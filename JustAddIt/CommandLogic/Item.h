@@ -14,6 +14,7 @@ private:
 	string _venue;
 	vector<string> _categories;
 	PriorityLevel _priority;
+	bool _isDone;
 
 public:
 

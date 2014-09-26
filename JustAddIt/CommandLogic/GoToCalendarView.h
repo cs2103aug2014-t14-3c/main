@@ -1,15 +1,11 @@
 #pragma once
 #include "CommandLogic.h"
-
-class Add :
+class GoToCalendarView :
 	public CommandLogic
 {
-private:
-	Item _item;
-
 public:
-	Add(Item item);
-	~Add();
+	GoToCalendarView();
+	~GoToCalendarView();
 
 	vector<string> execute();
 };

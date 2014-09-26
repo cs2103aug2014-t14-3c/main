@@ -1,13 +1,15 @@
 #pragma once
 #include "CommandLogic.h"
-class Edit :
+
+class EditItem :
 	public CommandLogic
 {
 private:
-	Item _item;
+	vector<Item>::iterator _item;
+
 public:
-	Edit(Item item);
-	~Edit();
+	EditItem(vector<Item>::iterator item);
+	~EditItem();
 
 	virtual vector<string> execute();
 };

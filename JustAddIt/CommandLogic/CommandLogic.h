@@ -15,6 +15,8 @@ protected:
 	vector<string> sortDateDescending();
 	vector<string> sortPriority();
 
+	//searches
+
 public:
 	virtual vector<string> execute();
 

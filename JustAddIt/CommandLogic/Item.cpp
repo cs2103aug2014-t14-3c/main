@@ -6,6 +6,7 @@ int Item::_id = 0;
 Item::Item(string title) {
 	_title = title;
 	_id++;
+	_isDone = false;
 }
 
 
