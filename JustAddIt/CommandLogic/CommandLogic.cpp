@@ -2,7 +2,9 @@
 #include "CommandLogic.h"
 
 vector<string> execute() {
-	return; // empty vector
+	vector<string> emptyVector;
+	emptyVector.clear();
+	return emptyVector; 
 }
 
 vector<string> sortAlphaAscending() {

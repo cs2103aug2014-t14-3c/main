@@ -1,16 +1,15 @@
 #pragma once
 #include "CommandLogic.h"
 
-class Add :
+class Search :
 	public CommandLogic
 {
 private:
-	Item _item;
+	string _searchTerm;
 
 public:
-	Add(Item item);
-	~Add();
+	Search(string searchTerm);
+	~Search();
 
 	vector<string> execute();
 };
-

@@ -1,16 +1,17 @@
 #pragma once
 #include "CommandLogic.h"
 
-class Add :
+class Delete :
 	public CommandLogic
 {
 private:
 	Item _item;
 
 public:
-	Add(Item item);
-	~Add();
+	Delete(Item item);
+	~Delete();
 
 	vector<string> execute();
+
 };
 

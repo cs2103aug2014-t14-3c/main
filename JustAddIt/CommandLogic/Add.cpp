@@ -2,11 +2,17 @@
 #include "Add.h"
 
 
-Add::Add()
+Add::Add(Item item)
 {
+	_item = item;
 }
 
 
 Add::~Add()
 {
+}
+
+vector<string> Add::execute() {
+
+
 }

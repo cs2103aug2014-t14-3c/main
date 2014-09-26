@@ -5,20 +5,18 @@ using namespace std;
 
 class CommandLogic
 {
-private:
-
-public:
-	
+protected:
 	static vector<Item> masterList;
-	static vector<Item> displayOrder;
 
-	virtual vector<string> execute();
-	
 	//sorts
 	vector<string> sortAlphaAscending();
 	vector<string> sortAlphaDescending();
 	vector<string> sortDateAscending();
 	vector<string> sortDateDescending();
 	vector<string> sortPriority();
+
+public:
+	virtual vector<string> execute();
+
 };
 
