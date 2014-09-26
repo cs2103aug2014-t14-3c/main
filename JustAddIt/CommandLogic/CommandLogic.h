@@ -1,13 +1,11 @@
 #pragma once
-#include "Item.h"
+#include "DataStorage.h"
 
 using namespace std;
 
 class CommandLogic
 {
 protected:
-	static vector<Item> masterList;
-
 	//sorts
 	vector<string> sortAlphaAscending();
 	vector<string> sortAlphaDescending();

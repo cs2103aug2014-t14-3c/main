@@ -10,6 +10,6 @@ Undo::~Undo() {
 
 }
 
-vector<string> execute() {
+vector<string> Undo::execute() {
 
 }

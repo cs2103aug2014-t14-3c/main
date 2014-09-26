@@ -27,13 +27,7 @@
     <ClInclude Include="CommandLogic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Search.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="goToListView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AddItem.h">
@@ -48,7 +42,22 @@
     <ClInclude Include="MarkItemDone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="goToCalendarView.h">
+    <ClInclude Include="GoToCalendarView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GoToListView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Undo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Redo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShowOverdueTasks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ClearAllOverdueTasks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -59,13 +68,7 @@
     <ClCompile Include="CommandLogic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Item.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Search.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="goToListView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AddItem.cpp">
@@ -80,7 +83,22 @@
     <ClCompile Include="MarkItemDone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="goToCalendarView.cpp">
+    <ClCompile Include="GoToCalendarView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GoToListView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Undo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Redo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShowOverdueTasks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ClearAllOverdueTasks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
