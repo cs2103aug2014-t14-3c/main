@@ -6,9 +6,12 @@ using namespace std;
 class DataStorage
 {
 private:
-	static vector<Item> masterList;
+	//static vector<Item> masterList;
 
 	void writeToTxtFile();
+
+protected:
+	static vector<Item> masterList;
 
 public:
 	void initialiseStorage();
