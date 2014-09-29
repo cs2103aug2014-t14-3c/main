@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "MarkItemDone.h"
-#include "Item.h"
 
 
 MarkItemDone::MarkItemDone(vector<Item>::iterator item) {
