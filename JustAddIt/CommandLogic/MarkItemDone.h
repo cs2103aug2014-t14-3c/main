@@ -1,5 +1,6 @@
 #pragma once
 #include "CommandLogic.h"
+#include "Item.h"
 
 class MarkItemDone :
 	public CommandLogic
@@ -12,5 +13,7 @@ public:
 	~MarkItemDone();
 
 	vector<string> execute();
+	void markItem();
+	void displaySuccessMessage();
 };
 
