@@ -11,9 +11,11 @@ private:
 	void writeToTxtFile();
 
 protected:
-	static vector<Item> masterList;
+	//static vector<Item> masterList;
 
 public:
+	static vector<Item> masterList;
+	
 	void initialiseStorage();
 	void addToList();
 	void deleteFromList();
