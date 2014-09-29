@@ -6,6 +6,8 @@ using namespace std;
 class CommandLogic
 {
 protected:
+	//static vector<string> outputMessageStorage;
+
 	//sorts
 	vector<string> sortAlphaAscending();
 	vector<string> sortAlphaDescending();
@@ -16,6 +18,8 @@ protected:
 	//searches
 
 public:
+	static vector<string> outputMessageStorage;
+
 	virtual vector<string> execute();
 
 };
