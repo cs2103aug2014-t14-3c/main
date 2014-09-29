@@ -18,89 +18,48 @@ vector<string> EditItem::execute() {
 	return CommandLogic::outputMessageStorage;
 }
 
-void EditItem::editTitle(string ) {
-}
-
-void EditItem::editStartDate(tm ) {
-}
-
-void EditItem::editEndDate(tm ) {
-}
-
-void EditItem::editVenue(string ) {
-}
-
-void EditItem::editCategory(vector<string> ) {
-}
-
-void EditItem::editPriority(PriorityLevel ) {
-}
-
-FIELD_TYPE EditItem::determineFieldType(string userInput) {
-	if (userInput == "1") {
-		return TITLE;
-	}
-	else if (userInput == "2") {
-		return START_DATE;
-	}
-	else if (userInput == "3") {
-		return END_DATE;
-	}
-	else if (userInput == "4") {
-		return VENUE;
-	}
-	else if (userInput == "5") {
-		return CATEGORY;
-	}
-	else if (userInput == "6") {
-		return PRIORITY;
-	}
-	else if (userInput == "s") {
-		return SAVE;
-	}
-	else if (userInput == "c") {
-		return CANCEL;
-	}
-	else {
-		return INVALID;
-	}
-}
-
 void EditItem::executeEditFunction() {
-	std::string userInput;
+	std::string userCommand;
 
 	do {
 		cout << "command: ";
-		cin >> userInput;
-		FIELD_TYPE commandType = determineFieldType(userInput);
+		cin >> userCommand;
+		FIELD_TYPE commandType = determineFieldType(userCommand);
 
 		switch (commandType) {
 		case TITLE: {
+			editTitle();
 			break;
 					}
 		case START_DATE: {
+			editStartDate();
 			break;
 						 }
 		case END_DATE: {
+			editEndDate();
 			break;
 					   }
 		case VENUE: {
+			editVenue();
 			break;
 					}
 		case CATEGORY: {
+			editCategory();
 			break;
 					   }
 		case PRIORITY: {
+			editPriority();
 			break;
 					   }
 		case SAVE: {
-			break;
+			exit(0);
 				   }
 		case CANCEL: {
+			//undo function
 			exit (0);
 					 }
 		case INVALID: {
-			showToUser("This is an invalid input! Please enter a valid input!");
+			showToUser("This is an invalid command! Please enter a valid command!");
 			break;
 					  }
 		default: {
@@ -109,6 +68,54 @@ void EditItem::executeEditFunction() {
 				 }
 		}
 	} while (1);
+}
+
+FIELD_TYPE EditItem::determineFieldType(string userCommand) {
+	if (userCommand == "1") {
+		return TITLE;
+	}
+	else if (userCommand == "2") {
+		return START_DATE;
+	}
+	else if (userCommand == "3") {
+		return END_DATE;
+	}
+	else if (userCommand == "4") {
+		return VENUE;
+	}
+	else if (userCommand == "5") {
+		return CATEGORY;
+	}
+	else if (userCommand == "6") {
+		return PRIORITY;
+	}
+	else if (userCommand == "s") {
+		return SAVE;
+	}
+	else if (userCommand == "c") {
+		return CANCEL;
+	}
+	else {
+		return INVALID;
+	}
+}
+
+void EditItem::editTitle() {
+}
+
+void EditItem::editStartDate() {
+}
+
+void EditItem::editEndDate() {
+}
+
+void EditItem::editVenue() {
+}
+
+void EditItem::editCategory() {
+}
+
+void EditItem::editPriority() {
 }
 
 void EditItem::showToUser(string outputString) {

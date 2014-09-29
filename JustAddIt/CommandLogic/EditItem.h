@@ -15,12 +15,12 @@ public:
 	virtual vector<string> execute();
 	void executeEditFunction();
 	FIELD_TYPE determineFieldType(string userInput);
-	void editTitle(string );
-	void editStartDate(tm );
-	void editEndDate(tm );
-	void editVenue(string );
-	void editCategory(vector<string> );
-	void editPriority(PriorityLevel );
+	void editTitle();
+	void editStartDate();
+	void editEndDate();
+	void editVenue();
+	void editCategory();
+	void editPriority();
 	void showToUser(string outputString);
 	void displaySuccessMessage();
 };
