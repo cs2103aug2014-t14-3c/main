@@ -6,7 +6,7 @@ int Item::_id = 0;
 Item::Item(string title) {
 	_title = title;
 	_id++;
-	_isDone = false;
+	_isMarked = false;
 }
 
 
@@ -28,6 +28,10 @@ tm Item::getEndDate() {
 
 string Item::getVenue() {
 	return _venue;
+}
+
+bool Item::getMarkedStatus() {
+	return _isMarked;
 }
 
 vector<string> Item::getCategories() {
@@ -59,4 +63,13 @@ void Item::setCategories(vector<string> categories) {
 
 void Item::setPriority(PriorityLevel priority) {
 	_priority = priority;
+}
+
+void Item::changeMarkedStatus() {
+	if (_isMarked == false) {
+		_isMarked = true;
+	}
+	else {
+		_isMarked = false;
+	}
 }
