@@ -34,8 +34,8 @@ bool Item::getMarkedStatus() {
 	return _isMarked;
 }
 
-vector<string> Item::getCategories() {
-	return _categories;
+string Item::getCategory() {
+	return _category;
 }
 
 PriorityLevel Item::getPriority() {
@@ -57,8 +57,8 @@ void Item::setVenue(string venue) {
 	_venue = venue;
 }
 
-void Item::setCategories(vector<string> categories) {
-	copy(categories.begin(), categories.end(), _categories.begin());
+void Item::setCategory(string category) {
+	_category = category;
 }
 
 void Item::setPriority(PriorityLevel priority) {

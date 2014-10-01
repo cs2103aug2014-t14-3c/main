@@ -12,7 +12,7 @@ private:
 	static tm _startDate;
 	static tm _endDate;
 	static string _venue;
-	static vector<string> _categories;
+	static string _category;
 	static PriorityLevel _priority;
 	static bool _isMarked;
 
@@ -25,7 +25,7 @@ public:
 	static tm getStartDate();
 	static tm getEndDate();
 	static string getVenue();
-	static vector<string> getCategories();
+	static string getCategory();
 	static PriorityLevel getPriority();
 	static bool Item::getMarkedStatus();
 
@@ -33,9 +33,8 @@ public:
 	static void setStartDate(tm startDate);
 	static void setEndDate(tm endDate);
 	static void setVenue(string venue);
-	static void setCategories(vector<string> categories);
+	static void setCategory(string category);
 	static void setPriority(PriorityLevel priority);
-
 	void changeMarkedStatus();
 
 };
