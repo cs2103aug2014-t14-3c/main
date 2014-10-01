@@ -8,33 +8,33 @@ class Item {
 private:
 	
 	static int _id;
-	string _title;
-	tm _startDate;
-	tm _endDate;
-	string _venue;
-	vector<string> _categories;
-	PriorityLevel _priority;
-	bool _isMarked;
+	static string _title;
+	static tm _startDate;
+	static tm _endDate;
+	static string _venue;
+	static vector<string> _categories;
+	static PriorityLevel _priority;
+	static bool _isMarked;
 
 public:
 
 	Item(string title);
 	~Item();
 
-	string getTitle();
-	tm getStartDate();
-	tm getEndDate();
-	string getVenue();
-	vector<string> getCategories();
-	PriorityLevel getPriority();
-	bool Item::getMarkedStatus();
+	static string getTitle();
+	static tm getStartDate();
+	static tm getEndDate();
+	static string getVenue();
+	static vector<string> getCategories();
+	static PriorityLevel getPriority();
+	static bool Item::getMarkedStatus();
 
-	void setTitle(string title);
-	void setStartDate(tm startDate);
-	void setEndDate(tm endDate);
-	void setVenue(string venue);
-	void setCategories(vector<string> categories);
-	void setPriority(PriorityLevel priority);
+	static void setTitle(string title);
+	static void setStartDate(tm startDate);
+	static void setEndDate(tm endDate);
+	static void setVenue(string venue);
+	static void setCategories(vector<string> categories);
+	static void setPriority(PriorityLevel priority);
 
 	void changeMarkedStatus();
 
