@@ -11,5 +11,6 @@ public:
 	Search(string searchTerm);
 	~Search();
 
+	vector<string> getItem(string keyword);
 	vector<string> execute();
 };
