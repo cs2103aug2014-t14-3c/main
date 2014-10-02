@@ -52,7 +52,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Raymond\Documents\main\JustAddIt\DataStorage;C:\Users\jumpinjelly\Documents\JAI\main\JustAddIt\DataStorage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Github\main\JustAddIt\DataStorage;C:\Users\Raymond\Documents\main\JustAddIt\DataStorage;C:\Users\jumpinjelly\Documents\JAI\main\JustAddIt\DataStorage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
