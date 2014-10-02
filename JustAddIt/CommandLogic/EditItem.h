@@ -14,14 +14,16 @@ public:
 
 	virtual vector<string> execute();
 	void executeEditFunction();
-	FIELD_TYPE determineFieldType(string userInput);
+	COMMAND_TYPE determineCommandType(string userInput);
 	void editTitle();
 	void editStartDate();
 	void editEndDate();
 	void editVenue();
 	void editCategory();
 	void editPriority();
+	PRIORITY_LEVEL obtainNewPriorityLevel();
 	void showToUser(string outputString);
 	void displaySuccessMessage();
+	void displayEditScreen();
 };
 

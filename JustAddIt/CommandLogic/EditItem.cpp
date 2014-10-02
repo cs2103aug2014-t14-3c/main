@@ -1,18 +1,19 @@
 #include "stdafx.h"
 #include "EditItem.h"
 
-enum FIELD_TYPE {TITLE, START_DATE, END_DATE, VENUE, CATEGORY, PRIORITY, SAVE, CANCEL, INVALID};
+enum COMMAND_TYPE {EDIT_TITLE, EDIT_START_DATE, EDIT_END_DATE, EDIT_VENUE, EDIT_CATEGORY, EDIT_PRIORITY, SAVE, CANCEL, COMMAND_INVALID};
+enum PRIORITY_LEVEL { LOW, MED, HIGH, PRIORITY_LEVEL_INVALID};
 
 EditItem::EditItem(vector<Item>::iterator item) {
 	_item = item;
 }
-
 
 EditItem::~EditItem()
 {
 }
 
 vector<string> EditItem::execute() {
+	displayEditScreen();
 	executeEditFunction();
 	displaySuccessMessage();
 	return CommandLogic::outputMessageStorage;
@@ -24,44 +25,50 @@ void EditItem::executeEditFunction() {
 	do {
 		cout << "command: ";
 		cin >> userCommand;
-		FIELD_TYPE commandType = determineFieldType(userCommand);
+		COMMAND_TYPE commandType = determineCommandType(userCommand);
 
 		switch (commandType) {
-		case TITLE: {
+		case EDIT_TITLE: {
 			editTitle();
-			break;
-					}
-		case START_DATE: {
-			editStartDate();
+			displayEditScreen();
 			break;
 						 }
-		case END_DATE: {
+		case EDIT_START_DATE: {
+			editStartDate();
+			displayEditScreen();
+			break;
+							  }
+		case EDIT_END_DATE: {
 			editEndDate();
+			displayEditScreen();
 			break;
-					   }
-		case VENUE: {
+							}
+		case EDIT_VENUE: {
 			editVenue();
+			displayEditScreen();
 			break;
-					}
-		case CATEGORY: {
+						 }
+		case EDIT_CATEGORY: {
 			editCategory();
+			displayEditScreen();
 			break;
-					   }
-		case PRIORITY: {
+							}
+		case EDIT_PRIORITY: {
 			editPriority();
+			displayEditScreen();
 			break;
-					   }
+							}
 		case SAVE: {
 			exit(0);
 				   }
 		case CANCEL: {
-			//undo function
+			//call for undo function????ARE WE GOING TO HAVE THIS FUNCTION? OR WILL THE UNDO COMMAND BE A OPTION?
 			exit (0);
 					 }
-		case INVALID: {
-			showToUser("This is an invalid command! Please enter a valid command!");
+		case COMMAND_INVALID: {
+			showToUser("This is an invalid command! Please refer to the command prompt for all the commands available!");
 			break;
-					  }
+							  }
 		default: {
 			showToUser("The edit function has malfunctioned! Please report this issue to the developers!");
 			exit (0);
@@ -70,24 +77,24 @@ void EditItem::executeEditFunction() {
 	} while (1);
 }
 
-FIELD_TYPE EditItem::determineFieldType(string userCommand) {
-	if (userCommand == "1") {
-		return TITLE;
+COMMAND_TYPE EditItem::determineCommandType(string userCommand) {
+	if (userCommand == "e1") {
+		return EDIT_TITLE;
 	}
-	else if (userCommand == "2") {
-		return START_DATE;
+	else if (userCommand == "e2") {
+		return EDIT_START_DATE;
 	}
-	else if (userCommand == "3") {
-		return END_DATE;
+	else if (userCommand == "e3") {
+		return EDIT_END_DATE;
 	}
-	else if (userCommand == "4") {
-		return VENUE;
+	else if (userCommand == "e4") {
+		return EDIT_VENUE;
 	}
-	else if (userCommand == "5") {
-		return CATEGORY;
+	else if (userCommand == "e5") {
+		return EDIT_CATEGORY;
 	}
-	else if (userCommand == "6") {
-		return PRIORITY;
+	else if (userCommand == "e6") {
+		return EDIT_PRIORITY;
 	}
 	else if (userCommand == "s") {
 		return SAVE;
@@ -96,26 +103,66 @@ FIELD_TYPE EditItem::determineFieldType(string userCommand) {
 		return CANCEL;
 	}
 	else {
-		return INVALID;
+		return COMMAND_INVALID;
 	}
 }
 
 void EditItem::editTitle() {
+	string newTitle;
+	cin >> newTitle;
+	Item::setTitle(newTitle);
 }
 
 void EditItem::editStartDate() {
+	tm newStartDate;
+	//cin >> newStartDate;
+	//need to find some way to take in the user input and store it as a tm variable
+	Item::setStartDate(newStartDate);
 }
 
 void EditItem::editEndDate() {
+	tm newEndDate;
+	//cin >> newEndDate;
+	//same problem as above
+	Item::setEndDate(newEndDate);
 }
 
 void EditItem::editVenue() {
+	string newVenue;
+	cin >> newVenue;
+	Item::setVenue(newVenue);
 }
 
 void EditItem::editCategory() {
+	string newCategory;
+	cin >> newCategory;
+	Item::setCategory(newCategory);
 }
 
 void EditItem::editPriority() {
+	Item::setPriority(obtainNewPriorityLevel());
+}
+
+PRIORITY_LEVEL EditItem::obtainNewPriorityLevel() {
+	string userNewPriorityInput;
+
+	do {
+		cin >> userNewPriorityInput;
+		if (userNewPriorityInput == "LOW" || "Low" || "low" || "L" || "l") {
+			return LOW;
+		}
+		else if (userNewPriorityInput == "MEDIUM" || "Medium" || "medium" || "MED" || "Med" || "med" || "M" || "m") {
+			return MED;
+		}
+		else if (userNewPriorityInput == "HIGH" || "High" || "high" || "H" || "h") {
+			return HIGH;
+		}
+		else {
+			showToUser("This is an invalid priority level! Please type in either HIGH, MEDIUM OR LOW!");
+			showToUser("Priority Level: ");
+			break;
+		}
+	} while (1);
 }
 
 void EditItem::showToUser(string outputString) {
@@ -124,4 +171,14 @@ void EditItem::showToUser(string outputString) {
 
 void EditItem::displaySuccessMessage() {
 	CommandLogic::outputMessageStorage.push_back("The item is successfully edited!");
+}
+
+void EditItem::displayEditScreen() {
+	Item::getTitle();
+	tm getStartDate();
+	tm getEndDate();
+	string getVenue();
+	vector<string> getCategories();
+	PRIORITY_LEVEL getPriority();
+
 }
