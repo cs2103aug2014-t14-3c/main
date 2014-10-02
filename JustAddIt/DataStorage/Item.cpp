@@ -38,7 +38,7 @@ string Item::getCategory() {
 	return _category;
 }
 
-PriorityLevel Item::getPriority() {
+PRIORITY_LEVEL Item::getPriority() {
 	return _priority;
 }
 
@@ -61,7 +61,7 @@ void Item::setCategory(string category) {
 	_category = category;
 }
 
-void Item::setPriority(PriorityLevel priority) {
+void Item::setPriority(PRIORITY_LEVEL priority) {
 	_priority = priority;
 }
 

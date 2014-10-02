@@ -2,7 +2,7 @@
 
 using namespace std;
 
-enum PriorityLevel { LOW, MED, HIGH };
+enum PRIORITY_LEVEL { LOW, MED, HIGH };
 
 class Item {
 private:
@@ -13,7 +13,7 @@ private:
 	static tm _endDate;
 	static string _venue;
 	static string _category;
-	static PriorityLevel _priority;
+	static PRIORITY_LEVEL _priority;
 	static bool _isMarked;
 
 public:
@@ -26,7 +26,7 @@ public:
 	static tm getEndDate();
 	static string getVenue();
 	static string getCategory();
-	static PriorityLevel getPriority();
+	static PRIORITY_LEVEL getPriority();
 	static bool Item::getMarkedStatus();
 
 	static void setTitle(string title);
@@ -34,8 +34,7 @@ public:
 	static void setEndDate(tm endDate);
 	static void setVenue(string venue);
 	static void setCategory(string category);
-	static void setPriority(PriorityLevel priority);
+	static void setPriority(PRIORITY_LEVEL priority);
 	void changeMarkedStatus();
 
 };
-
