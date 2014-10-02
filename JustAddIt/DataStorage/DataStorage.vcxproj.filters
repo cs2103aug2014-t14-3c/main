@@ -27,13 +27,13 @@
     <ClInclude Include="DataStorage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ItemMasterList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ActionLog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
