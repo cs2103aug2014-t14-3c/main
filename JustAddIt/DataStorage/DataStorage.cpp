@@ -21,5 +21,7 @@ void DataStorage::deleteFromList() {
 }
 
 vector<Item>::iterator DataStorage::getItem(int position) {
+	vector<Item>::iterator tempIter;
 
+	return tempIter;
 }

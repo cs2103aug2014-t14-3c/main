@@ -12,5 +12,7 @@ Redo::~Redo() {
 }
 
 vector<string> Redo::execute() {
+	vector<string> emptyString;
 
+	return emptyString;
 }

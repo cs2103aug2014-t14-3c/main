@@ -34,7 +34,7 @@ bool Item::getMarkedStatus() {
 	return _isMarked;
 }
 
-string Item::getCategory() {
+string Item::getCategories() {
 	return _category;
 }
 

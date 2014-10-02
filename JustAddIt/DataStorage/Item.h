@@ -8,33 +8,33 @@ class Item {
 private:
 	
 	static int _id;
-	static string _title;
-	static tm _startDate;
-	static tm _endDate;
-	static string _venue;
-	static string _category;
-	static PRIORITY_LEVEL _priority;
-	static bool _isMarked;
+	string _title;
+	tm _startDate; // TODO: Change type to boost library date
+	tm _endDate; // TODO: Change type to boost library date
+	string _venue;
+	string _category;
+	PRIORITY_LEVEL _priority;
+	bool _isMarked;
 
 public:
 
 	Item(string title);
 	~Item();
 
-	static string getTitle();
-	static tm getStartDate();
-	static tm getEndDate();
-	static string getVenue();
-	static string getCategory();
-	static PRIORITY_LEVEL getPriority();
-	static bool Item::getMarkedStatus();
+	string getTitle();
+	tm getStartDate();
+	tm getEndDate();
+	string getVenue();
+	string getCategories();
+	PRIORITY_LEVEL getPriority();
+	bool getMarkedStatus();
 
-	static void setTitle(string title);
-	static void setStartDate(tm startDate);
-	static void setEndDate(tm endDate);
-	static void setVenue(string venue);
-	static void setCategory(string category);
-	static void setPriority(PRIORITY_LEVEL priority);
+	void setTitle(string title);
+	void setStartDate(tm startDate);
+	void setEndDate(tm endDate);
+	void setVenue(string venue);
+	void setCategory(string category);
+	void setPriority(PRIORITY_LEVEL priority);
 	void changeMarkedStatus();
 
 };

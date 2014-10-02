@@ -11,11 +11,15 @@ Search::~Search() {
 }
 
 vector<string> Search::getItem(string keyword) {
+	vector<string> emptyString;
+
+	return emptyString;
 }
 
 //From CE2, will be changed later
+// Commented off the whole chunk : Use vector search instead
 vector<string> Search::execute() {
-	ifstream fin(fileName); 
+/*	ifstream fin(fileName); 
 	string itemsToBeSearched; 
 	while(getline(fin, itemsToBeSearched)) {
 		temporaryStorage.push_back(itemsToBeSearched);
@@ -30,5 +34,9 @@ vector<string> Search::execute() {
 		}
 	}
 //return vector<string> item
-//pushback
+//pushback*/
+
+	vector<string> emptyString;
+
+	return emptyString;
 }

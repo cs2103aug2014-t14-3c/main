@@ -12,5 +12,7 @@ ClearAllOverdueTasks::~ClearAllOverdueTasks() {
 }
 
 vector<string> ClearAllOverdueTasks::execute() {
+	vector<string> emptyString;
 
+	return emptyString;
 }

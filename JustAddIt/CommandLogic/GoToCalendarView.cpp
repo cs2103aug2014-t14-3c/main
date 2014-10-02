@@ -12,5 +12,7 @@ GoToCalendarView::~GoToCalendarView() {
 }
 
 vector<string> GoToCalendarView::execute() {
+	vector<string> emptyString;
 
+	return emptyString;
 }

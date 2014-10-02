@@ -12,5 +12,7 @@ ShowOverdueTasks::~ShowOverdueTasks() {
 }
 
 vector<string> ShowOverdueTasks::execute() {
+	vector<string> emptyString;
 
+	return emptyString;
 }

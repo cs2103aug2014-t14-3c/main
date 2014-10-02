@@ -11,5 +11,7 @@ AddItem::~AddItem() {
 }
 
 vector<string> AddItem::execute() {
+	vector<string> emptyString;
 
+	return emptyString;
 }

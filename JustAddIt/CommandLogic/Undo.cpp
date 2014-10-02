@@ -11,5 +11,7 @@ Undo::~Undo() {
 }
 
 vector<string> Undo::execute() {
+	vector<string> emptyString;
 
+	return emptyString;
 }

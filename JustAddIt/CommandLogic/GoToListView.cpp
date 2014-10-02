@@ -12,5 +12,7 @@ GoToListView::~GoToListView() {
 }
 
 vector<string> GoToListView::execute() {
+	vector<string> emptyString;
 
+	return emptyString;
 }

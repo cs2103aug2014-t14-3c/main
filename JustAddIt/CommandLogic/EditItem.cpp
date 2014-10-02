@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "EditItem.h"
 
-enum COMMAND_TYPE {EDIT_TITLE, EDIT_START_DATE, EDIT_END_DATE, EDIT_VENUE, EDIT_CATEGORY, EDIT_PRIORITY, SAVE, CANCEL, COMMAND_INVALID};
-enum PRIORITY_LEVEL { LOW, MED, HIGH, PRIORITY_LEVEL_INVALID};
+// enum PRIORITY_LEVEL { LOW, MED, HIGH, PRIORITY_LEVEL_INVALID}; NOTE: Already defined in Item.h
 
 EditItem::EditItem(vector<Item>::iterator item) {
 	_item = item;
@@ -75,6 +74,8 @@ void EditItem::executeEditFunction() {
 				 }
 		}
 	} while (1);
+
+	return;
 }
 
 COMMAND_TYPE EditItem::determineCommandType(string userCommand) {
@@ -110,37 +111,45 @@ COMMAND_TYPE EditItem::determineCommandType(string userCommand) {
 void EditItem::editTitle() {
 	string newTitle;
 	cin >> newTitle;
-	Item::setTitle(newTitle);
+	_item->setTitle(newTitle);
 }
 
 void EditItem::editStartDate() {
 	tm newStartDate;
+	time_t temp = time(0);
+
+	newStartDate = *(localtime(&temp));
+	
 	//cin >> newStartDate;
 	//need to find some way to take in the user input and store it as a tm variable
-	Item::setStartDate(newStartDate);
+	_item->setStartDate(newStartDate);
 }
 
 void EditItem::editEndDate() {
 	tm newEndDate;
+	time_t temp = time(0);
+
+	newEndDate = *(localtime(&temp));
+
 	//cin >> newEndDate;
 	//same problem as above
-	Item::setEndDate(newEndDate);
+	_item->setEndDate(newEndDate);
 }
 
 void EditItem::editVenue() {
 	string newVenue;
 	cin >> newVenue;
-	Item::setVenue(newVenue);
+	_item->setVenue(newVenue);
 }
 
 void EditItem::editCategory() {
 	string newCategory;
 	cin >> newCategory;
-	Item::setCategory(newCategory);
+	_item->setCategory(newCategory);
 }
 
 void EditItem::editPriority() {
-	Item::setPriority(obtainNewPriorityLevel());
+	_item->setPriority(obtainNewPriorityLevel());
 }
 
 PRIORITY_LEVEL EditItem::obtainNewPriorityLevel() {
@@ -174,11 +183,11 @@ void EditItem::displaySuccessMessage() {
 }
 
 void EditItem::displayEditScreen() {
-	Item::getTitle();
-	tm getStartDate();
-	tm getEndDate();
-	string getVenue();
-	vector<string> getCategories();
-	PRIORITY_LEVEL getPriority();
+	_item->getTitle();
+	_item->getStartDate();
+	_item->getEndDate();
+	_item->getVenue();
+	_item->getCategories();
+	_item->getPriority();
 
 }
