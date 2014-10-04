@@ -11,5 +11,8 @@ public:
 	static void removeFromBank(vector<Item>::iterator itemPtr);
 
 	static vector<Item>::iterator findItemById(int id);
+	static Item findItemByVectorPos(int i);
+
+	static int getBankSize();
 };
 

@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "DataStorage.h"
 
+string filename = "JustAddIt_ItemBank.txt";
 
-DataStorage::DataStorage(void)
-{
+void DataStorage::writeToFile() {
+
 }
 
+void DataStorage::readToBank() {
 
-DataStorage::~DataStorage(void)
-{
 }

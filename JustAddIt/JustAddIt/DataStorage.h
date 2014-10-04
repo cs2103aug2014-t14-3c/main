@@ -3,9 +3,11 @@
 
 class DataStorage
 {
+private:
+	static string filename;
 
 public:
-	DataStorage(void);
-	~DataStorage(void);
+	static void writeToFile();
+	static void readToBank();
 };
 
