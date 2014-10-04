@@ -11,8 +11,8 @@ private:
 
 	int _id;
 	string _title;
-	//time_type _startDate; // TODO: Include boost library
-	//time_type _endDate;
+	struct tm _startDateTime;
+	struct tm _endDateTime;
 	string _venue;
 	vector<string> _categories;
 	PriorityLevel _priority;
@@ -23,8 +23,8 @@ public:
 	~Item(void);
 
 	string getTitle();
-	//time_type getStartDate();
-	//time_type getEndDate();
+	struct tm getStartDateTime();
+	struct tm getEndDateTime();
 	string getVenue();
 	vector<string> getCategories();
 	PriorityLevel getPriority();
@@ -32,7 +32,9 @@ public:
 
 	void updateIdCounter(int lastIdUsed);
 	void setTitle(string title);
-	// void setStartDate(time_type startDate);
+	void setStartDate(int day, int month);
+	void setStartTime(int hour);
+	void setEndTime(int hour);
 	// void setEndDate(time_type endDate);
 	void setVenue(string venue);
 	void setCategory(string category);
