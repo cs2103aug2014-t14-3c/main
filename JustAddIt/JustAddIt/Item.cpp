@@ -37,8 +37,8 @@ bool Item::getIsDone() {
 	return _isDone;
 }
 
-void Item::updateIdCounter(int lastId) {
-	_idCounter = lastId + 1;
+void Item::updateIdCounter(int lastIdUsed) {
+	_idCounter = lastIdUsed + 1;
 }
 
 void Item::setTitle(string title) {

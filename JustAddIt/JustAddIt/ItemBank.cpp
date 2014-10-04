@@ -1,12 +1,20 @@
 #include "stdafx.h"
 #include "ItemBank.h"
 
+vector<Item> ItemBank::bank;
 
-ItemBank::ItemBank(void)
-{
+void ItemBank::addToBank(Item item) {
+	bank.push_back(item);
 }
 
+void ItemBank::removeFromBank(vector<Item>::iterator itemPtr) {
+	bank.erase(itemPtr);
+}
 
-ItemBank::~ItemBank(void)
-{
+vector<Item>::iterator findItemById(int id) {
+	vector<Item>::iterator itemPtr;
+
+	// search vector for item with _id = id
+
+	return itemPtr;
 }

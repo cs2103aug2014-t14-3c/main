@@ -11,7 +11,7 @@ private:
 
 	int _id;
 	string _title;
-	//time_type _startDate;
+	//time_type _startDate; // TODO: Include boost library
 	//time_type _endDate;
 	string _venue;
 	vector<string> _categories;
@@ -30,7 +30,7 @@ public:
 	PriorityLevel getPriority();
 	bool getIsDone();
 
-	void updateIdCounter(int lastId);
+	void updateIdCounter(int lastIdUsed);
 	void setTitle(string title);
 	// void setStartDate(time_type startDate);
 	// void setEndDate(time_type endDate);
