@@ -10,3 +10,7 @@ CmdClearAllOverdueTasks::CmdClearAllOverdueTasks(void)
 CmdClearAllOverdueTasks::~CmdClearAllOverdueTasks(void)
 {
 }
+
+void CmdClearAllOverdueTasks::execute() {
+
+}

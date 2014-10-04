@@ -10,3 +10,7 @@ CmdDeleteItem::CmdDeleteItem(void)
 CmdDeleteItem::~CmdDeleteItem(void)
 {
 }
+
+void CmdDeleteItem::execute() {
+
+}
