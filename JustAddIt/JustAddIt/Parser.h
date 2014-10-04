@@ -9,13 +9,12 @@
 #include "CmdAddItem.h"
 
 enum CommandType {
-		ADD
+	ADD
 };
 
 class Parser
 {
 protected:
-	Command* stringToCommand(string userCommand);
 	void embedDetailsInItem(Item* myItem, string stringDetails);
 	void detectTitleAndEmbed(Item* myItem, string stringDetails);
 	void detectTimeAndEmbed(Item* myItem, string stringDetails);
@@ -30,6 +29,7 @@ protected:
 	bool isKeywordEndTime(string myWord);
 	bool isKeywordDate(string myWord);
 public:
+	Command* stringToCommand(string userCommand);
 	Parser(void);
 	~Parser(void);
 };

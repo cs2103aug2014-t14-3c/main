@@ -1,13 +1,16 @@
 #pragma once
-#include "stdafx.h"
+
 #include "ItemBank.h"
+
+using namespace std;
 
 class Command
 {
+protected:
+	vector<string> outputMessageStorage;
+
 public:
 	Command(void);
 	~Command(void);
-
-	virtual void execute();
+	vector<string> execute();
 };
-
