@@ -1,5 +1,5 @@
 #pragma once
-#include "command.h"
+#include "Command.h"
 #include "ItemBank.h"
 
 class CmdAddItem :
@@ -12,6 +12,6 @@ public:
 	CmdAddItem(Item item);
 	~CmdAddItem(void);
 
-	void execute();
+	vector<string> execute();
 };
 

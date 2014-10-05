@@ -11,6 +11,9 @@ CmdAddItem::~CmdAddItem(void)
 {
 }
 
-void CmdAddItem::execute() {
+vector<string> CmdAddItem::execute() {
 	ItemBank::addToBank(*_itemAddr);
+	outputMessageStorage.clear();
+	outputMessageStorage.push_back("Item successfully added!");
+	return outputMessageStorage;
 }
