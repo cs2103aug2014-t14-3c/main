@@ -1,10 +1,14 @@
 #pragma once
-#include "command.h"
+#include "Command.h"
+#include "ItemBank.h"
+
 class CmdMarkItemDone :
 	public Command
 {
+private:
+	vector<Item>::iterator _itemPtr;
 public:
-	CmdMarkItemDone(void);
+	CmdMarkItemDone(vector<Item>::iterator itemPtr);
 	~CmdMarkItemDone(void);
+	vector<string> CmdMarkItemDone::execute();
 };
-

@@ -2,8 +2,8 @@
 #include "CmdDeleteItem.h"
 
 
-CmdDeleteItem::CmdDeleteItem(void)
-{
+CmdDeleteItem::CmdDeleteItem(vector<Item>::iterator itemPtr) {
+	_itemPtr = itemPtr;
 }
 
 
@@ -11,6 +11,9 @@ CmdDeleteItem::~CmdDeleteItem(void)
 {
 }
 
-void CmdDeleteItem::execute() {
-
+vector<string> CmdDeleteItem::execute() {
+	ItemBank::deleteFromBank(_itemPtr);
+	outputMessageStorage.clear();
+	outputMessageStorage.push_back("Item is successfully delete!");
+	return outputMessageStorage;
 }

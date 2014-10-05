@@ -1,16 +1,14 @@
 #pragma once
-#include "command.h"
+#include "Command.h"
+#include "ItemBank.h"
 
 class CmdDeleteItem :
 	public Command
 {
-private: 
-	vector<Item>::iterator itemAddr;
-
+private:
+	vector<Item>::iterator _itemPtr;
 public:
-	CmdDeleteItem(void);
+	CmdDeleteItem(vector<Item>::iterator itemPtr);
 	~CmdDeleteItem(void);
-
-	void execute();
+	vector<string> CmdDeleteItem::execute();
 };
-
