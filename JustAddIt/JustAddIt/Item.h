@@ -14,7 +14,7 @@ private:
 	struct tm _startDateTime;
 	struct tm _endDateTime;
 	string _venue;
-	vector<string> _categories;
+	string _category;
 	PriorityLevel _priority;
 	bool _isDone;
 
@@ -26,7 +26,7 @@ public:
 	struct tm getStartDateTime();
 	struct tm getEndDateTime();
 	string getVenue();
-	vector<string> getCategories();
+	string getCategory();
 	PriorityLevel getPriority();
 	bool getIsDone();
 

@@ -8,7 +8,8 @@ private:
 
 public:
 	static void addToBank(Item item);
-	static void removeFromBank(vector<Item>::iterator itemPtr);
+	static void deleteFromBank(vector<Item>::iterator itemPtr);
+	static void markItemInBank(vector<Item>::iterator itemPtr);
 
 	static vector<Item>::iterator findItemById(int id);
 	static Item findItemByVectorPos(int i);

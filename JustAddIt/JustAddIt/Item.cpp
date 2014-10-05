@@ -27,19 +27,19 @@ string Item::getTitle() {
 }
 
 struct tm Item::getStartDateTime() {
-return _startDateTime;
+	return _startDateTime;
 }
 
 struct tm Item::getEndDateTime() {
-return _endDateTime;
+	return _endDateTime;
 }
 
 string Item::getVenue() {
 	return _venue;
 }
 
-vector<string> Item::getCategories() {
-	return _categories;
+string Item::getCategory() {
+	return _category;
 }
 
 PriorityLevel Item::getPriority() {
@@ -74,8 +74,8 @@ void Item::setVenue(string venue) {
 	_venue = venue;
 }
 
-void Item::setCategory(string category) { // TODO: remove category function
-	_categories.push_back(category);
+void Item::setCategory(string category) {
+	_category = category;
 }
 
 void Item::setPriority(PriorityLevel priority) {

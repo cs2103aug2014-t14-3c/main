@@ -7,8 +7,12 @@ void ItemBank::addToBank(Item item) {
 	bank.push_back(item);
 }
 
-void ItemBank::removeFromBank(vector<Item>::iterator itemPtr) {
+void ItemBank::deleteFromBank(vector<Item>::iterator itemPtr) {
 	bank.erase(itemPtr);
+}
+
+void ItemBank::markItemInBank(vector<Item>::iterator itemPtr) {
+	itemPtr->toggleDone();
 }
 
 vector<Item>::iterator ItemBank::findItemById(int id) {
