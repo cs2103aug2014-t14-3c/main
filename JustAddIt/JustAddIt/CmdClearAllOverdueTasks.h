@@ -8,6 +8,6 @@ public:
 	CmdClearAllOverdueTasks(void);
 	~CmdClearAllOverdueTasks(void);
 
-	void execute();
+	vector<string> execute();
 };
 

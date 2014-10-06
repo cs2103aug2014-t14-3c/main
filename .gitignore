@@ -150,6 +150,3 @@ UpgradeLog*.htm
 *.bim_*.settings
 # Microsoft Fakes
 FakesAssemblies/
-JustAddIt/CommandLogic/CommandLogic.vcxproj
-JustAddIt/CommandLogic/CommandLogic.vcxproj
-*.vcxproj

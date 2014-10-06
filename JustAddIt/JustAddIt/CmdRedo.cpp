@@ -10,3 +10,8 @@ CmdRedo::CmdRedo(void)
 CmdRedo::~CmdRedo(void)
 {
 }
+
+vector<string> CmdRedo::execute() {
+	ActionLog::redo();
+	return outputMessageStorage;
+}
