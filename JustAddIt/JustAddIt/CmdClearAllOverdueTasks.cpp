@@ -11,6 +11,6 @@ CmdClearAllOverdueTasks::~CmdClearAllOverdueTasks(void)
 {
 }
 
-void CmdClearAllOverdueTasks::execute() {
-
+vector<string> CmdClearAllOverdueTasks::execute() {
+	return outputMessageStorage;
 }

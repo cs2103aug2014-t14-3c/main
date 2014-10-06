@@ -79,6 +79,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActionLog.h" />
     <ClInclude Include="CmdAddItem.h" />
     <ClInclude Include="CmdClearAllOverdueTasks.h" />
     <ClInclude Include="CmdDeleteItem.h" />
@@ -95,11 +96,13 @@
     <ClInclude Include="Executor.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemBank.h" />
+    <ClInclude Include="OutputConstructor.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ActionLog.cpp" />
     <ClCompile Include="CmdAddItem.cpp" />
     <ClCompile Include="CmdClearAllOverdueTasks.cpp" />
     <ClCompile Include="CmdDeleteItem.cpp" />
@@ -117,6 +120,7 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemBank.cpp" />
     <ClCompile Include="JustAddIt.cpp" />
+    <ClCompile Include="OutputConstructor.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

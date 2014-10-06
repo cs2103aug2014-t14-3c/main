@@ -13,5 +13,5 @@ protected:
 public:
 	Command(void);
 	~Command(void);
-	vector<string> execute();
+	virtual vector<string> execute();
 };

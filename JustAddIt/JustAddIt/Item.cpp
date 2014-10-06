@@ -26,6 +26,10 @@ string Item::getTitle() {
 	return _title;
 }
 
+string Item::getDescription() {
+	return _description;
+}
+
 struct tm Item::getStartDateTime() {
 	return _startDateTime;
 }
@@ -42,7 +46,7 @@ string Item::getCategory() {
 	return _category;
 }
 
-PriorityLevel Item::getPriority() {
+Item::PriorityLevel Item::getPriority() {
 	return _priority;
 }
 
@@ -56,6 +60,10 @@ void Item::updateIdCounter(int lastIdUsed) {
 
 void Item::setTitle(string title) {
 	_title = title;
+}
+
+void Item::setDescription(string description) {
+	_description = description;
 }
 
 void Item::setStartDate(int day, int month) {
