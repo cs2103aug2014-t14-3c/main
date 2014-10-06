@@ -17,7 +17,7 @@ public:
 	static void editItemEndDateTimeInBank(vector<Item>::iterator itemPtr, struct tm newEndDateTime);
 	static void editItemVenueInBank(vector<Item>::iterator itemPtr, string newVenue);
 	static void editItemCategoryInBank(vector<Item>::iterator itemPtr, string newCategory);
-	static void editItemPriorityInBank(vector<Item>::iterator itemPtr, PriorityLevel newPriority);
+	static void editItemPriorityInBank(vector<Item>::iterator itemPtr, Item::PriorityLevel newPriority);
 
 	static vector<Item>::iterator findItemById(int id);
 	static Item findItemByVectorPos(int i);

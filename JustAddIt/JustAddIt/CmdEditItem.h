@@ -14,7 +14,7 @@ private:
 	struct tm _newEndDateTime;
 	string _newVenue;
 	string _newCategory;
-	PriorityLevel _newPriority;
+	Item::PriorityLevel _newPriority;
 
 public:
 	CmdEditItem(vector<Item>::iterator itemPtr);

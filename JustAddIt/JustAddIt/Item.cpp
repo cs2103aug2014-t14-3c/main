@@ -46,7 +46,7 @@ string Item::getCategory() {
 	return _category;
 }
 
-PriorityLevel Item::getPriority() {
+Item::PriorityLevel Item::getPriority() {
 	return _priority;
 }
 

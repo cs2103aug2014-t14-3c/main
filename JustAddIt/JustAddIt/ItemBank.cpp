@@ -42,7 +42,7 @@ void ItemBank::editItemCategoryInBank(vector<Item>::iterator itemPtr, string new
 	itemPtr->setCategory(newCategory);
 }
 
-void ItemBank::editItemPriorityInBank(vector<Item>::iterator itemPtr, PriorityLevel newPriority) {
+void ItemBank::editItemPriorityInBank(vector<Item>::iterator itemPtr, Item::PriorityLevel newPriority) {
 	//itemPtr->setPriority(newPriority);
 }
 

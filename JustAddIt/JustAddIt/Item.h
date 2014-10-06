@@ -2,10 +2,12 @@
 
 using namespace std;
 
-enum PriorityLevel { LOW, MED, HIGH, INVALID };
 
 
 class Item { 
+public:
+	enum PriorityLevel { LOW, MED, HIGH, INVALID };	
+
 private:
 	static int _idCounter;
 

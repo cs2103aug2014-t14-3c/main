@@ -78,6 +78,9 @@
     <ClInclude Include="ActionLog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OutputConstructor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -138,6 +141,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ActionLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputConstructor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
