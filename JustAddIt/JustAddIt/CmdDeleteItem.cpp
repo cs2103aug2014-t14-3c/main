@@ -6,7 +6,6 @@ CmdDeleteItem::CmdDeleteItem(vector<Item>::iterator itemPtr) {
 	_itemPtr = itemPtr;
 }
 
-
 CmdDeleteItem::~CmdDeleteItem(void)
 {
 }
