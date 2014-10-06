@@ -20,6 +20,10 @@ void ItemBank::editItemTitleInBank(vector<Item>::iterator itemPtr, string newTit
 	itemPtr->setTitle(newTitle);
 }
 
+void ItemBank::editItemDescriptionInBank(vector<Item>::iterator itemPtr, string newDescription) {
+	itemPtr->setDescription(newDescription);
+}
+
 void ItemBank::editItemStartDateTimeInBank(vector<Item>::iterator itemPtr, struct tm newStartDateTime) {
 	//_itemPtr->setStartDate(5,5);
 	//_itemPtr->setStartTime(5);

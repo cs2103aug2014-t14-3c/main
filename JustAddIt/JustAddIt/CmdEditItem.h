@@ -9,6 +9,7 @@ private:
 	vector<Item>::iterator _itemPtr;
 	int _editFieldNumber;
 	string _newTitle;
+	string _newDescription;
 	struct tm _newStartDateTime;
 	struct tm _newEndDateTime;
 	string _newVenue;

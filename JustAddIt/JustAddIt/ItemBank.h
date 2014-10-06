@@ -12,6 +12,7 @@ public:
 	static void deleteFromBank(vector<Item>::iterator itemPtr);
 	static void markItemInBank(vector<Item>::iterator itemPtr);
 	static void editItemTitleInBank(vector<Item>::iterator itemPtr, string newTitle);
+	static void editItemDescriptionInBank(vector<Item>::iterator itemPtr, string newDescription);
 	static void editItemStartDateTimeInBank(vector<Item>::iterator itemPtr, struct tm newStartDateTime);
 	static void editItemEndDateTimeInBank(vector<Item>::iterator itemPtr, struct tm newEndDateTime);
 	static void editItemVenueInBank(vector<Item>::iterator itemPtr, string newVenue);
