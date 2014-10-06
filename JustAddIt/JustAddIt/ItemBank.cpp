@@ -2,6 +2,7 @@
 #include "ItemBank.h"
 
 vector<Item> ItemBank::bank;
+vector<Item> ItemBank::initialBank;
 
 void ItemBank::addToBank(Item item) {
 	bank.push_back(item);
@@ -29,4 +30,13 @@ Item ItemBank::findItemByVectorPos(int i) {
 
 int ItemBank::getBankSize() {
 	return (int)bank.size();
+}
+
+void ItemBank::initialiseBank() {
+	std::copy(bank.begin(), bank.end(), initialBank.begin());
+}
+
+void ItemBank::resetBank() {
+	bank.clear();
+	std::copy(initialBank.begin(), initialBank.end(), bank.begin());
 }

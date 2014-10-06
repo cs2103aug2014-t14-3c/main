@@ -79,6 +79,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActionLog.h" />
     <ClInclude Include="CmdAddItem.h" />
     <ClInclude Include="CmdClearAllOverdueTasks.h" />
     <ClInclude Include="CmdDeleteItem.h" />
@@ -100,6 +101,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ActionLog.cpp" />
     <ClCompile Include="CmdAddItem.cpp" />
     <ClCompile Include="CmdClearAllOverdueTasks.cpp" />
     <ClCompile Include="CmdDeleteItem.cpp" />
