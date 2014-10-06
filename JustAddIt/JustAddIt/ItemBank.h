@@ -5,6 +5,7 @@ class ItemBank
 {
 private: 
 	static vector<Item> bank;
+	static vector<Item> initialBank;
 
 public:
 	static void addToBank(Item item);
@@ -15,5 +16,7 @@ public:
 	static Item findItemByVectorPos(int i);
 
 	static int getBankSize();
+	static void initialiseBank();
+	static void resetBank();
 };
 
