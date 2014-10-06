@@ -6,9 +6,9 @@ class CmdDeleteItem :
 	public Command
 {
 private:
-	vector<Item>::iterator _itemPtr;
+	vector<Item*>::iterator _itemPtr;
 public:
-	CmdDeleteItem(vector<Item>::iterator itemPtr);
+	CmdDeleteItem(vector<Item*>::iterator itemPtr);
 	~CmdDeleteItem(void);
 	vector<string> CmdDeleteItem::execute();
 };

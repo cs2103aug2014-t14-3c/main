@@ -6,7 +6,7 @@ class CmdEditItem :
 	public Command 
 {
 private:
-	vector<Item>::iterator _itemPtr;
+	vector<Item*>::iterator _itemPtr;
 	int _editFieldNumber;
 	string _newTitle;
 	string _newDescription;
@@ -17,7 +17,7 @@ private:
 	Item::PriorityLevel _newPriority;
 
 public:
-	CmdEditItem(vector<Item>::iterator itemPtr);
+	CmdEditItem(vector<Item*>::iterator itemPtr);
 	~CmdEditItem(void);
 	vector<string> CmdEditItem::execute();
 };

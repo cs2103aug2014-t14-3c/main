@@ -2,7 +2,7 @@
 #include "CmdDeleteItem.h"
 
 
-CmdDeleteItem::CmdDeleteItem(vector<Item>::iterator itemPtr) {
+CmdDeleteItem::CmdDeleteItem(vector<Item*>::iterator itemPtr) {
 	_itemPtr = itemPtr;
 }
 

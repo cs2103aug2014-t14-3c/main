@@ -153,7 +153,7 @@ void Parser::detectDateAndEmbed(Item* myItem, string stringDetails){
 	//while(!isKeywordDate(currentWord)){
 	//	streamDetails >> currentWord;
 	//}
-	while(streamDetails >> currentWord && !keywordDateFound){
+	while(!keywordDateFound && streamDetails >> currentWord){
 		if(isKeywordDate(currentWord)){
 			keywordDateFound=true;
 		}
@@ -218,10 +218,11 @@ int Parser::convertStringToIntMin(string stringTime){
 	return stoi (stringTime);
 }
 int Parser::convertStrToIntMonth(string month){
-	const string month3[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-								"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-	const string monthfull[] = {"January", "February", "March", "April", "May", "June",
-								"July", "August", "September", "October", "November", "December"};
+	convertStringToLowercase(month);
+	const string month3[] = {"jan", "feb", "mar", "apr", "may", "jun",
+								"jul", "aug", "sep", "oct", "nov", "dec"};
+	const string monthfull[] = {"january", "february", "march", "april", "may", "june",
+								"july", "august", "september", "october", "november", "december"};
 	int i;
 	if(month.size()==3){
 		for(i=0; i<MONTHS_IN_YEAR; i++){

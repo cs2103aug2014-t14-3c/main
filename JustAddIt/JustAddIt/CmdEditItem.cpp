@@ -2,7 +2,7 @@
 #include "CmdEditItem.h"
 
 
-CmdEditItem::CmdEditItem(vector<Item>::iterator itemPtr) {
+CmdEditItem::CmdEditItem(vector<Item*>::iterator itemPtr) {
 	_itemPtr = itemPtr;
 	int _editFieldNumber = NULL;
 	string _newTitle = NULL;

@@ -2,7 +2,7 @@
 #include "CmdMarkItemDone.h"
 
 
-CmdMarkItemDone::CmdMarkItemDone(vector<Item>::iterator itemPtr) {
+CmdMarkItemDone::CmdMarkItemDone(vector<Item*>::iterator itemPtr) {
 	_itemPtr = itemPtr;
 }
 
