@@ -21,31 +21,6 @@ Command::~Command(void)
 {
 }
 
-string Command::priorityToString(Item::PriorityLevel priority) {
-	switch(priority) {
-		case Item::PriorityLevel::LOW:
-			return "Low";
-		case Item::PriorityLevel::MED:
-			return "Medium";
-		case Item::PriorityLevel::HIGH:
-			return "High";
-		case Item::PriorityLevel::INVALID:
-			return "Invalid";
-		default:
-			return "";
-	}
-}
-
-string Command::dateToString(tm* date) {
-	char tempArray[MAX_SIZE];
-	
-	strftime(tempArray, MAX_SIZE, "%d %b %I:%M%p", date);
-
-	string str(tempArray);
-
-	return str;
-}
-
 vector<string> Command::itemToString(Item* itemPtr) {
 	
 	vector<string> item;
@@ -57,16 +32,16 @@ vector<string> Command::itemToString(Item* itemPtr) {
 	lineContent = FORMAT_DESCRIPTION + itemPtr->getDescription();
 	item.push_back(lineContent);
 
-	lineContent = FORMAT_START + dateToString(&(itemPtr->getStartDateTime()));
+	lineContent = FORMAT_START + itemPtr->getStartDateInString();
 	item.push_back(lineContent);
 
-	lineContent = FORMAT_END + dateToString(&(itemPtr->getEndDateTime()));
+	lineContent = FORMAT_END + itemPtr->getEndDateInString();
 	item.push_back(lineContent);
 
 	lineContent = FORMAT_VENUE + itemPtr->getVenue();
 	item.push_back(lineContent);
 
-	lineContent = FORMAT_PRIORITY + priorityToString(itemPtr->getPriority());
+	lineContent = FORMAT_PRIORITY + itemPtr->getPriorityInString();
 	item.push_back(lineContent);
 
 	lineContent = FORMAT_CATEGORY + itemPtr->getCategory();

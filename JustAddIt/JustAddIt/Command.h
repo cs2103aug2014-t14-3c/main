@@ -22,9 +22,6 @@ protected:
 
 	vector<string> outputMessageStorage;
 
-	string priorityToString(Item::PriorityLevel priority);
-	string dateToString(tm* date);
-
 	virtual vector<string> itemToString(Item* itemPtr);
 
 	virtual vector<string> constructOutput();

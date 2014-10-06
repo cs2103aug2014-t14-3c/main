@@ -11,7 +11,11 @@ void UI::main() {
 	vector<string>::iterator iter;
 	Executor executor;
 
-	executor.initialise();
+	outputMessageStorage = executor.initialise();
+	for (iter = outputMessageStorage.begin(); iter != outputMessageStorage.end(); iter++) {
+		cout << *iter << endl;
+	}
+
 
 	cout << "command: ";
 	getline(cin, userCommand);

@@ -1,8 +1,9 @@
 #pragma once
 #include "stdafx.h"
+
+#define MAX_SIZE 100
+
 using namespace std;
-
-
 
 class Item { 
 public:
@@ -28,10 +29,13 @@ public:
 	string getTitle();
 	string getDescription();
 	struct tm getStartDateTime();
+	string getStartDateInString();
 	struct tm getEndDateTime();
+	string getEndDateInString();
 	string getVenue();
 	string getCategory();
 	PriorityLevel getPriority();
+	string getPriorityInString();
 	bool getIsDone();
 
 	void updateIdCounter(int lastIdUsed);

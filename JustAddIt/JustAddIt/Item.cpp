@@ -34,8 +34,28 @@ struct tm Item::getStartDateTime() {
 	return _startDateTime;
 }
 
+string Item::getStartDateInString() {
+	char tempArray[MAX_SIZE];
+	
+	strftime(tempArray, MAX_SIZE, "%d %b %I:%M%p", &_startDateTime);
+
+	string str(tempArray);
+
+	return str;
+}
+
 struct tm Item::getEndDateTime() {
 	return _endDateTime;
+}
+
+string Item::getEndDateInString() {
+	char tempArray[MAX_SIZE];
+	
+	strftime(tempArray, MAX_SIZE, "%d %b %I:%M%p", &_endDateTime);
+
+	string str(tempArray);
+
+	return str;
 }
 
 string Item::getVenue() {
@@ -48,6 +68,21 @@ string Item::getCategory() {
 
 Item::PriorityLevel Item::getPriority() {
 	return _priority;
+}
+
+string Item::getPriorityInString() {
+	switch(_priority) {
+		case Item::PriorityLevel::LOW:
+			return "Low";
+		case Item::PriorityLevel::MED:
+			return "Medium";
+		case Item::PriorityLevel::HIGH:
+			return "High";
+		case Item::PriorityLevel::INVALID:
+			return "Invalid";
+		default:
+			return "";
+	}
 }
 
 bool Item::getIsDone() { 
