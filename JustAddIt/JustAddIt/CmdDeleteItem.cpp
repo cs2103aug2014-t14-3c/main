@@ -13,6 +13,6 @@ CmdDeleteItem::~CmdDeleteItem(void)
 vector<string> CmdDeleteItem::execute() {
 	ItemBank::deleteFromBank(_itemPtr);
 	outputMessageStorage.clear();
-	outputMessageStorage.push_back("Item is successfully delete!");
+	outputMessageStorage.push_back("Item is successfully deleted!");
 	return outputMessageStorage;
 }

@@ -3,15 +3,6 @@
 
 vector<string> Executor::outputMessageStorage;
 
-Executor::Executor(void)
-{
-}
-
-
-Executor::~Executor(void)
-{
-}
-
 vector<string> Executor::execute(string userCommand) {
 	Parser parser;
 	Command* command;
@@ -22,5 +13,12 @@ vector<string> Executor::execute(string userCommand) {
 	outputMessageStorage = command->execute();
 	ActionLog::addCommand(*command);
 
+	return outputMessageStorage;
+}
+
+vector<string> Executor::initialise() {
+	Command* command = new CmdInitialiseBank();
+	outputMessageStorage = command->execute();
+	
 	return outputMessageStorage;
 }

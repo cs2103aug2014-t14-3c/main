@@ -78,7 +78,13 @@
     <ClInclude Include="ActionLog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OutputConstructor.h">
+    <ClInclude Include="UI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdInitialiseBank.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -143,7 +149,13 @@
     <ClCompile Include="ActionLog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OutputConstructor.cpp">
+    <ClCompile Include="UI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdInitialiseBank.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
