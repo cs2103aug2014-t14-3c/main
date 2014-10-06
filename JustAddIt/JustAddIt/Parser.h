@@ -7,9 +7,10 @@
 #include <iterator>
 #include "Command.h"
 #include "CmdAddItem.h"
+#include "CmdSearch.h"
 
 enum CommandType {
-	ADD
+	ADD, SEARCH
 };
 
 class Parser

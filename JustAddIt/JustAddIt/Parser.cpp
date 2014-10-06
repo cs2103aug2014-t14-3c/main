@@ -36,6 +36,14 @@ Command* Parser::stringToCommand(string userCommand) {
 			break;
 		}
 		
+		case SEARCH: {
+			string keyword;
+			getline(commandStream, keyword);
+			CmdSearch* mySearch = new CmdSearch(keyword);
+			return mySearch;
+			break;
+		}
+
 		//TODO: INVALID CASE AND DEFAULT CASE
 	}
 	return NULL;

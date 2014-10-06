@@ -1,10 +1,15 @@
 #pragma once
-#include "command.h"
+#include "Command.h"
+
 class CmdSearch :
-	public Command
-{
+	public Command {
+private:
+	string itemsToBeSearched;
+	vector<string> temporaryStorage;
 public:
-	CmdSearch(void);
+	CmdSearch(string keyword);
 	~CmdSearch(void);
+
+	string execute();
 };
 
