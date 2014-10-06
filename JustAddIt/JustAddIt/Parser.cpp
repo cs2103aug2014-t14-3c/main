@@ -21,7 +21,7 @@ Command* Parser::stringToCommand(string userCommand) {
 	commandStream >> userAction;
 	//translate the first word into a CommandType
 	CommandType commandAction = determineCommandType(userAction);
-	//translateStringToDetails(currentLogic, );
+	
 	
 	switch (commandAction) {
 		case ADD: {
@@ -31,8 +31,9 @@ Command* Parser::stringToCommand(string userCommand) {
 			string stringDetails;
 			getline(commandStream, stringDetails);
 			embedDetailsInItem(item1, stringDetails);
-			CmdAddItem* myAdd = new CmdAddItem(*item1);
+			CmdAddItem* myAdd = new CmdAddItem(item1);
 			return myAdd;
+
 			break;
 		}
 		
@@ -43,7 +44,15 @@ Command* Parser::stringToCommand(string userCommand) {
 			return mySearch;
 			break;
 		}
-
+		case EDIT: {
+			int fieldNum;
+			string newFieldInfo;
+			commandStream >> fieldNum;
+			getline(commandStream, newFieldInfo);
+			//CmdEditItem* myEdit = new CmdEditItem();
+			//return myEdit;
+			break;
+		}
 		//TODO: INVALID CASE AND DEFAULT CASE
 	}
 	return NULL;
@@ -86,6 +95,12 @@ void Parser::detectTimeAndEmbed(Item* myItem, string stringDetails){
 	string currentWord;
 	string endTime;
 	string startTime;
+	bool startTimeExists=false;
+	bool endTimeExists=false;
+	int startHourToBeSet;
+	int startMinToBeSet;
+	int endHourToBeSet;
+	int endMinToBeSet;
 
 	//loop and stop till it gets the first time keyword
 	streamDetails >> currentWord;
@@ -95,6 +110,7 @@ void Parser::detectTimeAndEmbed(Item* myItem, string stringDetails){
 	}
 	if(isKeywordStartTime(currentWord)){
 		//get the next string and treat it as start time
+		startTimeExists=true;
 		streamDetails >> startTime;
 		previousWord = startTime;
 		//move on to the next word after start time word
@@ -104,18 +120,25 @@ void Parser::detectTimeAndEmbed(Item* myItem, string stringDetails){
 	if(isKeywordEndTime(currentWord)){
 		//previous string is start time
 		//next string is end time
+		startTimeExists=true;//TODO: assumption that once got end keyword, start time exists
+		endTimeExists=true;
 		startTime=previousWord;
 		streamDetails >> endTime;
 	}
 	
+	if(startTimeExists){
+		startHourToBeSet = convertStringToIntHour(startTime);
+		startMinToBeSet = convertStringToIntMin(startTime);
+		myItem->setStartTime(startHourToBeSet, startMinToBeSet);
+	}
+	if(endTimeExists){
+		endHourToBeSet = convertStringToIntHour(endTime);
+		endMinToBeSet = convertStringToIntMin(endTime);	
+		myItem->setEndTime(endHourToBeSet, endMinToBeSet);
+	}
 
-	int startHourToBeSet = convertStringToIntHour(startTime);
-	int endHourToBeSet = convertStringToIntHour(endTime);
-	int startMinToBeSet = convertStringToIntMin(startTime);
-	int endMinToBeSet = convertStringToIntMin(endTime);	
-
-	myItem->setStartTime(startHourToBeSet, startMinToBeSet);
-	myItem->setEndTime(endHourToBeSet, endMinToBeSet);
+	
+	
 
 	return;
 	
@@ -125,19 +148,29 @@ void Parser::detectDateAndEmbed(Item* myItem, string stringDetails){
 	istringstream streamDetails(stringDetails);
 
 	string currentWord;
-	
+	bool keywordDateFound=false;
 	//loop and stop when it finds the first date keyword
-	while(!isKeywordDate(currentWord)){
-		streamDetails >> currentWord;
+	//while(!isKeywordDate(currentWord)){
+	//	streamDetails >> currentWord;
+	//}
+	while(streamDetails >> currentWord && !keywordDateFound){
+		if(isKeywordDate(currentWord)){
+			keywordDateFound=true;
+		}
 	}
-	int day;
-	string month;
-	streamDetails >> day;
-	streamDetails >> month;
+	if(keywordDateFound){
+		int day;
+		string month;
+		streamDetails >> day;
+		streamDetails >> month;
 
-	int monthNumber = convertStrToIntMonth(month);
-	myItem->setStartDate(day, monthNumber);
-	myItem->setEndDate(day, monthNumber);
+		int monthNumber = convertStrToIntMonth(month);
+		myItem->setStartDate(day, monthNumber);
+		myItem->setEndDate(day, monthNumber);
+	}
+	else{
+		return;
+	}
 	return;
 }
 
@@ -221,7 +254,12 @@ CommandType Parser::determineCommandType(string userCommand) {
 	if (userCommand == "add") {
 		return ADD;
 	}
-
+	if (userCommand == "search") {
+		return SEARCH;
+	}
+	if (userCommand == "e") {
+		return EDIT;
+	}
 	//DELETE THIS. PREVENT ERROR ONLY
 	return ADD;
 

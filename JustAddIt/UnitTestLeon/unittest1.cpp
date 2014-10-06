@@ -129,5 +129,17 @@ namespace UnitTestLeon
 			Assert::AreEqual("20 Sep 09:00PM.", buffer);
 			
 		}
+		//	TEST_METHOD(TestExecutor1)
+		//{
+		//	Executor myExec;
+		//	Parser myParser;
+		//	Item item1;
+		//	Command* myAdd;
+		//	myAdd = myParser.stringToCommand("add wake up on 20 Sep at 7");
+		//	Assert::AreEqual(1,1);
+		//  vector <string> actualString = myAdd->execute();
+		//	//vector<string> actualString = myExec.execute("add wake up on 20 Sep at 7");
+		//	
+		//}
 	};
 }

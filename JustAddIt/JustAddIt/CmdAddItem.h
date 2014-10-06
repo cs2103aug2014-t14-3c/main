@@ -10,9 +10,10 @@ private:
 	Item* _itemAddr;
 
 public:
-	CmdAddItem(Item item);
+	CmdAddItem(Item* item);
 	~CmdAddItem(void);
 
 	vector<string> execute();
+	Item* getItem();
 };
 

@@ -14,13 +14,13 @@ Executor::~Executor(void)
 
 vector<string> Executor::execute(string userCommand) {
 	Parser parser;
-	Command command;
+	Command* command;
 
 	outputMessageStorage.clear();
 
-	command = *(parser.stringToCommand(userCommand));
-	outputMessageStorage = command.execute();
-	ActionLog::addCommand(command);
+	command = parser.stringToCommand(userCommand);
+	outputMessageStorage = command->execute();
+	ActionLog::addCommand(*command);
 
 	return outputMessageStorage;
 }

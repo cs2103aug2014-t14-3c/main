@@ -1,15 +1,15 @@
 #include "stdafx.h"
 #include "ItemBank.h"
 
-vector<Item> ItemBank::bank;
-vector<Item> ItemBank::initialBank;
+vector<Item*> ItemBank::bank;
+vector<Item*> ItemBank::initialBank;
 
-void ItemBank::addToBank(Item item) {
+void ItemBank::addToBank(Item* item) {
 	bank.push_back(item);
 }
 
 void ItemBank::deleteFromBank(vector<Item>::iterator itemPtr) {
-	bank.erase(itemPtr);
+	//bank.erase(itemPtr, itemPtr);
 }
 
 void ItemBank::markItemInBank(vector<Item>::iterator itemPtr) {
@@ -55,7 +55,7 @@ vector<Item>::iterator ItemBank::findItemById(int id) {
 }
 
 Item ItemBank::findItemByVectorPos(int i) {
-	return bank[i];
+	return *bank[i];
 }
 
 int ItemBank::getBankSize() {

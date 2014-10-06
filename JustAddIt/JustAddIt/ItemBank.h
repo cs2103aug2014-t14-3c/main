@@ -4,11 +4,11 @@
 class ItemBank
 {
 private: 
-	static vector<Item> bank;
-	static vector<Item> initialBank;
+	static vector<Item*> bank;
+	static vector<Item*> initialBank;
 
 public:
-	static void addToBank(Item item);
+	static void addToBank(Item* item);
 	static void deleteFromBank(vector<Item>::iterator itemPtr);
 	static void markItemInBank(vector<Item>::iterator itemPtr);
 	static void editItemTitleInBank(vector<Item>::iterator itemPtr, string newTitle);

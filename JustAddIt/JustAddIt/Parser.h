@@ -11,7 +11,7 @@
 
 
 enum CommandType {
-	ADD, SEARCH
+	ADD, SEARCH, EDIT
 };
 
 class Parser

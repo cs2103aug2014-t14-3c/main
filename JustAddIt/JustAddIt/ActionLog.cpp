@@ -5,7 +5,8 @@ vector<Command> ActionLog::log;
 int ActionLog::numCommands = 0;
 
 void ActionLog::addCommand(Command cmd) {
-	log[numCommands++] = cmd;
+	log.push_back(cmd);
+	numCommands++;
 }
 
 void ActionLog::undo() {

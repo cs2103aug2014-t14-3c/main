@@ -16,3 +16,4 @@ vector<string> Command::execute() {
 	outputMessageStorage.clear();
 	return outputMessageStorage;
 }
+
