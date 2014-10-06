@@ -14,3 +14,4 @@ public:
 	static void undo();
 	static void redo();
 };
+

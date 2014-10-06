@@ -11,6 +11,7 @@ private:
 
 	int _id;
 	string _title;
+	string _description;
 	struct tm _startDateTime;
 	struct tm _endDateTime;
 	string _venue;
@@ -23,6 +24,7 @@ public:
 	~Item(void);
 
 	string getTitle();
+	string getDescription();
 	struct tm getStartDateTime();
 	struct tm getEndDateTime();
 	string getVenue();
@@ -32,6 +34,7 @@ public:
 
 	void updateIdCounter(int lastIdUsed);
 	void setTitle(string title);
+	void setDescription(string description);
 	void setStartDate(int day, int month);
 	void setStartTime(int hour);
 	void setEndTime(int hour);
