@@ -3,7 +3,7 @@
 #include "ItemBank.h"
 
 class CmdEditItem :
-	public Command 
+	public Command
 {
 private:
 	vector<Item>::iterator _itemPtr;
