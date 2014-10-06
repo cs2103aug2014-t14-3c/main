@@ -3,7 +3,7 @@
 
 class ItemBank
 {
-private: 
+public: 
 	static vector<Item*> bank;
 	static vector<Item*> initialBank;
 

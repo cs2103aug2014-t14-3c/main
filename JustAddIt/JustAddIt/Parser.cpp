@@ -36,7 +36,7 @@ Command* Parser::stringToCommand(string userCommand) {
 
 			break;
 		}
-		
+
 		case SEARCH: {
 			string keyword;
 			getline(commandStream, keyword);
@@ -44,6 +44,7 @@ Command* Parser::stringToCommand(string userCommand) {
 			return mySearch;
 			break;
 		}
+
 		case EDIT: {
 			int fieldNum;
 			string newFieldInfo;

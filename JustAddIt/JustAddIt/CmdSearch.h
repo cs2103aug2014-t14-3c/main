@@ -6,9 +6,10 @@ class CmdSearch :
 	public Command 
 {
 private:
-	string itemsToBeSearched;
+	string searchKeyword;
 	vector<string> temporaryStorage;
-	vector<Item>::iterator _itemPtr;
+	vector<string> contentAfterSearching;
+	
 public:
 	CmdSearch(string keyword);
 	~CmdSearch(void);
