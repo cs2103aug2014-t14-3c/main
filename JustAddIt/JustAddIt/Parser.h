@@ -8,18 +8,20 @@
 #include "Command.h"
 #include "CmdAddItem.h"
 
+
 enum CommandType {
 	ADD
 };
 
 class Parser
 {
-protected:
+public:
 	void embedDetailsInItem(Item* myItem, string stringDetails);
 	void detectTitleAndEmbed(Item* myItem, string stringDetails);
 	void detectTimeAndEmbed(Item* myItem, string stringDetails);
 	void detectDateAndEmbed(Item* myItem, string stringDetails);
 	int convertStringToIntHour(string stringTime);
+	int convertStringToIntMin(string stringTime);
 	int convertStrToIntMonth(string month);
 	void convertStringToLowercase(string &myString);
 	CommandType determineCommandType(string userCommand);

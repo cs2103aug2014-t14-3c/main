@@ -62,13 +62,19 @@ void Item::setStartDate(int day, int month) {
 	_startDateTime.tm_mday = day;
 	_startDateTime.tm_mon = month;
 }
-void Item::setStartTime(int hour){
+
+void Item::setEndDate(int day, int month) {
+	_endDateTime.tm_mday = day;
+	_endDateTime.tm_mon = month;
+}
+void Item::setStartTime(int hour, int min){
 	_startDateTime.tm_hour = hour;
+	_startDateTime.tm_min = min;
 }
-void Item::setEndTime(int hour){
+void Item::setEndTime(int hour, int min){
 	_endDateTime.tm_hour = hour;
+	_endDateTime.tm_min = min;
 }
-// void Item::setEndDate(time_type endDate) {}
 
 void Item::setVenue(string venue) {
 	_venue = venue;

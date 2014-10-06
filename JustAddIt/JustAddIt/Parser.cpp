@@ -74,7 +74,7 @@ void Parser::detectTitleAndEmbed(Item* myItem, string stringDetails){
 void Parser::detectTimeAndEmbed(Item* myItem, string stringDetails){
 	
 	istringstream streamDetails(stringDetails);
-	string previousWord=NULL;
+	string previousWord="";
 	string currentWord;
 	string endTime;
 	string startTime;
@@ -102,10 +102,12 @@ void Parser::detectTimeAndEmbed(Item* myItem, string stringDetails){
 	
 
 	int startHourToBeSet = convertStringToIntHour(startTime);
-	int endHourToBeSet = convertStringToIntHour(endTime);	
+	int endHourToBeSet = convertStringToIntHour(endTime);
+	int startMinToBeSet = convertStringToIntMin(startTime);
+	int endMinToBeSet = convertStringToIntMin(endTime);	
 
-	myItem->setStartTime(startHourToBeSet);
-	myItem->setEndTime(endHourToBeSet);
+	myItem->setStartTime(startHourToBeSet, startMinToBeSet);
+	myItem->setEndTime(endHourToBeSet, endMinToBeSet);
 
 	return;
 	
@@ -126,9 +128,8 @@ void Parser::detectDateAndEmbed(Item* myItem, string stringDetails){
 	streamDetails >> month;
 
 	int monthNumber = convertStrToIntMonth(month);
-
-	//std::string strDate = "5 Feb";
 	myItem->setStartDate(day, monthNumber);
+	myItem->setEndDate(day, monthNumber);
 	return;
 }
 
@@ -142,13 +143,13 @@ int Parser::convertStringToIntHour(string stringTime){
 	positionFound = stringTime.find("am");
 	//if found, cut the am out
 	if (positionFound!=string::npos){
-		stringTime.substr(0,positionFound);
+		stringTime = stringTime.substr(0,positionFound);
 	}
 
 	positionFound = stringTime.find("pm");
 	//if found, cut the pm out
 	if (positionFound!=string::npos){
-		stringTime.substr(0,positionFound);
+		stringTime = stringTime.substr(0,positionFound);
 		accountForPM=12;
 	}
 	//what remains is the digits
@@ -156,7 +157,25 @@ int Parser::convertStringToIntHour(string stringTime){
 	
 	return actualTime;
 }
-
+int Parser::convertStringToIntMin(string stringTime){
+	
+	size_t positionFound1;
+	size_t positionFound2;
+	positionFound1 = stringTime.find(".");
+	positionFound2 = stringTime.find(":");
+	//if found, crop the 2 digits after that 
+	if (positionFound1!=string::npos){
+		stringTime = stringTime.substr(positionFound1+1,positionFound1+3);
+	}
+	else if (positionFound2!=string::npos){
+		stringTime = stringTime.substr(positionFound2+1,positionFound2+3);
+	}
+	//default case: 0 minutes
+	else {
+		stringTime = "0";
+	}
+	return stoi (stringTime);
+}
 int Parser::convertStrToIntMonth(string month){
 	const string month3[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
 								"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -211,7 +230,7 @@ bool Parser::isKeywordStartTime(string myWord){
 	return myWord=="at" || myWord == "from" || myWord == "between";
 }
 bool Parser::isKeywordEndTime(string myWord){
-	return myWord=="to" || myWord == "-" || myWord == "by";
+	return myWord=="to" || myWord == "-" || myWord == "by" || myWord == "and";
 }
 bool Parser::isKeywordDate(string myWord){
 	return myWord=="on";

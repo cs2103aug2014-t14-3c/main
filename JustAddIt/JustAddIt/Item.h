@@ -1,5 +1,5 @@
 #pragma once
-
+#include "stdafx.h"
 using namespace std;
 
 enum PriorityLevel { LOW, MED, HIGH, INVALID };
@@ -33,8 +33,9 @@ public:
 	void updateIdCounter(int lastIdUsed);
 	void setTitle(string title);
 	void setStartDate(int day, int month);
-	void setStartTime(int hour);
-	void setEndTime(int hour);
+	void setEndDate(int day, int month);
+	void setStartTime(int hour, int min);
+	void setEndTime(int hour, int min);
 	// void setEndDate(time_type endDate);
 	void setVenue(string venue);
 	void setCategory(string category);

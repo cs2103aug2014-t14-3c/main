@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ItemBank.h"
+#include "stdafx.h"
 
 using namespace std;
 
