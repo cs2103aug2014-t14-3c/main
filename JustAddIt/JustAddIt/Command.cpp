@@ -28,6 +28,8 @@ const string Command::PAGE_COMMAND_EXPORT = "[e] Export";
 const string Command::PAGE_COMMAND_MODIFY = "[m 1, m 2, ...] = Modify item no.";
 const string Command::PAGE_COMMAND_DELETE = "[d 1, d 2, ...] = Delete item no.";
 const string Command::PAGE_COMMAND_MARK_DONE = "[k 1, k 2, ...] = Mark item no. done";
+const string Command::PAGE_COMMAND_UNDO = "[u] Undo";
+const string Command::PAGE_COMMAND_CHANGE_MONTH = "[<],[>] Cycle between months";
 
 Command::Command(void)
 {
@@ -38,49 +40,18 @@ Command::~Command(void)
 {
 }
 
-vector<string> Command::itemToString(Item* itemPtr) {
+void Command::itemToString(Item* itemPtr) {
 	
-	vector<string> item;
-	string lineContent;
-	string itemTitle = itemPtr->getTitle();
-	string itemDescription = itemPtr->getDescription();
-	string itemStartDate = itemPtr->getStartDateInString();
-	string itemEndDate = itemPtr->getEndDateInString();
-	string itemVenue = itemPtr->getVenue();
-	string itemPriority = itemPtr->getPriorityInString();
-	string itemCategory = itemPtr->getCategory();
-
-	lineContent = "1) " + FORMAT_TITLE + itemTitle;
-	item.push_back(lineContent);
-
-	lineContent = "2) " + FORMAT_DESCRIPTION + itemDescription;
-	item.push_back(lineContent);
-
-	lineContent = "3) " + FORMAT_START + itemStartDate;
-	item.push_back(lineContent);
-
-	lineContent = "4) " +FORMAT_END + itemEndDate;
-	item.push_back(lineContent);
-
-	lineContent = "5) " + FORMAT_VENUE + itemVenue;
-	item.push_back(lineContent);
-
-	lineContent = "6) " + FORMAT_PRIORITY + itemPriority;
-	item.push_back(lineContent);
-
-	lineContent = "7) " + FORMAT_CATEGORY + itemCategory;
-	item.push_back(lineContent);
-
-	OutputControl::addItemToDisplayList(itemPtr); 
-
-	outputMessageStorage.insert(outputMessageStorage.end(), item.begin(), item.end());
-	
-	return item;
 }
 
-vector<string> Command::constructOutput() {
+void Command::setPageCommands() {
 	outputMessageStorage.clear();
-	return outputMessageStorage;
+
+	cout << string(50,'\n');
+}
+
+void Command::constructOutput() {
+
 }
 
 vector<string> Command::execute() {

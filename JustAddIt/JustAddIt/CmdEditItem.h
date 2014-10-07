@@ -16,6 +16,10 @@ private:
 	string _newCategory;
 	Item::PriorityLevel _newPriority;
 
+	void constructOutput();
+	void itemToString(Item* itemPtr);
+	void setPageCommands();
+
 public:
 	CmdEditItem(vector<Item*>::iterator itemPtr);
 	~CmdEditItem(void);
