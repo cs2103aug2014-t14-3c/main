@@ -8,6 +8,10 @@ class CmdAddItem :
 {
 private:
 	Item* _itemAddr;
+	
+	void constructOutput();
+	void itemToString(Item* itemPtr);
+	void setPageCommands();
 
 public:
 	CmdAddItem(Item* item);

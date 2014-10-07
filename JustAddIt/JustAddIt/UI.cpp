@@ -6,28 +6,29 @@ void UI::main() {
 	//Output home screen
 	//Prompt for command
 
-	string userCommand;
+	string userCommand = "";
 	vector<string> outputMessageStorage;
 	vector<string>::iterator iter;
 	Executor executor;
 
 	outputMessageStorage = executor.initialise();
+
 	for (iter = outputMessageStorage.begin(); iter != outputMessageStorage.end(); iter++) {
 		cout << *iter << endl;
 	}
-
 
 	cout << "command: ";
 	getline(cin, userCommand);
 
 	while (userCommand != "exit") {
-		outputMessageStorage = executor.execute(userCommand);
-		for (iter = outputMessageStorage.begin(); iter != outputMessageStorage.end(); iter++) {
-			cout << *iter << endl;
-		}
+	outputMessageStorage = executor.execute(userCommand);
 
-		outputMessageStorage.clear();
-		cout << "command: ";
-		cin >> userCommand;
+	for (iter = outputMessageStorage.begin(); iter != outputMessageStorage.end(); iter++) {
+		cout << *iter << endl;
+	}
+
+	outputMessageStorage.clear();
+	cout << "command: ";
+	getline(cin, userCommand); 
 	};
 }

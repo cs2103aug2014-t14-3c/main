@@ -7,7 +7,7 @@ vector<string> Executor::execute(string userCommand) {
 	Parser parser;
 	Command* command;
 
-	outputMessageStorage.clear();
+	clearScreen();
 
 	command = parser.stringToCommand(userCommand);
 	outputMessageStorage = command->execute();
@@ -21,4 +21,12 @@ vector<string> Executor::initialise() {
 	outputMessageStorage = command->execute();
 	
 	return outputMessageStorage;
+}
+
+void Executor::clearScreen() {
+	outputMessageStorage.clear();
+	
+	cout << string(50, '\n');
+
+	return;
 }

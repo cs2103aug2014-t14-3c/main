@@ -20,11 +20,31 @@ protected:
 	static const string FORMAT_CATEGORY;	
 	static const string FORMAT_DIVIDER; 
 
+	static const string PAGE_COMMAND_TO_DO_LIST_VIEW;
+	static const string PAGE_COMMAND_CALENDAR_VIEW;
+	static const string PAGE_COMMAND_OVERDUE_TASKS;
+	static const string PAGE_COMMAND_SAVE;
+	static const string PAGE_COMMAND_EDIT;
+	static const string PAGE_COMMAND_CANCEL;
+	static const string PAGE_COMMAND_VIEW_TWO_WEEKS;
+	static const string PAGE_COMMAND_VIEW_THREE_WEEKS;
+	static const string PAGE_COMMAND_VIEW_MONTH;
+	static const string PAGE_COMMAND_SHOW_ALL;
+	static const string PAGE_COMMAND_SORT_CATEGORY;
+	static const string PAGE_COMMAND_SORT_PRIORITY;
+	static const string PAGE_COMMAND_EXPORT;
+	static const string PAGE_COMMAND_MODIFY;
+	static const string PAGE_COMMAND_DELETE;
+	static const string PAGE_COMMAND_MARK_DONE;
+	static const string PAGE_COMMAND_UNDO;
+	static const string PAGE_COMMAND_CHANGE_MONTH;
+
+
 	vector<string> outputMessageStorage;
 
-	virtual vector<string> itemToString(Item* itemPtr);
-
-	virtual vector<string> constructOutput();
+	virtual void itemToString(Item* itemPtr);
+	virtual void setPageCommands();
+	virtual void constructOutput();
 
 public:
 	Command(void);
