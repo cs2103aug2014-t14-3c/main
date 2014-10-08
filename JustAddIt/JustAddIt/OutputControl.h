@@ -24,5 +24,8 @@ public:
 	static void setCurrentScreen(CurrentScreenType newScreen);
 
 	static Item* getItemAddr(int itemLocationInList);
+	static vector<Item*>::iterator getCurrentDisplayedItemList();
+	static  CurrentScreenType getCurrentScreen();
+
 
 };

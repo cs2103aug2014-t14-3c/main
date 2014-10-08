@@ -12,9 +12,15 @@ CmdAddItem::~CmdAddItem(void)
 }
 
 vector<string> CmdAddItem::execute() {
+	//add to item bank
 	ItemBank::addToBank(_itemAddr);
-	
+
+	//construct output
 	CmdAddItem::constructOutput();
+
+	//update OutputControl info
+	OutputControl::resetCurrentItemList();
+	OutputControl::addItemToDisplayList(_itemAddr); 
 
 	return outputMessageStorage;
 }
@@ -51,9 +57,8 @@ void CmdAddItem::itemToString(Item* itemPtr) {
 
 	lineContent = "7) " + FORMAT_CATEGORY + itemCategory;
 	item.push_back(lineContent);
-
-	OutputControl::addItemToDisplayList(itemPtr); 
-
+	
+	
 	outputMessageStorage.insert(outputMessageStorage.end(), item.begin(), item.end());
 	
 	return;
@@ -77,7 +82,7 @@ void CmdAddItem::setPageCommands() {
 
 void CmdAddItem::constructOutput() {
 	outputMessageStorage.clear();
-	OutputControl::resetCurrentItemList();
+	
 
 	outputMessageStorage.push_back("Item successfully added!\n");
 

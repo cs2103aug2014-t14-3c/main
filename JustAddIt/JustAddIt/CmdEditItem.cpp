@@ -2,16 +2,17 @@
 #include "CmdEditItem.h"
 
 
-CmdEditItem::CmdEditItem(vector<Item*>::iterator itemPtr) {
+CmdEditItem::CmdEditItem(vector<Item*>::iterator itemPtr, int fieldNum, string newFieldInfo) {
 	_itemPtr = itemPtr;
-	int _editFieldNumber = NULL;
-	string _newTitle = NULL;
-	string _newDescription;
-	//struct tm _newStartDateTime = NULL;
-	//struct tm _newEndDateTime = NULL;
-	string _newVenue = NULL;
-	string _newCategory = NULL;
-	//PriorityLevel _newPriority = NULL;
+	_editFieldNumber = fieldNum;
+	_newFieldInfo = newFieldInfo;
+	//string _newTitle = NULL;
+	//string _newDescription;
+	////struct tm _newStartDateTime = NULL;
+	////struct tm _newEndDateTime = NULL;
+	//string _newVenue = NULL;
+	//string _newCategory = NULL;
+	////PriorityLevel _newPriority = NULL;
 }
 
 
@@ -23,37 +24,39 @@ vector<string> CmdEditItem::execute() {
 
 	switch (_editFieldNumber) {
 	case 1: {
-		ItemBank::editItemTitleInBank(_itemPtr, _newTitle);
+		ItemBank::editItemTitleInBank(_itemPtr, _newFieldInfo);
 		break;
 			}
 	case 2: {
-		ItemBank::editItemDescriptionInBank(_itemPtr, _newDescription);
+		ItemBank::editItemDescriptionInBank(_itemPtr, _newFieldInfo);
 		break;
 
 			}
 	case 3: {
+		//TODO: convert field info to date/time
 		//ItemBank::editItemStartDateTimeInBank(_itemPtr, _newStartDateTime);
-		break;
+		//break;
 
 			}
 	case 4: {
+		//TODO: convert field info to date/time
 		//ItemBank::editItemEndDateTimeInBank(_itemPtr, _newEndDateTime);
-		break;
+		//break;
 
 			}
 	case 5: {
-		ItemBank::editItemVenueInBank(_itemPtr, _newVenue);
+		ItemBank::editItemVenueInBank(_itemPtr, _newFieldInfo);
 		break;
 
 			}
 	case 6: {
-		ItemBank::editItemCategoryInBank(_itemPtr, _newCategory);
+		ItemBank::editItemCategoryInBank(_itemPtr, _newFieldInfo);
 		break;
 
 			}
 	case 7: {
 		//ItemBank::editItemPriorityInBank(_itemPtr, _newPriority);
-		break;
+		//break;
 			}
 	default: {
 		outputMessageStorage.push_back("An error has occcurred!");
@@ -82,6 +85,7 @@ void CmdEditItem::constructOutput() {
 	
 	outputMessageStorage.push_back("Item successfully edited!\n");
 
+	//
 	CmdEditItem::itemToString(*_itemPtr);
 
 	CmdEditItem::setPageCommands();

@@ -19,3 +19,10 @@ void OutputControl::setCurrentScreen(CurrentScreenType newScreen) {
 Item* OutputControl::getItemAddr(int itemLocationInList) {
 	return currentDisplayedItemList[itemLocationInList];
 }
+
+vector<Item*>::iterator OutputControl::getCurrentDisplayedItemList(){
+	return currentDisplayedItemList.begin();
+}
+OutputControl::CurrentScreenType OutputControl::getCurrentScreen(){
+	return currentScreen;
+}

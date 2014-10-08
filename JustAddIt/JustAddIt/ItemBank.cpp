@@ -9,7 +9,8 @@ void ItemBank::addToBank(Item* item) {
 }
 
 void ItemBank::deleteFromBank(vector<Item*>::iterator itemPtr) {
-	bank.erase(itemPtr);
+	bank.erase(find(bank.begin(), bank.end(), *itemPtr));
+	
 }
 
 void ItemBank::markItemInBank(vector<Item*>::iterator itemPtr) {

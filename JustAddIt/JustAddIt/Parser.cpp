@@ -20,7 +20,7 @@ Command* Parser::stringToCommand(string userCommand) {
 	string userAction;
 	commandStream >> userAction;
 	//translate the first word into a CommandType
-	CommandType commandAction = determineCommandType(userAction);
+	CommandType commandAction = determineCommandType(userAction, OutputControl::getCurrentScreen());
 	
 	
 	switch (commandAction) {
@@ -50,10 +50,33 @@ Command* Parser::stringToCommand(string userCommand) {
 			string newFieldInfo;
 			commandStream >> fieldNum;
 			getline(commandStream, newFieldInfo);
-			//CmdEditItem* myEdit = new CmdEditItem();
-			//return myEdit;
+			CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, newFieldInfo);
+			return myEdit;
 			break;
-		}
+				   }
+		case SAVE : {
+
+			break;
+					}
+		case CANCEL : {
+			CmdDeleteItem* myDelete = new CmdDeleteItem(OutputControl::getCurrentDisplayedItemList());
+			return myDelete;
+			break;
+					}
+		case VIEW_CALENDAR : {
+
+			break;
+					}
+		case VIEW_TODOLIST : {
+
+			break;
+					}
+		case VIEW_OVERDUE : {
+
+			break;
+					}
+
+	
 		//TODO: INVALID CASE AND DEFAULT CASE
 	}
 	return NULL;
@@ -98,17 +121,29 @@ void Parser::detectTimeAndEmbed(Item* myItem, string stringDetails){
 	string startTime;
 	bool startTimeExists=false;
 	bool endTimeExists=false;
+	bool keywordTimeFound=false;
 	int startHourToBeSet;
 	int startMinToBeSet;
 	int endHourToBeSet;
 	int endMinToBeSet;
 
-	//loop and stop till it gets the first time keyword
+	
+	
 	streamDetails >> currentWord;
-	while(!isKeywordTime(currentWord)){
-		previousWord = currentWord;
-		streamDetails >> currentWord;
+	//for safety (if the first word is a keywordtime)
+	if(isKeywordTime(currentWord)){
+		keywordTimeFound=true;
 	}
+	previousWord = currentWord;
+	//loop and stop if keywordtime is found
+	while(!keywordTimeFound && streamDetails >> currentWord){
+		if(isKeywordTime(currentWord)){
+			keywordTimeFound=true;
+		}
+		previousWord = currentWord;
+	}
+
+
 	if(isKeywordStartTime(currentWord)){
 		//get the next string and treat it as start time
 		startTimeExists=true;
@@ -137,6 +172,13 @@ void Parser::detectTimeAndEmbed(Item* myItem, string stringDetails){
 		endMinToBeSet = convertStringToIntMin(endTime);	
 		myItem->setEndTime(endHourToBeSet, endMinToBeSet);
 	}
+	//tasks
+	if(!startTimeExists && !endTimeExists){
+
+		//TODO: MAGIC NUMBERS
+		myItem->setStartTime(0, 0);
+		myItem->setEndTime(23, 59);
+	}
 
 	
 	
@@ -151,9 +193,7 @@ void Parser::detectDateAndEmbed(Item* myItem, string stringDetails){
 	string currentWord;
 	bool keywordDateFound=false;
 	//loop and stop when it finds the first date keyword
-	//while(!isKeywordDate(currentWord)){
-	//	streamDetails >> currentWord;
-	//}
+	//
 	while(!keywordDateFound && streamDetails >> currentWord){
 		if(isKeywordDate(currentWord)){
 			keywordDateFound=true;
@@ -252,7 +292,56 @@ void Parser::convertStringToLowercase(string &myString){
 	return;
 }
 
-CommandType Parser::determineCommandType(string userCommand) {
+CommandType Parser::determineCommandType(string userCommand, OutputControl::CurrentScreenType currentScreen) {
+	switch (currentScreen) {
+	case OutputControl::HOME_SCREEN: {
+		return determineCommandType_HomeScreen(userCommand);
+		break;
+			}
+	case OutputControl::EDIT_SCREEN: {
+		return determineCommandType_EditScreen(userCommand);
+		break;
+
+			}
+	case OutputControl::DELETE_SCREEN: {
+		return determineCommandType_DeleteScreen(userCommand);
+		break;
+
+			}
+	case OutputControl::SEARCH_RESULTS_SCREEN: {
+		return determineCommandType_SearchResultsScreen(userCommand);
+		break;
+
+			}
+	case OutputControl::TO_DO_LIST_VIEW: {
+		return determineCommandType_ToDoListView(userCommand);
+		break;
+
+			}
+	case OutputControl::CALENDAR_VIEW: {
+		return determineCommandType_CalendarView(userCommand);
+		break;
+			}
+	case OutputControl::OVERDUE_TASKS_SCREEN: {
+		return determineCommandType_OverdueTasksScreen(userCommand);
+		break;
+
+			 }
+										 
+
+	default: {
+				break;
+			 }
+	}
+
+	
+	//DELETE THIS. PREVENT ERROR ONLY
+	return ADD;
+
+}
+
+CommandType Parser::determineCommandType_HomeScreen(string userCommand){
+	
 	if (userCommand == "add") {
 		return ADD;
 	}
@@ -262,9 +351,55 @@ CommandType Parser::determineCommandType(string userCommand) {
 	if (userCommand == "e") {
 		return EDIT;
 	}
-	//DELETE THIS. PREVENT ERROR ONLY
+	//DELETE: FOR TEMP DEBUG ONLY
 	return ADD;
-
+}
+CommandType Parser::determineCommandType_EditScreen(string userCommand){
+	if (userCommand == "e") {
+		return EDIT;
+	}
+	if (userCommand == "s") {
+		return SAVE;
+	}
+	if (userCommand == "c") {
+		return CANCEL;
+	}
+	//DELETE: FOR TEMP DEBUG ONLY
+	return ADD;
+}
+CommandType Parser::determineCommandType_DeleteScreen(string userCommand){
+	if (userCommand == "u") {
+		return UNDO;
+	}
+	if (userCommand == "c") {
+		return VIEW_CALENDAR;
+	}
+	if (userCommand == "t") {
+		return VIEW_TODOLIST;
+	}
+	if (userCommand == "o") {
+		return VIEW_OVERDUE;
+	}
+	//DELETE: FOR TEMP DEBUG ONLY
+	return ADD;
+	//DELETE: FOR TEMP DEBUG ONLY
+	return ADD;
+}
+CommandType Parser::determineCommandType_SearchResultsScreen(string userCommand){
+	//DELETE: FOR TEMP DEBUG ONLY
+	return ADD;
+}
+CommandType Parser::determineCommandType_ToDoListView(string userCommand){
+	//DELETE: FOR TEMP DEBUG ONLY
+	return ADD;
+}
+CommandType Parser::determineCommandType_CalendarView(string userCommand){
+	//DELETE: FOR TEMP DEBUG ONLY
+	return ADD;
+}
+CommandType Parser::determineCommandType_OverdueTasksScreen(string userCommand){
+	//DELETE: FOR TEMP DEBUG ONLY
+	return ADD;
 }
 
 bool Parser::isKeyword(string myWord){
