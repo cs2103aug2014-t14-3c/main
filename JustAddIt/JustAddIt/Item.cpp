@@ -3,15 +3,15 @@
 #include <time.h>
 
 int Item::_idCounter = 1;
-//default start time/date is current time
-//default end time/date is current time + 1h
-Item::Item(void){
 
-	time_t myTempTime;
-	time(&myTempTime);	//set current time to myTempTime
-	localtime_s (&_startDateTime, &myTempTime); //assign time_t var (myTempTime) to tm variable (_startDateTime)
-	localtime_s (&_endDateTime, &myTempTime);
-	_endDateTime.tm_hour++;		//add one more hour
+Item::Item(void){
+	//default start time/date is current time
+	//default end time/date is current time + 1h
+	//time_t myTempTime;
+	//time(&myTempTime);	//set current time to myTempTime
+	//localtime_s (&_startDateTime, &myTempTime); //assign time_t var (myTempTime) to tm variable (_startDateTime)
+	//localtime_s (&_endDateTime, &myTempTime);
+	//_endDateTime.tm_hour++;		//add one more hour
 
 
 	_id = _idCounter++;
@@ -36,12 +36,16 @@ struct tm Item::getStartDateTime() {
 
 string Item::getStartDateInString() {
 	char tempArray[MAX_SIZE];
-	
+	if(&_startDateTime==NULL){
+		return "";
+	}
+	else{
 	strftime(tempArray, MAX_SIZE, "%d %b %I:%M%p", &_startDateTime);
 
 	string str(tempArray);
 
 	return str;
+	}
 }
 
 struct tm Item::getEndDateTime() {
@@ -50,12 +54,16 @@ struct tm Item::getEndDateTime() {
 
 string Item::getEndDateInString() {
 	char tempArray[MAX_SIZE];
-	
-	strftime(tempArray, MAX_SIZE, "%d %b %I:%M%p", &_endDateTime);
+	if(&_endDateTime==NULL){
+		return "";
+	}
+	else{
+		strftime(tempArray, MAX_SIZE, "%d %b %I:%M%p", &_endDateTime);
 
-	string str(tempArray);
+		string str(tempArray);
 
-	return str;
+		return str;
+	}
 }
 
 string Item::getVenue() {
@@ -88,6 +96,9 @@ string Item::getPriorityInString() {
 bool Item::getIsDone() { 
 	return _isDone;
 }
+string Item::getItemType(){
+	return _itemType;
+}
 
 void Item::updateIdCounter(int lastIdUsed) {
 	_idCounter = lastIdUsed + 1;
@@ -109,6 +120,12 @@ void Item::setStartDate(int day, int month) {
 void Item::setEndDate(int day, int month) {
 	_endDateTime.tm_mday = day;
 	_endDateTime.tm_mon = month;
+}
+void Item::setStartEndDateTimeAsToday(){
+	time_t nowTime;
+	time(&nowTime);
+	localtime_s (&_startDateTime, &nowTime);
+	localtime_s (&_endDateTime, &nowTime);
 }
 void Item::setStartTime(int hour, int min){
 	_startDateTime.tm_hour = hour;
@@ -137,4 +154,8 @@ void Item::toggleDone() {
 	} else {
 		_isDone = true;
 	}
+}
+
+void Item::setItemType(string itemType){
+	_itemType = itemType;
 }

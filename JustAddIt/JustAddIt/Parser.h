@@ -10,6 +10,7 @@
 #include "CmdSearch.h"
 #include "CmdEditItem.h"
 #include "CmdDeleteItem.h"
+#include "CmdUndo.h"
 
 
 enum CommandType {
@@ -20,9 +21,13 @@ class Parser
 {
 public:
 	void embedDetailsInItem(Item* myItem, string stringDetails);
-	void detectTitleAndEmbed(Item* myItem, string stringDetails);
-	void detectTimeAndEmbed(Item* myItem, string stringDetails);
-	void detectDateAndEmbed(Item* myItem, string stringDetails);
+	void detectTitleAndEmbed(Item* myItem, string &stringDetails);
+	bool detectDeadlineKeywordAndTrim(string &stringDetails);
+	bool detectTimeAndEmbedIsOk(Item* myItem, string stringDetails, bool isDeadline);
+	bool detectDateAndEmbedIsOk(Item* myItem, string &stringDetails, bool isDeadline);
+	bool isInteger(string query);
+	bool isMonth(string query);
+	bool isTime(string query);
 	int convertStringToIntHour(string stringTime);
 	int convertStringToIntMin(string stringTime);
 	int convertStrToIntMonth(string month);

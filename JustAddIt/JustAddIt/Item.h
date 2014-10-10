@@ -21,6 +21,7 @@ private:
 	string _category;
 	PriorityLevel _priority;
 	bool _isDone;
+	string _itemType;
 
 public:
 	Item(void);
@@ -37,18 +38,21 @@ public:
 	PriorityLevel getPriority();
 	string getPriorityInString();
 	bool getIsDone();
+	string getItemType();
 
 	void updateIdCounter(int lastIdUsed);
 	void setTitle(string title);
 	void setDescription(string description);
 	void setStartDate(int day, int month);
 	void setEndDate(int day, int month);
+	void setStartEndDateTimeAsToday();
 	void setStartTime(int hour, int min);
 	void setEndTime(int hour, int min);
-	// void setEndDate(time_type endDate);
+	void setStartEndDateTimeAsNull();
 	void setVenue(string venue);
 	void setCategory(string category);
 	void setPriority(PriorityLevel priority);
 	void toggleDone();
+	void setItemType(string itemType);
 };
 

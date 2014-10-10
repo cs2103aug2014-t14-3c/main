@@ -58,6 +58,11 @@ Command* Parser::stringToCommand(string userCommand) {
 
 			break;
 					}
+		case UNDO : {
+			CmdUndo* myUndo = new CmdUndo();
+			return myUndo;
+			break;
+					}
 		case CANCEL : {
 			CmdDeleteItem* myDelete = new CmdDeleteItem(OutputControl::getCurrentDisplayedItemList());
 			return myDelete;
@@ -85,136 +90,258 @@ Command* Parser::stringToCommand(string userCommand) {
 void Parser::embedDetailsInItem(Item* myItem, string stringDetails)
 {
 	detectTitleAndEmbed(myItem, stringDetails);
-	detectDateAndEmbed(myItem, stringDetails);
-	detectTimeAndEmbed(myItem, stringDetails);	
-		
+	bool isDeadline = detectDeadlineKeywordAndTrim(stringDetails);
+	bool foundDate = detectDateAndEmbedIsOk(myItem, stringDetails, isDeadline);
+	bool foundTime = detectTimeAndEmbedIsOk(myItem, stringDetails, isDeadline);	
 
-	
+	if(foundDate && !foundTime){
+		//set as all day if no time
+		myItem->setStartTime(0,0);
+		myItem->setEndTime(23,59);
+	}
+	if(!foundDate && foundTime){
+		//set as today if no day
+		time_t nowTime;
+		tm nowTimeTM;
+		time(&nowTime);
+		localtime_s (&nowTimeTM, &nowTime);
+		myItem->setStartDate(nowTimeTM.tm_mday, nowTimeTM.tm_mon);
+		myItem->setEndDate(nowTimeTM.tm_mday, nowTimeTM.tm_mon);
+	}
+	//if no date or no time, it is a task
+	if(isDeadline){
+		myItem->setItemType("deadline");
+	}
+	else if(!foundDate && !foundTime){
+		myItem->setStartEndDateTimeAsToday();
+		myItem->setItemType("task");
+	}
+	else{
+		myItem->setItemType("event");
+	}
+
+
+			
 }
 
-void Parser::detectTitleAndEmbed(Item* myItem, string stringDetails){
+void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 	
 	istringstream streamDetails(stringDetails);
 	string title = "";
 	string currentWord;
+	string previousWord;
+	string nextWord;
 	//get the first word and store in title if not a keyword
+	streamDetails >> previousWord;
 	streamDetails >> currentWord;
-	if(!isKeyword(currentWord)){
-		title = currentWord;
+	if(isKeyword(currentWord)){
+		title = previousWord;
 	}
-	//get the second word
-	streamDetails >> currentWord;
-	//and loop the subsequent adding
-	while(!isKeyword(currentWord)){
-		title += ' ' + currentWord;
+	else{
+		title=previousWord;
+		previousWord = currentWord;
+		//get the next word;
 		streamDetails >> currentWord;
+		//account for one worded events
+		if(!isKeywordEndTime(currentWord)){
+			//and loop the subsequent adding
+			while((streamDetails >> nextWord) && !isKeyword(currentWord) && !isKeywordEndTime(nextWord)){
+				title += ' ' + previousWord;
+				previousWord = currentWord;
+				currentWord = nextWord;
+
+				/*streamDetails >> nextWord;*/
+
+				//title += ' ' + currentWord;
+				//previousWord = currentWord;
+				//streamDetails >> currentWord;
+			}
+			//for currentWord isKeyword exit 
+			if(isKeyword(currentWord) || isKeywordEndTime(nextWord)){
+				title += ' ' + previousWord;
+			}
+		}
+
 	}
+	//cut out the title
+	stringDetails.replace(stringDetails.find(title),title.length(),"");
 	myItem->setTitle(title);
+	//TODO:Exception if no title (first word is a keyword)
 	return;
 }
-void Parser::detectTimeAndEmbed(Item* myItem, string stringDetails){
-	
+bool Parser::detectDeadlineKeywordAndTrim(string &stringDetails){
+	size_t position;
+	bool isFound = false;
+	position = stringDetails.find("by");
+	//if found
+	if (position!=string::npos){
+		stringDetails = stringDetails.substr(position);
+		isFound = true;
+	}
+	return isFound;
+}
+bool Parser::detectTimeAndEmbedIsOk(Item* myItem, string stringDetails, bool isDeadline){
 	istringstream streamDetails(stringDetails);
-	string previousWord="";
-	string currentWord;
-	string endTime;
-	string startTime;
-	bool startTimeExists=false;
-	bool endTimeExists=false;
-	bool keywordTimeFound=false;
+	string startTime="";
+	string endTime="";
 	int startHourToBeSet;
 	int startMinToBeSet;
 	int endHourToBeSet;
 	int endMinToBeSet;
-
-	
-	
-	streamDetails >> currentWord;
-	//for safety (if the first word is a keywordtime)
-	if(isKeywordTime(currentWord)){
-		keywordTimeFound=true;
+	bool startFound = false;
+	bool endFound = false;
+	while(streamDetails >> startTime && !isTime(startTime)){
 	}
-	previousWord = currentWord;
-	//loop and stop if keywordtime is found
-	while(!keywordTimeFound && streamDetails >> currentWord){
-		if(isKeywordTime(currentWord)){
-			keywordTimeFound=true;
-		}
-		previousWord = currentWord;
+	while(streamDetails >> endTime && !isTime(endTime)){
 	}
-
-
-	if(isKeywordStartTime(currentWord)){
-		//get the next string and treat it as start time
-		startTimeExists=true;
-		streamDetails >> startTime;
-		previousWord = startTime;
-		//move on to the next word after start time word
-		streamDetails >> currentWord;
-	}
-	
-	if(isKeywordEndTime(currentWord)){
-		//previous string is start time
-		//next string is end time
-		startTimeExists=true;//TODO: assumption that once got end keyword, start time exists
-		endTimeExists=true;
-		startTime=previousWord;
-		streamDetails >> endTime;
-	}
-	
-	if(startTimeExists){
+	//if start time exists
+	if(isTime(startTime)){
 		startHourToBeSet = convertStringToIntHour(startTime);
 		startMinToBeSet = convertStringToIntMin(startTime);
 		myItem->setStartTime(startHourToBeSet, startMinToBeSet);
-	}
-	if(endTimeExists){
-		endHourToBeSet = convertStringToIntHour(endTime);
-		endMinToBeSet = convertStringToIntMin(endTime);	
-		myItem->setEndTime(endHourToBeSet, endMinToBeSet);
-	}
-	//tasks
-	if(!startTimeExists && !endTimeExists){
-
-		//TODO: MAGIC NUMBERS
-		myItem->setStartTime(0, 0);
-		myItem->setEndTime(23, 59);
-	}
-
-	
-	
-
-	return;
-	
-}
-void Parser::detectDateAndEmbed(Item* myItem, string stringDetails){
-
-	istringstream streamDetails(stringDetails);
-
-	string currentWord;
-	bool keywordDateFound=false;
-	//loop and stop when it finds the first date keyword
-	//
-	while(!keywordDateFound && streamDetails >> currentWord){
-		if(isKeywordDate(currentWord)){
-			keywordDateFound=true;
+		startFound = true;
+		if(isDeadline){
+			myItem->setEndTime(startHourToBeSet, startMinToBeSet);
+		}
+		else{
+			//TODO:Assuming deadlines only have one time/date
+			//start exists and end exists
+			if(isTime(endTime)){
+				endHourToBeSet = convertStringToIntHour(endTime);
+				endMinToBeSet = convertStringToIntMin(endTime);
+				myItem->setEndTime(endHourToBeSet, endMinToBeSet);
+				endFound = true;
+			}
+			//start exists but end does not exist
+			//default is an hour aft start
+			else{
+				endHourToBeSet = convertStringToIntHour(startTime);
+				endHourToBeSet++;
+				endMinToBeSet = convertStringToIntMin(startTime);
+				myItem->setEndTime(endHourToBeSet, endMinToBeSet);
+			}
 		}
 	}
-	if(keywordDateFound){
-		int day;
-		string month;
-		streamDetails >> day;
-		streamDetails >> month;
 
-		int monthNumber = convertStrToIntMonth(month);
-		myItem->setStartDate(day, monthNumber);
-		myItem->setEndDate(day, monthNumber);
+
+	return startFound || endFound;
+}
+bool Parser::detectDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool isDeadline){
+	istringstream streamDetails(stringDetails);
+	string currentWord="";
+	string previousWord;
+	string nextWord;
+	string startMonthFound="";
+	string startDateFound="";
+	string startDayFound = "";
+	string endMonthFound="";
+	string endDateFound="";
+	string endDayFound = "";
+	int startDayInt;
+	int startMonthInt;
+	int endDayInt;
+	int endMonthInt;
+	
+	streamDetails >> previousWord;
+	while(streamDetails >> currentWord && !isMonth(currentWord)){
+		previousWord = currentWord;
+	}
+	if(isMonth(currentWord)){
+		//store the month name in date found
+		startMonthFound = currentWord; 
+		//if the previous word is a integer, it's the date
+		if(isInteger(previousWord)){
+			startDayFound = previousWord;
+			startDateFound = startDayFound + ' ' + startMonthFound;
+		}
+		//if the next word is a integer, it's the date
+		else if(streamDetails >> nextWord && isInteger(nextWord)){
+			startDayFound = nextWord;
+			startDateFound = startMonthFound + ' ' + startDayFound;
+		}
+		//TODO:: exception for only month found
+		else{
+		}
+
+		//cut out the date
+		stringDetails.replace(stringDetails.find(startDateFound),startDateFound.length(),"");
+		startDayInt = stoi(startDayFound);
+		startMonthInt = convertStrToIntMonth(startMonthFound);
+		
+		//reset currentWord and search for second date
+		currentWord="";
+		while(streamDetails >> currentWord && !isMonth(currentWord)){
+			previousWord = currentWord;
+		}
+
+		if(isMonth(currentWord)){
+			//store the month name in date found
+			endMonthFound = currentWord; 
+			//if the previous word is a integer, it's the date
+			if(isInteger(previousWord)){
+				endDayFound = previousWord;
+				endDateFound = endDayFound + ' ' + endMonthFound;
+			}
+			//if the next word is a integer, it's the date
+			else if(streamDetails >> nextWord && isInteger(nextWord)){
+				endDayFound = nextWord;
+				endDateFound = endMonthFound + ' ' + endDayFound;
+			}
+			//TODO:: exception for only month found
+			else{
+			}
+			//cut the date out
+			stringDetails.replace(stringDetails.find(endDateFound),endDateFound.length(),"");
+			endDayInt = stoi(endDayFound);
+			endMonthInt = convertStrToIntMonth(endMonthFound);
+		}
+
+		if(isDeadline){
+			myItem->setStartDate(startDayInt, startMonthInt); //for safety
+			myItem->setEndDate(startDayInt, startMonthInt);
+		}
+		else{
+			myItem->setStartDate(startDayInt, startMonthInt);
+			myItem->setEndDate(endDayInt, endMonthInt);
+		}
+		return true;
 	}
 	else{
-		return;
+		return false;
 	}
-	return;
+	//TODO: exception if first word is a month
+	
+
 }
 
+bool Parser::isInteger(string query){
+    unsigned int i;
+
+    for(i = 0; i < query.length(); i++){
+		if(isdigit(query[i]) == 0 || ispunct(query[i]) != 0) {
+			break;
+		}
+	}
+
+	if(i != query.length())
+		return 0;
+	else
+		return 1;
+}
+
+bool Parser::isMonth(string query){
+	if(convertStrToIntMonth(query)>=0)
+		return true;
+	else
+		return false;
+}
+bool Parser::isTime(string query){
+	//TODO: For more supported formats
+	if(isdigit(query[0])>0)
+		return true;
+	else
+		return false;
+}
 int Parser::convertStringToIntHour(string stringTime){
 	
 	convertStringToLowercase(stringTime);
@@ -280,7 +407,7 @@ int Parser::convertStrToIntMonth(string month){
 		}
 	
 	}
-	return 0; 
+	return -1; 
 	//TODO: Throw exeception for bad month
 }
 
