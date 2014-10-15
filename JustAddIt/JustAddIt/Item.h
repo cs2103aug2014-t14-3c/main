@@ -48,7 +48,8 @@ public:
 	void setStartEndDateTimeAsToday();
 	void setStartTime(int hour, int min);
 	void setEndTime(int hour, int min);
-	void setStartEndDateTimeAsNull();
+	void addToStartDate(int daysToAdd);
+	void addToEndDate(int daysToAdd);
 	void setVenue(string venue);
 	void setCategory(string category);
 	void setPriority(PriorityLevel priority);

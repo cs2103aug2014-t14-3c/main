@@ -54,6 +54,24 @@ Command* Parser::stringToCommand(string userCommand) {
 			return myEdit;
 			break;
 				   }
+
+		//TODO:DELETE IS UNTESTED (possibly use get getItemAddr instead)
+		case DELETE: {
+			int itemNum;
+			commandStream >> itemNum;
+	
+			CmdDeleteItem* myDelete = new CmdDeleteItem(OutputControl::getCurrentDisplayedItemList()+itemNum-1);
+			return myDelete;
+			break;
+					 }
+
+		case MARK: {
+			int itemNum;
+			commandStream >> itemNum;
+			CmdMarkItemDone* myMark = new CmdMarkItemDone(OutputControl::getCurrentDisplayedItemList()+itemNum-1);
+			return myMark;
+			break;
+					 }
 		case SAVE : {
 
 			break;
@@ -69,15 +87,18 @@ Command* Parser::stringToCommand(string userCommand) {
 			break;
 					}
 		case VIEW_CALENDAR : {
-
+			CmdGoToCalendarView* myCalendar = new CmdGoToCalendarView();
+			return myCalendar;
 			break;
 					}
 		case VIEW_TODOLIST : {
-
+			CmdGoToListView* myList = new CmdGoToListView();
+			return myList;
 			break;
 					}
 		case VIEW_OVERDUE : {
-
+			CmdShowOverdueTasks* myOverdue = new CmdShowOverdueTasks();
+			return myOverdue;
 			break;
 					}
 
@@ -87,12 +108,14 @@ Command* Parser::stringToCommand(string userCommand) {
 	return NULL;
 }
 
-void Parser::embedDetailsInItem(Item* myItem, string stringDetails)
-{
+void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
 	detectTitleAndEmbed(myItem, stringDetails);
 	bool isDeadline = detectDeadlineKeywordAndTrim(stringDetails);
-	bool foundDate = detectDateAndEmbedIsOk(myItem, stringDetails, isDeadline);
+	bool foundMonthDate = detectMonthDateAndEmbedIsOk(myItem, stringDetails, isDeadline);
+	bool foundDayOfWeek = detectDayOfWeekDateAndEmbedIsOk(myItem, stringDetails, isDeadline);
 	bool foundTime = detectTimeAndEmbedIsOk(myItem, stringDetails, isDeadline);	
+
+	bool foundDate = foundMonthDate || foundDayOfWeek;
 
 	if(foundDate && !foundTime){
 		//set as all day if no time
@@ -226,7 +249,7 @@ bool Parser::detectTimeAndEmbedIsOk(Item* myItem, string stringDetails, bool isD
 
 	return startFound || endFound;
 }
-bool Parser::detectDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool isDeadline){
+bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool isDeadline){
 	istringstream streamDetails(stringDetails);
 	string currentWord="";
 	string previousWord;
@@ -241,6 +264,7 @@ bool Parser::detectDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool i
 	int startMonthInt;
 	int endDayInt;
 	int endMonthInt;
+	bool endExists = false;
 	
 	streamDetails >> previousWord;
 	while(streamDetails >> currentWord && !isMonth(currentWord)){
@@ -281,11 +305,13 @@ bool Parser::detectDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool i
 			if(isInteger(previousWord)){
 				endDayFound = previousWord;
 				endDateFound = endDayFound + ' ' + endMonthFound;
+				endExists = true;
 			}
 			//if the next word is a integer, it's the date
 			else if(streamDetails >> nextWord && isInteger(nextWord)){
 				endDayFound = nextWord;
 				endDateFound = endMonthFound + ' ' + endDayFound;
+				endExists = true;
 			}
 			//TODO:: exception for only month found
 			else{
@@ -294,6 +320,7 @@ bool Parser::detectDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool i
 			stringDetails.replace(stringDetails.find(endDateFound),endDateFound.length(),"");
 			endDayInt = stoi(endDayFound);
 			endMonthInt = convertStrToIntMonth(endMonthFound);
+
 		}
 
 		if(isDeadline){
@@ -301,8 +328,14 @@ bool Parser::detectDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool i
 			myItem->setEndDate(startDayInt, startMonthInt);
 		}
 		else{
+			if(endExists){
 			myItem->setStartDate(startDayInt, startMonthInt);
 			myItem->setEndDate(endDayInt, endMonthInt);
+			}
+			else{
+				myItem->setStartDate(startDayInt, startMonthInt);
+				myItem->setEndDate(startDayInt, startMonthInt);
+			}
 		}
 		return true;
 	}
@@ -313,7 +346,52 @@ bool Parser::detectDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool i
 	
 
 }
+bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool isDeadline){
+	
+	istringstream streamDetails(stringDetails);
+	string startDate="";
+	string endDate="";
+	int startDaysToAdd;
+	int endDaysToAdd;
+	bool startFound = false;
+	bool endFound = false;
+	while(streamDetails >> startDate && !isDayOfWeek(startDate)){
+	}
+	while(streamDetails >> endDate && !isDayOfWeek(endDate)){
+	}
+	//if start time exists
+	if(isDayOfWeek(startDate)){
+		startDaysToAdd = convertDayOfWeekToIntDaysToAdd(startDate);
+		myItem->addToStartDate(startDaysToAdd);
+		startFound = true;
+		//cut the start day out
+		stringDetails.replace(stringDetails.find(startDate),startDate.length(),"");
+		if(isDeadline){
+			myItem->addToEndDate(startDaysToAdd);
+		}
+		else{
+			//TODO:Assuming deadlines only have one time/date
+			//start exists and end exists
+			if(isDayOfWeek(endDate)){
+				endDaysToAdd = convertDayOfWeekToIntDaysToAdd(endDate);
+				myItem->addToEndDate(endDaysToAdd);
+				endFound = true;
+				//cut the end day out
+				stringDetails.replace(stringDetails.find(endDate),endDate.length(),"");
+			}
+			//start exists but end does not exist
+			//default end date is same as start date
+			else{
+				myItem->addToEndDate(startDaysToAdd);
+			}
+		}
+	}
 
+
+	return startFound || endFound;
+
+
+}
 bool Parser::isInteger(string query){
     unsigned int i;
 
@@ -338,6 +416,12 @@ bool Parser::isMonth(string query){
 bool Parser::isTime(string query){
 	//TODO: For more supported formats
 	if(isdigit(query[0])>0)
+		return true;
+	else
+		return false;
+}
+bool Parser::isDayOfWeek(string query){
+	if(convertDayOfWeekToIntDaysToAdd(query)>=0)
 		return true;
 	else
 		return false;
@@ -417,6 +501,40 @@ void Parser::convertStringToLowercase(string &myString){
 		myString[i] = tolower(myString[i]);
 	}
 	return;
+}
+int Parser::convertDayOfWeekToIntDaysToAdd(string query){
+	
+	const string dayOfWeek[] = {"sunday", "monday", "tuesday", "wednesday","thursday",
+								"friday", "saturday"};
+	convertStringToLowercase(query);
+	int i;
+	int daysAfterSunday=-1;
+	bool dayOfWeekFound=false;
+	for(i=0; i<7 && !dayOfWeekFound; i++){
+			if(query==dayOfWeek[i]){
+				daysAfterSunday=i;
+				dayOfWeekFound = true;
+			}
+	}
+	if(dayOfWeekFound){
+		time_t nowTime;
+		tm nowTimeTM;
+		time(&nowTime);
+		localtime_s (&nowTimeTM, &nowTime);
+	
+		int daysToAdd;
+		daysToAdd = daysAfterSunday - nowTimeTM.tm_wday ;
+		if(daysToAdd<0){
+			daysToAdd += 7;
+		}
+		return daysToAdd;
+	}
+	else{
+		return -1;
+		//TODO: Throw exception for bad day
+	}
+	
+
 }
 
 CommandType Parser::determineCommandType(string userCommand, OutputControl::CurrentScreenType currentScreen) {

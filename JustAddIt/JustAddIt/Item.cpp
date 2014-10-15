@@ -7,10 +7,10 @@ int Item::_idCounter = 1;
 Item::Item(void){
 	//default start time/date is current time
 	//default end time/date is current time + 1h
-	//time_t myTempTime;
-	//time(&myTempTime);	//set current time to myTempTime
-	//localtime_s (&_startDateTime, &myTempTime); //assign time_t var (myTempTime) to tm variable (_startDateTime)
-	//localtime_s (&_endDateTime, &myTempTime);
+	time_t myTempTime;
+	time(&myTempTime);	//set current time to myTempTime
+	localtime_s (&_startDateTime, &myTempTime); //assign time_t var (myTempTime) to tm variable (_startDateTime)
+	localtime_s (&_endDateTime, &myTempTime);
 	//_endDateTime.tm_hour++;		//add one more hour
 
 
@@ -40,7 +40,7 @@ string Item::getStartDateInString() {
 		return "";
 	}
 	else{
-	strftime(tempArray, MAX_SIZE, "%d %b %I:%M%p", &_startDateTime);
+	strftime(tempArray, MAX_SIZE, "%A %d %b %I:%M%p", &_startDateTime);
 
 	string str(tempArray);
 
@@ -58,7 +58,7 @@ string Item::getEndDateInString() {
 		return "";
 	}
 	else{
-		strftime(tempArray, MAX_SIZE, "%d %b %I:%M%p", &_endDateTime);
+		strftime(tempArray, MAX_SIZE, "%A %d %b %I:%M%p", &_endDateTime);
 
 		string str(tempArray);
 
@@ -115,11 +115,13 @@ void Item::setDescription(string description) {
 void Item::setStartDate(int day, int month) {
 	_startDateTime.tm_mday = day;
 	_startDateTime.tm_mon = month;
+	mktime(&_startDateTime); 
 }
 
 void Item::setEndDate(int day, int month) {
 	_endDateTime.tm_mday = day;
 	_endDateTime.tm_mon = month;
+	mktime(&_endDateTime);
 }
 void Item::setStartEndDateTimeAsToday(){
 	time_t nowTime;
@@ -130,12 +132,21 @@ void Item::setStartEndDateTimeAsToday(){
 void Item::setStartTime(int hour, int min){
 	_startDateTime.tm_hour = hour;
 	_startDateTime.tm_min = min;
+	mktime(&_startDateTime);
+
 }
 void Item::setEndTime(int hour, int min){
 	_endDateTime.tm_hour = hour;
 	_endDateTime.tm_min = min;
-}
+	mktime(&_endDateTime);
 
+}
+void Item::addToStartDate(int daysToAdd){
+	_startDateTime.tm_mday += daysToAdd;
+}
+void Item::addToEndDate(int daysToAdd){
+	_endDateTime.tm_mday += daysToAdd;
+}
 void Item::setVenue(string venue) {
 	_venue = venue;
 }
