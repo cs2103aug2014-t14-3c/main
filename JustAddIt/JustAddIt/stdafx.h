@@ -12,5 +12,6 @@
 #include <tchar.h>
 #include <string>
 #include <vector>
+#include <cassert>
 
 // TODO: reference additional headers your program requires here

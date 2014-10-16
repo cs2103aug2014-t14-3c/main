@@ -18,6 +18,8 @@ public:
 	static void editItemVenueInBank(vector<Item*>::iterator itemPtr, string newVenue);
 	static void editItemCategoryInBank(vector<Item*>::iterator itemPtr, string newCategory);
 	static void editItemPriorityInBank(vector<Item*>::iterator itemPtr, Item::PriorityLevel newPriority);
+	static vector<string> getDeadlines(int weeks); 
+	static vector<string> getTasks();
 
 	static vector<Item*>::iterator findItemById(int id);
 	static Item findItemByVectorPos(int i);
