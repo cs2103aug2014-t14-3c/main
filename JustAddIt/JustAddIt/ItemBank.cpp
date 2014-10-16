@@ -80,8 +80,8 @@ vector<string> ItemBank::getTasks() {
 
 	for(vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
 		if((*iter)->getItemType() == "task") { // && (*iter)->getEndDateTime() x
-			assert((*iter)->getEndDateInString() != "");
-			lineContent = (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
+			assert((*iter)->getTitle() != "");
+			lineContent = (*iter)->getTitle();
 			tasks.push_back(lineContent);
 		}
 	}
