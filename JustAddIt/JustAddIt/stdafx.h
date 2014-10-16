@@ -13,5 +13,6 @@
 #include <string>
 #include <vector>
 #include <cassert>
+#include <fstream>
 
 // TODO: reference additional headers your program requires here

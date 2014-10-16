@@ -87,6 +87,12 @@
     <ClInclude Include="CmdInitialiseBank.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CmdHome.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DisplayScreenConstructor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -156,6 +162,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CmdInitialiseBank.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdHome.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DisplayScreenConstructor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
