@@ -159,42 +159,54 @@ void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 	string nextWord;
 	//get the first word and store in title if not a keyword
 	streamDetails >> previousWord;
-	streamDetails >> currentWord;
+	
+
 	if(isKeyword(previousWord)){
 		throw invalid_argument("no title was found!");
 	}
-	
-	if(isKeyword(currentWord)){
+	//account for one worded task
+	else if(!(streamDetails >> currentWord)){
+		title = previousWord;
+	}
+	//acccount for one worded event
+	else if(isKeyword(currentWord)){
 		title = previousWord;
 	}
 	else{
-		title=previousWord;
-		previousWord = currentWord;
-		//get the next word;
-		streamDetails >> currentWord;
-		//account for one worded events
-		if(!isKeywordEndTime(currentWord)){
-			//and loop the subsequent adding
-			while((streamDetails >> nextWord) && !isKeyword(currentWord) && !isKeywordEndTime(nextWord)){
-				title += ' ' + previousWord;
-				previousWord = currentWord;
-				currentWord = nextWord;
 
-				/*streamDetails >> nextWord;*/
-
-				//title += ' ' + currentWord;
-				//previousWord = currentWord;
-				//streamDetails >> currentWord;
-			}
-			//for currentWord isKeyword exit 
-			if(isKeyword(currentWord) || isKeywordEndTime(nextWord)){
+			title=previousWord;
+			previousWord = currentWord;
+			//get the next word;
+			//account for two worded task
+			if(!(streamDetails >> currentWord)){
 				title += ' ' + previousWord;
 			}
 			else{
-				title += ' ' + previousWord + ' ' + currentWord;
-			}
-		}
 
+				//account for one worded events
+				if(!isKeywordEndTime(currentWord)){
+				//and loop the subsequent adding
+					while((streamDetails >> nextWord) && !isKeyword(currentWord) && !isKeywordEndTime(nextWord)){
+						title += ' ' + previousWord;
+						previousWord = currentWord;
+						currentWord = nextWord;
+
+						/*streamDetails >> nextWord;*/
+
+						//title += ' ' + currentWord;
+						//previousWord = currentWord;
+						//streamDetails >> currentWord;
+					}
+				//for currentWord isKeyword exit 
+					if(isKeyword(currentWord) || isKeywordEndTime(nextWord)){
+						title += ' ' + previousWord;
+					}
+					else{
+						title += ' ' + previousWord + ' ' + currentWord;
+					}
+				}
+			}
+		
 	}
 	//cut out the title
 	stringDetails.replace(stringDetails.find(title),title.length(),"");
