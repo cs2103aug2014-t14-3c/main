@@ -190,6 +190,9 @@ void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 			if(isKeyword(currentWord) || isKeywordEndTime(nextWord)){
 				title += ' ' + previousWord;
 			}
+			else{
+				title += ' ' + previousWord + ' ' + currentWord;
+			}
 		}
 
 	}

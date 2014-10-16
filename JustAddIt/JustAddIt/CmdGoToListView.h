@@ -10,6 +10,7 @@ private:
 
 public:
 	CmdGoToListView(int numWeeks);
+	CmdGoToListView();
 	~CmdGoToListView(void);
 
 	vector<string> execute();
