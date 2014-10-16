@@ -1,0 +1,18 @@
+		    ____________________________________
+		    |	   			       |
+		    |	          JustAddIt            |
+		    |__________________________________|
+
+Showing results:
+
+================================================================================
+
+[e#] Edit {result number}
+[m#] Mark {result number}
+[d#] Delete {result number}
+[p] Export
+
+Tip: To perform multiple deletes/marks, leave a space between each command.
+For example: d1 d2 d5
+
+================================================================================
