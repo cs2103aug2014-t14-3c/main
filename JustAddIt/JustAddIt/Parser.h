@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <sstream>
 #include <iterator>
+#include <exception>
 #include "Command.h"
 #include "CmdAddItem.h"
 #include "CmdSearch.h"

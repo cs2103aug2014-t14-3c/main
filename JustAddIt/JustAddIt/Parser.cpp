@@ -31,6 +31,7 @@ Command* Parser::stringToCommand(string userCommand) {
 			string stringDetails;
 			getline(commandStream, stringDetails);
 			embedDetailsInItem(item1, stringDetails);
+
 			CmdAddItem* myAdd = new CmdAddItem(item1);
 			return myAdd;
 
@@ -109,7 +110,9 @@ Command* Parser::stringToCommand(string userCommand) {
 }
 
 void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
+
 	detectTitleAndEmbed(myItem, stringDetails);
+
 	bool isDeadline = detectDeadlineKeywordAndTrim(stringDetails);
 	bool foundMonthDate = detectMonthDateAndEmbedIsOk(myItem, stringDetails, isDeadline);
 	bool foundDayOfWeek = detectDayOfWeekDateAndEmbedIsOk(myItem, stringDetails, isDeadline);
@@ -157,6 +160,10 @@ void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 	//get the first word and store in title if not a keyword
 	streamDetails >> previousWord;
 	streamDetails >> currentWord;
+	if(isKeyword(previousWord)){
+		throw invalid_argument("no title was found!");
+	}
+	
 	if(isKeyword(currentWord)){
 		title = previousWord;
 	}
@@ -189,6 +196,8 @@ void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 	//cut out the title
 	stringDetails.replace(stringDetails.find(title),title.length(),"");
 	myItem->setTitle(title);
+
+
 	//TODO:Exception if no title (first word is a keyword)
 	return;
 }
@@ -348,17 +357,21 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 }
 bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool isDeadline){
 	
-	istringstream streamDetails(stringDetails);
+	
 	string startDate="";
 	string endDate="";
 	int startDaysToAdd;
 	int endDaysToAdd;
 	bool startFound = false;
 	bool endFound = false;
+	bool isWordNextStart = false;
+	bool isWordNextEnd = false;
+	istringstream streamDetails(stringDetails);
 	while(streamDetails >> startDate && !isDayOfWeek(startDate)){
 	}
 	while(streamDetails >> endDate && !isDayOfWeek(endDate)){
 	}
+
 	//if start time exists
 	if(isDayOfWeek(startDate)){
 		startDaysToAdd = convertDayOfWeekToIntDaysToAdd(startDate);

@@ -8,10 +8,16 @@ vector<string> Executor::execute(string userCommand) {
 	Command* command;
 
 	clearScreen();
+	try{
+		command = parser.stringToCommand(userCommand);
+		outputMessageStorage = command->execute();
+		ActionLog::addCommand(*command);
+	}
+	
+	catch(exception& e){
+		cerr << "exception caught: " << e.what() << '\n';
+	}
 
-	command = parser.stringToCommand(userCommand);
-	outputMessageStorage = command->execute();
-	ActionLog::addCommand(*command);
 
 	return outputMessageStorage;
 }
