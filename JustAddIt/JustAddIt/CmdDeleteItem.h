@@ -1,6 +1,7 @@
 #pragma once
 #include "Command.h"
 #include "ItemBank.h"
+#include "DisplayScreenConstructor.h"
 
 class CmdDeleteItem :
 	public Command
@@ -8,9 +9,10 @@ class CmdDeleteItem :
 private:
 	vector<Item*>::iterator _itemPtr;
 	Item* _itemAddr;
+	vector<string> outputMessageStorage;
 
-	void constructOutput();
-	void itemToString(Item* itemPtr);
+	//void constructOutput();
+	//void itemToString(Item* itemPtr);
 	void setPageCommands();
 
 public:

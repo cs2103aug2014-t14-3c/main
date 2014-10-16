@@ -7,7 +7,10 @@ vector<string> Executor::execute(string userCommand) {
 	Parser parser;
 	Command* command;
 
-	clearScreen();
+	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
+	outputMessageStorage.clear();
+	outputMessageStorage = displayScreenConstructor->clearScreen();
+
 	try{
 		command = parser.stringToCommand(userCommand);
 		outputMessageStorage = command->execute();
@@ -15,7 +18,11 @@ vector<string> Executor::execute(string userCommand) {
 	}
 	
 	catch(exception& e){
-		cerr << "exception caught: " << e.what() << '\n';
+		cerr << "error: " << e.what() << endl;
+		ofstream file;
+		file.open("error.log");
+		file << "exception occurred: " << userCommand << endl;
+		file.close();
 	}
 
 
@@ -24,15 +31,8 @@ vector<string> Executor::execute(string userCommand) {
 
 vector<string> Executor::initialise() {
 	Command* command = new CmdInitialiseBank();
+	outputMessageStorage.clear();
 	outputMessageStorage = command->execute();
 	
 	return outputMessageStorage;
-}
-
-void Executor::clearScreen() {
-	outputMessageStorage.clear();
-	
-	cout << string(50, '\n');
-
-	return;
 }
