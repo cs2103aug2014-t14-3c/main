@@ -10,7 +10,6 @@ void ItemBank::addToBank(Item* item) {
 
 void ItemBank::deleteFromBank(vector<Item*>::iterator itemPtr) {
 	bank.erase(find(bank.begin(), bank.end(), *itemPtr));
-	
 }
 
 void ItemBank::markItemInBank(vector<Item*>::iterator itemPtr) {
@@ -57,6 +56,38 @@ vector<Item*>::iterator ItemBank::findItemById(int id) {
 
 Item ItemBank::findItemByVectorPos(int i) {
 	return *bank[i];
+}
+
+vector<string> ItemBank::getDeadlines(int weeks) {
+	string lineContent;
+	vector<string> deadlines;
+
+	for(vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if((*iter)->getItemType() == "deadline") { // && (*iter)->getEndDateTime() x
+			assert((*iter)->getEndDateInString() != "");
+			lineContent = (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
+			deadlines.push_back(lineContent);
+		}
+	}
+
+	return deadlines;
+
+}
+
+vector<string> ItemBank::getTasks() {
+	string lineContent;
+	vector<string> tasks;
+
+	for(vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if((*iter)->getItemType() == "task") { // && (*iter)->getEndDateTime() x
+			assert((*iter)->getEndDateInString() != "");
+			lineContent = (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
+			tasks.push_back(lineContent);
+		}
+	}
+
+	return tasks;
+
 }
 
 int ItemBank::getBankSize() {
