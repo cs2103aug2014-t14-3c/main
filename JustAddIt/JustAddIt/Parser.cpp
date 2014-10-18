@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Parser.h"
 #define MONTHS_IN_YEAR 12
+#define DEFAULT_MONTH_START "1"
 
 Parser::Parser(void)
 {
@@ -73,10 +74,7 @@ Command* Parser::stringToCommand(string userCommand) {
 			return myMark;
 			break;
 					 }
-		case SAVE : {
 
-			break;
-					}
 		case UNDO : {
 			CmdUndo* myUndo = new CmdUndo();
 			return myUndo;
@@ -100,6 +98,11 @@ Command* Parser::stringToCommand(string userCommand) {
 		case VIEW_OVERDUE : {
 			CmdShowOverdueTasks* myOverdue = new CmdShowOverdueTasks();
 			return myOverdue;
+			break;
+					}
+		case HOME : {
+			CmdHome* myHome = new CmdHome();
+			return myHome;
 			break;
 					}
 
@@ -309,6 +312,8 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 		}
 		//TODO:: exception for only month found
 		else{
+			startDayFound = DEFAULT_MONTH_START;
+			startDateFound = startMonthFound;
 		}
 
 		//cut out the date
@@ -566,6 +571,20 @@ int Parser::convertDayOfWeekToIntDaysToAdd(string query){
 }
 
 CommandType Parser::determineCommandType(string userCommand, OutputControl::CurrentScreenType currentScreen) {
+	//universal commands
+	if (userCommand == "add") {
+		return ADD;
+	}
+	if (userCommand == "search") {
+		return SEARCH;
+	}
+	if (userCommand == "undo") {
+		return UNDO;
+	}
+	if (userCommand == "home") {
+		return HOME;
+	}
+
 	switch (currentScreen) {
 	case OutputControl::HOME_SCREEN: {
 		return determineCommandType_HomeScreen(userCommand);
@@ -615,27 +634,35 @@ CommandType Parser::determineCommandType(string userCommand, OutputControl::Curr
 
 CommandType Parser::determineCommandType_HomeScreen(string userCommand){
 	
-	if (userCommand == "add") {
-		return ADD;
+
+	if (userCommand == "t") {
+		return VIEW_TODOLIST;
 	}
-	if (userCommand == "search") {
-		return SEARCH;
+	else if (userCommand == "c") {
+		return VIEW_CALENDAR;
 	}
-	if (userCommand == "e") {
-		return EDIT;
+	else if (userCommand == "o") {
+		return VIEW_OVERDUE;
+	}
+	else{
+		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
 	}
 	//DELETE: FOR TEMP DEBUG ONLY
 	return ADD;
 }
 CommandType Parser::determineCommandType_EditScreen(string userCommand){
+	
 	if (userCommand == "e") {
 		return EDIT;
 	}
-	if (userCommand == "s") {
-		return SAVE;
+	else if (userCommand == "o") {
+		return HOME;
 	}
-	if (userCommand == "c") {
+	else if (userCommand == "c") {
 		return CANCEL;
+	}
+	else{
+		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
 	}
 	//DELETE: FOR TEMP DEBUG ONLY
 	return ADD;
@@ -644,19 +671,22 @@ CommandType Parser::determineCommandType_DeleteScreen(string userCommand){
 	if (userCommand == "u") {
 		return UNDO;
 	}
-	if (userCommand == "c") {
+	else if (userCommand == "c") {
 		return VIEW_CALENDAR;
 	}
-	if (userCommand == "t") {
+	else if (userCommand == "t") {
 		return VIEW_TODOLIST;
 	}
-	if (userCommand == "o") {
+	else if (userCommand == "o") {
 		return VIEW_OVERDUE;
+	}
+	else{
+		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
 	}
 	//DELETE: FOR TEMP DEBUG ONLY
 	return ADD;
 	//DELETE: FOR TEMP DEBUG ONLY
-	return ADD;
+
 }
 CommandType Parser::determineCommandType_SearchResultsScreen(string userCommand){
 	//DELETE: FOR TEMP DEBUG ONLY

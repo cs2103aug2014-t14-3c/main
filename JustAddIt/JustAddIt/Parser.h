@@ -15,11 +15,12 @@
 #include "CmdMarkItemDone.h"
 #include "CmdGoToCalendarView.h"
 #include "CmdGoToListView.h"
+#include "CmdHome.h"
 #include "CmdShowOverdueTasks.h"
 
 
 enum CommandType {
-	ADD, SEARCH, EDIT, DELETE, MARK, SAVE, CANCEL, UNDO, VIEW_CALENDAR, VIEW_TODOLIST, VIEW_OVERDUE
+	ADD, SEARCH, EDIT, DELETE, MARK, SAVE, CANCEL, UNDO, VIEW_CALENDAR, VIEW_TODOLIST, VIEW_OVERDUE, HOME
 };
 
 class Parser

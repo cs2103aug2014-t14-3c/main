@@ -2,7 +2,7 @@
 		    |	   			       |
 		    |	          JustAddIt            |
 		    |__________________________________|
-Edit event
+Edit 
 
 1) Title: 
 2) Description: 
@@ -13,7 +13,7 @@ Edit event
 
 ================================================================================
 
-[s] Save
+[o] Ok
 [e#] Edit {Field number}
 [c] Cancel
 

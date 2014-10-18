@@ -36,7 +36,10 @@ vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
 
-		if (dummyLine == "1) Title: ") {
+		if (dummyLine == "Edit ") {
+			dummyLine += item->getItemType();
+		}
+		else if (dummyLine == "1) Title: ") {
 			dummyLine += item->getTitle();
 			if (item->getIsDone() == true) {
 				dummyLine += " *Done*";

@@ -16,7 +16,7 @@ vector<string> CmdAddItem::execute() {
 	outputMessageStorage.clear();
 	outputMessageStorage = displayScreenConstructor->clearScreen();
 	outputMessageStorage = displayScreenConstructor->constructEditScreen(_itemAddr);
-
+	outputMessageStorage.push_back("Just added it successfully!");
 	OutputControl::setCurrentScreen(OutputControl::EDIT_SCREEN);
 	OutputControl::resetCurrentItemList();
 	OutputControl::addItemToDisplayList(_itemAddr); 
