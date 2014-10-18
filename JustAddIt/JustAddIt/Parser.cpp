@@ -2,6 +2,7 @@
 #include "Parser.h"
 #define MONTHS_IN_YEAR 12
 #define DEFAULT_MONTH_START "1"
+#define FORMAT_24H_SIZE 4
 
 Parser::Parser(void)
 {
@@ -386,7 +387,9 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 	bool endFound = false;
 	bool isWordNextStart = false;
 	bool isWordNextEnd = false;
+
 	istringstream streamDetails(stringDetails);
+	
 	while(streamDetails >> startDate && !isDayOfWeek(startDate)){
 	}
 	while(streamDetails >> endDate && !isDayOfWeek(endDate)){
@@ -394,11 +397,19 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 
 	//if start time exists
 	if(isDayOfWeek(startDate)){
-		startDaysToAdd = convertDayOfWeekToIntDaysToAdd(startDate);
-		myItem->addToStartDate(startDaysToAdd);
+
 		startFound = true;
 		//cut the start day out
-		stringDetails.replace(stringDetails.find(startDate),startDate.length(),"");
+		//if "next" keyword is found
+		if(stringDetails.find("next " + startDate)!=string::npos){
+			isWordNextStart=true;
+			stringDetails.replace(stringDetails.find("next " + startDate),startDate.length(),"");
+		}
+		else{
+			stringDetails.replace(stringDetails.find(startDate),startDate.length(),"");
+		}
+		startDaysToAdd = convertDayOfWeekToIntDaysToAdd(startDate, isWordNextStart);
+		myItem->addToStartDate(startDaysToAdd);
 		if(isDeadline){
 			myItem->addToEndDate(startDaysToAdd);
 		}
@@ -406,11 +417,21 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 			//TODO:Assuming deadlines only have one time/date
 			//start exists and end exists
 			if(isDayOfWeek(endDate)){
-				endDaysToAdd = convertDayOfWeekToIntDaysToAdd(endDate);
-				myItem->addToEndDate(endDaysToAdd);
+				
 				endFound = true;
-				//cut the end day out
-				stringDetails.replace(stringDetails.find(endDate),endDate.length(),"");
+				//if "next" keyword is found
+				if(stringDetails.find("next " + endDate)!=string::npos){
+					isWordNextEnd=true;
+					stringDetails.replace(stringDetails.find("next " + endDate),endDate.length(),"");
+				}
+				else{
+					//cut the end day out
+					stringDetails.replace(stringDetails.find(endDate),endDate.length(),"");
+				}
+				
+			
+				endDaysToAdd = convertDayOfWeekToIntDaysToAdd(endDate, isWordNextEnd);
+				myItem->addToEndDate(endDaysToAdd);
 			}
 			//start exists but end does not exist
 			//default end date is same as start date
@@ -454,7 +475,7 @@ bool Parser::isTime(string query){
 		return false;
 }
 bool Parser::isDayOfWeek(string query){
-	if(convertDayOfWeekToIntDaysToAdd(query)>=0)
+	if(convertDayOfWeekToIntDaysToAdd(query, false)>=0)
 		return true;
 	else
 		return false;
@@ -465,20 +486,25 @@ int Parser::convertStringToIntHour(string stringTime){
 	size_t positionFound;
 	//set accountForPM to 12 if afternoon
 	int accountForPM=0;
-	
-	positionFound = stringTime.find("am");
-	//if found, cut the am out
-	if (positionFound!=string::npos){
-		stringTime = stringTime.substr(0,positionFound);
-	}
 
-	positionFound = stringTime.find("pm");
-	//if found, cut the pm out
-	if (positionFound!=string::npos){
-		stringTime = stringTime.substr(0,positionFound);
-		accountForPM=12;
+	if(isInteger(stringTime) && stringTime.length() == FORMAT_24H_SIZE){
+		stringTime = stringTime.substr(0,2);
 	}
-	//what remains is the digits
+	else{
+		positionFound = stringTime.find("am");
+		//if found, cut the am out
+		if (positionFound!=string::npos){
+			stringTime = stringTime.substr(0,positionFound);
+		}
+
+		positionFound = stringTime.find("pm");
+		//if found, cut the pm out
+		if (positionFound!=string::npos){
+			stringTime = stringTime.substr(0,positionFound);
+			accountForPM=12;
+		}
+	}
+	//what remains is the digits (minutes are trimmed)
 	int actualTime = stoi (stringTime) + accountForPM;
 	
 	return actualTime;
@@ -487,18 +513,24 @@ int Parser::convertStringToIntMin(string stringTime){
 	
 	size_t positionFound1;
 	size_t positionFound2;
-	positionFound1 = stringTime.find(".");
-	positionFound2 = stringTime.find(":");
-	//if found, crop the 2 digits after that 
-	if (positionFound1!=string::npos){
-		stringTime = stringTime.substr(positionFound1+1,positionFound1+3);
+
+	if(isInteger(stringTime) && stringTime.length() == FORMAT_24H_SIZE){
+		stringTime = stringTime.substr(2,4);
 	}
-	else if (positionFound2!=string::npos){
-		stringTime = stringTime.substr(positionFound2+1,positionFound2+3);
-	}
-	//default case: 0 minutes
-	else {
-		stringTime = "0";
+	else{
+		positionFound1 = stringTime.find(".");
+		positionFound2 = stringTime.find(":");
+		//if found, crop the 2 digits after that 
+		if (positionFound1!=string::npos){
+			stringTime = stringTime.substr(positionFound1+1,positionFound1+3);
+		}
+		else if (positionFound2!=string::npos){
+			stringTime = stringTime.substr(positionFound2+1,positionFound2+3);
+		}
+		//default case: 0 minutes
+		else {
+			stringTime = "0";
+		}
 	}
 	return stoi (stringTime);
 }
@@ -535,7 +567,7 @@ void Parser::convertStringToLowercase(string &myString){
 	}
 	return;
 }
-int Parser::convertDayOfWeekToIntDaysToAdd(string query){
+int Parser::convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek){
 	
 	const string dayOfWeek[] = {"sunday", "monday", "tuesday", "wednesday","thursday",
 								"friday", "saturday"};
@@ -560,6 +592,12 @@ int Parser::convertDayOfWeekToIntDaysToAdd(string query){
 		if(daysToAdd<0){
 			daysToAdd += 7;
 		}
+		//checking for "next"
+		int eventDay = nowTimeTM.tm_wday + daysToAdd;
+		if(isNextWeek && eventDay<=6){
+			daysToAdd += 7;
+		}
+
 		return daysToAdd;
 	}
 	else{
@@ -713,7 +751,7 @@ bool Parser::isKeywordTime(string myWord){
 }
 
 bool Parser::isKeywordStartTime(string myWord){
-	return myWord=="at" || myWord == "from" || myWord == "between";
+	return myWord=="at" || myWord == "from" || myWord == "between" || myWord == "next";
 }
 bool Parser::isKeywordEndTime(string myWord){
 	return myWord=="to" || myWord == "-" || myWord == "by" || myWord == "and";

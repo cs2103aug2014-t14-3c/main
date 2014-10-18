@@ -39,7 +39,7 @@ public:
 	int convertStringToIntHour(string stringTime);
 	int convertStringToIntMin(string stringTime);
 	int convertStrToIntMonth(string month);
-	int convertDayOfWeekToIntDaysToAdd(string query);
+	int convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek);
 	
 	void convertStringToLowercase(string &myString);
 	CommandType determineCommandType(string userCommand, OutputControl::CurrentScreenType currentScreen);
