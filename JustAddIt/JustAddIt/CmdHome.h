@@ -6,8 +6,6 @@ class CmdHome :
 	public Command
 {
 private:
-	vector<string> outputMessageStorage;
-	//void setPageCommands();
 
 public:
 	CmdHome(void);

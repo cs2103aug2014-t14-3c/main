@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Command.h"
 #include "ItemBank.h"
+#include "DisplayScreenConstructor.h"
 
 class CmdInitialiseBank :
 	public Command {

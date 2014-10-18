@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "CmdDeleteItem.h"
 
-
 CmdDeleteItem::CmdDeleteItem(vector<Item*>::iterator itemPtr) {
 	_itemPtr = itemPtr;
 	_itemAddr = *_itemPtr;
@@ -17,8 +16,9 @@ vector<string> CmdDeleteItem::execute() {
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();
 	outputMessageStorage = displayScreenConstructor->clearScreen();
-	outputMessageStorage.push_back("Item successfully deleted!");
 	outputMessageStorage = displayScreenConstructor->constructHomeScreen();
+	outputMessageStorage.push_back("Item successfully deleted!");
+	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::DELETE_SCREEN);
 	//CmdDeleteItem::constructOutput();
 
 	return outputMessageStorage;
@@ -74,17 +74,17 @@ vector<string> CmdDeleteItem::execute() {
 //	return;
 //
 //
+////}
+//
+//void CmdDeleteItem::setPageCommands() {
+//	outputMessageStorage.push_back(FORMAT_DIVIDER);
+//
+//	outputMessageStorage.push_back(PAGE_COMMAND_UNDO);
+//	outputMessageStorage.push_back(PAGE_COMMAND_CALENDAR_VIEW);
+//	outputMessageStorage.push_back(PAGE_COMMAND_TO_DO_LIST_VIEW);
+//	outputMessageStorage.push_back(PAGE_COMMAND_OVERDUE_TASKS);
+//
+//	outputMessageStorage.push_back(FORMAT_DIVIDER);
+//
+//	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::DELETE_SCREEN);
 //}
-
-void CmdDeleteItem::setPageCommands() {
-	outputMessageStorage.push_back(FORMAT_DIVIDER);
-
-	outputMessageStorage.push_back(PAGE_COMMAND_UNDO);
-	outputMessageStorage.push_back(PAGE_COMMAND_CALENDAR_VIEW);
-	outputMessageStorage.push_back(PAGE_COMMAND_TO_DO_LIST_VIEW);
-	outputMessageStorage.push_back(PAGE_COMMAND_OVERDUE_TASKS);
-
-	outputMessageStorage.push_back(FORMAT_DIVIDER);
-
-	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::DELETE_SCREEN);
-}

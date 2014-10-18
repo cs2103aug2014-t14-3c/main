@@ -38,8 +38,8 @@ vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
 
 		if (dummyLine == "1) Title: ") {
 			dummyLine += item->getTitle();
-			if (item->getIsDone()) {
-				dummyLine += " *Marked*";
+			if (item->getIsDone() == true) {
+				dummyLine += " *Done*";
 			}
 		}
 		else if (dummyLine == "2) Description: ") {
@@ -58,8 +58,6 @@ vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
 			dummyLine += item->getCategory();
 		}
 
-		outputMessageStorage.push_back(dummyLine);
-		dummyLine = "";
 		outputMessageStorage.push_back(dummyLine);
 	}
 

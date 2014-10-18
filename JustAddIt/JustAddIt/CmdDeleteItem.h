@@ -2,6 +2,7 @@
 #include "Command.h"
 #include "ItemBank.h"
 #include "DisplayScreenConstructor.h"
+#include "OutputControl.h"
 
 class CmdDeleteItem :
 	public Command
@@ -13,7 +14,7 @@ private:
 
 	//void constructOutput();
 	//void itemToString(Item* itemPtr);
-	void setPageCommands();
+	//void setPageCommands();
 
 public:
 	CmdDeleteItem(vector<Item*>::iterator itemPtr);

@@ -15,18 +15,7 @@ vector<string> CmdHome::execute() {
 	outputMessageStorage = displayScreenConstructor->clearScreen();
 	outputMessageStorage = displayScreenConstructor->constructHomeScreen();
 
+	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
+
 	return outputMessageStorage;
 }
-
-//void CmdHome::setPageCommands() {
-//	outputMessageStorage.push_back(FORMAT_DIVIDER);
-//
-//	outputMessageStorage.push_back(PAGE_COMMAND_UNDO);
-//	outputMessageStorage.push_back(PAGE_COMMAND_CALENDAR_VIEW);
-//	outputMessageStorage.push_back(PAGE_COMMAND_TO_DO_LIST_VIEW);
-//	outputMessageStorage.push_back(PAGE_COMMAND_OVERDUE_TASKS);
-//
-//	outputMessageStorage.push_back(FORMAT_DIVIDER);
-//
-//	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
-//}

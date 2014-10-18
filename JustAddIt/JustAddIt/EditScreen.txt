@@ -2,8 +2,7 @@
 		    |	   			       |
 		    |	          JustAddIt            |
 		    |__________________________________|
-
-Event
+Edit event
 
 1) Title: 
 2) Description: 

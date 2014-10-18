@@ -1,17 +1,15 @@
 #pragma once
 #include "Command.h"
 #include "ItemBank.h"
-
+#include "Item.h"
+#include "OutputControl.h"
+#include "DisplayScreenConstructor.h"
 
 class CmdAddItem :
 	public Command
 {
 private:
 	Item* _itemAddr;
-	
-	void constructOutput();
-	void itemToString(Item* itemPtr);
-	void setPageCommands();
 
 public:
 	CmdAddItem(Item* item);
