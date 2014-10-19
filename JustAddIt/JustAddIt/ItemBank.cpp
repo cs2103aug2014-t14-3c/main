@@ -127,10 +127,6 @@ void ItemBank::initialiseBank() {
 	DataStorage* dataStorage = dataStorage->getInstance();
 	itemsToBeReadToBank = dataStorage->readToBank();
 
-	//for (vector<string>::iterator iter = itemsToBeReadToBank.begin(); iter != itemsToBeReadToBank.end(); iter++)
-	//{ cout << *iter << endl;}
-	//cout << endl;
-
 	bank.clear();
 	while (!itemsToBeReadToBank.empty()) {
 		Item* newItem = new Item;
@@ -140,9 +136,6 @@ void ItemBank::initialiseBank() {
 		itemsToBeReadToBank.pop_back();
 
 		cout << newItem->getItemType() << endl;
-		//for (vector<string>::iterator iter = itemsToBeReadToBank.begin(); iter != itemsToBeReadToBank.end(); iter++)
-		//{ cout << *iter << endl;}
-		//cout << endl;
 
 		//is done
 		if (itemsToBeReadToBank.back() != "0") {
@@ -151,18 +144,12 @@ void ItemBank::initialiseBank() {
 		itemsToBeReadToBank.pop_back();
 
 		cout << newItem->getIsDone() << endl;
-		//for (vector<string>::iterator iter = itemsToBeReadToBank.begin(); iter != itemsToBeReadToBank.end(); iter++)
-		//{ cout << *iter << endl;}
-		//cout << endl;
 
 		//category
 		newItem->setCategory(itemsToBeReadToBank.back());
 		itemsToBeReadToBank.pop_back();
 
 		cout << newItem->getCategory() << endl;
-		//for (vector<string>::iterator iter = itemsToBeReadToBank.begin(); iter != itemsToBeReadToBank.end(); iter++)
-		//{ cout << *iter << endl;}
-		//cout << endl;
 
 		//priority
 		if (itemsToBeReadToBank.back() == "High") {
@@ -180,9 +167,6 @@ void ItemBank::initialiseBank() {
 		itemsToBeReadToBank.pop_back();
 
 		cout << newItem->getPriorityInString() << endl;
-		//for (vector<string>::iterator iter = itemsToBeReadToBank.begin(); iter != itemsToBeReadToBank.end(); iter++)
-		//{ cout << *iter << endl;}
-		//cout << endl;
 
 		//venue
 		newItem->setVenue(itemsToBeReadToBank.back());
@@ -200,9 +184,6 @@ void ItemBank::initialiseBank() {
 		itemsToBeReadToBank.pop_back();
 
 		cout << newItem->getEndDateInString() << endl;
-		//for (vector<string>::iterator iter = itemsToBeReadToBank.begin(); iter != itemsToBeReadToBank.end(); iter++)
-		//{ cout << *iter << endl;}
-		//cout << endl;
 
 		//start date time
 		startDateTimeInStringForm = itemsToBeReadToBank.back();
@@ -214,28 +195,20 @@ void ItemBank::initialiseBank() {
 		itemsToBeReadToBank.pop_back();
 
 		cout << newItem->getStartDateInString() << endl;
-		//for (vector<string>::iterator iter = itemsToBeReadToBank.begin(); iter != itemsToBeReadToBank.end(); iter++)
-		//{ cout << *iter << endl;}
-		//cout << endl;
 
 		//description
 		newItem->setDescription(itemsToBeReadToBank.back());
 		itemsToBeReadToBank.pop_back();
 
 		cout << newItem->getDescription() << endl;
-		//for (vector<string>::iterator iter = itemsToBeReadToBank.begin(); iter != itemsToBeReadToBank.end(); iter++)
-		//{ cout << *iter << endl;}
-		//cout << endl;
 
 		//title
 		newItem->setTitle(itemsToBeReadToBank.back());
 		itemsToBeReadToBank.pop_back();
 
 		cout << newItem->getTitle() << endl;
-		//for (vector<string>::iterator iter = itemsToBeReadToBank.begin(); iter != itemsToBeReadToBank.end(); iter++)
-		//{ cout << *iter << endl;}
-		//cout << endl;
 
+		bank.push_back(newItem);
 	}
 
 	return;

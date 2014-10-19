@@ -34,7 +34,7 @@ vector<string> DataStorage::readToBank() {
 	vector<string>itemsToBeReadToBank;
 	string dummyLine;
 	ifstream mytextfile;
-	mytextfile.open(fileName, ios::app);
+	mytextfile.open(fileName);
 
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
@@ -46,7 +46,7 @@ vector<string> DataStorage::readToBank() {
 		continue;
 		}
 	}
-
+	mytextfile.close();
 	return itemsToBeReadToBank;
 }
 
