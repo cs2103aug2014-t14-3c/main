@@ -135,21 +135,15 @@ void ItemBank::initialiseBank() {
 		newItem->setItemType(itemsToBeReadToBank.back());
 		itemsToBeReadToBank.pop_back();
 
-		cout << newItem->getItemType() << endl;
-
 		//is done
 		if (itemsToBeReadToBank.back() != "0") {
 			newItem->toggleDone();
 		}
 		itemsToBeReadToBank.pop_back();
 
-		cout << newItem->getIsDone() << endl;
-
 		//category
 		newItem->setCategory(itemsToBeReadToBank.back());
 		itemsToBeReadToBank.pop_back();
-
-		cout << newItem->getCategory() << endl;
 
 		//priority
 		if (itemsToBeReadToBank.back() == "High") {
@@ -166,13 +160,9 @@ void ItemBank::initialiseBank() {
 		}
 		itemsToBeReadToBank.pop_back();
 
-		cout << newItem->getPriorityInString() << endl;
-
 		//venue
 		newItem->setVenue(itemsToBeReadToBank.back());
 		itemsToBeReadToBank.pop_back();
-
-		cout << newItem->getVenue() << endl;
 
 		//end date time
 		endDateTimeInStringForm = itemsToBeReadToBank.back();
@@ -183,8 +173,6 @@ void ItemBank::initialiseBank() {
 
 		itemsToBeReadToBank.pop_back();
 
-		cout << newItem->getEndDateInString() << endl;
-
 		//start date time
 		startDateTimeInStringForm = itemsToBeReadToBank.back();
 		startDateTimeInIntForm = stol(startDateTimeInStringForm, nullptr, 10); 
@@ -194,19 +182,13 @@ void ItemBank::initialiseBank() {
 
 		itemsToBeReadToBank.pop_back();
 
-		cout << newItem->getStartDateInString() << endl;
-
 		//description
 		newItem->setDescription(itemsToBeReadToBank.back());
 		itemsToBeReadToBank.pop_back();
 
-		cout << newItem->getDescription() << endl;
-
 		//title
 		newItem->setTitle(itemsToBeReadToBank.back());
 		itemsToBeReadToBank.pop_back();
-
-		cout << newItem->getTitle() << endl;
 
 		bank.push_back(newItem);
 	}

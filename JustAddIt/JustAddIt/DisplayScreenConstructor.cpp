@@ -13,7 +13,7 @@ DisplayScreenConstructor::~DisplayScreenConstructor(void) {
 
 DisplayScreenConstructor* DisplayScreenConstructor::getInstance(void) {
 	if (displayScreenConstructor == NULL) {
-	displayScreenConstructor = new DisplayScreenConstructor();
+		displayScreenConstructor = new DisplayScreenConstructor();
 	}
 	return displayScreenConstructor;
 }
@@ -46,19 +46,39 @@ vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
 			}
 		}
 		else if (dummyLine == "2) Description: ") {
-			dummyLine += item->getDescription();
+			if (item->getDescription() == "-") {
+				dummyLine += "";
+			}
+			else {
+				dummyLine += item->getDescription();
+			}
 		}
 		else if (dummyLine == "3) Start: ") {
-			dummyLine += item->getStartDateInString();
+			if (item->getItemType() == "task" || item->getItemType() == "deadline") {
+				dummyLine += "";
+			}
+			else {
+				dummyLine += item->getStartDateInString();
+			}
 		}
 		else if (dummyLine == "4) End: ") {
-			dummyLine += item->getEndDateInString();
+			if (item->getItemType() == "task") {
+				dummyLine += "";
+			}
+			else {
+				dummyLine += item->getStartDateInString();
+			}
 		}
 		else if (dummyLine == "5) Priority: ") {
 			dummyLine += item->getPriorityInString();
 		}
 		else if (dummyLine == "6) Category: ") {
-			dummyLine += item->getCategory();
+			if (item->getCategory() == "-") {
+				dummyLine += "";
+			}
+			else {
+				dummyLine += item->getCategory();
+			}
 		}
 
 		outputMessageStorage.push_back(dummyLine);
@@ -345,7 +365,7 @@ vector<string> DisplayScreenConstructor::constructOverdueScreen(vector<Item*>ite
 vector<string> DisplayScreenConstructor::clearScreen() {
 	outputMessageStorage.clear();
 	for (int i = 0; i != 50; i++) {
-	outputMessageStorage.push_back("");
+		outputMessageStorage.push_back("");
 	}
 	return outputMessageStorage;
 }
