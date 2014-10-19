@@ -17,10 +17,11 @@
 #include "CmdGoToListView.h"
 #include "CmdHome.h"
 #include "CmdShowOverdueTasks.h"
+#include "CmdRedo.h"
 
 
 enum CommandType {
-	ADD, SEARCH, EDIT, DELETE, MARK, SAVE, CANCEL, UNDO, VIEW_CALENDAR, VIEW_TODOLIST, VIEW_OVERDUE, HOME
+	ADD, SEARCH, EDIT, DELETE, MARK, SAVE, CANCEL, UNDO, VIEW_CALENDAR, VIEW_TODOLIST, VIEW_OVERDUE, HOME, REDO
 };
 
 class Parser
