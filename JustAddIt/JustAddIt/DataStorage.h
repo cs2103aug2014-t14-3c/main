@@ -5,9 +5,16 @@ class DataStorage
 {
 private:
 	static string filename;
+	static DataStorage* dataStorage;
+
+	DataStorage(void);
+	static inline string DataStorage::trimWhiteSpaceOnLeft(const string& inputString);
 
 public:
-	static void writeToFile();
-	static void readToBank();
+	static DataStorage* getInstance(void);
+	~DataStorage(void);
+
+	static void writeToFile(vector<string>itemsToBeWrittenToFile);
+	vector<string> readToBank();
 };
 

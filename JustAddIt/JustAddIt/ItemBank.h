@@ -1,13 +1,15 @@
 #pragma once
 #include "Item.h"
+#include "DataStorage.h"
 
 class ItemBank
 {
-public: 
-	static vector<Item*> bank;
+private: 
 	static vector<Item*> initialBank;
+	static void update();
 
 public:
+	static vector<Item*> bank;
 	static void addToBank(Item* item);
 	static void deleteFromBank(vector<Item*>::iterator itemPtr);
 	static void markItemInBank(vector<Item*>::iterator itemPtr);
@@ -17,7 +19,7 @@ public:
 	static void editItemEndDateTimeInBank(vector<Item*>::iterator itemPtr, struct tm newEndDateTime);
 	static void editItemVenueInBank(vector<Item*>::iterator itemPtr, string newVenue);
 	static void editItemCategoryInBank(vector<Item*>::iterator itemPtr, string newCategory);
-	static void editItemPriorityInBank(vector<Item*>::iterator itemPtr, Item::PriorityLevel newPriority);
+	static void editItemPriorityInBank(vector<Item*>::iterator itemPtr, string newPriority);
 	static vector<string> getDeadlines(int weeks); 
 	static vector<string> getTasks();
 

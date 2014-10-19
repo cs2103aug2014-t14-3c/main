@@ -5,6 +5,8 @@
 int Item::_idCounter = 1;
 
 Item::Item(void){
+	_title = "-";
+	_description = "-";
 	//default start time/date is current time
 	//default end time/date is current time + 1h
 	time_t myTempTime;
@@ -12,8 +14,10 @@ Item::Item(void){
 	localtime_s (&_startDateTime, &myTempTime); //assign time_t var (myTempTime) to tm variable (_startDateTime)
 	localtime_s (&_endDateTime, &myTempTime);
 	//_endDateTime.tm_hour++;		//add one more hour
-
-
+	_venue = "-";
+	_category = "-";
+	_priority = MED;
+	toggleDone();
 	_id = _idCounter++;
 }
 
@@ -110,6 +114,14 @@ void Item::setTitle(string title) {
 
 void Item::setDescription(string description) {
 	_description = description;
+}
+
+void Item::setStartDateTime(struct tm startDateTime) {
+	_startDateTime = startDateTime;
+}
+
+void Item::setEndDateTime(struct tm endDateTime) {
+	_endDateTime = endDateTime;
 }
 
 void Item::setStartDate(int day, int month) {

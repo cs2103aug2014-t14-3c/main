@@ -37,19 +37,18 @@ vector<string> CmdEditItem::execute() {
 		//break;
 
 			}
-	case 5: {
-		ItemBank::editItemVenueInBank(_itemPtr, _newFieldInfo);
-		break;
+			//case 5: {
+			//	ItemBank::editItemVenueInBank(_itemPtr, _newFieldInfo);
+			//	break;
 
+			//		}
+	case 5: {
+		ItemBank::editItemPriorityInBank(_itemPtr, _newFieldInfo);
+		break;
 			}
 	case 6: {
 		ItemBank::editItemCategoryInBank(_itemPtr, _newFieldInfo);
 		break;
-
-			}
-	case 7: {
-		//ItemBank::editItemPriorityInBank(_itemPtr, _newPriority);
-		//break;
 			}
 	default: {
 		outputMessageStorage.push_back("An error has occcurred!");

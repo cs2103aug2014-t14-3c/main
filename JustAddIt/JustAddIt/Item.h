@@ -43,6 +43,8 @@ public:
 	void updateIdCounter(int lastIdUsed);
 	void setTitle(string title);
 	void setDescription(string description);
+	void setStartDateTime(struct tm startDateTime);
+	void setEndDateTime(struct tm endDateTime);
 	void setStartDate(int day, int month);
 	void setEndDate(int day, int month);
 	void setStartEndDateTimeAsToday();

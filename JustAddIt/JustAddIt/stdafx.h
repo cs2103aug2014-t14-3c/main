@@ -14,5 +14,7 @@
 #include <vector>
 #include <cassert>
 #include <fstream>
+#include <time.h>
+#include <cctype>
 
 // TODO: reference additional headers your program requires here
