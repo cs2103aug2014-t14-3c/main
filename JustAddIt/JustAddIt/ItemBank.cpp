@@ -109,6 +109,22 @@ vector<string> ItemBank::getTasks() {
 
 }
 
+vector<Item*> ItemBank::getOverdueTasks(time_t currentTime) {
+	vector<Item*>itemsToBeDisplayed;
+	vector<Item*>::iterator iter;
+
+	for (iter = bank.begin(); iter != bank.end(); iter++) {
+		if (static_cast<long int>(mktime(&((*iter)->getEndDateTime()))) <= static_cast<long int>(currentTime)) {
+			itemsToBeDisplayed.push_back(*iter);
+		}
+		else {
+			continue;
+		}
+	}
+
+	return itemsToBeDisplayed;
+}
+
 int ItemBank::getBankSize() {
 	return (int)bank.size();
 }

@@ -22,6 +22,7 @@ public:
 	static void editItemPriorityInBank(vector<Item*>::iterator itemPtr, string newPriority);
 	static vector<string> getDeadlines(int weeks); 
 	static vector<string> getTasks();
+	static vector<Item*> getOverdueTasks(time_t currentTime);
 
 	static vector<Item*>::iterator findItemById(int id);
 	static Item findItemByVectorPos(int i);
