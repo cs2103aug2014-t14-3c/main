@@ -81,6 +81,11 @@ Command* Parser::stringToCommand(string userCommand) {
 			return myUndo;
 			break;
 					}
+		case REDO : {
+			CmdRedo* myRedo = new CmdRedo();
+			return myRedo;
+			break;
+					}
 		case CANCEL : {
 			CmdDeleteItem* myDelete = new CmdDeleteItem(OutputControl::getCurrentDisplayedItemList());
 			return myDelete;
