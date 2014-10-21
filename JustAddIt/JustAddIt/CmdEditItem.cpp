@@ -2,9 +2,9 @@
 #include "CmdEditItem.h"
 
 
-CmdEditItem::CmdEditItem(vector<Item*>::iterator itemPtr, int fieldNum, string newFieldInfo) {
-	_itemAddr = *itemPtr;
-	_itemPtr = itemPtr;
+CmdEditItem::CmdEditItem(vector<Item*>::iterator bankPtr, int fieldNum, string newFieldInfo) {
+	_itemAddr = *bankPtr;
+	_bankPtr = bankPtr;
 	_editFieldNumber = fieldNum;
 	_newFieldInfo = newFieldInfo;
 }
@@ -17,11 +17,11 @@ vector<string> CmdEditItem::execute() {
 
 	switch (_editFieldNumber) {
 	case 1: {
-		ItemBank::editItemTitleInBank(_itemPtr, _newFieldInfo);
+		ItemBank::editItemTitleInBank(_bankPtr, _newFieldInfo);
 		break;
 			}
 	case 2: {
-		ItemBank::editItemDescriptionInBank(_itemPtr, _newFieldInfo);
+		ItemBank::editItemDescriptionInBank(_bankPtr, _newFieldInfo);
 		break;
 
 			}
@@ -43,11 +43,11 @@ vector<string> CmdEditItem::execute() {
 
 			//		}
 	case 5: {
-		ItemBank::editItemPriorityInBank(_itemPtr, _newFieldInfo);
+		ItemBank::editItemPriorityInBank(_bankPtr, _newFieldInfo);
 		break;
 			}
 	case 6: {
-		ItemBank::editItemCategoryInBank(_itemPtr, _newFieldInfo);
+		ItemBank::editItemCategoryInBank(_bankPtr, _newFieldInfo);
 		break;
 			}
 	default: {

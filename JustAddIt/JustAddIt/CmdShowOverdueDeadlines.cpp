@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "CmdShowOverdueTasks.h"
+#include "CmdShowOverdueDeadlines.h"
 
 
-CmdShowOverdueTasks::CmdShowOverdueTasks(void)
+CmdShowOverdueDeadlines::CmdShowOverdueDeadlines(void)
 {
 	time_t myTempTime;
 	time(&myTempTime);
@@ -10,14 +10,14 @@ CmdShowOverdueTasks::CmdShowOverdueTasks(void)
 }
 
 
-CmdShowOverdueTasks::~CmdShowOverdueTasks(void)
+CmdShowOverdueDeadlines::~CmdShowOverdueDeadlines(void)
 {
 }
 
-vector<string> CmdShowOverdueTasks::execute() {
+vector<string> CmdShowOverdueDeadlines::execute() {
 	vector<Item*>itemsToBeDisplayed;
 
-	itemsToBeDisplayed = ItemBank::getOverdueTasks(_currentTime);
+	itemsToBeDisplayed = ItemBank::getOverdueDeadlines();
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();

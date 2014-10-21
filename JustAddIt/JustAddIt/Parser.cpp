@@ -102,7 +102,7 @@ Command* Parser::stringToCommand(string userCommand) {
 			break;
 					}
 		case VIEW_OVERDUE : {
-			CmdShowOverdueTasks* myOverdue = new CmdShowOverdueTasks();
+			CmdShowOverdueDeadlines* myOverdue = new CmdShowOverdueDeadlines();
 			return myOverdue;
 			break;
 					}

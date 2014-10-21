@@ -6,10 +6,10 @@ class ItemBank
 {
 private: 
 	static vector<Item*> initialBank;
+	static vector<Item*> bank;
 	static void update();
 
 public:
-	static vector<Item*> bank;
 	static void addToBank(Item* item);
 	static void deleteFromBank(vector<Item*>::iterator itemPtr);
 	static void markItemInBank(vector<Item*>::iterator itemPtr);
@@ -20,9 +20,16 @@ public:
 	static void editItemVenueInBank(vector<Item*>::iterator itemPtr, string newVenue);
 	static void editItemCategoryInBank(vector<Item*>::iterator itemPtr, string newCategory);
 	static void editItemPriorityInBank(vector<Item*>::iterator itemPtr, string newPriority);
-	static vector<string> getDeadlines(int weeks); 
-	static vector<string> getTasks();
-	static vector<Item*> getOverdueTasks(time_t currentTime);
+	static vector<Item*> getEvents(struct tm cutOffDateTime);
+	static vector<Item*> getDeadlines(struct tm cutOffDateTime);
+	static vector<Item*> getAllEvents();
+	static vector<Item*> getAllDeadlines(); 
+	static vector<Item*> getTasks();
+	static vector<Item*> getOverdueDeadlines();
+	static bool searchKeywordInItemAttribute(string itemAttribute, string keyword);
+	static vector<Item*> searchEvents(string keyword);
+	static vector<Item*> searchDeadlines(string keyword);
+	static vector<Item*> searchTasks(string keyword);
 
 	static vector<Item*>::iterator findItemById(int id);
 	static Item findItemByVectorPos(int i);

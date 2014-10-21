@@ -90,7 +90,7 @@
     <ClInclude Include="CmdMarkItemDone.h" />
     <ClInclude Include="CmdRedo.h" />
     <ClInclude Include="CmdSearch.h" />
-    <ClInclude Include="CmdShowOverdueTasks.h" />
+    <ClInclude Include="CmdShowOverdueDeadlines.h" />
     <ClInclude Include="CmdUndo.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="DataStorage.h" />
@@ -117,7 +117,7 @@
     <ClCompile Include="CmdMarkItemDone.cpp" />
     <ClCompile Include="CmdRedo.cpp" />
     <ClCompile Include="CmdSearch.cpp" />
-    <ClCompile Include="CmdShowOverdueTasks.cpp" />
+    <ClCompile Include="CmdShowOverdueDeadlines.cpp" />
     <ClCompile Include="CmdUndo.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="DataStorage.cpp" />

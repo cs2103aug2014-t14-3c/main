@@ -16,7 +16,7 @@
 #include "CmdGoToCalendarView.h"
 #include "CmdGoToListView.h"
 #include "CmdHome.h"
-#include "CmdShowOverdueTasks.h"
+#include "CmdShowOverdueDeadlines.h"
 #include "CmdRedo.h"
 
 

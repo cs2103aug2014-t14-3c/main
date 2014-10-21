@@ -2,15 +2,15 @@
 #include "command.h"
 #include "DisplayScreenConstructor.h"
 
-class CmdShowOverdueTasks :
+class CmdShowOverdueDeadlines :
 	public Command
 {
 private:
 	time_t _currentTime;
 	
 public:
-	CmdShowOverdueTasks(void);
-	~CmdShowOverdueTasks(void);
+	CmdShowOverdueDeadlines(void);
+	~CmdShowOverdueDeadlines(void);
 	vector<string> execute();
 };
 
