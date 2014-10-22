@@ -1,7 +1,7 @@
 #pragma once
 #include "command.h"
 #include "ItemBank.h"
-#include "ActionLog.h"
+#include "DisplayScreenConstructor.h"
 
 class CmdGoToListView :
 	public Command

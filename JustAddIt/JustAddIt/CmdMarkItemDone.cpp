@@ -2,7 +2,7 @@
 #include "CmdMarkItemDone.h"
 
 
-CmdMarkItemDone::CmdMarkItemDone(vector<Item*>::iterator itemPtr) {
+CmdMarkItemDone::CmdMarkItemDone(vector<Item*> itemPtr) {
 	_itemPtr = itemPtr;
 }
 
@@ -12,11 +12,8 @@ CmdMarkItemDone::~CmdMarkItemDone(void)
 }
 
 vector<string> CmdMarkItemDone::execute() {
-	ItemBank::markItemInBank(_itemPtr);
+	ItemBank::markItemsInBank(_itemPtr);
 	outputMessageStorage.clear();
 	outputMessageStorage.push_back("Item is successfully marked!");
-
-	ActionLog::addCommand(this);
-
 	return outputMessageStorage;
 }

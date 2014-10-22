@@ -22,6 +22,7 @@ public:
 	static void resetCurrentItemList();
 	static void addItemToDisplayList(Item* itemPtr);
 	static void setCurrentScreen(CurrentScreenType newScreen);
+	static void setCurrentDisplayedItemList(vector<Item*> newList);
 
 	static Item* getItemAddr(int itemLocationInList);
 	static vector<Item*>::iterator getCurrentDisplayedItemList();

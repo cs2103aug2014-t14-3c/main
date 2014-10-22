@@ -4,7 +4,6 @@
 #include "Item.h"
 #include "OutputControl.h"
 #include "DisplayScreenConstructor.h"
-#include "ActionLog.h"
 
 class CmdAddItem :
 	public Command
