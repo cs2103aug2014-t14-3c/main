@@ -9,9 +9,9 @@ void UI::main() {
 	string userCommand = "";
 	vector<string> outputMessageStorage;
 	vector<string>::iterator iter;
-	Executor executor;
+	Executor* executor = new Executor();
 
-	outputMessageStorage = executor.initialise();
+	outputMessageStorage = executor->initialise();
 
 	for (iter = outputMessageStorage.begin(); iter != outputMessageStorage.end(); iter++) {
 		cout << *iter << endl;
@@ -22,7 +22,7 @@ void UI::main() {
 
 	while (userCommand != "exit") {
 		try{
-			outputMessageStorage = executor.execute(userCommand);
+			outputMessageStorage = executor->execute(userCommand);
 
 			for (iter = outputMessageStorage.begin(); iter != outputMessageStorage.end(); iter++) {
 				cout << *iter << endl;

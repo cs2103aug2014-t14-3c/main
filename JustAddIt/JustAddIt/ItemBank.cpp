@@ -29,14 +29,12 @@ void ItemBank::editItemDescriptionInBank(vector<Item*>::iterator itemPtr, string
 	update();
 }
 
-void ItemBank::editItemStartDateTimeInBank(vector<Item*>::iterator itemPtr, struct tm newStartDateTime) {
-	//_itemPtr->setStartDate(5,5);
-	//_itemPtr->setStartTime(5);
+void ItemBank::editItemStartDateTimeInBank(vector<Item*>::iterator itemPtr, tm newStartDateTime) {
+	(*itemPtr)->setStartDateTime(newStartDateTime);
 }
 
-void ItemBank::editItemEndDateTimeInBank(vector<Item*>::iterator itemPtr, struct tm newEndDateTime) {
-	//_itemPtr->setEndDate(5,5);
-	//_itemPtr->setEndTime(5);
+void ItemBank::editItemEndDateTimeInBank(vector<Item*>::iterator itemPtr, tm newEndDateTime) {
+	(*itemPtr)->setEndDateTime(newEndDateTime);
 }
 
 void ItemBank::editItemVenueInBank(vector<Item*>::iterator itemPtr, string newVenue) {
@@ -50,13 +48,13 @@ void ItemBank::editItemCategoryInBank(vector<Item*>::iterator itemPtr, string ne
 }
 
 void ItemBank::editItemPriorityInBank(vector<Item*>::iterator itemPtr, string newPriority) {
-	if (newPriority == "High" || "H" || "high" || "h" || "hi") {
+	if (newPriority == "High" || newPriority == "H" || newPriority == "high" || newPriority == "h" || newPriority == "hi") {
 		(*itemPtr)->setPriority(static_cast<Item::PriorityLevel>(2));
 	}
-	else if (newPriority == "Medium" || "Med" || "M" || "medium" || "med" || "m") {
+	else if (newPriority == "Medium" || newPriority == "Med" || newPriority == "M" || newPriority == "medium" || newPriority == "med" || newPriority == "m") {
 		(*itemPtr)->setPriority(static_cast<Item::PriorityLevel>(1));
 	}
-	else if (newPriority == "Low" || "L" || "low" || "l") {
+	else if (newPriority == "Low" || newPriority == "L" || newPriority == "low" || newPriority == "l") {
 		(*itemPtr)->setPriority(static_cast<Item::PriorityLevel>(0));
 	}
 	else {

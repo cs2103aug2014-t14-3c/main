@@ -93,6 +93,9 @@
     <ClInclude Include="CmdShowOverdueDeadlines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ParserForCmds.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -168,6 +171,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CmdShowOverdueDeadlines.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ParserForCmds.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

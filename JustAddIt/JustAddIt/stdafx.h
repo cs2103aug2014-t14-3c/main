@@ -16,5 +16,8 @@
 #include <fstream>
 #include <time.h>
 #include <cctype>
-
+enum CommandType {
+	ADD, SEARCH, EDIT, DELETE, MARK, SAVE, CANCEL, UNDO, VIEW_CALENDAR, VIEW_TODOLIST, 
+	VIEW_OVERDUE, HOME, REDO, EXPORT, CLEAR_ALL_OVERDUE, CYCLE_LEFT, CYCLE_RIGHT
+};
 // TODO: reference additional headers your program requires here

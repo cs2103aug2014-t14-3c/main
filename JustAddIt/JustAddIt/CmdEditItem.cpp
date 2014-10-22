@@ -8,7 +8,12 @@ CmdEditItem::CmdEditItem(vector<Item*>::iterator bankPtr, int fieldNum, string n
 	_editFieldNumber = fieldNum;
 	_newFieldInfo = newFieldInfo;
 }
-
+CmdEditItem::CmdEditItem(vector<Item*>::iterator bankPtr, int fieldNum, tm newTimeInfo) {
+	_itemAddr = *bankPtr;
+	_bankPtr = bankPtr;
+	_editFieldNumber = fieldNum;
+	_newTimeInfo = newTimeInfo;
+}
 CmdEditItem::~CmdEditItem(void)
 {
 }
@@ -26,15 +31,15 @@ vector<string> CmdEditItem::execute() {
 
 			}
 	case 3: {
-		//TODO: convert field info to date/time
-		//ItemBank::editItemStartDateTimeInBank(_itemPtr, _newStartDateTime);
-		//break;
+
+		ItemBank::editItemStartDateTimeInBank(_bankPtr, _newTimeInfo);
+		break;
 
 			}
 	case 4: {
-		//TODO: convert field info to date/time
-		//ItemBank::editItemEndDateTimeInBank(_itemPtr, _newEndDateTime);
-		//break;
+
+		ItemBank::editItemEndDateTimeInBank(_bankPtr, _newTimeInfo);
+		break;
 
 			}
 			//case 5: {

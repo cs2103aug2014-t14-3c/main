@@ -3,7 +3,8 @@
 #define MONTHS_IN_YEAR 12
 #define DEFAULT_MONTH_START "1"
 #define FORMAT_24H_SIZE 4
-
+#define START_TIME_FIELD_INDEX 3
+#define END_TIME_FIELD_INDEX 4
 Parser::Parser(void)
 {
 }
@@ -22,8 +23,10 @@ Command* Parser::stringToCommand(string userCommand) {
 	string userAction;
 	commandStream >> userAction;
 	//translate the first word into a CommandType
-	CommandType commandAction = determineCommandType(userAction, OutputControl::getCurrentScreen());
 	
+	//CommandType commandAction = determineCommandType(userAction, OutputControl::getCurrentScreen());
+	ParserForCmds* myParserCmd = new ParserForCmds();
+	CommandType commandAction = myParserCmd->determineCommandType(userAction, OutputControl::getCurrentScreen());
 	
 	switch (commandAction) {
 		case ADD: {
@@ -51,10 +54,34 @@ Command* Parser::stringToCommand(string userCommand) {
 		case EDIT: {
 			int fieldNum;
 			string newFieldInfo;
+			string buffer;
 			commandStream >> fieldNum;
-			getline(commandStream, newFieldInfo);
-			CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, newFieldInfo);
-			return myEdit;
+			commandStream >> newFieldInfo;
+			getline(commandStream, buffer);
+			newFieldInfo += buffer;
+			if(fieldNum == START_TIME_FIELD_INDEX){
+				//edit all the start time values
+				Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());
+				detectMonthDateAndEmbedIsOk(&myNewItem, newFieldInfo, false);
+				detectDayOfWeekDateAndEmbedIsOk(&myNewItem, newFieldInfo, false);
+				detectTimeAndEmbedIsOk(&myNewItem, newFieldInfo, false);
+				CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, myNewItem.getStartDateTime());
+				return myEdit;
+			}
+			else if(fieldNum == END_TIME_FIELD_INDEX){
+				//edit all the end time values
+				Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());
+				detectMonthDateAndEmbedIsOk(&myNewItem, newFieldInfo, true);
+				detectDayOfWeekDateAndEmbedIsOk(&myNewItem, newFieldInfo, true);
+				detectTimeAndEmbedIsOk(&myNewItem, newFieldInfo, true);
+				CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, myNewItem.getEndDateTime());
+				return myEdit;
+			
+			}
+			else{
+				CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, newFieldInfo);
+				return myEdit;
+			}
 			break;
 				   }
 
@@ -612,195 +639,6 @@ int Parser::convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek){
 
 }
 
-CommandType Parser::determineCommandType(string userCommand, OutputControl::CurrentScreenType currentScreen) {
-	//universal commands
-	if (userCommand == "add") {
-		return ADD;
-	}
-	if (userCommand == "search") {
-		return SEARCH;
-	}
-	if (userCommand == "undo") {
-		return UNDO;
-	}
-	if (userCommand == "home") {
-		return HOME;
-	}
-
-	switch (currentScreen) {
-	case OutputControl::HOME_SCREEN: {
-		return determineCommandType_HomeScreen(userCommand);
-		break;
-			}
-	case OutputControl::EDIT_SCREEN: {
-		return determineCommandType_EditScreen(userCommand);
-		break;
-
-			}
-	case OutputControl::DELETE_SCREEN: {
-		return determineCommandType_DeleteScreen(userCommand);
-		break;
-
-			}
-	case OutputControl::SEARCH_RESULTS_SCREEN: {
-		return determineCommandType_SearchResultsScreen(userCommand);
-		break;
-
-			}
-	case OutputControl::TO_DO_LIST_VIEW: {
-		return determineCommandType_ToDoListView(userCommand);
-		break;
-
-			}
-	case OutputControl::CALENDAR_VIEW: {
-		return determineCommandType_CalendarView(userCommand);
-		break;
-			}
-	case OutputControl::OVERDUE_TASKS_SCREEN: {
-		return determineCommandType_OverdueTasksScreen(userCommand);
-		break;
-
-			 }
-										 
-
-	default: {
-				break;
-			 }
-	}
-
-	
-	//DELETE THIS. PREVENT ERROR ONLY
-	return ADD;
-
-}
-
-CommandType Parser::determineCommandType_HomeScreen(string userCommand){
-	
-
-	if (userCommand == "t") {
-		return VIEW_TODOLIST;
-	}
-	else if (userCommand == "c") {
-		return VIEW_CALENDAR;
-	}
-	else if (userCommand == "o") {
-		return VIEW_OVERDUE;
-	}
-	else{
-		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
-	}
-	//DELETE: FOR TEMP DEBUG ONLY
-	return ADD;
-}
-CommandType Parser::determineCommandType_EditScreen(string userCommand){
-	
-	if (userCommand == "e") {
-		return EDIT;
-	}
-	else if (userCommand == "o") {
-		return HOME;
-	}
-	else if (userCommand == "c") {
-		return CANCEL;
-	}
-	else{
-		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
-	}
-	//DELETE: FOR TEMP DEBUG ONLY
-	return ADD;
-}
-CommandType Parser::determineCommandType_DeleteScreen(string userCommand){
-	if (userCommand == "u") {
-		return UNDO;
-	}
-	else if (userCommand == "c") {
-		return VIEW_CALENDAR;
-	}
-	else if (userCommand == "t") {
-		return VIEW_TODOLIST;
-	}
-	else if (userCommand == "o") {
-		return VIEW_OVERDUE;
-	}
-	else{
-		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
-	}
-	//DELETE: FOR TEMP DEBUG ONLY
-	return ADD;
-	//DELETE: FOR TEMP DEBUG ONLY
-
-}
-CommandType Parser::determineCommandType_SearchResultsScreen(string userCommand){
-	//DELETE: FOR TEMP DEBUG ONLY
-	return ADD;
-}
-CommandType Parser::determineCommandType_ToDoListView(string userCommand){
-	if (userCommand == "e") {
-		return EDIT;
-	}
-	else if (userCommand == "m") {
-		return MARK;
-	}
-	else if (userCommand == "d") {
-		return DELETE;
-	}
-	else if (userCommand == "p") {
-		return EXPORT;
-	}
-	else{
-		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
-	}
-	
-	//DELETE: FOR TEMP DEBUG ONLY
-	return ADD;
-}
-CommandType Parser::determineCommandType_CalendarView(string userCommand){
-	if (userCommand == "<") {
-		return CYCLE_LEFT;
-	}
-	else if (userCommand == ">") {
-		return CYCLE_RIGHT;
-	}
-	else if (userCommand == "e") {
-		return EDIT;
-	}
-	else if (userCommand == "m") {
-		return MARK;
-	}
-	else if (userCommand == "d") {
-		return DELETE;
-	}
-	else if (userCommand == "p") {
-		return EXPORT;
-	}
-	else if (userCommand == "t") {
-		return VIEW_TODOLIST;
-	}
-	else{
-		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
-	}
-	
-	//DELETE: FOR TEMP DEBUG ONLY
-	return ADD;
-}
-CommandType Parser::determineCommandType_OverdueTasksScreen(string userCommand){
-	
-	if (userCommand == "m") {
-		return MARK;
-	}
-	else if (userCommand == "d") {
-		return DELETE;
-	}
-	else if (userCommand == "a") {
-		return CLEAR_ALL_OVERDUE;
-	}
-	else{
-		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
-	}
-	
-	//DELETE: FOR TEMP DEBUG ONLY
-	return ADD;
-}
 
 bool Parser::isKeyword(string myWord){
 	return isKeywordTime(myWord) || isKeywordDate(myWord);

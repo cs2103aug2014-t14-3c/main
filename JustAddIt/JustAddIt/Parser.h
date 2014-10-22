@@ -18,16 +18,15 @@
 #include "CmdHome.h"
 #include "CmdShowOverdueDeadlines.h"
 #include "CmdRedo.h"
+#include "ParserForCmds.h"
+#include "Item.h"
 
 
-enum CommandType {
-	ADD, SEARCH, EDIT, DELETE, MARK, SAVE, CANCEL, UNDO, VIEW_CALENDAR, VIEW_TODOLIST, 
-	VIEW_OVERDUE, HOME, REDO, EXPORT, CLEAR_ALL_OVERDUE, CYCLE_LEFT, CYCLE_RIGHT
-};
+
 
 class Parser
 {
-public:
+private:
 	void embedDetailsInItem(Item* myItem, string stringDetails);
 	void detectTitleAndEmbed(Item* myItem, string &stringDetails);
 	bool detectDeadlineKeywordAndTrim(string &stringDetails);
@@ -44,14 +43,7 @@ public:
 	int convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek);
 	
 	void convertStringToLowercase(string &myString);
-	CommandType determineCommandType(string userCommand, OutputControl::CurrentScreenType currentScreen);
-	CommandType determineCommandType_HomeScreen(string userCommand);
-	CommandType determineCommandType_EditScreen(string userCommand);
-	CommandType determineCommandType_DeleteScreen(string userCommand);
-	CommandType determineCommandType_SearchResultsScreen(string userCommand);
-	CommandType determineCommandType_ToDoListView(string userCommand);
-	CommandType determineCommandType_CalendarView(string userCommand);
-	CommandType determineCommandType_OverdueTasksScreen(string userCommand);
+
 
 	bool isKeyword(string myWord);
 	bool isKeywordTime(string myWord);
@@ -59,8 +51,11 @@ public:
 	bool isKeywordEndTime(string myWord);
 	bool isKeywordDate(string myWord);
 public:
+
 	Command* stringToCommand(string userCommand);
 	Parser(void);
 	~Parser(void);
+
+
 };
 
