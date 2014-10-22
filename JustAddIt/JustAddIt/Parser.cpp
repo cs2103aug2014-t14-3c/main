@@ -5,6 +5,7 @@
 #define FORMAT_24H_SIZE 4
 #define START_TIME_FIELD_INDEX 3
 #define END_TIME_FIELD_INDEX 4
+#define DEFAULT_FIRST_INDEX "1"
 Parser::Parser(void)
 {
 }
@@ -22,9 +23,27 @@ Command* Parser::stringToCommand(string userCommand) {
 	istringstream commandStream(userCommand);
 	string userAction;
 	commandStream >> userAction;
-	//translate the first word into a CommandType
 	
-	//CommandType commandAction = determineCommandType(userAction, OutputControl::getCurrentScreen());
+	//if(userAction[0] == 'e' ){
+	//	fieldNums.push_back(userAction[1]);
+	//	userAction = userAction.substr(0,1);
+	//}
+	//else if(userAction[0] == 'm' || userAction[0] == 'd'){
+	//	//cut out the m or d and save it
+	//	userFieldInfo = userAction.substr(1,userAction.length());
+	//	//cut out the field info
+	//	userAction = userAction.substr(0,1);
+	//	//push back the remaining number
+	//	fieldNums.push_back(stoi(userFieldInfo));
+	//	while(commandStream >> userAction && (userAction[0] == 'm' || userAction[0] == 'd')){
+	//		userFieldInfo= userAction.substr(1,userAction.length());
+	//		userAction = userAction.substr(0,1);
+	//		fieldNums.push_back(stoi(userAction));
+	//	}
+	//	collatedList = convertFieldNumsToItemPtrs(fieldNums);
+	//}
+
+	//translate the first word into a CommandType
 	ParserForCmds* myParserCmd = new ParserForCmds();
 	CommandType commandAction = myParserCmd->determineCommandType(userAction, OutputControl::getCurrentScreen());
 	
@@ -52,9 +71,9 @@ Command* Parser::stringToCommand(string userCommand) {
 		}
 
 		case EDIT: {
-			int fieldNum;
 			string newFieldInfo;
 			string buffer;
+			int fieldNum;
 			commandStream >> fieldNum;
 			commandStream >> newFieldInfo;
 			getline(commandStream, buffer);
@@ -87,17 +106,21 @@ Command* Parser::stringToCommand(string userCommand) {
 
 		//TODO:DELETE IS UNTESTED (possibly use get getItemAddr instead)
 		case DELETE: {
-			int itemNum;
-			commandStream >> itemNum;
-			CmdDeleteItem* myDelete = new CmdDeleteItem(OutputControl::getCurrentDisplayedItemList()+itemNum-1);
+			vector<Item*> collatedList;
+			string fieldNumsStr;
+			getline(commandStream, fieldNumsStr);
+			collatedList = convertFieldNumsToItemPtrs(fieldNumsStr);
+			CmdDeleteItem* myDelete = new CmdDeleteItem(collatedList);
 			return myDelete;
 			break;
 					 }
 
 		case MARK: {
-			int itemNum;
-			commandStream >> itemNum;
-			CmdMarkItemDone* myMark = new CmdMarkItemDone(OutputControl::getCurrentDisplayedItemList()+itemNum-1);
+			vector<Item*> collatedList;
+			string fieldNumsStr;
+			getline(commandStream, fieldNumsStr);
+			collatedList = convertFieldNumsToItemPtrs(fieldNumsStr);
+			CmdMarkItemDone* myMark = new CmdMarkItemDone(collatedList);
 			return myMark;
 			break;
 					 }
@@ -113,7 +136,10 @@ Command* Parser::stringToCommand(string userCommand) {
 			break;
 					}
 		case CANCEL : {
-			CmdDeleteItem* myDelete = new CmdDeleteItem(OutputControl::getCurrentDisplayedItemList());
+
+			vector<Item*> collatedList;
+			collatedList = convertFieldNumsToItemPtrs(DEFAULT_FIRST_INDEX);
+			CmdDeleteItem* myDelete = new CmdDeleteItem(collatedList);
 			return myDelete;
 			break;
 					}
@@ -655,4 +681,14 @@ bool Parser::isKeywordEndTime(string myWord){
 }
 bool Parser::isKeywordDate(string myWord){
 	return myWord=="on";
+}
+
+vector <Item*> Parser::convertFieldNumsToItemPtrs(string fieldNumsStr){
+	vector<Item*> itemPtrs;
+	int fieldNum;
+	istringstream fieldStream(fieldNumsStr);
+	while(fieldStream >> fieldNum){
+		itemPtrs.push_back(OutputControl::getItemAddr(fieldNum));
+	}
+	return itemPtrs;
 }

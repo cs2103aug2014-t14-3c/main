@@ -26,9 +26,9 @@ vector<string> CmdGoToListView::execute() {
 	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::TO_DO_LIST_VIEW);
 
 	//append all items to collated list vector
-	collatedList.insert(collatedList.end(), tasksToBeDisplayed.begin(), tasksToBeDisplayed.end());
-	collatedList.insert(collatedList.end(), deadlinesToBeDisplayed.begin(), deadlinesToBeDisplayed.end());
 	collatedList.insert(collatedList.end(), eventsToBeDisplayed.begin(), eventsToBeDisplayed.end());
+	collatedList.insert(collatedList.end(), deadlinesToBeDisplayed.begin(), deadlinesToBeDisplayed.end());
+	collatedList.insert(collatedList.end(), tasksToBeDisplayed.begin(), tasksToBeDisplayed.end());
 	OutputControl::setCurrentDisplayedItemList(collatedList);
 
 	return outputMessageStorage;

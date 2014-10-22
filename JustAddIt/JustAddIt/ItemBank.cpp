@@ -9,13 +9,24 @@ void ItemBank::addToBank(Item* item) {
 	update();
 }
 
-void ItemBank::deleteFromBank(vector<Item*>::iterator itemPtr) {
-	bank.erase(find(bank.begin(), bank.end(), *itemPtr));
+void ItemBank::deleteFromBank(vector<Item*> itemPtr) {
+	vector<Item*>::iterator myIter;
+	myIter = itemPtr.begin();
+	while(myIter!=itemPtr.end()){
+		bank.erase(find(bank.begin(), bank.end(), *myIter));
+		myIter++;
+	}
 	update();
 }
 
-void ItemBank::markItemInBank(vector<Item*>::iterator itemPtr) {
-	(*itemPtr)->toggleDone();
+void ItemBank::markItemsInBank(vector<Item*> itemPtr) {
+
+	vector<Item*>::iterator myIter;
+	myIter = itemPtr.begin();
+	while(myIter!=itemPtr.end()){
+		(*myIter)->toggleDone();
+		myIter++;
+	}
 	update();
 }
 

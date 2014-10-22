@@ -20,7 +20,7 @@ void OutputControl::setCurrentDisplayedItemList(vector<Item*> newList){
 	currentDisplayedItemList=newList;
 }
 Item* OutputControl::getItemAddr(int itemLocationInList) {
-	return currentDisplayedItemList[itemLocationInList];
+	return currentDisplayedItemList[itemLocationInList-1];
 }
 
 vector<Item*>::iterator OutputControl::getCurrentDisplayedItemList(){

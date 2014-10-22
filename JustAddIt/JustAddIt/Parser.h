@@ -1,11 +1,7 @@
 #pragma once
-#include <iostream>
+
 #include "stdafx.h"
-#include <time.h>
-#include <ctype.h>
-#include <sstream>
-#include <iterator>
-#include <exception>
+
 #include "Command.h"
 #include "CmdAddItem.h"
 #include "CmdSearch.h"
@@ -50,6 +46,7 @@ private:
 	bool isKeywordStartTime(string myWord);
 	bool isKeywordEndTime(string myWord);
 	bool isKeywordDate(string myWord);
+	vector <Item*> convertFieldNumsToItemPtrs(string fieldNumsStr);
 public:
 
 	Command* stringToCommand(string userCommand);

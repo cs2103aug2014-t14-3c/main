@@ -2,17 +2,18 @@
 #include "CmdDeleteItem.h"
 #include "CmdHome.h"
 
-CmdDeleteItem::CmdDeleteItem(vector<Item*>::iterator itemPtr) {
-	_itemPtr = itemPtr;
-	_itemAddr = *_itemPtr;
+CmdDeleteItem::CmdDeleteItem(vector<Item*> itemPtrs) {
+	_itemPtrs = itemPtrs;
+//	_itemAddr = *_itemPtr;
 }
+
 
 CmdDeleteItem::~CmdDeleteItem(void)
 {
 }
 
 vector<string> CmdDeleteItem::execute() {
-	ItemBank::deleteFromBank(_itemPtr);
+	ItemBank::deleteFromBank(_itemPtrs);
 
 	Command* cmdHome = new CmdHome;
 	outputMessageStorage.clear();
