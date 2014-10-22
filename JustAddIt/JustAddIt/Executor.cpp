@@ -11,20 +11,9 @@ vector<string> Executor::execute(string userCommand) {
 	outputMessageStorage.clear();
 	outputMessageStorage = displayScreenConstructor->clearScreen();
 
-	try{
-		command = parser.stringToCommand(userCommand);
-		outputMessageStorage = command->execute();
-		ActionLog::addCommand(*command);
-	}
-	
-	catch(exception& e){
-		cerr << "error: " << e.what() << endl;
-		ofstream file;
-		file.open("error.log");
-		file << "exception occurred: " << userCommand << endl;
-		file.close();
-	}
-
+	command = parser.stringToCommand(userCommand);
+	outputMessageStorage = command->execute();
+	ActionLog::addCommand(*command);
 
 	return outputMessageStorage;
 }

@@ -13,6 +13,7 @@ vector<string> CmdGoToListView::execute() {
 	vector<Item*>tasksToBeDisplayed;
 	vector<Item*>deadlinesToBeDisplayed;
 	vector<Item*>eventsToBeDisplayed;
+	vector<Item*>collatedList;
 
 	eventsToBeDisplayed = ItemBank::getAllEvents();
 	deadlinesToBeDisplayed = ItemBank::getAllDeadlines();
@@ -23,6 +24,12 @@ vector<string> CmdGoToListView::execute() {
 	outputMessageStorage = displayScreenConstructor->clearScreen();
 	outputMessageStorage = displayScreenConstructor->constructListScreen(tasksToBeDisplayed, deadlinesToBeDisplayed, eventsToBeDisplayed);
 	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::TO_DO_LIST_VIEW);
+
+	//append all items to collated list vector
+	collatedList.insert(collatedList.end(), tasksToBeDisplayed.begin(), tasksToBeDisplayed.end());
+	collatedList.insert(collatedList.end(), deadlinesToBeDisplayed.begin(), deadlinesToBeDisplayed.end());
+	collatedList.insert(collatedList.end(), eventsToBeDisplayed.begin(), eventsToBeDisplayed.end());
+	OutputControl::setCurrentDisplayedItemList(collatedList);
 
 	return outputMessageStorage;
 }

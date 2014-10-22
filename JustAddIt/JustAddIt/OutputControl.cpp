@@ -15,7 +15,10 @@ void OutputControl::addItemToDisplayList(Item* itemPtr) {
 void OutputControl::setCurrentScreen(CurrentScreenType newScreen) {
 	currentScreen = newScreen;
 }
-
+void OutputControl::setCurrentDisplayedItemList(vector<Item*> newList){
+	resetCurrentItemList();
+	currentDisplayedItemList=newList;
+}
 Item* OutputControl::getItemAddr(int itemLocationInList) {
 	return currentDisplayedItemList[itemLocationInList];
 }

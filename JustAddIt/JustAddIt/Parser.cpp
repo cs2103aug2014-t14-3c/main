@@ -62,7 +62,6 @@ Command* Parser::stringToCommand(string userCommand) {
 		case DELETE: {
 			int itemNum;
 			commandStream >> itemNum;
-	
 			CmdDeleteItem* myDelete = new CmdDeleteItem(OutputControl::getCurrentDisplayedItemList()+itemNum-1);
 			return myDelete;
 			break;
@@ -736,14 +735,69 @@ CommandType Parser::determineCommandType_SearchResultsScreen(string userCommand)
 	return ADD;
 }
 CommandType Parser::determineCommandType_ToDoListView(string userCommand){
+	if (userCommand == "e") {
+		return EDIT;
+	}
+	else if (userCommand == "m") {
+		return MARK;
+	}
+	else if (userCommand == "d") {
+		return DELETE;
+	}
+	else if (userCommand == "p") {
+		return EXPORT;
+	}
+	else{
+		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
+	}
+	
 	//DELETE: FOR TEMP DEBUG ONLY
 	return ADD;
 }
 CommandType Parser::determineCommandType_CalendarView(string userCommand){
+	if (userCommand == "<") {
+		return CYCLE_LEFT;
+	}
+	else if (userCommand == ">") {
+		return CYCLE_RIGHT;
+	}
+	else if (userCommand == "e") {
+		return EDIT;
+	}
+	else if (userCommand == "m") {
+		return MARK;
+	}
+	else if (userCommand == "d") {
+		return DELETE;
+	}
+	else if (userCommand == "p") {
+		return EXPORT;
+	}
+	else if (userCommand == "t") {
+		return VIEW_TODOLIST;
+	}
+	else{
+		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
+	}
+	
 	//DELETE: FOR TEMP DEBUG ONLY
 	return ADD;
 }
 CommandType Parser::determineCommandType_OverdueTasksScreen(string userCommand){
+	
+	if (userCommand == "m") {
+		return MARK;
+	}
+	else if (userCommand == "d") {
+		return DELETE;
+	}
+	else if (userCommand == "a") {
+		return CLEAR_ALL_OVERDUE;
+	}
+	else{
+		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
+	}
+	
 	//DELETE: FOR TEMP DEBUG ONLY
 	return ADD;
 }
