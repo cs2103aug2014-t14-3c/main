@@ -2,26 +2,28 @@
 #include "CmdSearch.h"
 
 CmdSearch::CmdSearch(string keyword) {
-	_searchKeyword = keyword;
+	searchKeyword = keyword;
 }
 
 CmdSearch::~CmdSearch(void) {
 }
 
 vector<string> CmdSearch::execute() {
-	vector<Item*>tasksToBeDisplayed;
-	vector<Item*>deadlinesToBeDisplayed;
-	vector<Item*>eventsToBeDisplayed;
+	int sizeOfItemList = ItemBank::bank.size();
+	for (int i = 0; i < sizeOfItemList; i++) {
+		for (int start = 0; start <= (signed)ItemBank::bank[i]->getTitle().length(); start++) {
+				if (!((temporaryStorage[i]).substr(start, temporaryStorage[i].length())).find(searchKeyword)) {
+					//showUser(temporaryStorage[i] + "\n");
+					contentAfterSearching.push_back(temporaryStorage[i]);
+					break;
+				}
+		}
+	}
+	for (int i = 0; i < sizeOfItemList; i++) {
+		temporaryStorage.pop_back();
+	}
 
-	eventsToBeDisplayed = ItemBank::searchEvents(_searchKeyword);
-	deadlinesToBeDisplayed = ItemBank::searchDeadlines(_searchKeyword);
-	tasksToBeDisplayed = ItemBank::searchTasks(_searchKeyword);
+	ActionLog::addCommand(this);
 
-	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
-	outputMessageStorage.clear();
-	outputMessageStorage = displayScreenConstructor->clearScreen();
-	outputMessageStorage = displayScreenConstructor->constructSearchScreen(tasksToBeDisplayed, deadlinesToBeDisplayed, eventsToBeDisplayed);
-	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::SEARCH_RESULTS_SCREEN);
-
-	return outputMessageStorage;
+	return contentAfterSearching;
 }

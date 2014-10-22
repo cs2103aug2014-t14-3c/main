@@ -7,11 +7,13 @@ int Item::_idCounter = 1;
 Item::Item(void){
 	_title = "-";
 	_description = "-";
-	//default start/end time/date is current time
+	//default start time/date is current time
+	//default end time/date is current time + 1h
 	time_t myTempTime;
 	time(&myTempTime);	//set current time to myTempTime
 	localtime_s (&_startDateTime, &myTempTime); //assign time_t var (myTempTime) to tm variable (_startDateTime)
 	localtime_s (&_endDateTime, &myTempTime);
+	//_endDateTime.tm_hour++;		//add one more hour
 	_venue = "-";
 	_category = "-";
 	_priority = MED;
@@ -116,12 +118,10 @@ void Item::setDescription(string description) {
 
 void Item::setStartDateTime(struct tm startDateTime) {
 	_startDateTime = startDateTime;
-	mktime(&_startDateTime);
 }
 
 void Item::setEndDateTime(struct tm endDateTime) {
 	_endDateTime = endDateTime;
-	mktime(&_endDateTime);
 }
 
 void Item::setStartDate(int day, int month) {
@@ -140,33 +140,6 @@ void Item::setStartEndDateTimeAsToday(){
 	time(&nowTime);
 	localtime_s (&_startDateTime, &nowTime);
 	localtime_s (&_endDateTime, &nowTime);
-
-}
-void Item::setStartDateAsToday(){
-	time_t nowTime;
-	tm nowTimeTM;
-
-	time(&nowTime);
-	localtime_s (&nowTimeTM, &nowTime);
-	_startDateTime.tm_mday=nowTimeTM.tm_mday;
-	_startDateTime.tm_wday=nowTimeTM.tm_wday;
-	_startDateTime.tm_mon=nowTimeTM.tm_mon;
-	_startDateTime.tm_yday=nowTimeTM.tm_yday;
-	_startDateTime.tm_year=nowTimeTM.tm_year;
-	mktime(&_startDateTime);
-}
-void Item::setEndDateAsToday(){
-	time_t nowTime;
-	tm nowTimeTM;
-
-	time(&nowTime);
-	localtime_s (&nowTimeTM, &nowTime);
-	_endDateTime.tm_mday=nowTimeTM.tm_mday;
-	_endDateTime.tm_wday=nowTimeTM.tm_wday;
-	_endDateTime.tm_mon=nowTimeTM.tm_mon;
-	_endDateTime.tm_yday=nowTimeTM.tm_yday;
-	_endDateTime.tm_year=nowTimeTM.tm_year;
-	mktime(&_endDateTime);
 }
 void Item::setStartTime(int hour, int min){
 	_startDateTime.tm_hour = hour;
@@ -181,14 +154,10 @@ void Item::setEndTime(int hour, int min){
 
 }
 void Item::addToStartDate(int daysToAdd){
-	setStartDateAsToday();
 	_startDateTime.tm_mday += daysToAdd;
-	mktime(&_startDateTime);
 }
 void Item::addToEndDate(int daysToAdd){
-	setEndDateAsToday();
 	_endDateTime.tm_mday += daysToAdd;
-	mktime(&_endDateTime);
 }
 void Item::setVenue(string venue) {
 	_venue = venue;

@@ -9,9 +9,9 @@ void UI::main() {
 	string userCommand = "";
 	vector<string> outputMessageStorage;
 	vector<string>::iterator iter;
-	Executor* executor = new Executor();
+	Executor executor;
 
-	outputMessageStorage = executor->initialise();
+	outputMessageStorage = executor.initialise();
 
 	for (iter = outputMessageStorage.begin(); iter != outputMessageStorage.end(); iter++) {
 		cout << *iter << endl;
@@ -21,23 +21,14 @@ void UI::main() {
 	getline(cin, userCommand);
 
 	while (userCommand != "exit") {
-		try{
-			outputMessageStorage = executor->execute(userCommand);
+	outputMessageStorage = executor.execute(userCommand);
 
-			for (iter = outputMessageStorage.begin(); iter != outputMessageStorage.end(); iter++) {
-				cout << *iter << endl;
-				}
+	for (iter = outputMessageStorage.begin(); iter != outputMessageStorage.end(); iter++) {
+		cout << *iter << endl;
+	}
 
-			outputMessageStorage.clear();
-			}
-		catch(exception& e){
-			cerr << "error: " << e.what() << endl;
-			ofstream file;
-			file.open("error.log");
-			file << "exception occurred: " << userCommand << endl;
-			file.close();
-		}
-		cout << "command: ";
-		getline(cin, userCommand); 
+	outputMessageStorage.clear();
+	cout << "command: ";
+	getline(cin, userCommand); 
 	};
 }

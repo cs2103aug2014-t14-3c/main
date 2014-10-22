@@ -14,10 +14,13 @@ public:
 	static DisplayScreenConstructor* getInstance(void);
 	~DisplayScreenConstructor(void);
 
-	vector<string> constructHomeScreen(vector<Item*>tasksToBeDisplayed, vector<Item*>deadlinesToBeDisplayed, vector<Item*>eventsToBeDisplayed);
+	vector<string> constructHomeScreen();
 	vector<string> constructEditScreen(Item* item);
-	vector<string> constructSearchScreen(vector<Item*>tasksToBeDisplayed, vector<Item*>deadlinesToBeDisplayed, vector<Item*>eventsToBeDisplayed);
-	vector<string> constructListScreen(vector<Item*>tasksToBeDisplayed, vector<Item*>deadlinesToBeDisplayed, vector<Item*>eventsToBeDisplayed);
+	vector<string> constructSearchScreen(vector<Item*>itemsToBeDisplayed);
+	vector<string> constructListScreen_1Week(vector<Item*>itemsToBeDisplayed);
+	vector<string> constructListScreen_2Weeks(vector<Item*>itemsToBeDisplayed);
+	vector<string> constructListScreen_3Weeks(vector<Item*>itemsToBeDisplayed);
+	vector<string> constructListScreen_Month(vector<Item*>itemsToBeDisplayed);
 	vector<string> constructCalendarScreen(vector<Item*>itemsToBeDisplayed);
 	vector<string> constructOverdueScreen(vector<Item*>itemsToBeDisplayed);
 	vector<string> clearScreen();

@@ -3,12 +3,13 @@
 #include "ItemBank.h"
 #include "DisplayScreenConstructor.h"
 #include "OutputControl.h"
+#include "ActionLog.h"
 
 class CmdDeleteItem :
 	public Command
 {
 private:
-	vector<Item*> _itemPtrs;
+	vector<Item*>::iterator _itemPtr;
 	Item* _itemAddr;
 	vector<string> outputMessageStorage;
 
@@ -17,7 +18,7 @@ private:
 	//void setPageCommands();
 
 public:
-	CmdDeleteItem(vector<Item*> itemPtrs);
+	CmdDeleteItem(vector<Item*>::iterator itemPtr);
 	~CmdDeleteItem(void);
 	vector<string> CmdDeleteItem::execute();
 };

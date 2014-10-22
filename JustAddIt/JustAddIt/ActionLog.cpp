@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "ActionLog.h"
 
-vector<Command> ActionLog::log;
+vector<Command*> ActionLog::log;
 int ActionLog::numCommands = 0;
 
-void ActionLog::addCommand(Command cmd) {
+void ActionLog::addCommand(Command* cmd) {
 	log.push_back(cmd);
 	numCommands++;
 }
@@ -14,10 +14,11 @@ void ActionLog::undo() {
 		// cannot undo!
 		// throw exception
 	} else {
+		
 		ItemBank::resetBank();
-
+		
 		for(int i = 0; i < numCommands - 1; i++) {
-			log[i].execute();
+			log[i]->execute();
 		}
 
 		numCommands--;
@@ -29,6 +30,6 @@ void ActionLog::redo() {
 		// nothing to redo!
 		// throw exception
 	} else {
-		log[++numCommands].execute();
+		log[++numCommands]->execute();
 	}
 }

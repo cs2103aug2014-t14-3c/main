@@ -48,8 +48,6 @@ public:
 	void setStartDate(int day, int month);
 	void setEndDate(int day, int month);
 	void setStartEndDateTimeAsToday();
-	void setStartDateAsToday();
-	void setEndDateAsToday();
 	void setStartTime(int hour, int min);
 	void setEndTime(int hour, int min);
 	void addToStartDate(int daysToAdd);

@@ -3,14 +3,28 @@
 		    |	          JustAddIt            |
 		    |__________________________________|
 
-Overdue Deadlines
+To-do list
 
+========================
+Deadlines due in 3 weeks
+========================
+
+
+=====
+Tasks
+=====
 
 ================================================================================
 
+[v1] View 1 week
+[v2] view 2 weeks
+[v4] view month
+[a] Show all
+[e#] Edit {Item number}
 [m#] Mark {Item number}
 [d#] Delete {Item number}
-[a] Clear all overdue deadlines
+[p] Export
+[c] View Calendar
 
 Tip: To perform multiple deletes/marks, leave a space between each command.
 For example: d1 d2 d5

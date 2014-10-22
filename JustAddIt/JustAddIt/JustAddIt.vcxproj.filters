@@ -54,6 +54,9 @@
     <ClInclude Include="CmdSearch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CmdShowOverdueTasks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="CmdUndo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -88,12 +91,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DisplayScreenConstructor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CmdShowOverdueDeadlines.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ParserForCmds.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -134,6 +131,9 @@
     <ClCompile Include="CmdSearch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CmdShowOverdueTasks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="CmdUndo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -168,12 +168,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DisplayScreenConstructor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CmdShowOverdueDeadlines.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParserForCmds.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,7 +1,11 @@
 #pragma once
-
+#include <iostream>
 #include "stdafx.h"
-
+#include <time.h>
+#include <ctype.h>
+#include <sstream>
+#include <iterator>
+#include <exception>
 #include "Command.h"
 #include "CmdAddItem.h"
 #include "CmdSearch.h"
@@ -12,17 +16,15 @@
 #include "CmdGoToCalendarView.h"
 #include "CmdGoToListView.h"
 #include "CmdHome.h"
-#include "CmdShowOverdueDeadlines.h"
+#include "CmdShowOverdueTasks.h"
 #include "CmdRedo.h"
-#include "ParserForCmds.h"
-#include "Item.h"
 
 
-
+enum CommandType { ADD, SEARCH, EDIT, DELETE, MARK, SAVE, CANCEL, UNDO, VIEW_CALENDAR, VIEW_TODOLIST, VIEW_OVERDUE, HOME, REDO };
 
 class Parser
 {
-private:
+public:
 	void embedDetailsInItem(Item* myItem, string stringDetails);
 	void detectTitleAndEmbed(Item* myItem, string &stringDetails);
 	bool detectDeadlineKeywordAndTrim(string &stringDetails);
@@ -39,20 +41,23 @@ private:
 	int convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek);
 	
 	void convertStringToLowercase(string &myString);
-
+	CommandType determineCommandType(string userCommand, OutputControl::CurrentScreenType currentScreen);
+	CommandType determineCommandType_HomeScreen(string userCommand);
+	CommandType determineCommandType_EditScreen(string userCommand);
+	CommandType determineCommandType_DeleteScreen(string userCommand);
+	CommandType determineCommandType_SearchResultsScreen(string userCommand);
+	CommandType determineCommandType_ToDoListView(string userCommand);
+	CommandType determineCommandType_CalendarView(string userCommand);
+	CommandType determineCommandType_OverdueTasksScreen(string userCommand);
 
 	bool isKeyword(string myWord);
 	bool isKeywordTime(string myWord);
 	bool isKeywordStartTime(string myWord);
 	bool isKeywordEndTime(string myWord);
 	bool isKeywordDate(string myWord);
-	vector <Item*> convertFieldNumsToItemPtrs(string fieldNumsStr);
 public:
-
 	Command* stringToCommand(string userCommand);
 	Parser(void);
 	~Parser(void);
-
-
 };
 

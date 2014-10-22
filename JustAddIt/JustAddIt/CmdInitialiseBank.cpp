@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "CmdInitialiseBank.h"
-#include "CmdHome.h"
 
 CmdInitialiseBank::CmdInitialiseBank(void)
 {
@@ -13,9 +12,11 @@ CmdInitialiseBank::~CmdInitialiseBank(void)
 vector<string> CmdInitialiseBank::execute() {
 	ItemBank::initialiseBank();
 
-	Command* cmdHome = new CmdHome;
+	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();
-	outputMessageStorage = cmdHome->execute();
+	outputMessageStorage = displayScreenConstructor->constructHomeScreen();
+
+	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
 
 	return outputMessageStorage;
 }
