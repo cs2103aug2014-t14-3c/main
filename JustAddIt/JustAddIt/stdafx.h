@@ -19,6 +19,7 @@
 #include <sstream>
 #include <iterator>
 #include <exception>
+#include <algorithm>
 enum CommandType {
 	ADD, SEARCH, EDIT, DELETE, MARK, SAVE, UNDO, VIEW_CALENDAR, VIEW_TODOLIST, 
 	VIEW_OVERDUE, HOME, REDO, EXPORT, CLEAR_ALL_OVERDUE, CYCLE_LEFT, CYCLE_RIGHT

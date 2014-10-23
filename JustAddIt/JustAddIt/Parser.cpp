@@ -171,6 +171,8 @@ Command* Parser::stringToCommand(string userCommand) {
 
 void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
 
+	vector<string> vectorOfStrings;
+	vectorOfStrings = convertStringToVector(stringDetails);
 	detectTitleAndEmbed(myItem, stringDetails);
 
 	bool isDeadline = detectDeadlineKeywordAndTrim(stringDetails);
@@ -210,69 +212,56 @@ void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
 			
 }
 
+
+
 void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 	
-	istringstream streamDetails(stringDetails);
-	string title = "";
-	string currentWord;
-	string previousWord;
-	string nextWord;
-	//get the first word and store in title if not a keyword
-	streamDetails >> previousWord;
+
+	vector<string> vectorOfStrings;
+	vector<string>::iterator titleStartIter;
+	vector<string>::iterator titleEndIter;
+	vector<string>::iterator startWordIter;
+	vector<string>::iterator endWordIter;
+	vector<string>::iterator prevWordIter;
+	string titleToSet;
+	string leftoverString;
+
+	vectorOfStrings = convertStringToVector(stringDetails);
+
+	startWordIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isKeywordDate_StartTime_Deadline);
+	endWordIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isKeywordEndTime);
+	//if found start keyword before end keyword
+	if(startWordIter<endWordIter){
+		titleStartIter= vectorOfStrings.begin();
+		titleEndIter = startWordIter;
+	}
+	//if found end keyword before start keyword
+	else if(endWordIter<startWordIter){
+		vector<string>::iterator timeIter;
+		vector<string>::iterator monthIter;
+		timeIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isTime);
+		monthIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isMonth);
+		//if month before endword and before time
+		if(monthIter<endWordIter && monthIter < timeIter){
+			titleStartIter= vectorOfStrings.begin();
+			titleEndIter = monthIter;
+		}
+
+		//if time before endword and before month
+		else if(timeIter<endWordIter && timeIter < monthIter){
+			titleStartIter= vectorOfStrings.begin();
+			titleEndIter = timeIter;
+		}
+		else{
+			titleStartIter= vectorOfStrings.begin();
+			titleEndIter = endWordIter;
+		}
+	}
 	
-
-	if(isKeyword(previousWord)){
-		throw invalid_argument("no title was found!");
-	}
-	//account for one worded task
-	else if(!(streamDetails >> currentWord)){
-		title = previousWord;
-	}
-	//acccount for one worded event
-	else if(isKeyword(currentWord)){
-		title = previousWord;
-	}
-	else{
-
-			title=previousWord;
-			previousWord = currentWord;
-			//get the next word;
-			//account for two worded task
-			if(!(streamDetails >> currentWord)){
-				title += ' ' + previousWord;
-			}
-			else{
-
-				//account for one worded events
-				if(!isKeywordEndTime(currentWord)){
-				//and loop the subsequent adding
-					while((streamDetails >> nextWord) && !isKeyword(currentWord) && !isKeywordEndTime(nextWord)){
-						title += ' ' + previousWord;
-						previousWord = currentWord;
-						currentWord = nextWord;
-
-						/*streamDetails >> nextWord;*/
-
-						//title += ' ' + currentWord;
-						//previousWord = currentWord;
-						//streamDetails >> currentWord;
-					}
-				//for currentWord isKeyword exit 
-					if(isKeyword(currentWord) || isKeywordEndTime(nextWord)){
-						title += ' ' + previousWord;
-					}
-					else{
-						title += ' ' + previousWord + ' ' + currentWord;
-					}
-				}
-			}
-		
-	}
-	//cut out the title
-	stringDetails.replace(stringDetails.find(title),title.length(),"");
-	myItem->setTitle(title);
-
-
+	//for the leftovers
+	stringDetails = convertVectorToString(titleEndIter, vectorOfStrings.end());
+	titleToSet = convertVectorToString(titleStartIter, titleEndIter);
+	myItem->setTitle(titleToSet);
 	//TODO:Exception if no title (first word is a keyword)
 	return;
 }
@@ -543,14 +532,17 @@ int Parser::convertStringToIntHour(string stringTime){
 	//set accountForPM to 12 if afternoon
 	int accountForPM=0;
 
+	//if 2359 format
 	if(isInteger(stringTime) && stringTime.length() == FORMAT_24H_SIZE){
 		stringTime = stringTime.substr(0,2);
+		return stoi(stringTime);
 	}
 	else{
 		positionFound = stringTime.find("am");
 		//if found, cut the am out
 		if (positionFound!=string::npos){
 			stringTime = stringTime.substr(0,positionFound);
+
 		}
 
 		positionFound = stringTime.find("pm");
@@ -561,7 +553,7 @@ int Parser::convertStringToIntHour(string stringTime){
 		}
 	}
 	//what remains is the digits (minutes are trimmed)
-	int actualTime = stoi (stringTime) + accountForPM;
+	int actualTime = (stoi (stringTime)%12) + accountForPM;
 	
 	return actualTime;
 }
@@ -676,10 +668,16 @@ bool Parser::isKeywordStartTime(string myWord){
 	return myWord=="at" || myWord == "from" || myWord == "between" || myWord == "next";
 }
 bool Parser::isKeywordEndTime(string myWord){
-	return myWord=="to" || myWord == "-" || myWord == "by" || myWord == "and";
+	return myWord=="to" || myWord == "-"  || myWord == "and";
+}
+bool Parser::isKeywordDeadline(string myWord){
+	return myWord == "by" ;
 }
 bool Parser::isKeywordDate(string myWord){
 	return myWord=="on";
+}
+bool Parser::isKeywordDate_StartTime_Deadline(string myWord){
+	return isKeywordDate(myWord) || isKeywordStartTime(myWord) || isKeywordDeadline(myWord);
 }
 
 vector <Item*> Parser::convertFieldNumsToItemPtrs(string fieldNumsStr){
@@ -696,4 +694,32 @@ vector <Item*> Parser::convertFieldNumsToItemPtrs(string fieldNumsStr){
 		}
 	}
 	return itemPtrs;
+}
+
+vector<string> Parser::convertStringToVector(string inputString){
+
+	istringstream inputStream(inputString);
+	string currentWord;
+	vector<string> vectorOfStrings;
+
+	while(inputStream >> currentWord){
+		vectorOfStrings.push_back(currentWord);
+	}
+
+	return vectorOfStrings;
+}
+
+string Parser::convertVectorToString(vector<string>::iterator start, vector<string>::iterator end){
+	string finalString="";
+	//if first word exists
+	if(*start!=""){
+		finalString=*start;
+		start++;
+	}
+	while(start!=end){
+		finalString += ' ' + *start;
+		start++;
+	}
+	return finalString;
+	
 }

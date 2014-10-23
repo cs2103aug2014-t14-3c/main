@@ -20,19 +20,19 @@ public:
 private:
 	static vector<Item*> currentDisplayedItemList;
 	static CurrentScreenType currentScreen;
-//	static CurrentScreenType currentBaseScreen;
+	static CurrentScreenType currentBaseScreen;
 
 public:
 	static void resetCurrentItemList();
 	static void addItemToDisplayList(Item* itemPtr);
 	static void setCurrentScreen(CurrentScreenType newScreen);
-//	static void setCurrentBaseScreen(CurrentScreenType newScreen);
+	static void setCurrentBaseScreen(CurrentScreenType newScreen);
 	static void setCurrentDisplayedItemList(vector<Item*> newList);
 
 	static Item* getItemAddr(int itemLocationInList);
 	static vector<Item*>::iterator getCurrentDisplayedItemList();
 	static CurrentScreenType getCurrentScreen();
-//	static Command* constructCmdBaseScreen();
+	//static Command* constructCmdBaseScreen();
 
 
 
