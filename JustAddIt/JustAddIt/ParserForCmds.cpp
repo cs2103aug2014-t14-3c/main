@@ -123,14 +123,27 @@ CommandType ParserForCmds::determineCommandType_DeleteScreen(string userCommand)
 	else{
 		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
 	}
-	//DELETE: FOR TEMP DEBUG ONLY
-	return ADD;
-	//DELETE: FOR TEMP DEBUG ONLY
+
 
 }
 CommandType ParserForCmds::determineCommandType_SearchResultsScreen(string userCommand){
-	//DELETE: FOR TEMP DEBUG ONLY
-	return ADD;
+	if (userCommand == "e") {
+		return EDIT;
+	}
+	else if (userCommand == "m") {
+		return MARK;
+	}
+	else if (userCommand == "d") {
+		return DELETE;
+	}
+	else if (userCommand == "p") {
+		return EXPORT;
+	}
+	else{
+		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
+	}
+
+
 }
 CommandType ParserForCmds::determineCommandType_ToDoListView(string userCommand){
 	if (userCommand == "e") {

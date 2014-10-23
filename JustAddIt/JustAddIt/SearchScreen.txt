@@ -13,6 +13,6 @@ Showing results:
 [p] Export
 
 Tip: To perform multiple deletes/marks, leave a space between each Item number.
-For example: d1 2 5
+For example: d 1 2 5
 
 ================================================================================

@@ -30,6 +30,6 @@ All happenings within this month:
 [t] View To-do List
 
 Tip: To perform multiple deletes/marks, leave a space between each command.
-For example: d1 d2 d5
+For example: d 1 2 5
 
 ================================================================================
