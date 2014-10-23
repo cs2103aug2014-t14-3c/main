@@ -6,6 +6,8 @@
 #define START_TIME_FIELD_INDEX 3
 #define END_TIME_FIELD_INDEX 4
 #define DEFAULT_FIRST_INDEX "1"
+#define CATEGORY_MARKER "#"
+
 Parser::Parser(void)
 {
 }
@@ -173,13 +175,13 @@ void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
 
 	vector<string> vectorOfStrings;
 	vectorOfStrings = convertStringToVector(stringDetails);
+	detectCategoryAndEmbed(myItem, stringDetails);
 	detectTitleAndEmbed(myItem, stringDetails);
-
 	bool isDeadline = detectDeadlineKeywordAndTrim(stringDetails);
 	bool foundMonthDate = detectMonthDateAndEmbedIsOk(myItem, stringDetails, isDeadline);
 	bool foundDayOfWeek = detectDayOfWeekDateAndEmbedIsOk(myItem, stringDetails, isDeadline);
 	bool foundTime = detectTimeAndEmbedIsOk(myItem, stringDetails, isDeadline);	
-
+	
 	bool foundDate = foundMonthDate || foundDayOfWeek;
 
 	if(foundDate && !foundTime){
@@ -230,8 +232,13 @@ void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 
 	startWordIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isKeywordDate_StartTime_Deadline);
 	endWordIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isKeywordEndTime);
+	//if didn't find any keywords
+	if(startWordIter==vectorOfStrings.end() && endWordIter==vectorOfStrings.end()){
+		titleStartIter = vectorOfStrings.begin();
+		titleEndIter = vectorOfStrings.end();
+	}
 	//if found start keyword before end keyword
-	if(startWordIter<endWordIter){
+	else if(startWordIter<endWordIter){
 		titleStartIter= vectorOfStrings.begin();
 		titleEndIter = startWordIter;
 	}
@@ -491,6 +498,31 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 
 
 }
+void Parser::detectCategoryAndEmbed(Item* myItem, string &stringDetails){
+
+	string::iterator myIter;
+	string categoryToSet="";
+	size_t pos;
+	pos = stringDetails.find(CATEGORY_MARKER);
+	 
+	//if found
+	if(pos!=string::npos){
+		myIter = stringDetails.begin() + pos;
+		myIter++;
+		while(myIter!=stringDetails.end() && *myIter!=' '){
+			categoryToSet += *myIter;
+			myIter++;
+		}
+		myItem->setCategory(categoryToSet);
+		string categoryFound = CATEGORY_MARKER + categoryToSet;
+		stringDetails.replace(stringDetails.find(categoryFound),categoryFound.length(),"");	
+	}
+
+	return;
+}
+void Parser::detectPriorityAndEmbed(Item* myItem, string &stringDetails){
+	return ;
+}
 bool Parser::isInteger(string query){
     unsigned int i;
 
@@ -711,14 +743,20 @@ vector<string> Parser::convertStringToVector(string inputString){
 
 string Parser::convertVectorToString(vector<string>::iterator start, vector<string>::iterator end){
 	string finalString="";
-	//if first word exists
-	if(*start!=""){
-		finalString=*start;
-		start++;
+	//if start and end are same point, return nothing
+	if(start==end){
+		return finalString;
 	}
-	while(start!=end){
-		finalString += ' ' + *start;
-		start++;
+	else{
+		//if first word exists
+		if(*start!=""){
+			finalString=*start;
+			start++;
+		}
+		while(start!=end){
+			finalString += ' ' + *start;
+			start++;
+		}
 	}
 	return finalString;
 	
