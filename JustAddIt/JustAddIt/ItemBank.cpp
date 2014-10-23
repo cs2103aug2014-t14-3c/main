@@ -9,13 +9,24 @@ void ItemBank::addToBank(Item* item) {
 	update();
 }
 
-void ItemBank::deleteFromBank(vector<Item*>::iterator itemPtr) {
-	bank.erase(find(bank.begin(), bank.end(), *itemPtr));
+void ItemBank::deleteFromBank(vector<Item*> itemPtr) {
+	vector<Item*>::iterator myIter;
+	myIter = itemPtr.begin();
+	while(myIter!=itemPtr.end()){
+		bank.erase(find(bank.begin(), bank.end(), *myIter));
+		myIter++;
+	}
 	update();
 }
 
-void ItemBank::markItemInBank(vector<Item*>::iterator itemPtr) {
-	(*itemPtr)->toggleDone();
+void ItemBank::markItemsInBank(vector<Item*> itemPtr) {
+
+	vector<Item*>::iterator myIter;
+	myIter = itemPtr.begin();
+	while(myIter!=itemPtr.end()){
+		(*myIter)->toggleDone();
+		myIter++;
+	}
 	update();
 }
 
@@ -29,14 +40,12 @@ void ItemBank::editItemDescriptionInBank(vector<Item*>::iterator itemPtr, string
 	update();
 }
 
-void ItemBank::editItemStartDateTimeInBank(vector<Item*>::iterator itemPtr, struct tm newStartDateTime) {
-	//_itemPtr->setStartDate(5,5);
-	//_itemPtr->setStartTime(5);
+void ItemBank::editItemStartDateTimeInBank(vector<Item*>::iterator itemPtr, tm newStartDateTime) {
+	(*itemPtr)->setStartDateTime(newStartDateTime);
 }
 
-void ItemBank::editItemEndDateTimeInBank(vector<Item*>::iterator itemPtr, struct tm newEndDateTime) {
-	//_itemPtr->setEndDate(5,5);
-	//_itemPtr->setEndTime(5);
+void ItemBank::editItemEndDateTimeInBank(vector<Item*>::iterator itemPtr, tm newEndDateTime) {
+	(*itemPtr)->setEndDateTime(newEndDateTime);
 }
 
 void ItemBank::editItemVenueInBank(vector<Item*>::iterator itemPtr, string newVenue) {
@@ -50,13 +59,13 @@ void ItemBank::editItemCategoryInBank(vector<Item*>::iterator itemPtr, string ne
 }
 
 void ItemBank::editItemPriorityInBank(vector<Item*>::iterator itemPtr, string newPriority) {
-	if (newPriority == "High" || "H" || "high" || "h" || "hi") {
+	if (newPriority == "High" || newPriority == "H" || newPriority == "high" || newPriority == "h" || newPriority == "hi") {
 		(*itemPtr)->setPriority(static_cast<Item::PriorityLevel>(2));
 	}
-	else if (newPriority == "Medium" || "Med" || "M" || "medium" || "med" || "m") {
+	else if (newPriority == "Medium" || newPriority == "Med" || newPriority == "M" || newPriority == "medium" || newPriority == "med" || newPriority == "m") {
 		(*itemPtr)->setPriority(static_cast<Item::PriorityLevel>(1));
 	}
-	else if (newPriority == "Low" || "L" || "low" || "l") {
+	else if (newPriority == "Low" || newPriority == "L" || newPriority == "low" || newPriority == "l") {
 		(*itemPtr)->setPriority(static_cast<Item::PriorityLevel>(0));
 	}
 	else {
@@ -77,36 +86,230 @@ Item ItemBank::findItemByVectorPos(int i) {
 	return *bank[i];
 }
 
-vector<string> ItemBank::getDeadlines(int weeks) {
-	string lineContent;
-	vector<string> deadlines;
+vector<Item*> ItemBank::getEvents(struct tm cutOffDateTime) {
+	vector<Item*>eventsToBeDisplayed;
+	time_t currentTime;
+	time(&currentTime);
 
-	for(vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
-		if((*iter)->getItemType() == "deadline") { // && (*iter)->getEndDateTime() x
-			assert((*iter)->getEndDateInString() != "");
-			lineContent = (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
-			deadlines.push_back(lineContent);
+	assert(mktime(&(cutOffDateTime)) >= currentTime);
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "event" && mktime(&((*iter)->getEndDateTime())) <= mktime(&(cutOffDateTime)) && mktime(&((*iter)->getEndDateTime())) >= currentTime) {
+			eventsToBeDisplayed.push_back(*iter);
+		}
+		else {
+			continue;
 		}
 	}
 
-	return deadlines;
-
+	return eventsToBeDisplayed;
 }
 
-vector<string> ItemBank::getTasks() {
-	string lineContent;
-	vector<string> tasks;
+vector<Item*> ItemBank::getDeadlines(struct tm cutOffDateTime) {
+	vector<Item*>deadlinesToBeDisplayed;
+	time_t currentTime;
+	time(&currentTime);
 
-	for(vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
-		if((*iter)->getItemType() == "task") { // && (*iter)->getEndDateTime() x
-			assert((*iter)->getTitle() != "");
-			lineContent = (*iter)->getTitle();
-			tasks.push_back(lineContent);
+	assert(mktime(&(cutOffDateTime)) >= currentTime);
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "deadline" && mktime(&((*iter)->getEndDateTime())) <= mktime(&(cutOffDateTime)) && mktime(&((*iter)->getEndDateTime())) >= currentTime) {
+			deadlinesToBeDisplayed.push_back(*iter);
+		}
+		else {
+			continue;
 		}
 	}
 
-	return tasks;
+	return deadlinesToBeDisplayed;
+}
 
+vector<Item*> ItemBank::getAllEvents() {
+	vector<Item*>eventsToBeDisplayed;
+	time_t currentTime;
+	time(&currentTime);
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "event") {
+			eventsToBeDisplayed.push_back(*iter);
+		}
+		else {
+			continue;
+		}
+	}
+
+	return eventsToBeDisplayed;
+}
+
+vector<Item*> ItemBank::getAllDeadlines() {
+	vector<Item*>deadlinesToBeDisplayed;
+	time_t currentTime;
+	time(&currentTime);
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "deadline") {
+			deadlinesToBeDisplayed.push_back(*iter);
+		}
+		else {
+			continue;
+		}
+	}
+
+	return deadlinesToBeDisplayed;
+}
+
+vector<Item*> ItemBank::getTasks() {
+	vector<Item*> tasksToBeDisplayed;
+
+	for(vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if((*iter)->getItemType() == "task") {
+			assert((*iter)->getTitle() != "");
+			tasksToBeDisplayed.push_back(*iter);
+		}
+		else {
+			continue;
+		}
+	}
+
+	return tasksToBeDisplayed;
+}
+
+vector<Item*> ItemBank::getOverdueDeadlines() {
+	vector<Item*>overdueDeadlinesToBeDisplayed;
+	vector<Item*>::iterator iter;
+
+	time_t currentTime;
+	time(&currentTime);
+
+	for (iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "deadline" && mktime(&((*iter)->getEndDateTime())) <= currentTime) {
+			overdueDeadlinesToBeDisplayed.push_back(*iter);
+		}
+		else {
+			continue;
+		}
+	}
+
+	return overdueDeadlinesToBeDisplayed;
+}
+
+bool ItemBank::searchKeywordInItemAttribute(string itemAttribute, string keyword) {
+	bool isFound = false;
+
+	size_t wordPosition = itemAttribute.find(keyword);
+	if (wordPosition != string::npos) {
+		isFound = true;
+	}
+
+	return isFound;
+}
+
+vector<Item*> ItemBank::searchEvents(string keyword) {
+	vector<Item*> eventsToBeDisplayed;
+	bool isFound = false;
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "event") {
+			if (searchKeywordInItemAttribute((*iter)->getTitle(), keyword) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getDescription(), keyword) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getStartDateInString(), keyword) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getEndDateInString(), keyword) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getVenue(), keyword) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getCategory(), keyword) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), keyword) == true) {
+				isFound = true;
+			}
+
+			if (isFound == true) {
+				eventsToBeDisplayed.push_back(*iter);
+			}
+
+			isFound = false;
+		}
+	}
+
+	return eventsToBeDisplayed;
+}
+
+vector<Item*> ItemBank::searchDeadlines(string keyword) {
+	vector<Item*> deadlinesToBeDisplayed;
+	bool isFound = false;
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "deadline") {
+			if (searchKeywordInItemAttribute((*iter)->getTitle(), keyword) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getDescription(), keyword) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getEndDateInString(), keyword) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getVenue(), keyword) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getCategory(), keyword) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), keyword) == true) {
+				isFound = true;
+			}
+
+			if (isFound == true) {
+				deadlinesToBeDisplayed.push_back(*iter);
+			}
+
+			isFound = false;
+		}
+	}
+
+	return deadlinesToBeDisplayed;
+}
+
+vector<Item*> ItemBank::searchTasks(string keyword) {
+	vector<Item*> tasksToBeDisplayed;
+	bool isFound = false;
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "task") {
+			if (searchKeywordInItemAttribute((*iter)->getTitle(), keyword) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getDescription(), keyword) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getVenue(), keyword) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getCategory(), keyword) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), keyword) == true) {
+				isFound = true;
+			}
+
+			if (isFound == true) {
+				tasksToBeDisplayed.push_back(*iter);
+			}
+
+			isFound = false;
+		}
+	}
+
+	return tasksToBeDisplayed;
 }
 
 int ItemBank::getBankSize() {

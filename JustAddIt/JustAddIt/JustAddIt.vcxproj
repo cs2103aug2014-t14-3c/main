@@ -90,7 +90,7 @@
     <ClInclude Include="CmdMarkItemDone.h" />
     <ClInclude Include="CmdRedo.h" />
     <ClInclude Include="CmdSearch.h" />
-    <ClInclude Include="CmdShowOverdueTasks.h" />
+    <ClInclude Include="CmdShowOverdueDeadlines.h" />
     <ClInclude Include="CmdUndo.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="DataStorage.h" />
@@ -101,6 +101,7 @@
     <ClInclude Include="ItemBank.h" />
     <ClInclude Include="OutputControl.h" />
     <ClInclude Include="Parser.h" />
+    <ClInclude Include="ParserForCmds.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="UI.h" />
@@ -117,7 +118,7 @@
     <ClCompile Include="CmdMarkItemDone.cpp" />
     <ClCompile Include="CmdRedo.cpp" />
     <ClCompile Include="CmdSearch.cpp" />
-    <ClCompile Include="CmdShowOverdueTasks.cpp" />
+    <ClCompile Include="CmdShowOverdueDeadlines.cpp" />
     <ClCompile Include="CmdUndo.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="DataStorage.cpp" />
@@ -129,6 +130,7 @@
     <ClCompile Include="JustAddIt.cpp" />
     <ClCompile Include="OutputControl.cpp" />
     <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="ParserForCmds.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

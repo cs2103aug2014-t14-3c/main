@@ -5,10 +5,13 @@
 
 To-do list
 
-=======================
-Deadlines due in a week
-=======================
+==========
+All Events
+==========
 
+=============
+All Deadlines
+=============
 
 =====
 Tasks
@@ -16,17 +19,12 @@ Tasks
 
 ================================================================================
 
-[v2] View 2 weeks
-[v3] view 3 weeks
-[v4] view month
-[a] Show all
-[e#] Edit {Item number}
-[m#] Mark {Item number}
-[d#] Delete {Item number}
+[e #] Edit {Item number}
+[m #] Mark {Item number}
+[d #] Delete {Item number}
 [p] Export
-[c] View Calendar
 
-Tip: To perform multiple deletes/marks, leave a space between each command.
-For example: d1 d2 d5
+Tip: To perform multiple deletes/marks, leave a space between each Item number.
+For example: d1 2 5
 
 ================================================================================

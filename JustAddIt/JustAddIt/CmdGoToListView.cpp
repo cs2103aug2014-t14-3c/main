@@ -1,45 +1,35 @@
 #include "stdafx.h"
 #include "CmdGoToListView.h"
-#define DEFAULT_NUM_WEEKS 1
-
-CmdGoToListView::CmdGoToListView(int numWeeks)
-{
-	_numWeeks = numWeeks;
-}
 
 CmdGoToListView::CmdGoToListView()
 {
-	_numWeeks = DEFAULT_NUM_WEEKS;
 }
-
 
 CmdGoToListView::~CmdGoToListView(void)
 {
 }
 
 vector<string> CmdGoToListView::execute() {
-	vector<string> deadlines;
-	vector<string> tasks;
-	int i = 1;
+	vector<Item*>tasksToBeDisplayed;
+	vector<Item*>deadlinesToBeDisplayed;
+	vector<Item*>eventsToBeDisplayed;
+	vector<Item*>collatedList;
 
-	deadlines = ItemBank::getDeadlines(1);
-	tasks = ItemBank::getTasks();
+	eventsToBeDisplayed = ItemBank::getAllEvents();
+	deadlinesToBeDisplayed = ItemBank::getAllDeadlines();
+	tasksToBeDisplayed = ItemBank::getTasks();
 
-	outputMessageStorage.push_back("--------------------\nDeadlines in a week\n---------------------");
+	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
+	outputMessageStorage.clear();
+	outputMessageStorage = displayScreenConstructor->clearScreen();
+	outputMessageStorage = displayScreenConstructor->constructListScreen(tasksToBeDisplayed, deadlinesToBeDisplayed, eventsToBeDisplayed);
+	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::TO_DO_LIST_VIEW);
 
-	for(vector<string>::iterator iter = deadlines.begin(); iter != deadlines.end(); iter++) {
-		outputMessageStorage.push_back(to_string(i) + ")");
-		outputMessageStorage.push_back(*iter);
-		i++;
-	}
-
-	outputMessageStorage.push_back("");
-	outputMessageStorage.push_back("----------\nTasks\n----------");
-	for(vector<string>::iterator iter = tasks.begin(); iter != tasks.end(); iter++) {
-		outputMessageStorage.push_back(to_string(i) + ")");
-		outputMessageStorage.push_back(*iter);
-		i++;
-	}
+	//append all items to collated list vector
+	collatedList.insert(collatedList.end(), eventsToBeDisplayed.begin(), eventsToBeDisplayed.end());
+	collatedList.insert(collatedList.end(), deadlinesToBeDisplayed.begin(), deadlinesToBeDisplayed.end());
+	collatedList.insert(collatedList.end(), tasksToBeDisplayed.begin(), tasksToBeDisplayed.end());
+	OutputControl::setCurrentDisplayedItemList(collatedList);
 
 	return outputMessageStorage;
 }

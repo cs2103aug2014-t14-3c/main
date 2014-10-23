@@ -8,7 +8,7 @@ class CmdDeleteItem :
 	public Command
 {
 private:
-	vector<Item*>::iterator _itemPtr;
+	vector<Item*> _itemPtrs;
 	Item* _itemAddr;
 	vector<string> outputMessageStorage;
 
@@ -17,7 +17,7 @@ private:
 	//void setPageCommands();
 
 public:
-	CmdDeleteItem(vector<Item*>::iterator itemPtr);
+	CmdDeleteItem(vector<Item*> itemPtrs);
 	~CmdDeleteItem(void);
 	vector<string> CmdDeleteItem::execute();
 };
