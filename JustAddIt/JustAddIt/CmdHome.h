@@ -6,6 +6,7 @@ class CmdHome :
 	public Command
 {
 private:
+	struct tm _currentTime;
 
 public:
 	CmdHome(void);
