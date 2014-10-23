@@ -5,7 +5,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTestLeon
 {		
-	TEST_CLASS(UnitTest1)
+	TEST_CLASS(ParserTest)
 	{
 	public:
 		
