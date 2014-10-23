@@ -16,7 +16,6 @@ public:
 	~CmdAddItem(void);
 
 	vector<string> execute();
-	vector<string> undo();
 	Item* getItem();
 };
 

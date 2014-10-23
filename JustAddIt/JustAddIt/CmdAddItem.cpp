@@ -10,12 +10,6 @@ CmdAddItem::~CmdAddItem(void)
 }
 
 vector<string> CmdAddItem::execute() {
-	if(status == CmdStatus::UNDO) {
-		return CmdAddItem::undo();
-	} else if (status == CmdStatus::REDO) {
-		return CmdAddItem::redo();
-	}
-	
 	ItemBank::addToBank(_itemAddr);
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
@@ -26,18 +20,6 @@ vector<string> CmdAddItem::execute() {
 	OutputControl::setCurrentScreen(OutputControl::EDIT_SCREEN);
 	OutputControl::resetCurrentItemList();
 	OutputControl::addItemToDisplayList(_itemAddr); 
-
-	return outputMessageStorage;
-}
-
-
-vector<string> CmdAddItem::undo() {
-	ItemBank::deleteFromBank(_itemAddr);
-
-	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
-	outputMessageStorage.clear();
-	outputMessageStorage = displayScreenConstructor->clearScreen();
-	outputMessageStorage = displayScreenConstructor->constructDeleteScreen(_itemAddr);
 
 	return outputMessageStorage;
 }

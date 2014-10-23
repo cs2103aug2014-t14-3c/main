@@ -6,9 +6,9 @@ class CmdMarkItemDone :
 	public Command
 {
 private:
-	vector<Item*> _itemPtr;
+	vector<Item*>::iterator _itemPtr;
 public:
-	CmdMarkItemDone(vector<Item*> itemPtr);
+	CmdMarkItemDone(vector<Item*>::iterator itemPtr);
 	~CmdMarkItemDone(void);
 	vector<string> CmdMarkItemDone::execute();
 };

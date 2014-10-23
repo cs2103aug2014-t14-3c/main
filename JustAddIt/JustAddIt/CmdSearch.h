@@ -1,13 +1,14 @@
 #pragma once
 #include "Command.h"
 #include "ItemBank.h"
-#include "DisplayScreenConstructor.h"
 
 class CmdSearch :
 	public Command 
 {
 private:
-	string _searchKeyword;
+	string searchKeyword;
+	vector<string> temporaryStorage;
+	vector<string> contentAfterSearching;
 	
 public:
 	CmdSearch(string keyword);
