@@ -1,6 +1,6 @@
 #pragma once
-#include "Parser.h"
 #include "Command.h"
+#include "Parser.h"
 #include "CmdInitialiseBank.h"
 #include "DisplayScreenConstructor.h"
 #include "ActionLog.h"

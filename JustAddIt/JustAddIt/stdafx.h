@@ -6,7 +6,6 @@
 #pragma once
 
 #include "targetver.h"
-
 #include <iostream>
 #include <iomanip>
 #include <tchar.h>
@@ -21,7 +20,7 @@
 #include <iterator>
 #include <exception>
 enum CommandType {
-	ADD, SEARCH, EDIT, DELETE, MARK, SAVE, CANCEL, UNDO, VIEW_CALENDAR, VIEW_TODOLIST, 
+	ADD, SEARCH, EDIT, DELETE, MARK, SAVE, UNDO, VIEW_CALENDAR, VIEW_TODOLIST, 
 	VIEW_OVERDUE, HOME, REDO, EXPORT, CLEAR_ALL_OVERDUE, CYCLE_LEFT, CYCLE_RIGHT
 };
 // TODO: reference additional headers your program requires here

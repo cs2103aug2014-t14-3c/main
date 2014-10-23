@@ -104,7 +104,6 @@ Command* Parser::stringToCommand(string userCommand) {
 			break;
 				   }
 
-		//TODO:DELETE IS UNTESTED (possibly use get getItemAddr instead)
 		case DELETE: {
 			vector<Item*> collatedList;
 			string fieldNumsStr;
@@ -135,14 +134,14 @@ Command* Parser::stringToCommand(string userCommand) {
 			return myRedo;
 			break;
 					}
-		case CANCEL : {
+		//case CANCEL : {
 
-			vector<Item*> collatedList;
-			collatedList = convertFieldNumsToItemPtrs(DEFAULT_FIRST_INDEX);
-			CmdDeleteItem* myDelete = new CmdDeleteItem(collatedList);
-			return myDelete;
-			break;
-					}
+		//	vector<Item*> collatedList;
+		//	collatedList = convertFieldNumsToItemPtrs(DEFAULT_FIRST_INDEX);
+		//	CmdDeleteItem* myDelete = new CmdDeleteItem(collatedList);
+		//	return myDelete;
+		//	break;
+		//			}
 		case VIEW_CALENDAR : {
 			CmdGoToCalendarView* myCalendar = new CmdGoToCalendarView();
 			return myCalendar;
@@ -687,8 +686,14 @@ vector <Item*> Parser::convertFieldNumsToItemPtrs(string fieldNumsStr){
 	vector<Item*> itemPtrs;
 	int fieldNum;
 	istringstream fieldStream(fieldNumsStr);
-	while(fieldStream >> fieldNum){
-		itemPtrs.push_back(OutputControl::getItemAddr(fieldNum));
+	//if empty, return the first item*
+	if(fieldNumsStr==""){
+		itemPtrs.push_back(OutputControl::getItemAddr(1));
+	}
+	else{
+		while(fieldStream >> fieldNum){
+			itemPtrs.push_back(OutputControl::getItemAddr(fieldNum));
+		}
 	}
 	return itemPtrs;
 }

@@ -22,7 +22,7 @@
 
 class Parser
 {
-private:
+public:
 	void embedDetailsInItem(Item* myItem, string stringDetails);
 	void detectTitleAndEmbed(Item* myItem, string &stringDetails);
 	bool detectDeadlineKeywordAndTrim(string &stringDetails);

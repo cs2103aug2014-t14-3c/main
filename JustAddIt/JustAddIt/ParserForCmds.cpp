@@ -98,8 +98,8 @@ CommandType ParserForCmds::determineCommandType_EditScreen(string userCommand){
 	else if (userCommand == "o") {
 		return HOME;
 	}
-	else if (userCommand == "c") {
-		return CANCEL;
+	else if (userCommand == "d") {
+		return DELETE;
 	}
 	else{
 		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");

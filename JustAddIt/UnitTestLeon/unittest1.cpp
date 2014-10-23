@@ -47,25 +47,26 @@ namespace UnitTestLeon
 			char buffer[256];
 			Parser myParser;
 			Item* myItem = new Item;
+			bool isDeadline = false;
 			string testString = "dinner reserve at 8pm on 3 Sep";
 			
 
-			myParser.detectDateAndEmbedIsOk(myItem, testString);
+			myParser.detectMonthDateAndEmbedIsOk(myItem, testString, isDeadline);
 			strftime (buffer, buffer_size ,"%d %b",&myItem->getStartDateTime());
 			Assert::AreEqual("03 Sep", buffer);
 
 			testString = "dinner reserve on 17 Sep at 8pm";
-			myParser.detectDateAndEmbedIsOk(myItem, testString);
+			myParser.detectMonthDateAndEmbedIsOk(myItem, testString, isDeadline);
 			strftime (buffer, buffer_size ,"%d %b",&myItem->getStartDateTime());
 			Assert::AreEqual("17 Sep", buffer);
 
 			testString = "dinner reserve on Sep 23 at 8pm";
-			myParser.detectDateAndEmbedIsOk(myItem, testString);
+			myParser.detectMonthDateAndEmbedIsOk(myItem, testString, isDeadline);
 			strftime (buffer, buffer_size ,"%d %b",&myItem->getStartDateTime());
 			Assert::AreEqual("23 Sep", buffer);
 
 			testString = "dinner reserve on August 30";
-			myParser.detectDateAndEmbedIsOk(myItem, testString);
+			myParser.detectMonthDateAndEmbedIsOk(myItem, testString, isDeadline);
 			strftime (buffer, buffer_size ,"%d %b",&myItem->getStartDateTime());
 			Assert::AreEqual("30 Aug", buffer);
 
@@ -81,7 +82,8 @@ namespace UnitTestLeon
 
 			Parser myParser;
 			Item* myItem = new Item;
-			myParser.detectTimeAndEmbedIsOk(myItem, "dinner reserve from 7.30pm to 9pm");
+			bool isDeadline = false;
+			myParser.detectTimeAndEmbedIsOk(myItem, "dinner reserve from 7.30pm to 9pm", isDeadline);
 	
 
 			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getStartDateTime());
@@ -89,28 +91,28 @@ namespace UnitTestLeon
 			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getEndDateTime());
 			Assert::AreEqual("09:00PM.", buffer);
 			
-			myParser.detectTimeAndEmbedIsOk(myItem, "dinner reserve 2:20pm to 3pm");
+			myParser.detectTimeAndEmbedIsOk(myItem, "dinner reserve 2:20pm to 3pm", isDeadline);
 			
 			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getStartDateTime());
 			Assert::AreEqual("02:20PM.", buffer);
 			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getEndDateTime());
 			Assert::AreEqual("03:00PM.", buffer);
 
-			myParser.detectTimeAndEmbedIsOk(myItem, "dinner reserve from 1pm - 3pm");
+			myParser.detectTimeAndEmbedIsOk(myItem, "dinner reserve from 1pm - 3pm", isDeadline);
 			
 			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getStartDateTime());
 			Assert::AreEqual("01:00PM.", buffer);
 			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getEndDateTime());
 			Assert::AreEqual("03:00PM.", buffer);
 
-			myParser.detectTimeAndEmbedIsOk(myItem, "dinner reserve between 1pm and 3pm");
+			myParser.detectTimeAndEmbedIsOk(myItem, "dinner reserve between 1pm and 3pm", isDeadline);
 			
 			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getStartDateTime());
 			Assert::AreEqual("01:00PM.", buffer);
 			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getEndDateTime());
 			Assert::AreEqual("03:00PM.", buffer);
 
-			myParser.detectTimeAndEmbedIsOk(myItem, "dinner reserve at 2pm");
+			myParser.detectTimeAndEmbedIsOk(myItem, "dinner reserve at 2pm", isDeadline);
 			
 			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getStartDateTime());
 			Assert::AreEqual("02:00PM.", buffer);
