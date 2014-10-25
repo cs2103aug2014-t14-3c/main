@@ -331,6 +331,8 @@ void ItemBank::initialiseBank() {
 	itemsToBeReadToBank = dataStorage->readToBank();
 
 	bank.clear();
+	initialBank.clear();
+
 	while (!itemsToBeReadToBank.empty()) {
 		Item* newItem = new Item;
 
@@ -394,6 +396,7 @@ void ItemBank::initialiseBank() {
 		itemsToBeReadToBank.pop_back();
 
 		bank.push_back(newItem);
+		initialBank.push_back(newItem);
 	}
 
 	return;
