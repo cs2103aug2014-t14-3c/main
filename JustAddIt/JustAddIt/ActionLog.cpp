@@ -2,33 +2,33 @@
 #include "ActionLog.h"
 
 vector<Command> ActionLog::log;
-int ActionLog::numCommands = 0;
+int ActionLog::numberOfCommands = 0;
 
-void ActionLog::addCommand(Command cmd) {
+void ActionLog::addCommands(Command cmd) {
 	log.push_back(cmd);
-	numCommands++;
+	numberOfCommands++;
 }
 
 void ActionLog::undo() {
-	if(numCommands == 0) {
-		// cannot undo!
-		// throw exception
+	if(numberOfCommands == 0) {
+		//cannot undo!
+		//throw exception
 	} else {
 		ItemBank::resetBank();
 
-		for(int i = 0; i < numCommands - 1; i++) {
-			log[i].execute();
+		for(int index = 0; index < numberOfCommands - 1; index++) {
+			log[index].execute();
 		}
 
-		numCommands--;
+		numberOfCommands--;
 	} 
 }
 
 void ActionLog::redo() {
-	if(numCommands == log.size()) {
-		// nothing to redo!
-		// throw exception
+	if(numberOfCommands == log.size()) {
+		//nothing to redo!
+		//throw exception
 	} else {
-		log[++numCommands].execute();
+		log[++numberOfCommands].execute();
 	}
 }

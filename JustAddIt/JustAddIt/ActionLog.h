@@ -7,10 +7,10 @@ class ActionLog
 {
 private:
 	static vector<Command> log;
-	static int numCommands;
+	static int numberOfCommands;
 
 public:
-	static void addCommand(Command cmd);
+	static void addCommands(Command cmd);
 	static void undo();
 	static void redo();
 };
