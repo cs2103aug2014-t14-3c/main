@@ -17,8 +17,7 @@ void ActionLog::addCommand(Command* cmd) {
 
 void ActionLog::undo() {
 	if(numCommands == 0) {
-		// cannot undo!
-		// throw exception
+		throw invalid_argument("no previous command to undo!");
 	} else {
 		ItemBank::resetBank();
 
