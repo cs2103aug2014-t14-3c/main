@@ -2,28 +2,27 @@
 #include "CmdAddItem.h"
 
 CmdAddItem::CmdAddItem(Item* item) {
-	_itemAddr = item;
+	_itemAddress = item;
 }
 
-CmdAddItem::~CmdAddItem(void)
-{
+CmdAddItem::~CmdAddItem(void) {
 }
 
 vector<string> CmdAddItem::execute() {
-	ItemBank::addToBank(_itemAddr);
+	ItemBank::addToBank(_itemAddress);
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();
-	outputMessageStorage = displayScreenConstructor->clearScreen();
-	outputMessageStorage = displayScreenConstructor->constructEditScreen(_itemAddr);
+	outputMessageStorage = displayScreenConstructor -> clearScreen();
+	outputMessageStorage = displayScreenConstructor -> constructEditScreen(_itemAddress);
 	outputMessageStorage.push_back("Just added it successfully!");
 	OutputControl::setCurrentScreen(OutputControl::EDIT_SCREEN);
 	OutputControl::resetCurrentItemList();
-	OutputControl::addItemToDisplayList(_itemAddr); 
+	OutputControl::addItemToDisplayList(_itemAddress); 
 
 	return outputMessageStorage;
 }
 
-Item* CmdAddItem::getItem(){
-	return _itemAddr;
+Item* CmdAddItem::getItem() {
+	return _itemAddress;
 }

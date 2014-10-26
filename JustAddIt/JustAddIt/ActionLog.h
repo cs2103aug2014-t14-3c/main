@@ -10,7 +10,7 @@ private:
 	static int numberOfCommands;
 
 public:
-	static void addCommands(Command cmd);
+	static void addCommand(Command cmd);
 	static void undo();
 	static void redo();
 };

@@ -4,7 +4,7 @@
 vector<Command> ActionLog::log;
 int ActionLog::numberOfCommands = 0;
 
-void ActionLog::addCommands(Command cmd) {
+void ActionLog::addCommand(Command cmd) {
 	log.push_back(cmd);
 	numberOfCommands++;
 }
