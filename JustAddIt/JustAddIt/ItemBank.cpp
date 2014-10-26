@@ -210,25 +210,26 @@ vector<Item*> ItemBank::searchEvents(string keyword) {
 
 	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
 		if ((*iter)->getItemType() == "event") {
-			if (searchKeywordInItemAttribute((*iter)->getTitle(), keyword) == true) {
+
+			if (searchKeywordInItemAttribute((*iter)->getTitle(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getDescription(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getDescription(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getStartDateInString(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getStartDateInString(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getEndDateInString(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getEndDateInString(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getVenue(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getVenue(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getCategory(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getCategory(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
 
@@ -249,22 +250,22 @@ vector<Item*> ItemBank::searchDeadlines(string keyword) {
 
 	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
 		if ((*iter)->getItemType() == "deadline") {
-			if (searchKeywordInItemAttribute((*iter)->getTitle(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getTitle(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getDescription(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getDescription(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getEndDateInString(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getEndDateInString(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getVenue(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getVenue(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getCategory(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getCategory(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
 
@@ -285,19 +286,20 @@ vector<Item*> ItemBank::searchTasks(string keyword) {
 
 	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
 		if ((*iter)->getItemType() == "task") {
-			if (searchKeywordInItemAttribute((*iter)->getTitle(), keyword) == true) {
+
+			if (searchKeywordInItemAttribute((*iter)->getTitle(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getDescription(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getDescription(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getVenue(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getVenue(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getCategory(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getCategory(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
 
