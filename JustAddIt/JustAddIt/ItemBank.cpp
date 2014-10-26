@@ -404,7 +404,9 @@ void ItemBank::initialiseBank() {
 
 void ItemBank::resetBank() {
 	bank.clear();
-	std::copy(initialBank.begin(), initialBank.end(), bank.begin());
+	for(vector<Item*>::iterator iter = initialBank.begin(); iter != initialBank.end(); iter++) {
+		bank.push_back(*iter);
+	}
 }
 
 void ItemBank::update() {

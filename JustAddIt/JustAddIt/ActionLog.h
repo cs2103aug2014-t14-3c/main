@@ -7,7 +7,7 @@ class ActionLog
 {
 private:
 	static vector<Command*> log;
-	static Command* lastUndo;
+	static stack<Command*> undoStack;
 	static int numCommands;
 
 	static void resetLog();

@@ -2,11 +2,12 @@
 #include "ActionLog.h"
 
 vector<Command*> ActionLog::log;
-Command* ActionLog::lastUndo;
+stack<Command*> ActionLog::undoStack;
 int ActionLog::numCommands = 0;
 
 void ActionLog::resetLog() {
 	log.clear();
+	numCommands = 0;
 }
 
 void ActionLog::addCommand(Command* cmd) {
@@ -27,21 +28,24 @@ void ActionLog::undo() {
 			tempLog.push_back(*iter);
 		}
 
+		int initialNumCommands = numCommands;
+
 		resetLog();
 
-		for(int i = 0; i < numCommands - 1; i++) {
+		for(int i = 0; i < initialNumCommands - 1; i++) {
 			tempLog[i]->execute();
 		}
 
-		lastUndo = tempLog[--numCommands];
+		undoStack.push(tempLog[--initialNumCommands]);
 	} 
 }
 
 void ActionLog::redo() {
-	if(numCommands == log.size()) {
-		// nothing to redo!
-		// throw exception
+	if(undoStack.empty()) {
+		throw invalid_argument("nothing to redo!");
 	} else {
+		Command* lastUndo = undoStack.top();
+		undoStack.pop();
 		lastUndo->execute();
 	}
 }

@@ -13,7 +13,7 @@ vector<string> Executor::execute(string userCommand) {
 
 	command = parser.stringToCommand(userCommand);
 	outputMessageStorage = command->execute();
-	ActionLog::addCommand(command);
+//	ActionLog::addCommand(command);
 
 	return outputMessageStorage;
 }

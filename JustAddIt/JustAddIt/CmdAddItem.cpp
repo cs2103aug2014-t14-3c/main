@@ -20,6 +20,7 @@ vector<string> CmdAddItem::execute() {
 	OutputControl::setCurrentScreen(OutputControl::EDIT_SCREEN);
 	OutputControl::resetCurrentItemList();
 	OutputControl::addItemToDisplayList(_itemAddr); 
+	ActionLog::addCommand(this);
 
 	return outputMessageStorage;
 }
