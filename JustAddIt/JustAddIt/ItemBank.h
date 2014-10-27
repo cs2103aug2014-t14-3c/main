@@ -11,7 +11,8 @@ private:
 	static void update();
 
 public:
-	static void addToBank(Item* item);
+	static bool addToBank(Item* item);
+	static bool checkForConflict(Item* item);
 	static void deleteFromBank(vector<Item*> itemPtr);
 	static void deleteAllDoneItemsFromBank();
 	static void deleteAllOverdueDeadlinesFromBank();

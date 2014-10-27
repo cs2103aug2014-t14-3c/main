@@ -4,9 +4,29 @@
 vector<Item*> ItemBank::bank;
 vector<Item*> ItemBank::initialBank;
 
-void ItemBank::addToBank(Item* item) {
+bool ItemBank::addToBank(Item* item) {
 	bank.push_back(item);
 	update();
+
+	return checkForConflict(item);
+
+}
+
+bool ItemBank::checkForConflict(Item* item) {
+	vector<Item*>::iterator iter;
+	bool isConflicted = false;
+
+	for (iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "event") {
+			if (mktime(&(item->getStartDateTime())) >= mktime(&((*iter)->getStartDateTime())) && mktime(&(item->getStartDateTime())) <= mktime(&((*iter)->getEndDateTime())) ||
+				mktime(&(item->getEndDateTime())) >= mktime(&((*iter)->getStartDateTime())) && mktime(&(item->getEndDateTime())) <= mktime(&((*iter)->getEndDateTime())) ||
+				mktime(&(item->getStartDateTime())) <= mktime(&((*iter)->getStartDateTime())) && mktime(&(item->getEndDateTime())) >= mktime(&((*iter)->getEndDateTime()))) {
+					isConflicted = true;
+			}
+		}
+	}
+
+	return isConflicted;
 }
 
 void ItemBank::deleteFromBank(vector<Item*> itemPtr) {

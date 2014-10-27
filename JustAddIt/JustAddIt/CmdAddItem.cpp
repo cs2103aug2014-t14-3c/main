@@ -9,13 +9,19 @@ CmdAddItem::~CmdAddItem(void) {
 }
 
 vector<string> CmdAddItem::execute() {
-	ItemBank::addToBank(_itemAddress);
+
+
+	bool isConflicted = ItemBank::addToBank(_itemAddress);
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();
 	outputMessageStorage = displayScreenConstructor -> clearScreen();
 	outputMessageStorage = displayScreenConstructor -> constructEditScreen(_itemAddress);
 	outputMessageStorage.push_back("Just added it successfully!");
+	if (isConflicted == true) {
+	outputMessageStorage.push_back("This conflicts with another event!");
+	}
+
 	OutputControl::setCurrentScreen(OutputControl::EDIT_SCREEN);
 	OutputControl::resetCurrentItemList();
 	OutputControl::addItemToDisplayList(_itemAddress); 
