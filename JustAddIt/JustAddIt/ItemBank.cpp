@@ -456,7 +456,36 @@ void ItemBank::initialiseBank() {
 		bank.push_back(newItem);
 	}
 
+	deletePastEvents();
+
 	return;
+}
+
+void ItemBank::deletePastEvents() {
+	//time_t currentTime;
+	//time(&currentTime);
+
+	//bank.erase(remove_if(begin(bank), end(bank), ((*iter)->getItemType() == "event" && mktime(&((*iter)->getEndDateTime())) <= currentTime)), end(bank));
+
+
+	vector<Item*>::iterator iter;
+	bool allPastEventsDeleted = false;
+	time_t currentTime;
+	time(&currentTime);
+
+	while (allPastEventsDeleted == false) {
+		allPastEventsDeleted = true;
+		for(iter = bank.begin(); iter != bank.end(); iter++) {
+			if ((*iter)->getItemType() == "event" && mktime(&((*iter)->getEndDateTime())) <= currentTime) {
+				bank.erase(iter);
+				allPastEventsDeleted = false;
+				break;
+			}
+			else {
+				continue;
+			}
+		}
+	}
 }
 
 void ItemBank::resetBank() {
