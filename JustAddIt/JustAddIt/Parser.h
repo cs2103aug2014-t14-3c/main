@@ -9,7 +9,7 @@
 #include "CmdDeleteItem.h"
 #include "CmdUndo.h"
 #include "CmdMarkItemDone.h"
-#include "CmdGoToCalendarView.h"
+//#include "CmdGoToCalendarView.h"
 #include "CmdGoToListView.h"
 #include "CmdHome.h"
 #include "CmdShowOverdueDeadlines.h"

@@ -13,6 +13,8 @@ private:
 public:
 	static void addToBank(Item* item);
 	static void deleteFromBank(vector<Item*> itemPtr);
+	static void deleteAllDoneItemsFromBank();
+	static void deleteAllOverdueDeadlinesFromBank();
 	static void markItemsInBank(vector<Item*> itemPtr);
 	static void editItemTitleInBank(vector<Item*>::iterator itemPtr, string newTitle);
 	static void editItemDescriptionInBank(vector<Item*>::iterator itemPtr, string newDescription);

@@ -33,13 +33,7 @@
     <ClInclude Include="CmdEditItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CmdClearAllOverdueTasks.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CmdDeleteItem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CmdGoToCalendarView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CmdGoToListView.h">
@@ -96,6 +90,12 @@
     <ClInclude Include="ParserForCmds.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CmdClearAllOverdue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CmdClearAllDone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -113,13 +113,7 @@
     <ClCompile Include="CmdEditItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CmdClearAllOverdueTasks.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CmdDeleteItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CmdGoToCalendarView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CmdGoToListView.cpp">
@@ -174,6 +168,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ParserForCmds.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdClearAllOverdue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdClearAllDone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

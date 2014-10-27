@@ -1,10 +1,9 @@
 #include "stdafx.h"
 #include "CmdDeleteItem.h"
-#include "CmdHome.h"
 
 CmdDeleteItem::CmdDeleteItem(vector<Item*> itemPtrs) {
 	_itemPtrs = itemPtrs;
-//	_itemAddr = *_itemPtr;
+
 }
 
 
@@ -15,6 +14,8 @@ CmdDeleteItem::~CmdDeleteItem(void)
 vector<string> CmdDeleteItem::execute() {
 	ItemBank::deleteFromBank(_itemPtrs);
 
+
+	//returns to base screen
 	Command* cmdHome = new CmdHome;
 	outputMessageStorage.clear();
 	outputMessageStorage = cmdHome->execute();

@@ -81,10 +81,10 @@
   <ItemGroup>
     <ClInclude Include="ActionLog.h" />
     <ClInclude Include="CmdAddItem.h" />
-    <ClInclude Include="CmdClearAllOverdueTasks.h" />
+    <ClInclude Include="CmdClearAllDone.h" />
+    <ClInclude Include="CmdClearAllOverdue.h" />
     <ClInclude Include="CmdDeleteItem.h" />
     <ClInclude Include="CmdEditItem.h" />
-    <ClInclude Include="CmdGoToCalendarView.h" />
     <ClInclude Include="CmdGoToListView.h" />
     <ClInclude Include="CmdHome.h" />
     <ClInclude Include="CmdMarkItemDone.h" />
@@ -109,10 +109,10 @@
   <ItemGroup>
     <ClCompile Include="ActionLog.cpp" />
     <ClCompile Include="CmdAddItem.cpp" />
-    <ClCompile Include="CmdClearAllOverdueTasks.cpp" />
+    <ClCompile Include="CmdClearAllDone.cpp" />
+    <ClCompile Include="CmdClearAllOverdue.cpp" />
     <ClCompile Include="CmdDeleteItem.cpp" />
     <ClCompile Include="CmdEditItem.cpp" />
-    <ClCompile Include="CmdGoToCalendarView.cpp" />
     <ClCompile Include="CmdGoToListView.cpp" />
     <ClCompile Include="CmdHome.cpp" />
     <ClCompile Include="CmdMarkItemDone.cpp" />

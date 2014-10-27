@@ -19,6 +19,44 @@ void ItemBank::deleteFromBank(vector<Item*> itemPtr) {
 	update();
 }
 
+void ItemBank::deleteAllDoneItemsFromBank() {
+	vector<Item*>::iterator iter;
+	bool allDoneItemsDeleted = false;
+
+	while (allDoneItemsDeleted == false) {
+		allDoneItemsDeleted = true;
+		for(iter = bank.begin(); iter != bank.end(); iter++) {
+			if ((*iter)->getIsDone() == true) {
+				bank.erase(iter);
+				allDoneItemsDeleted = false;
+			}
+			else {
+				continue;
+			}
+		}
+	}
+}
+
+void ItemBank::deleteAllOverdueDeadlinesFromBank() {
+	vector<Item*>::iterator iter;
+	bool allOverdueDeadlinesDeleted = false;
+	time_t currentTime;
+	time(&currentTime);
+
+	while (allOverdueDeadlinesDeleted == false) {
+		allOverdueDeadlinesDeleted = true;
+		for(iter = bank.begin(); iter != bank.end(); iter++) {
+			if ((*iter)->getItemType() == "deadline" && mktime(&((*iter)->getEndDateTime())) <= currentTime) {
+				bank.erase(iter);
+				allOverdueDeadlinesDeleted = false;
+			}
+			else {
+				continue;
+			}
+		}
+	}
+}
+
 void ItemBank::markItemsInBank(vector<Item*> itemPtr) {
 
 	vector<Item*>::iterator myIter;

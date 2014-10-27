@@ -145,9 +145,9 @@ Command* Parser::stringToCommand(string userCommand) {
 		//	break;
 		//			}
 		case VIEW_CALENDAR : {
-			CmdGoToCalendarView* myCalendar = new CmdGoToCalendarView();
-			return myCalendar;
-			break;
+			//CmdGoToCalendarView* myCalendar = new CmdGoToCalendarView();
+			//return myCalendar;
+			//break;
 					}
 		case VIEW_TODOLIST : {
 			CmdGoToListView* myList = new CmdGoToListView();
