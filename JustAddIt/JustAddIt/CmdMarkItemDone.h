@@ -1,6 +1,7 @@
 #pragma once
 #include "Command.h"
 #include "ItemBank.h"
+#include "CmdGoToBaseScreen.h"
 
 class CmdMarkItemDone :
 	public Command

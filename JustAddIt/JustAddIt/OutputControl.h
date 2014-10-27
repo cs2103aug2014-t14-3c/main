@@ -1,16 +1,14 @@
 #pragma once
+
 #include "stdafx.h"
 #include "Command.h"
-//#include "CmdHome.h"
-//#include "CmdGoToCalendarView.h"
-//#include "CmdGoToListView.h"
+
 
 class OutputControl {
 public:
 	enum CurrentScreenType { 
 		HOME_SCREEN, 
 		EDIT_SCREEN, 
-		DELETE_SCREEN,
 		SEARCH_RESULTS_SCREEN, 
 		TO_DO_LIST_VIEW, 
 		CALENDAR_VIEW, 
@@ -28,12 +26,14 @@ public:
 	static void setCurrentScreen(CurrentScreenType newScreen);
 	static void setCurrentBaseScreen(CurrentScreenType newScreen);
 	static void setCurrentDisplayedItemList(vector<Item*> newList);
-
+	static int getNumberOfDisplayedItems();
 	static Item* getItemAddr(int itemLocationInList);
 	static vector<Item*>::iterator getCurrentDisplayedItemList();
 	static CurrentScreenType getCurrentScreen();
-	//static Command* constructCmdBaseScreen();
+	static CurrentScreenType getCurrentBaseScreen();
 
 
 
 };
+
+

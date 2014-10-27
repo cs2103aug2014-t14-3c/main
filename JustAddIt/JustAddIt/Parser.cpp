@@ -26,25 +26,6 @@ Command* Parser::stringToCommand(string userCommand) {
 	string userAction;
 	commandStream >> userAction;
 	
-	//if(userAction[0] == 'e' ){
-	//	fieldNums.push_back(userAction[1]);
-	//	userAction = userAction.substr(0,1);
-	//}
-	//else if(userAction[0] == 'm' || userAction[0] == 'd'){
-	//	//cut out the m or d and save it
-	//	userFieldInfo = userAction.substr(1,userAction.length());
-	//	//cut out the field info
-	//	userAction = userAction.substr(0,1);
-	//	//push back the remaining number
-	//	fieldNums.push_back(stoi(userFieldInfo));
-	//	while(commandStream >> userAction && (userAction[0] == 'm' || userAction[0] == 'd')){
-	//		userFieldInfo= userAction.substr(1,userAction.length());
-	//		userAction = userAction.substr(0,1);
-	//		fieldNums.push_back(stoi(userAction));
-	//	}
-	//	collatedList = convertFieldNumsToItemPtrs(fieldNums);
-	//}
-
 	//translate the first word into a CommandType
 	ParserForCmds* myParserCmd = new ParserForCmds();
 	CommandType commandAction = myParserCmd->determineCommandType(userAction, OutputControl::getCurrentScreen());
@@ -71,8 +52,18 @@ Command* Parser::stringToCommand(string userCommand) {
 			return mySearch;
 			break;
 		}
+		case EDIT_ITEM: {
+			int itemNum;
+			commandStream >> itemNum;
+			if(itemNum <= 0 || itemNum > OutputControl::getNumberOfDisplayedItems()){
+				throw invalid_argument("Invalid item number! Please enter a valid number.");
+			}
+			CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList()+itemNum-1);
+			return myEdit;
+			break;
+		}
 
-		case EDIT: {
+		case EDIT_FIELD: {
 			string newFieldInfo;
 			string buffer;
 			int fieldNum;
@@ -136,14 +127,6 @@ Command* Parser::stringToCommand(string userCommand) {
 			return myRedo;
 			break;
 					}
-		//case CANCEL : {
-
-		//	vector<Item*> collatedList;
-		//	collatedList = convertFieldNumsToItemPtrs(DEFAULT_FIRST_INDEX);
-		//	CmdDeleteItem* myDelete = new CmdDeleteItem(collatedList);
-		//	return myDelete;
-		//	break;
-		//			}
 		case VIEW_CALENDAR : {
 			//CmdGoToCalendarView* myCalendar = new CmdGoToCalendarView();
 			//return myCalendar;

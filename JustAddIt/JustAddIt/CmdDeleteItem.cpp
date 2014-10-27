@@ -16,12 +16,12 @@ vector<string> CmdDeleteItem::execute() {
 
 
 	//returns to base screen
-	Command* cmdHome = new CmdHome;
+	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
 	outputMessageStorage.clear();
-	outputMessageStorage = cmdHome->execute();
+	outputMessageStorage = cmdBase->execute();
 
 	outputMessageStorage.push_back("Item successfully deleted!");
-	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::DELETE_SCREEN);
+	
 
 	return outputMessageStorage;
 }

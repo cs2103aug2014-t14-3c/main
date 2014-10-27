@@ -21,7 +21,7 @@
 #include <exception>
 #include <algorithm>
 enum CommandType {
-	ADD, SEARCH, EDIT, DELETE, MARK, SAVE, UNDO, VIEW_CALENDAR, VIEW_TODOLIST, 
+	ADD, SEARCH, EDIT_FIELD, EDIT_ITEM, DELETE, MARK, SAVE, UNDO, VIEW_CALENDAR, VIEW_TODOLIST, 
 	VIEW_OVERDUE, HOME, REDO, EXPORT, CLEAR_ALL_OVERDUE, CYCLE_LEFT, CYCLE_RIGHT
 };
 // TODO: reference additional headers your program requires here

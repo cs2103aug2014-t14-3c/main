@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Command.h"
 #include "OutputControl.h"
 
 vector<Item*> OutputControl::currentDisplayedItemList;
@@ -24,6 +25,9 @@ void OutputControl::setCurrentDisplayedItemList(vector<Item*> newList){
 	resetCurrentItemList();
 	currentDisplayedItemList=newList;
 }
+int OutputControl::getNumberOfDisplayedItems(){
+	return currentDisplayedItemList.size();
+}
 Item* OutputControl::getItemAddr(int itemLocationInList) {
 	return currentDisplayedItemList[itemLocationInList-1];
 }
@@ -35,25 +39,7 @@ OutputControl::CurrentScreenType OutputControl::getCurrentScreen(){
 	return currentScreen;
 }
 
-//Command* OutputControl::constructCmdBaseScreen(){
-//	switch (OutputControl::currentBaseScreen) {
-//		case HOME_SCREEN: {
-//			CmdHome* myHome = new CmdHome();
-//			return myHome;
-//						  }
-//		//case TO_DO_LIST_VIEW: {
-//		//	CmdGoToListView* myList = new CmdGoToListView();
-//		//	return myList;
-//		//					  }
-//		//case CALENDAR_VIEW: {
-//		//	CmdGoToCalendarView* myCal = new CmdGoToCalendarView();
-//		//	return myCal;
-//		//					}
-//		//default:{
-//		//	CmdHome* myHome = new CmdHome();
-//		//	return myHome;
-//		//		}
-//	}
-//	//Command* myCmd = new Command();
-//	//return myCmd;
-//}
+OutputControl::CurrentScreenType OutputControl::getCurrentBaseScreen(){
+	return currentBaseScreen;
+}
+	

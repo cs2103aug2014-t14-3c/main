@@ -85,6 +85,7 @@
     <ClInclude Include="CmdClearAllOverdue.h" />
     <ClInclude Include="CmdDeleteItem.h" />
     <ClInclude Include="CmdEditItem.h" />
+    <ClInclude Include="CmdGoToBaseScreen.h" />
     <ClInclude Include="CmdGoToListView.h" />
     <ClInclude Include="CmdHome.h" />
     <ClInclude Include="CmdMarkItemDone.h" />
@@ -113,6 +114,7 @@
     <ClCompile Include="CmdClearAllOverdue.cpp" />
     <ClCompile Include="CmdDeleteItem.cpp" />
     <ClCompile Include="CmdEditItem.cpp" />
+    <ClCompile Include="CmdGoToBaseScreen.cpp" />
     <ClCompile Include="CmdGoToListView.cpp" />
     <ClCompile Include="CmdHome.cpp" />
     <ClCompile Include="CmdMarkItemDone.cpp" />
@@ -136,6 +138,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="UI.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
