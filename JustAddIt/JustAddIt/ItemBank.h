@@ -40,6 +40,7 @@ public:
 
 	static int getBankSize();
 	static void initialiseBank();
+	static void deletePastEvents();
 	static void resetBank();
 };
 
