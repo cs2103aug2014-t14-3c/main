@@ -14,6 +14,8 @@
 #include "CmdHome.h"
 #include "CmdShowOverdueDeadlines.h"
 #include "CmdRedo.h"
+#include "CmdClearAllDone.h"
+#include "CmdClearAllOverdue.h"
 #include "ParserForCmds.h"
 #include "Item.h"
 

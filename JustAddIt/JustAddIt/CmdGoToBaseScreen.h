@@ -3,6 +3,8 @@
 #include "Command.h"
 #include "CmdHome.h"
 #include "CmdGoToListView.h"
+#include "CmdSearch.h"
+#include "CmdShowOverdueDeadlines.h"
 #include "OutputControl.h"
 
 class CmdGoToBaseScreen :

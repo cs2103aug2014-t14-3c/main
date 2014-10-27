@@ -203,7 +203,7 @@ CommandType ParserForCmds::determineCommandType_GoToBaseScreen(){
 			break;									
 															   }
 		case OutputControl::CurrentScreenType::SEARCH_RESULTS_SCREEN:{
-			return SEARCH;
+			return VIEW_LAST_SEARCH;
 			break;									
 															   }
 		case OutputControl::CurrentScreenType::OVERDUE_TASKS_SCREEN:{

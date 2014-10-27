@@ -19,6 +19,7 @@ private:
 	static vector<Item*> currentDisplayedItemList;
 	static CurrentScreenType currentScreen;
 	static CurrentScreenType currentBaseScreen;
+	static string currentKeywordSearched;
 
 public:
 	static void resetCurrentItemList();
@@ -26,11 +27,14 @@ public:
 	static void setCurrentScreen(CurrentScreenType newScreen);
 	static void setCurrentBaseScreen(CurrentScreenType newScreen);
 	static void setCurrentDisplayedItemList(vector<Item*> newList);
+	static void setCurrentKeywordSearched(string keyword);
+
 	static int getNumberOfDisplayedItems();
 	static Item* getItemAddr(int itemLocationInList);
 	static vector<Item*>::iterator getCurrentDisplayedItemList();
 	static CurrentScreenType getCurrentScreen();
 	static CurrentScreenType getCurrentBaseScreen();
+	static string getCurrentKeywordSearched();
 
 
 

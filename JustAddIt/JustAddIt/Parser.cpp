@@ -48,7 +48,14 @@ Command* Parser::stringToCommand(string userCommand) {
 		case SEARCH: {
 			string keyword;
 			getline(commandStream, keyword);
+			//inform outputcontrol of keyword
+			OutputControl::setCurrentKeywordSearched(keyword);
 			CmdSearch* mySearch = new CmdSearch(keyword);
+			return mySearch;
+			break;
+		}
+		case VIEW_LAST_SEARCH: {
+			CmdSearch* mySearch = new CmdSearch(OutputControl::getCurrentKeywordSearched());
 			return mySearch;
 			break;
 		}
@@ -147,7 +154,17 @@ Command* Parser::stringToCommand(string userCommand) {
 			return myHome;
 			break;
 					}
-
+		case CLEAR_ALL_DONE : {
+			CmdClearAllDone* myDone = new CmdClearAllDone();
+			return myDone;
+			break;
+							  }
+							  
+		case CLEAR_ALL_OVERDUE : {
+			CmdClearAllOverdue* myOverdue = new CmdClearAllOverdue();
+			return myOverdue;
+			break;
+								 }
 	
 		//TODO: INVALID CASE AND DEFAULT CASE
 	}

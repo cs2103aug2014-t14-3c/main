@@ -5,7 +5,7 @@
 vector<Item*> OutputControl::currentDisplayedItemList;
 OutputControl::CurrentScreenType OutputControl::currentScreen = OutputControl::CurrentScreenType::HOME_SCREEN;
 OutputControl::CurrentScreenType OutputControl::currentBaseScreen = OutputControl::CurrentScreenType::HOME_SCREEN;
-
+string OutputControl::currentKeywordSearched;
 void OutputControl::resetCurrentItemList() {
 	currentDisplayedItemList.clear();
 }
@@ -25,6 +25,11 @@ void OutputControl::setCurrentDisplayedItemList(vector<Item*> newList){
 	resetCurrentItemList();
 	currentDisplayedItemList=newList;
 }
+
+void OutputControl::setCurrentKeywordSearched(string keyword){
+	currentKeywordSearched=keyword;
+}
+
 int OutputControl::getNumberOfDisplayedItems(){
 	return currentDisplayedItemList.size();
 }
@@ -42,4 +47,7 @@ OutputControl::CurrentScreenType OutputControl::getCurrentScreen(){
 OutputControl::CurrentScreenType OutputControl::getCurrentBaseScreen(){
 	return currentBaseScreen;
 }
-	
+
+string OutputControl::getCurrentKeywordSearched(){
+	return currentKeywordSearched;
+}
