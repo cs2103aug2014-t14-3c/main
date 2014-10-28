@@ -30,26 +30,38 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasksT
 			outputMessageStorage.push_back(dummyLine);
 
 			for (vector<Item*>::iterator iter = eventsToBeDisplayed.begin(); iter != eventsToBeDisplayed.end(); iter++) {
-				dummyLine = to_string(resultCounter) + ". " + (*iter)->getTitle() + " from " + (*iter)->getStartDateInString() + " to " + (*iter)->getEndDateInString();
+				dummyLine = to_string(resultCounter) + ". ";
+
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += " *Done*";
+					dummyLine += "*DONE* ";
 				}
+
+				dummyLine += (*iter)->getTitle() + " from " + (*iter)->getStartDateInString() + " to " + (*iter)->getEndDateInString();
+
 				outputMessageStorage.push_back(dummyLine);
 				resultCounter++;
 			}
 			for (vector<Item*>::iterator iter = deadlinesToBeDisplayed.begin(); iter != deadlinesToBeDisplayed.end(); iter++) {
-				dummyLine = to_string(resultCounter) + ". " + (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
+				dummyLine = to_string(resultCounter) + ". ";
+
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += " *Done*";
+					dummyLine += "*DONE* ";
 				}
+
+				dummyLine += (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
+
 				outputMessageStorage.push_back(dummyLine);
 				resultCounter++;
 			}
 			for (vector<Item*>::iterator iter = tasksToBeDisplayed.begin(); iter != tasksToBeDisplayed.end(); iter++) {
-				dummyLine = to_string(resultCounter) + ". " + (*iter)->getTitle();
+				dummyLine = to_string(resultCounter) + ". ";
+
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += " *Done*";
+					dummyLine += "*DONE* ";
 				}
+
+				dummyLine += (*iter)->getTitle();
+
 				outputMessageStorage.push_back(dummyLine);
 				resultCounter++;
 			}
@@ -72,10 +84,13 @@ vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
 			dummyLine += item->getItemType();
 		}
 		else if (dummyLine == "1) Title: ") {
-			dummyLine += item->getTitle();
+
 			if (item->getIsDone() == true) {
-				dummyLine += " *Done*";
+				dummyLine += "*DONE* ";
 			}
+
+			dummyLine += item->getTitle();
+
 		}
 		else if (dummyLine == "2) Description: ") {
 			if (item->getDescription() == "-") {
@@ -131,26 +146,38 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 			outputMessageStorage.push_back(dummyLine);
 
 			for (vector<Item*>::iterator iter = eventsToBeDisplayed.begin(); iter != eventsToBeDisplayed.end(); iter++) {
-				dummyLine = to_string(resultCounter) + ". " + (*iter)->getTitle() + " from " + (*iter)->getStartDateInString() + " to " + (*iter)->getEndDateInString();
+				dummyLine = to_string(resultCounter) + ". ";
+
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += " *Done*";
+					dummyLine += "*DONE* ";
 				}
+
+				dummyLine += (*iter)->getTitle() + " from " + (*iter)->getStartDateInString() + " to " + (*iter)->getEndDateInString();
+
 				outputMessageStorage.push_back(dummyLine);
 				resultCounter++;
 			}
 			for (vector<Item*>::iterator iter = deadlinesToBeDisplayed.begin(); iter != deadlinesToBeDisplayed.end(); iter++) {
-				dummyLine = to_string(resultCounter) + ". " + (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
+				dummyLine = to_string(resultCounter) + ". ";
+
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += " *Done*";
+					dummyLine += "*DONE* ";
 				}
+
+				dummyLine += (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
+
 				outputMessageStorage.push_back(dummyLine);
 				resultCounter++;
 			}
 			for (vector<Item*>::iterator iter = tasksToBeDisplayed.begin(); iter != tasksToBeDisplayed.end(); iter++) {
-				dummyLine = to_string(resultCounter) + ". " + (*iter)->getTitle();
+				dummyLine = to_string(resultCounter) + ". ";
+
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += " *Done*";
+					dummyLine += "*DONE* ";
 				}
+
+				dummyLine += (*iter)->getTitle();
+
 				outputMessageStorage.push_back(dummyLine);
 				resultCounter++;
 			}
@@ -177,10 +204,14 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasksT
 			outputMessageStorage.push_back(dummyLine);
 
 			for (vector<Item*>::iterator iter = eventsToBeDisplayed.begin(); iter != eventsToBeDisplayed.end(); iter++) {
-				dummyLine = to_string(resultCounter) + ". " + (*iter)->getTitle() + " from " + (*iter)->getStartDateInString() + " to " + (*iter)->getEndDateInString();
+				dummyLine = to_string(resultCounter) + ". ";
+
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += " *Done*";
+					dummyLine += "*DONE* ";
 				}
+
+				dummyLine += (*iter)->getTitle() + " from " + (*iter)->getStartDateInString() + " to " + (*iter)->getEndDateInString();
+
 				outputMessageStorage.push_back(dummyLine);
 				resultCounter++;
 			}
@@ -195,10 +226,14 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasksT
 			outputMessageStorage.push_back(dummyLine);
 
 			for (vector<Item*>::iterator iter = deadlinesToBeDisplayed.begin(); iter != deadlinesToBeDisplayed.end(); iter++) {
-				dummyLine = to_string(resultCounter) + ". " + (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
+				dummyLine = to_string(resultCounter) + ". ";
+
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += " *Done*";
+					dummyLine += "*DONE* ";
 				}
+
+				dummyLine += (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
+
 				outputMessageStorage.push_back(dummyLine);
 				resultCounter++;
 			}
@@ -213,10 +248,14 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasksT
 			outputMessageStorage.push_back(dummyLine);
 
 			for (vector<Item*>::iterator iter = tasksToBeDisplayed.begin(); iter != tasksToBeDisplayed.end(); iter++) {
-				dummyLine = to_string(resultCounter) + ". " + (*iter)->getTitle();
+				dummyLine = to_string(resultCounter) + ". ";
+
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += " *Done*";
+					dummyLine += "*DONE* ";
 				}
+
+				dummyLine += (*iter)->getTitle();
+
 				outputMessageStorage.push_back(dummyLine);
 				resultCounter++;
 			}
@@ -225,46 +264,6 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasksT
 			outputMessageStorage.push_back(dummyLine);
 		}
 	}
-	return outputMessageStorage;
-}
-
-vector<string> DisplayScreenConstructor::constructCalendarScreen(vector<Item*>itemsToBeDisplayed) {
-	ifstream mytextfile ("CalendarViewScreen.txt");
-	string dummyLine;
-	int resultCounter = 1;
-	vector<Item*>::iterator iter;
-
-	while (!mytextfile.eof()) {
-		getline(mytextfile, dummyLine);
-		if (dummyLine == "All happenings within this month:") {
-			outputMessageStorage.push_back(dummyLine);
-			getline(mytextfile, dummyLine);
-			outputMessageStorage.push_back(dummyLine);
-
-			for (iter = itemsToBeDisplayed.begin(); iter != itemsToBeDisplayed.end(); iter++) {
-				if ((*iter)->getItemType() == "event") {
-					dummyLine = to_string(resultCounter) + ". " + (*iter)->getTitle() + " from " + (*iter)->getStartDateInString() + " to " + (*iter)->getEndDateInString();
-					outputMessageStorage.push_back(dummyLine);
-					dummyLine = "";
-					outputMessageStorage.push_back(dummyLine);
-				}
-				else if ((*iter)->getItemType() == "deadline") {
-					dummyLine = to_string(resultCounter) + ". " + (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
-					outputMessageStorage.push_back(dummyLine);
-					dummyLine = "";
-					outputMessageStorage.push_back(dummyLine);
-				}
-				else {
-					dummyLine = "getItemType is not one of the 2 accepted inputs";
-					outputMessageStorage.push_back(dummyLine);
-					dummyLine = "";
-					outputMessageStorage.push_back(dummyLine);
-				}
-				resultCounter++;
-			}
-		}
-	}
-
 	return outputMessageStorage;
 }
 
@@ -280,10 +279,14 @@ vector<string> DisplayScreenConstructor::constructOverdueScreen(vector<Item*>ite
 			outputMessageStorage.push_back(dummyLine);
 
 			for (iter = itemsToBeDisplayed.begin(); iter != itemsToBeDisplayed.end(); iter++) {
-				dummyLine = to_string(resultCounter) + ". " + (*iter)->getTitle() + " was due " + (*iter)->getEndDateInString();
+				dummyLine = to_string(resultCounter) + ". ";
+
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += " *Done*";
+					dummyLine += "*DONE* ";
 				}
+
+				dummyLine += (*iter)->getTitle() + " was due " + (*iter)->getEndDateInString();
+
 				outputMessageStorage.push_back(dummyLine);
 				resultCounter++;
 			}

@@ -49,6 +49,7 @@ void ItemBank::deleteAllDoneItemsFromBank() {
 			if ((*iter)->getIsDone() == true) {
 				bank.erase(iter);
 				allDoneItemsDeleted = false;
+				break;
 			}
 			else {
 				continue;
@@ -69,6 +70,7 @@ void ItemBank::deleteAllOverdueDeadlinesFromBank() {
 			if ((*iter)->getItemType() == "deadline" && mktime(&((*iter)->getEndDateTime())) <= currentTime) {
 				bank.erase(iter);
 				allOverdueDeadlinesDeleted = false;
+				break;
 			}
 			else {
 				continue;
@@ -462,12 +464,6 @@ void ItemBank::initialiseBank() {
 }
 
 void ItemBank::deletePastEvents() {
-	//time_t currentTime;
-	//time(&currentTime);
-
-	//bank.erase(remove_if(begin(bank), end(bank), ((*iter)->getItemType() == "event" && mktime(&((*iter)->getEndDateTime())) <= currentTime)), end(bank));
-
-
 	vector<Item*>::iterator iter;
 	bool allPastEventsDeleted = false;
 	time_t currentTime;

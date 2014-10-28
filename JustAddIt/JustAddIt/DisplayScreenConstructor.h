@@ -18,7 +18,6 @@ public:
 	vector<string> constructEditScreen(Item* item);
 	vector<string> constructSearchScreen(vector<Item*>tasksToBeDisplayed, vector<Item*>deadlinesToBeDisplayed, vector<Item*>eventsToBeDisplayed);
 	vector<string> constructListScreen(vector<Item*>tasksToBeDisplayed, vector<Item*>deadlinesToBeDisplayed, vector<Item*>eventsToBeDisplayed);
-	vector<string> constructCalendarScreen(vector<Item*>itemsToBeDisplayed);
 	vector<string> constructOverdueScreen(vector<Item*>itemsToBeDisplayed);
 	vector<string> clearScreen();
 };
