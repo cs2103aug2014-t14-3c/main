@@ -12,7 +12,6 @@
 #define NUM_OF_FIELDS 6
 #define DESCRIP_MARKER_FRONT "("
 #define DESCRIP_MARKER_BACK ")"
-#define DESCRIP_MARKER_SIZE 1
 
 Parser::Parser(void)
 {

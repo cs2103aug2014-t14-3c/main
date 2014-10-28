@@ -117,6 +117,9 @@ CommandType ParserForCmds::determineCommandType_SearchResultsScreen(string userC
 	else if (userCommand == "p") {
 		return EXPORT;
 	}
+	else if (userCommand == "a") {
+		return CLEAR_ALL_DONE;
+	}
 	else{
 		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
 	}
@@ -132,6 +135,9 @@ CommandType ParserForCmds::determineCommandType_ToDoListView(string userCommand)
 	}
 	else if (userCommand == "d") {
 		return DELETE;
+	}
+	else if (userCommand == "a") {
+		return CLEAR_ALL_DONE;
 	}
 	else if (userCommand == "p") {
 		return EXPORT;

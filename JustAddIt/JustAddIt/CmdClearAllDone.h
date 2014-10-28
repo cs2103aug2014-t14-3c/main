@@ -3,7 +3,7 @@
 #include "Command.h"
 #include "ItemBank.h"
 #include "DisplayScreenConstructor.h"
-#include "CmdHome.h"
+#include "CmdGoToBaseScreen.h"
 
 class CmdClearAllDone :
 	public Command

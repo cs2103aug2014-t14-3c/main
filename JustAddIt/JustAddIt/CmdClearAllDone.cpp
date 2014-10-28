@@ -13,9 +13,9 @@ vector<string> CmdClearAllDone::execute() {
 
 
 	//returns to base screen
-	Command* cmdHome = new CmdHome;
+	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
 	outputMessageStorage.clear();
-	outputMessageStorage = cmdHome->execute();
+	outputMessageStorage = cmdBase->execute();
 
 	outputMessageStorage.push_back("All completed Item(s) successfully deleted!");
 
