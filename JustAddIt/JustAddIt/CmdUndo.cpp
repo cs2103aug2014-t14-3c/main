@@ -17,7 +17,7 @@ vector<string> CmdUndo::execute() {
 		ActionLog::undo();
 	} 
 	catch(invalid_argument inv) {
-		cerr << inv.what();
+		cerr << inv.what() << endl;
 	};
 
 	return outputMessageStorage;

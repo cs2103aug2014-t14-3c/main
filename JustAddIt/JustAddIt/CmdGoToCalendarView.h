@@ -1,5 +1,6 @@
 #pragma once
 #include "command.h"
+
 class CmdGoToCalendarView :
 	public Command
 {

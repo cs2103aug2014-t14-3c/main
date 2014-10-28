@@ -1,5 +1,6 @@
 #pragma once
 #include "Command.h"
+#include "ActionLog.h"
 
 class CmdClearAllOverdueTasks :
 	public Command

@@ -4,19 +4,34 @@
 vector<Command*> ActionLog::log;
 stack<Command*> ActionLog::undoStack;
 int ActionLog::numCommands = 0;
+ActionLog::State ActionLog::state = READY;
 
 void ActionLog::resetLog() {
 	log.clear();
 	numCommands = 0;
 }
 
+void ActionLog::resetUndoStack() {
+	while(undoStack.size() != 0) {
+		undoStack.pop();
+	}
+}
+
 void ActionLog::addCommand(Command* cmd) {
 	log.push_back(cmd);
 	numCommands++;
 	assert(numCommands != 0);
+
+	if(state == UNDO) {
+		resetUndoStack();
+		state = READY;
+	}
 }
 
 void ActionLog::undo() {
+
+	state = READY;
+
 	if(numCommands == 0) {
 		throw invalid_argument("no previous command to undo!");
 	} else {
@@ -38,6 +53,8 @@ void ActionLog::undo() {
 
 		undoStack.push(tempLog[--initialNumCommands]);
 	} 
+
+	state = UNDO;
 }
 
 void ActionLog::redo() {

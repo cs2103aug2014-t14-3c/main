@@ -70,5 +70,7 @@ vector<string> CmdEditItem::execute() {
 	OutputControl::resetCurrentItemList();
 	OutputControl::addItemToDisplayList(_itemAddr); 
 
+	ActionLog::addCommand(this);
+
 	return outputMessageStorage;
 }

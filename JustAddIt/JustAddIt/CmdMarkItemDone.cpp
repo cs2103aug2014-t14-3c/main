@@ -15,5 +15,8 @@ vector<string> CmdMarkItemDone::execute() {
 	ItemBank::markItemsInBank(_itemPtr);
 	outputMessageStorage.clear();
 	outputMessageStorage.push_back("Item is successfully marked!");
+
+	ActionLog::addCommand(this);
+
 	return outputMessageStorage;
 }

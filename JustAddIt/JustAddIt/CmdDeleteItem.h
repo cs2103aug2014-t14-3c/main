@@ -3,6 +3,7 @@
 #include "ItemBank.h"
 #include "DisplayScreenConstructor.h"
 #include "OutputControl.h"
+#include "ActionLog.h"
 
 class CmdDeleteItem :
 	public Command

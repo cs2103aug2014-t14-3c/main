@@ -396,7 +396,10 @@ void ItemBank::initialiseBank() {
 		itemsToBeReadToBank.pop_back();
 
 		bank.push_back(newItem);
-		initialBank.push_back(newItem);
+
+		Item * newItemCopy = new Item;
+		*newItemCopy = *newItem;
+		initialBank.push_back(newItemCopy);
 	}
 
 	return;

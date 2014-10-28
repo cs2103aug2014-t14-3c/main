@@ -22,5 +22,7 @@ vector<string> CmdDeleteItem::execute() {
 	outputMessageStorage.push_back("Item successfully deleted!");
 	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::DELETE_SCREEN);
 
+	ActionLog::addCommand(this);
+
 	return outputMessageStorage;
 }

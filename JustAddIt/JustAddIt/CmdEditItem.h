@@ -2,7 +2,7 @@
 #include "Command.h"
 #include "ItemBank.h"
 #include "DisplayScreenConstructor.h"
-
+#include "ActionLog.h"
 
 class CmdEditItem :
 	public Command
