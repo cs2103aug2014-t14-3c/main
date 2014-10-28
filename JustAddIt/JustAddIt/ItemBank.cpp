@@ -393,6 +393,8 @@ void ItemBank::initialiseBank() {
 	itemsToBeReadToBank = dataStorage->readToBank();
 
 	bank.clear();
+	initialBank.clear();
+
 	while (!itemsToBeReadToBank.empty()) {
 		Item* newItem = new Item;
 
@@ -456,6 +458,10 @@ void ItemBank::initialiseBank() {
 		itemsToBeReadToBank.pop_back();
 
 		bank.push_back(newItem);
+
+		Item * newItemCopy = new Item;
+		*newItemCopy = *newItem;
+		initialBank.push_back(newItemCopy);
 	}
 
 	deletePastEvents();
@@ -486,7 +492,9 @@ void ItemBank::deletePastEvents() {
 
 void ItemBank::resetBank() {
 	bank.clear();
-	std::copy(initialBank.begin(), initialBank.end(), bank.begin());
+	for(vector<Item*>::iterator iter = initialBank.begin(); iter != initialBank.end(); iter++) {
+		bank.push_back(*iter);
+	}
 }
 
 void ItemBank::update() {

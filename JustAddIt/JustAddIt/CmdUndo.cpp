@@ -13,7 +13,13 @@ CmdUndo::~CmdUndo(void)
 
 
 vector<string> CmdUndo::execute() {
-	ActionLog::undo();
+	try {
+		ActionLog::undo();
+	} 
+	catch(invalid_argument inv) {
+		cerr << inv.what() << endl;
+	};
+
 	return outputMessageStorage;
 }
 

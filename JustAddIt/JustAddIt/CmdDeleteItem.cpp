@@ -23,5 +23,7 @@ vector<string> CmdDeleteItem::execute() {
 	outputMessageStorage.push_back("Item successfully deleted!");
 	
 
+	ActionLog::addCommand(this);
+
 	return outputMessageStorage;
 }

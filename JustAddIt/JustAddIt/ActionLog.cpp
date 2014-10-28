@@ -1,34 +1,69 @@
 #include "stdafx.h"
 #include "ActionLog.h"
 
-vector<Command> ActionLog::log;
-int ActionLog::numberOfCommands = 0;
+vector<Command*> ActionLog::log;
+stack<Command*> ActionLog::undoStack;
+int ActionLog::numCommands = 0;
+ActionLog::State ActionLog::state = READY;
 
-void ActionLog::addCommand(Command cmd) {
+void ActionLog::resetLog() {
+	log.clear();
+	numCommands = 0;
+}
+
+void ActionLog::resetUndoStack() {
+	while(undoStack.size() != 0) {
+		undoStack.pop();
+	}
+}
+
+void ActionLog::addCommand(Command* cmd) {
 	log.push_back(cmd);
-	numberOfCommands++;
+
+	numCommands++;
+	assert(numCommands != 0);
+
+	if(state == UNDO) {
+		resetUndoStack();
+		state = READY;
+	}
 }
 
 void ActionLog::undo() {
-	if(numberOfCommands == 0) {
-		//cannot undo!
-		//throw exception
+
+	state = READY;
+
+	if(numCommands == 0) {
+		throw invalid_argument("no previous command to undo!");
 	} else {
 		ItemBank::resetBank();
 
-		for(int index = 0; index < numberOfCommands - 1; index++) {
-			log[index].execute();
+		vector<Command*> tempLog;
+		
+		for(vector<Command*>::iterator iter = log.begin(); iter != log.end(); iter++) {
+			tempLog.push_back(*iter);
 		}
 
-		numberOfCommands--;
+		int initialNumCommands = numCommands;
+
+		resetLog();
+
+		for(int i = 0; i < initialNumCommands - 1; i++) {
+			tempLog[i]->execute();
+		}
+
+		undoStack.push(tempLog[--initialNumCommands]);
 	} 
+
+	state = UNDO;
 }
 
 void ActionLog::redo() {
-	if(numberOfCommands == log.size()) {
-		//nothing to redo!
-		//throw exception
+	if(undoStack.empty()) {
+		throw invalid_argument("nothing to redo!");
 	} else {
-		log[++numberOfCommands].execute();
+		Command* lastUndo = undoStack.top();
+		undoStack.pop();
+		lastUndo->execute();
 	}
 }

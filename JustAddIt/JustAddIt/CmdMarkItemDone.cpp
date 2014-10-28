@@ -19,5 +19,8 @@ vector<string> CmdMarkItemDone::execute() {
 	outputMessageStorage.clear();
 	outputMessageStorage = cmdBase->execute();
 	outputMessageStorage.push_back("Item is successfully marked!");
+
+	ActionLog::addCommand(this);
+
 	return outputMessageStorage;
 }

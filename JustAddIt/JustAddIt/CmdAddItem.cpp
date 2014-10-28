@@ -26,6 +26,8 @@ vector<string> CmdAddItem::execute() {
 	OutputControl::resetCurrentItemList();
 	OutputControl::addItemToDisplayList(_itemAddress); 
 
+	ActionLog::addCommand(this);
+
 	return outputMessageStorage;
 }
 

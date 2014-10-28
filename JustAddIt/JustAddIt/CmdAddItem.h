@@ -4,6 +4,7 @@
 #include "ItemBank.h"
 #include "Item.h"
 #include "OutputControl.h"
+#include "ActionLog.h"
 
 class CmdAddItem:
 	public Command {
