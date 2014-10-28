@@ -20,6 +20,7 @@ vector<string> CmdUndo::execute() {
 		cerr << inv.what() << endl;
 	};
 
+	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
 	return outputMessageStorage;
 }
 

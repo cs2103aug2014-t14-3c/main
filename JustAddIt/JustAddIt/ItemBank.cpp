@@ -56,6 +56,7 @@ void ItemBank::deleteAllDoneItemsFromBank() {
 			}
 		}
 	}
+	update();
 }
 
 void ItemBank::deleteAllOverdueDeadlinesFromBank() {
@@ -77,6 +78,7 @@ void ItemBank::deleteAllOverdueDeadlinesFromBank() {
 			}
 		}
 	}
+	update();
 }
 
 void ItemBank::markItemsInBank(vector<Item*> itemPtr) {
@@ -102,10 +104,12 @@ void ItemBank::editItemDescriptionInBank(vector<Item*>::iterator itemPtr, string
 
 void ItemBank::editItemStartDateTimeInBank(vector<Item*>::iterator itemPtr, tm newStartDateTime) {
 	(*itemPtr)->setStartDateTime(newStartDateTime);
+	update();
 }
 
 void ItemBank::editItemEndDateTimeInBank(vector<Item*>::iterator itemPtr, tm newEndDateTime) {
 	(*itemPtr)->setEndDateTime(newEndDateTime);
+	update();
 }
 
 void ItemBank::editItemVenueInBank(vector<Item*>::iterator itemPtr, string newVenue) {
@@ -131,19 +135,7 @@ void ItemBank::editItemPriorityInBank(vector<Item*>::iterator itemPtr, string ne
 	else {
 		(*itemPtr)->setPriority(static_cast<Item::PriorityLevel>(3));
 	}
-	return;
-}
-
-vector<Item*>::iterator ItemBank::findItemById(int id) {
-	vector<Item*>::iterator itemPtr;
-
-	// search vector for item with _id = id
-
-	return itemPtr;
-}
-
-Item ItemBank::findItemByVectorPos(int i) {
-	return *bank[i];
+	update();
 }
 
 vector<Item*> ItemBank::getEvents(struct tm cutOffDateTime) {
@@ -488,6 +480,7 @@ void ItemBank::deletePastEvents() {
 			}
 		}
 	}
+	update();
 }
 
 void ItemBank::resetBank() {
@@ -495,6 +488,7 @@ void ItemBank::resetBank() {
 	for(vector<Item*>::iterator iter = initialBank.begin(); iter != initialBank.end(); iter++) {
 		bank.push_back(*iter);
 	}
+	update();
 }
 
 void ItemBank::update() {
