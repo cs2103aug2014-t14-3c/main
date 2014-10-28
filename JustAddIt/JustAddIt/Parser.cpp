@@ -7,6 +7,12 @@
 #define END_TIME_FIELD_INDEX 4
 #define DEFAULT_FIRST_INDEX "1"
 #define CATEGORY_MARKER "#"
+#define PRIORITY_MARKER "!"
+#define PRIORITY_MARKER_SIZE 1
+#define NUM_OF_FIELDS 6
+#define DESCRIP_MARKER_FRONT "("
+#define DESCRIP_MARKER_BACK ")"
+#define DESCRIP_MARKER_SIZE 1
 
 Parser::Parser(void)
 {
@@ -71,15 +77,19 @@ Command* Parser::stringToCommand(string userCommand) {
 		}
 
 		case EDIT_FIELD: {
-			string newFieldInfo;
+			string newFieldInfo="";
 			string buffer;
 			int fieldNum;
 			commandStream >> fieldNum;
+			if(fieldNum=0 || fieldNum > NUM_OF_FIELDS){
+				throw invalid_argument("Invalid field number! Please enter a field number 1 - 6."); 
+			}	
 			commandStream >> newFieldInfo;
 			getline(commandStream, buffer);
 			newFieldInfo += buffer;
+			
 			if(fieldNum == START_TIME_FIELD_INDEX){
-				//edit all the start time values
+				//check for all the possible types of time input
 				Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());
 				detectMonthDateAndEmbedIsOk(&myNewItem, newFieldInfo, false);
 				detectDayOfWeekDateAndEmbedIsOk(&myNewItem, newFieldInfo, false);
@@ -88,7 +98,7 @@ Command* Parser::stringToCommand(string userCommand) {
 				return myEdit;
 			}
 			else if(fieldNum == END_TIME_FIELD_INDEX){
-				//edit all the end time values
+				//check for all the possible types of time input
 				Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());
 				detectMonthDateAndEmbedIsOk(&myNewItem, newFieldInfo, true);
 				detectDayOfWeekDateAndEmbedIsOk(&myNewItem, newFieldInfo, true);
@@ -106,9 +116,9 @@ Command* Parser::stringToCommand(string userCommand) {
 
 		case DELETE: {
 			vector<Item*> collatedList;
-			string fieldNumsStr;
-			getline(commandStream, fieldNumsStr);
-			collatedList = convertFieldNumsToItemPtrs(fieldNumsStr);
+			string itemNumsStr;
+			getline(commandStream, itemNumsStr);
+			collatedList = convertItemNumsToItemPtrs(itemNumsStr);
 			CmdDeleteItem* myDelete = new CmdDeleteItem(collatedList);
 			return myDelete;
 			break;
@@ -116,9 +126,9 @@ Command* Parser::stringToCommand(string userCommand) {
 
 		case MARK: {
 			vector<Item*> collatedList;
-			string fieldNumsStr;
-			getline(commandStream, fieldNumsStr);
-			collatedList = convertFieldNumsToItemPtrs(fieldNumsStr);
+			string itemNumsStr;
+			getline(commandStream, itemNumsStr);
+			collatedList = convertItemNumsToItemPtrs(itemNumsStr);
 			CmdMarkItemDone* myMark = new CmdMarkItemDone(collatedList);
 			return myMark;
 			break;
@@ -134,11 +144,11 @@ Command* Parser::stringToCommand(string userCommand) {
 			return myRedo;
 			break;
 					}
-		case VIEW_CALENDAR : {
-			//CmdGoToCalendarView* myCalendar = new CmdGoToCalendarView();
-			//return myCalendar;
-			//break;
-					}
+		//case VIEW_CALENDAR : {
+		//	//CmdGoToCalendarView* myCalendar = new CmdGoToCalendarView();
+		//	//return myCalendar;
+		//	//break;
+		//			}
 		case VIEW_TODOLIST : {
 			CmdGoToListView* myList = new CmdGoToListView();
 			return myList;
@@ -176,6 +186,8 @@ void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
 	vector<string> vectorOfStrings;
 	vectorOfStrings = convertStringToVector(stringDetails);
 	detectCategoryAndEmbed(myItem, stringDetails);
+	detectPriorityAndEmbed(myItem, stringDetails);
+	detectDescriptionAndEmbed(myItem, stringDetails);
 	detectTitleAndEmbed(myItem, stringDetails);
 	bool isDeadline = detectDeadlineKeywordAndTrim(stringDetails);
 	bool foundMonthDate = detectMonthDateAndEmbedIsOk(myItem, stringDetails, isDeadline);
@@ -521,6 +533,53 @@ void Parser::detectCategoryAndEmbed(Item* myItem, string &stringDetails){
 	return;
 }
 void Parser::detectPriorityAndEmbed(Item* myItem, string &stringDetails){
+	size_t position;
+	int count = 0;
+	
+	
+	while(true){
+		position = stringDetails.find(PRIORITY_MARKER);
+		//if found, count and trim "!"
+		if(position!=string::npos){
+			count++;
+			stringDetails.replace(stringDetails.find(PRIORITY_MARKER),PRIORITY_MARKER_SIZE,"");
+		}
+		else{
+			break;
+		}
+	}
+	if(count == 1){
+		myItem->setPriority(static_cast<Item::PriorityLevel>(1));
+	}
+	else if(count >= 2){
+		myItem->setPriority(static_cast<Item::PriorityLevel>(2));
+	}
+	else{
+		myItem->setPriority(static_cast<Item::PriorityLevel>(0));
+	}
+	return ;
+}
+void Parser::detectDescriptionAndEmbed(Item* myItem, string &stringDetails){
+	size_t positionFront;
+	size_t positionBack;
+	string descripToSet;
+	positionFront = stringDetails.find(DESCRIP_MARKER_FRONT);
+		//if found the front
+		if(positionFront!=string::npos){
+			positionBack = stringDetails.find(DESCRIP_MARKER_BACK);
+			//if found the back
+			if(positionBack<positionFront){
+				throw invalid_argument("Invalid brackets! Please follow e.g. add event at 7pm (description)");
+			}
+			if(positionBack!=string::npos && positionBack!=0){
+				descripToSet = stringDetails.substr(positionFront, positionBack);
+				stringDetails.replace(stringDetails.find(descripToSet),descripToSet.length(),"");
+				
+				descripToSet = descripToSet.substr(1, descripToSet.length()-2);
+				myItem->setDescription(descripToSet);
+			}
+		}
+
 	return ;
 }
 bool Parser::isInteger(string query){
@@ -712,17 +771,20 @@ bool Parser::isKeywordDate_StartTime_Deadline(string myWord){
 	return isKeywordDate(myWord) || isKeywordStartTime(myWord) || isKeywordDeadline(myWord);
 }
 
-vector <Item*> Parser::convertFieldNumsToItemPtrs(string fieldNumsStr){
+vector <Item*> Parser::convertItemNumsToItemPtrs(string itemNumsStr){
 	vector<Item*> itemPtrs;
-	int fieldNum;
-	istringstream fieldStream(fieldNumsStr);
+	int itemNum;
+	istringstream itemStream(itemNumsStr);
 	//if empty, return the first item*
-	if(fieldNumsStr==""){
+	if(itemNumsStr==""){
 		itemPtrs.push_back(OutputControl::getItemAddr(1));
 	}
 	else{
-		while(fieldStream >> fieldNum){
-			itemPtrs.push_back(OutputControl::getItemAddr(fieldNum));
+		while(itemStream >> itemNum){
+			if(itemNum <= 0 || itemNum > OutputControl::getNumberOfDisplayedItems()){
+				throw invalid_argument("Invalid item number! Please enter a valid number.");
+			}
+			itemPtrs.push_back(OutputControl::getItemAddr(itemNum));
 		}
 	}
 	return itemPtrs;
@@ -761,3 +823,6 @@ string Parser::convertVectorToString(vector<string>::iterator start, vector<stri
 	return finalString;
 	
 }
+
+
+

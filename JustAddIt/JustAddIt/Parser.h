@@ -33,6 +33,7 @@ public:
 	bool detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails, bool isDeadline);
 	void detectCategoryAndEmbed(Item* myItem, string &stringDetails);
 	void detectPriorityAndEmbed(Item* myItem, string &stringDetails);
+	void detectDescriptionAndEmbed(Item* myItem, string &stringDetails);
 	static bool isInteger(string query);
 	static bool isMonth(string query);
 	static bool isTime(string query);
@@ -52,9 +53,10 @@ public:
 	static bool isKeywordDeadline(string myWord);
 	static bool isKeywordDate(string myWord);
 	static bool isKeywordDate_StartTime_Deadline(string myWord);
-	vector <Item*> convertFieldNumsToItemPtrs(string fieldNumsStr);
+	vector <Item*> convertItemNumsToItemPtrs(string itemNumsStr);
 	vector <string> convertStringToVector(string inputString);
 	string convertVectorToString(vector<string>::iterator start, vector<string>::iterator end);
+	
 public:
 
 	Command* stringToCommand(string userCommand);
