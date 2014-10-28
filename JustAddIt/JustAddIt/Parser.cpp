@@ -6,6 +6,13 @@
 #define START_TIME_FIELD_INDEX 3
 #define END_TIME_FIELD_INDEX 4
 #define DEFAULT_FIRST_INDEX "1"
+#define CATEGORY_MARKER "#"
+#define PRIORITY_MARKER "!"
+#define PRIORITY_MARKER_SIZE 1
+#define NUM_OF_FIELDS 6
+#define DESCRIP_MARKER_FRONT "("
+#define DESCRIP_MARKER_BACK ")"
+
 Parser::Parser(void)
 {
 }
@@ -24,25 +31,6 @@ Command* Parser::stringToCommand(string userCommand) {
 	string userAction;
 	commandStream >> userAction;
 	
-	//if(userAction[0] == 'e' ){
-	//	fieldNums.push_back(userAction[1]);
-	//	userAction = userAction.substr(0,1);
-	//}
-	//else if(userAction[0] == 'm' || userAction[0] == 'd'){
-	//	//cut out the m or d and save it
-	//	userFieldInfo = userAction.substr(1,userAction.length());
-	//	//cut out the field info
-	//	userAction = userAction.substr(0,1);
-	//	//push back the remaining number
-	//	fieldNums.push_back(stoi(userFieldInfo));
-	//	while(commandStream >> userAction && (userAction[0] == 'm' || userAction[0] == 'd')){
-	//		userFieldInfo= userAction.substr(1,userAction.length());
-	//		userAction = userAction.substr(0,1);
-	//		fieldNums.push_back(stoi(userAction));
-	//	}
-	//	collatedList = convertFieldNumsToItemPtrs(fieldNums);
-	//}
-
 	//translate the first word into a CommandType
 	ParserForCmds* myParserCmd = new ParserForCmds();
 	CommandType commandAction = myParserCmd->determineCommandType(userAction, OutputControl::getCurrentScreen());
@@ -65,21 +53,42 @@ Command* Parser::stringToCommand(string userCommand) {
 		case SEARCH: {
 			string keyword;
 			getline(commandStream, keyword);
+			//inform outputcontrol of keyword
+			OutputControl::setCurrentKeywordSearched(keyword);
 			CmdSearch* mySearch = new CmdSearch(keyword);
 			return mySearch;
 			break;
 		}
+		case VIEW_LAST_SEARCH: {
+			CmdSearch* mySearch = new CmdSearch(OutputControl::getCurrentKeywordSearched());
+			return mySearch;
+			break;
+		}
+		case EDIT_ITEM: {
+			int itemNum;
+			commandStream >> itemNum;
+			if(itemNum <= 0 || itemNum > OutputControl::getNumberOfDisplayedItems()){
+				throw invalid_argument("Invalid item number! Please enter a valid number.");
+			}
+			CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList()+itemNum-1);
+			return myEdit;
+			break;
+		}
 
-		case EDIT: {
-			string newFieldInfo;
+		case EDIT_FIELD: {
+			string newFieldInfo="";
 			string buffer;
 			int fieldNum;
 			commandStream >> fieldNum;
+			if(fieldNum=0 || fieldNum > NUM_OF_FIELDS){
+				throw invalid_argument("Invalid field number! Please enter a field number 1 - 6."); 
+			}	
 			commandStream >> newFieldInfo;
 			getline(commandStream, buffer);
 			newFieldInfo += buffer;
+			
 			if(fieldNum == START_TIME_FIELD_INDEX){
-				//edit all the start time values
+				//check for all the possible types of time input
 				Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());
 				detectMonthDateAndEmbedIsOk(&myNewItem, newFieldInfo, false);
 				detectDayOfWeekDateAndEmbedIsOk(&myNewItem, newFieldInfo, false);
@@ -88,7 +97,7 @@ Command* Parser::stringToCommand(string userCommand) {
 				return myEdit;
 			}
 			else if(fieldNum == END_TIME_FIELD_INDEX){
-				//edit all the end time values
+				//check for all the possible types of time input
 				Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());
 				detectMonthDateAndEmbedIsOk(&myNewItem, newFieldInfo, true);
 				detectDayOfWeekDateAndEmbedIsOk(&myNewItem, newFieldInfo, true);
@@ -106,9 +115,9 @@ Command* Parser::stringToCommand(string userCommand) {
 
 		case DELETE: {
 			vector<Item*> collatedList;
-			string fieldNumsStr;
-			getline(commandStream, fieldNumsStr);
-			collatedList = convertFieldNumsToItemPtrs(fieldNumsStr);
+			string itemNumsStr;
+			getline(commandStream, itemNumsStr);
+			collatedList = convertItemNumsToItemPtrs(itemNumsStr);
 			CmdDeleteItem* myDelete = new CmdDeleteItem(collatedList);
 			return myDelete;
 			break;
@@ -116,9 +125,9 @@ Command* Parser::stringToCommand(string userCommand) {
 
 		case MARK: {
 			vector<Item*> collatedList;
-			string fieldNumsStr;
-			getline(commandStream, fieldNumsStr);
-			collatedList = convertFieldNumsToItemPtrs(fieldNumsStr);
+			string itemNumsStr;
+			getline(commandStream, itemNumsStr);
+			collatedList = convertItemNumsToItemPtrs(itemNumsStr);
 			CmdMarkItemDone* myMark = new CmdMarkItemDone(collatedList);
 			return myMark;
 			break;
@@ -134,19 +143,11 @@ Command* Parser::stringToCommand(string userCommand) {
 			return myRedo;
 			break;
 					}
-		//case CANCEL : {
-
-		//	vector<Item*> collatedList;
-		//	collatedList = convertFieldNumsToItemPtrs(DEFAULT_FIRST_INDEX);
-		//	CmdDeleteItem* myDelete = new CmdDeleteItem(collatedList);
-		//	return myDelete;
-		//	break;
+		//case VIEW_CALENDAR : {
+		//	//CmdGoToCalendarView* myCalendar = new CmdGoToCalendarView();
+		//	//return myCalendar;
+		//	//break;
 		//			}
-		case VIEW_CALENDAR : {
-			CmdGoToCalendarView* myCalendar = new CmdGoToCalendarView();
-			return myCalendar;
-			break;
-					}
 		case VIEW_TODOLIST : {
 			CmdGoToListView* myList = new CmdGoToListView();
 			return myList;
@@ -162,7 +163,17 @@ Command* Parser::stringToCommand(string userCommand) {
 			return myHome;
 			break;
 					}
-
+		case CLEAR_ALL_DONE : {
+			CmdClearAllDone* myDone = new CmdClearAllDone();
+			return myDone;
+			break;
+							  }
+							  
+		case CLEAR_ALL_OVERDUE : {
+			CmdClearAllOverdue* myOverdue = new CmdClearAllOverdue();
+			return myOverdue;
+			break;
+								 }
 	
 		//TODO: INVALID CASE AND DEFAULT CASE
 	}
@@ -171,13 +182,17 @@ Command* Parser::stringToCommand(string userCommand) {
 
 void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
 
+	vector<string> vectorOfStrings;
+	vectorOfStrings = convertStringToVector(stringDetails);
+	detectCategoryAndEmbed(myItem, stringDetails);
+	detectPriorityAndEmbed(myItem, stringDetails);
+	detectDescriptionAndEmbed(myItem, stringDetails);
 	detectTitleAndEmbed(myItem, stringDetails);
-
 	bool isDeadline = detectDeadlineKeywordAndTrim(stringDetails);
 	bool foundMonthDate = detectMonthDateAndEmbedIsOk(myItem, stringDetails, isDeadline);
 	bool foundDayOfWeek = detectDayOfWeekDateAndEmbedIsOk(myItem, stringDetails, isDeadline);
 	bool foundTime = detectTimeAndEmbedIsOk(myItem, stringDetails, isDeadline);	
-
+	
 	bool foundDate = foundMonthDate || foundDayOfWeek;
 
 	if(foundDate && !foundTime){
@@ -210,69 +225,61 @@ void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
 			
 }
 
+
+
 void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 	
-	istringstream streamDetails(stringDetails);
-	string title = "";
-	string currentWord;
-	string previousWord;
-	string nextWord;
-	//get the first word and store in title if not a keyword
-	streamDetails >> previousWord;
+
+	vector<string> vectorOfStrings;
+	vector<string>::iterator titleStartIter;
+	vector<string>::iterator titleEndIter;
+	vector<string>::iterator startWordIter;
+	vector<string>::iterator endWordIter;
+	vector<string>::iterator prevWordIter;
+	string titleToSet;
+	string leftoverString;
+
+	vectorOfStrings = convertStringToVector(stringDetails);
+
+	startWordIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isKeywordDate_StartTime_Deadline);
+	endWordIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isKeywordEndTime);
+	//if didn't find any keywords
+	if(startWordIter==vectorOfStrings.end() && endWordIter==vectorOfStrings.end()){
+		titleStartIter = vectorOfStrings.begin();
+		titleEndIter = vectorOfStrings.end();
+	}
+	//if found start keyword before end keyword
+	else if(startWordIter<endWordIter){
+		titleStartIter= vectorOfStrings.begin();
+		titleEndIter = startWordIter;
+	}
+	//if found end keyword before start keyword
+	else if(endWordIter<startWordIter){
+		vector<string>::iterator timeIter;
+		vector<string>::iterator monthIter;
+		timeIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isTime);
+		monthIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isMonth);
+		//if month before endword and before time
+		if(monthIter<endWordIter && monthIter < timeIter){
+			titleStartIter= vectorOfStrings.begin();
+			titleEndIter = monthIter;
+		}
+
+		//if time before endword and before month
+		else if(timeIter<endWordIter && timeIter < monthIter){
+			titleStartIter= vectorOfStrings.begin();
+			titleEndIter = timeIter;
+		}
+		else{
+			titleStartIter= vectorOfStrings.begin();
+			titleEndIter = endWordIter;
+		}
+	}
 	
-
-	if(isKeyword(previousWord)){
-		throw invalid_argument("no title was found!");
-	}
-	//account for one worded task
-	else if(!(streamDetails >> currentWord)){
-		title = previousWord;
-	}
-	//acccount for one worded event
-	else if(isKeyword(currentWord)){
-		title = previousWord;
-	}
-	else{
-
-			title=previousWord;
-			previousWord = currentWord;
-			//get the next word;
-			//account for two worded task
-			if(!(streamDetails >> currentWord)){
-				title += ' ' + previousWord;
-			}
-			else{
-
-				//account for one worded events
-				if(!isKeywordEndTime(currentWord)){
-				//and loop the subsequent adding
-					while((streamDetails >> nextWord) && !isKeyword(currentWord) && !isKeywordEndTime(nextWord)){
-						title += ' ' + previousWord;
-						previousWord = currentWord;
-						currentWord = nextWord;
-
-						/*streamDetails >> nextWord;*/
-
-						//title += ' ' + currentWord;
-						//previousWord = currentWord;
-						//streamDetails >> currentWord;
-					}
-				//for currentWord isKeyword exit 
-					if(isKeyword(currentWord) || isKeywordEndTime(nextWord)){
-						title += ' ' + previousWord;
-					}
-					else{
-						title += ' ' + previousWord + ' ' + currentWord;
-					}
-				}
-			}
-		
-	}
-	//cut out the title
-	stringDetails.replace(stringDetails.find(title),title.length(),"");
-	myItem->setTitle(title);
-
-
+	//for the leftovers
+	stringDetails = convertVectorToString(titleEndIter, vectorOfStrings.end());
+	titleToSet = convertVectorToString(titleStartIter, titleEndIter);
+	myItem->setTitle(titleToSet);
 	//TODO:Exception if no title (first word is a keyword)
 	return;
 }
@@ -502,6 +509,78 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 
 
 }
+void Parser::detectCategoryAndEmbed(Item* myItem, string &stringDetails){
+
+	string::iterator myIter;
+	string categoryToSet="";
+	size_t pos;
+	pos = stringDetails.find(CATEGORY_MARKER);
+	 
+	//if found
+	if(pos!=string::npos){
+		myIter = stringDetails.begin() + pos;
+		myIter++;
+		while(myIter!=stringDetails.end() && *myIter!=' '){
+			categoryToSet += *myIter;
+			myIter++;
+		}
+		myItem->setCategory(categoryToSet);
+		string categoryFound = CATEGORY_MARKER + categoryToSet;
+		stringDetails.replace(stringDetails.find(categoryFound),categoryFound.length(),"");	
+	}
+
+	return;
+}
+void Parser::detectPriorityAndEmbed(Item* myItem, string &stringDetails){
+	size_t position;
+	int count = 0;
+	
+	
+	while(true){
+		position = stringDetails.find(PRIORITY_MARKER);
+		//if found, count and trim "!"
+		if(position!=string::npos){
+			count++;
+			stringDetails.replace(stringDetails.find(PRIORITY_MARKER),PRIORITY_MARKER_SIZE,"");
+		}
+		else{
+			break;
+		}
+	}
+	if(count == 1){
+		myItem->setPriority(static_cast<Item::PriorityLevel>(1));
+	}
+	else if(count >= 2){
+		myItem->setPriority(static_cast<Item::PriorityLevel>(2));
+	}
+	else{
+		myItem->setPriority(static_cast<Item::PriorityLevel>(0));
+	}
+	return ;
+}
+void Parser::detectDescriptionAndEmbed(Item* myItem, string &stringDetails){
+	size_t positionFront;
+	size_t positionBack;
+	string descripToSet;
+	positionFront = stringDetails.find(DESCRIP_MARKER_FRONT);
+		//if found the front
+		if(positionFront!=string::npos){
+			positionBack = stringDetails.find(DESCRIP_MARKER_BACK);
+			//if found the back
+			if(positionBack<positionFront){
+				throw invalid_argument("Invalid brackets! Please follow e.g. add event at 7pm (description)");
+			}
+			if(positionBack!=string::npos && positionBack!=0){
+				descripToSet = stringDetails.substr(positionFront, positionBack);
+				stringDetails.replace(stringDetails.find(descripToSet),descripToSet.length(),"");
+				
+				descripToSet = descripToSet.substr(1, descripToSet.length()-2);
+				myItem->setDescription(descripToSet);
+			}
+		}
+
+	return ;
+}
 bool Parser::isInteger(string query){
     unsigned int i;
 
@@ -543,14 +622,17 @@ int Parser::convertStringToIntHour(string stringTime){
 	//set accountForPM to 12 if afternoon
 	int accountForPM=0;
 
+	//if 2359 format
 	if(isInteger(stringTime) && stringTime.length() == FORMAT_24H_SIZE){
 		stringTime = stringTime.substr(0,2);
+		return stoi(stringTime);
 	}
 	else{
 		positionFound = stringTime.find("am");
 		//if found, cut the am out
 		if (positionFound!=string::npos){
 			stringTime = stringTime.substr(0,positionFound);
+
 		}
 
 		positionFound = stringTime.find("pm");
@@ -561,7 +643,7 @@ int Parser::convertStringToIntHour(string stringTime){
 		}
 	}
 	//what remains is the digits (minutes are trimmed)
-	int actualTime = stoi (stringTime) + accountForPM;
+	int actualTime = (stoi (stringTime)%12) + accountForPM;
 	
 	return actualTime;
 }
@@ -676,24 +758,70 @@ bool Parser::isKeywordStartTime(string myWord){
 	return myWord=="at" || myWord == "from" || myWord == "between" || myWord == "next";
 }
 bool Parser::isKeywordEndTime(string myWord){
-	return myWord=="to" || myWord == "-" || myWord == "by" || myWord == "and";
+	return myWord=="to" || myWord == "-"  || myWord == "and";
+}
+bool Parser::isKeywordDeadline(string myWord){
+	return myWord == "by" ;
 }
 bool Parser::isKeywordDate(string myWord){
 	return myWord=="on";
 }
+bool Parser::isKeywordDate_StartTime_Deadline(string myWord){
+	return isKeywordDate(myWord) || isKeywordStartTime(myWord) || isKeywordDeadline(myWord);
+}
 
-vector <Item*> Parser::convertFieldNumsToItemPtrs(string fieldNumsStr){
+vector <Item*> Parser::convertItemNumsToItemPtrs(string itemNumsStr){
 	vector<Item*> itemPtrs;
-	int fieldNum;
-	istringstream fieldStream(fieldNumsStr);
+	int itemNum;
+	istringstream itemStream(itemNumsStr);
 	//if empty, return the first item*
-	if(fieldNumsStr==""){
+	if(itemNumsStr==""){
 		itemPtrs.push_back(OutputControl::getItemAddr(1));
 	}
 	else{
-		while(fieldStream >> fieldNum){
-			itemPtrs.push_back(OutputControl::getItemAddr(fieldNum));
+		while(itemStream >> itemNum){
+			if(itemNum <= 0 || itemNum > OutputControl::getNumberOfDisplayedItems()){
+				throw invalid_argument("Invalid item number! Please enter a valid number.");
+			}
+			itemPtrs.push_back(OutputControl::getItemAddr(itemNum));
 		}
 	}
 	return itemPtrs;
 }
+
+vector<string> Parser::convertStringToVector(string inputString){
+
+	istringstream inputStream(inputString);
+	string currentWord;
+	vector<string> vectorOfStrings;
+
+	while(inputStream >> currentWord){
+		vectorOfStrings.push_back(currentWord);
+	}
+
+	return vectorOfStrings;
+}
+
+string Parser::convertVectorToString(vector<string>::iterator start, vector<string>::iterator end){
+	string finalString="";
+	//if start and end are same point, return nothing
+	if(start==end){
+		return finalString;
+	}
+	else{
+		//if first word exists
+		if(*start!=""){
+			finalString=*start;
+			start++;
+		}
+		while(start!=end){
+			finalString += ' ' + *start;
+			start++;
+		}
+	}
+	return finalString;
+	
+}
+
+
+

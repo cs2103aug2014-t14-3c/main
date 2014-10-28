@@ -9,11 +9,13 @@
 #include "CmdDeleteItem.h"
 #include "CmdUndo.h"
 #include "CmdMarkItemDone.h"
-#include "CmdGoToCalendarView.h"
+//#include "CmdGoToCalendarView.h"
 #include "CmdGoToListView.h"
 #include "CmdHome.h"
 #include "CmdShowOverdueDeadlines.h"
 #include "CmdRedo.h"
+#include "CmdClearAllDone.h"
+#include "CmdClearAllOverdue.h"
 #include "ParserForCmds.h"
 #include "Item.h"
 
@@ -29,24 +31,32 @@ public:
 	bool detectTimeAndEmbedIsOk(Item* myItem, string stringDetails, bool isDeadline);
 	bool detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails, bool isDeadline);
 	bool detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails, bool isDeadline);
-	bool isInteger(string query);
-	bool isMonth(string query);
-	bool isTime(string query);
-	bool isDayOfWeek(string query);
+	void detectCategoryAndEmbed(Item* myItem, string &stringDetails);
+	void detectPriorityAndEmbed(Item* myItem, string &stringDetails);
+	void detectDescriptionAndEmbed(Item* myItem, string &stringDetails);
+	static bool isInteger(string query);
+	static bool isMonth(string query);
+	static bool isTime(string query);
+	static bool isDayOfWeek(string query);
 	int convertStringToIntHour(string stringTime);
 	int convertStringToIntMin(string stringTime);
-	int convertStrToIntMonth(string month);
-	int convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek);
+	static int convertStrToIntMonth(string month);
+	static int convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek);
 	
-	void convertStringToLowercase(string &myString);
+	static void convertStringToLowercase(string &myString);
 
 
-	bool isKeyword(string myWord);
-	bool isKeywordTime(string myWord);
-	bool isKeywordStartTime(string myWord);
-	bool isKeywordEndTime(string myWord);
-	bool isKeywordDate(string myWord);
-	vector <Item*> convertFieldNumsToItemPtrs(string fieldNumsStr);
+	static bool isKeyword(string myWord);
+	static bool isKeywordTime(string myWord);
+	static bool isKeywordStartTime(string myWord);
+	static bool isKeywordEndTime(string myWord);
+	static bool isKeywordDeadline(string myWord);
+	static bool isKeywordDate(string myWord);
+	static bool isKeywordDate_StartTime_Deadline(string myWord);
+	vector <Item*> convertItemNumsToItemPtrs(string itemNumsStr);
+	vector <string> convertStringToVector(string inputString);
+	string convertVectorToString(vector<string>::iterator start, vector<string>::iterator end);
+	
 public:
 
 	Command* stringToCommand(string userCommand);

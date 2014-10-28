@@ -19,6 +19,7 @@ void ActionLog::resetUndoStack() {
 
 void ActionLog::addCommand(Command* cmd) {
 	log.push_back(cmd);
+
 	numCommands++;
 	assert(numCommands != 0);
 

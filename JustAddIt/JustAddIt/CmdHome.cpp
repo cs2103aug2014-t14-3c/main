@@ -31,7 +31,7 @@ vector<string> CmdHome::execute() {
 	outputMessageStorage = displayScreenConstructor->clearScreen();
 	outputMessageStorage = displayScreenConstructor->constructHomeScreen(tasksToBeDisplayed, deadlinesToBeDisplayed, eventsToBeDisplayed);
 	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
-	//OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
+	OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
 
 	return outputMessageStorage;
 }

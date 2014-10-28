@@ -2,6 +2,7 @@
 #include "Command.h"
 #include "ItemBank.h"
 #include "ActionLog.h"
+#include "CmdGoToBaseScreen.h"
 
 class CmdMarkItemDone :
 	public Command

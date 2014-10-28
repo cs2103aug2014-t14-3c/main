@@ -22,9 +22,10 @@ Tasks
 [e #] Edit {Item number}
 [m #] Mark {Item number}
 [d #] Delete {Item number}
+[a] Clear all completed items
 [p] Export
 
 Tip: To perform multiple deletes/marks, leave a space between each Item number.
-For example: d1 2 5
+For example: d 1 2 5
 
 ================================================================================

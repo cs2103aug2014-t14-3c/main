@@ -5,17 +5,13 @@
 #include "OutputControl.h"
 #include "ActionLog.h"
 
+#include "CmdGoToBaseScreen.h"
+
 class CmdDeleteItem :
 	public Command
 {
 private:
 	vector<Item*> _itemPtrs;
-	Item* _itemAddr;
-	vector<string> outputMessageStorage;
-
-	//void constructOutput();
-	//void itemToString(Item* itemPtr);
-	//void setPageCommands();
 
 public:
 	CmdDeleteItem(vector<Item*> itemPtrs);

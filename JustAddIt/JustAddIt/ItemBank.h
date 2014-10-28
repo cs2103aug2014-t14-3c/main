@@ -11,8 +11,11 @@ private:
 	static void update();
 
 public:
-	static void addToBank(Item* item);
+	static bool addToBank(Item* item);
+	static bool checkForConflict(Item* item);
 	static void deleteFromBank(vector<Item*> itemPtr);
+	static void deleteAllDoneItemsFromBank();
+	static void deleteAllOverdueDeadlinesFromBank();
 	static void markItemsInBank(vector<Item*> itemPtr);
 	static void editItemTitleInBank(vector<Item*>::iterator itemPtr, string newTitle);
 	static void editItemDescriptionInBank(vector<Item*>::iterator itemPtr, string newDescription);
@@ -37,6 +40,7 @@ public:
 
 	static int getBankSize();
 	static void initialiseBank();
+	static void deletePastEvents();
 	static void resetBank();
 };
 

@@ -12,11 +12,14 @@ namespace UnitTestLeon
 		TEST_METHOD(TestStringToHourInt)
 		{
 			Parser myParser;
-			Assert::AreEqual(myParser.convertStringToIntHour("5pm"), 17);
-			Assert::AreEqual(myParser.convertStringToIntHour("9PM"), 21);
-			Assert::AreEqual(myParser.convertStringToIntHour("12"), 12);
-			Assert::AreEqual(myParser.convertStringToIntHour("11am"), 11);
-			Assert::AreEqual(myParser.convertStringToIntHour("1AM"), 1);
+			Assert::AreEqual(17, myParser.convertStringToIntHour("5pm"));
+			Assert::AreEqual(21, myParser.convertStringToIntHour("9PM"));
+			Assert::AreEqual(0, myParser.convertStringToIntHour("12"));
+			Assert::AreEqual(11, myParser.convertStringToIntHour("11am"));
+			Assert::AreEqual(1, myParser.convertStringToIntHour("1AM"));
+			Assert::AreEqual(22, myParser.convertStringToIntHour("2204"));
+			Assert::AreEqual(0, myParser.convertStringToIntHour("12am"));
+			Assert::AreEqual(12, myParser.convertStringToIntHour("12pm"));
 		}
 
 		TEST_METHOD(TestStringToMinInt)
@@ -26,6 +29,7 @@ namespace UnitTestLeon
 			Assert::AreEqual(50, myParser.convertStringToIntMin("7:50am"));
 			Assert::AreEqual(59, myParser.convertStringToIntMin("2.59"));
 			Assert::AreEqual(0, myParser.convertStringToIntMin("5:00"));
+			Assert::AreEqual(0, myParser.convertStringToIntMin("5:00"));
 		}
 
 		TEST_METHOD(TestEmbedTitle)
@@ -34,11 +38,37 @@ namespace UnitTestLeon
 			Item* myItem = new Item;
 			string expectedString = "dinner reserve";
 			string testString = "dinner reserve at 8pm on 3 Sep";
-			string testString2 = "dinner reserve on 3 Sep at 8pm";
 			myParser.detectTitleAndEmbed(myItem, testString);
 			Assert::AreEqual(expectedString, myItem->getTitle());
-			myParser.detectTitleAndEmbed(myItem, testString2);
+
+			testString = "dinner reserve on 3 Sep at 8pm";
+			myParser.detectTitleAndEmbed(myItem, testString);
 			Assert::AreEqual(expectedString, myItem->getTitle());
+
+			expectedString = "lunch";
+			testString = "lunch on 3 Sep at 8pm";
+			myParser.detectTitleAndEmbed(myItem, testString);
+			Assert::AreEqual(expectedString, myItem->getTitle());
+
+			expectedString = "deadline two three";
+			testString = "deadline two three by 8pm";
+			myParser.detectTitleAndEmbed(myItem, testString);
+			Assert::AreEqual(expectedString, myItem->getTitle());
+
+			expectedString = "event one";
+			testString = "event one 2pm to 3pm";
+			myParser.detectTitleAndEmbed(myItem, testString);
+			Assert::AreEqual(expectedString, myItem->getTitle());
+			
+			expectedString = "event two";
+			testString = "event two 3 oct to 5 oct";
+			myParser.detectTitleAndEmbed(myItem, testString);
+			Assert::AreEqual(expectedString, myItem->getTitle());
+
+			//expectedString = "assignment 5";
+			//testString = "assignment 5 3 oct to 5 oct";
+			//myParser.detectTitleAndEmbed(myItem, testString);
+			//Assert::AreEqual(expectedString, myItem->getTitle());
 		}
 
 			TEST_METHOD(TestEmbedDate)
@@ -105,7 +135,7 @@ namespace UnitTestLeon
 			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getEndDateTime());
 			Assert::AreEqual("03:00PM.", buffer);
 
-			myParser.detectTimeAndEmbedIsOk(myItem, "dinner reserve between 1pm and 3pm", isDeadline);
+			myParser.detectTimeAndEmbedIsOk(myItem, "dinner between 1pm and 3pm", isDeadline);
 			
 			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getStartDateTime());
 			Assert::AreEqual("01:00PM.", buffer);

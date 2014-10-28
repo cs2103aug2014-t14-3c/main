@@ -4,9 +4,29 @@
 vector<Item*> ItemBank::bank;
 vector<Item*> ItemBank::initialBank;
 
-void ItemBank::addToBank(Item* item) {
+bool ItemBank::addToBank(Item* item) {
 	bank.push_back(item);
 	update();
+
+	return checkForConflict(item);
+
+}
+
+bool ItemBank::checkForConflict(Item* item) {
+	vector<Item*>::iterator iter;
+	bool isConflicted = false;
+
+	for (iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "event") {
+			if (mktime(&(item->getStartDateTime())) >= mktime(&((*iter)->getStartDateTime())) && mktime(&(item->getStartDateTime())) <= mktime(&((*iter)->getEndDateTime())) ||
+				mktime(&(item->getEndDateTime())) >= mktime(&((*iter)->getStartDateTime())) && mktime(&(item->getEndDateTime())) <= mktime(&((*iter)->getEndDateTime())) ||
+				mktime(&(item->getStartDateTime())) <= mktime(&((*iter)->getStartDateTime())) && mktime(&(item->getEndDateTime())) >= mktime(&((*iter)->getEndDateTime()))) {
+					isConflicted = true;
+			}
+		}
+	}
+
+	return isConflicted;
 }
 
 void ItemBank::deleteFromBank(vector<Item*> itemPtr) {
@@ -17,6 +37,46 @@ void ItemBank::deleteFromBank(vector<Item*> itemPtr) {
 		myIter++;
 	}
 	update();
+}
+
+void ItemBank::deleteAllDoneItemsFromBank() {
+	vector<Item*>::iterator iter;
+	bool allDoneItemsDeleted = false;
+
+	while (allDoneItemsDeleted == false) {
+		allDoneItemsDeleted = true;
+		for(iter = bank.begin(); iter != bank.end(); iter++) {
+			if ((*iter)->getIsDone() == true) {
+				bank.erase(iter);
+				allDoneItemsDeleted = false;
+				break;
+			}
+			else {
+				continue;
+			}
+		}
+	}
+}
+
+void ItemBank::deleteAllOverdueDeadlinesFromBank() {
+	vector<Item*>::iterator iter;
+	bool allOverdueDeadlinesDeleted = false;
+	time_t currentTime;
+	time(&currentTime);
+
+	while (allOverdueDeadlinesDeleted == false) {
+		allOverdueDeadlinesDeleted = true;
+		for(iter = bank.begin(); iter != bank.end(); iter++) {
+			if ((*iter)->getItemType() == "deadline" && mktime(&((*iter)->getEndDateTime())) <= currentTime) {
+				bank.erase(iter);
+				allOverdueDeadlinesDeleted = false;
+				break;
+			}
+			else {
+				continue;
+			}
+		}
+	}
 }
 
 void ItemBank::markItemsInBank(vector<Item*> itemPtr) {
@@ -210,25 +270,26 @@ vector<Item*> ItemBank::searchEvents(string keyword) {
 
 	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
 		if ((*iter)->getItemType() == "event") {
-			if (searchKeywordInItemAttribute((*iter)->getTitle(), keyword) == true) {
+
+			if (searchKeywordInItemAttribute((*iter)->getTitle(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getDescription(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getDescription(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getStartDateInString(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getStartDateInString(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getEndDateInString(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getEndDateInString(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getVenue(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getVenue(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getCategory(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getCategory(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
 
@@ -249,22 +310,22 @@ vector<Item*> ItemBank::searchDeadlines(string keyword) {
 
 	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
 		if ((*iter)->getItemType() == "deadline") {
-			if (searchKeywordInItemAttribute((*iter)->getTitle(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getTitle(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getDescription(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getDescription(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getEndDateInString(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getEndDateInString(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getVenue(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getVenue(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getCategory(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getCategory(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
 
@@ -285,19 +346,20 @@ vector<Item*> ItemBank::searchTasks(string keyword) {
 
 	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
 		if ((*iter)->getItemType() == "task") {
-			if (searchKeywordInItemAttribute((*iter)->getTitle(), keyword) == true) {
+
+			if (searchKeywordInItemAttribute((*iter)->getTitle(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getDescription(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getDescription(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getVenue(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getVenue(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getCategory(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getCategory(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
-			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), keyword) == true) {
+			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), (keyword.substr(1))) == true) {
 				isFound = true;
 			}
 
@@ -402,7 +464,30 @@ void ItemBank::initialiseBank() {
 		initialBank.push_back(newItemCopy);
 	}
 
+	deletePastEvents();
+
 	return;
+}
+
+void ItemBank::deletePastEvents() {
+	vector<Item*>::iterator iter;
+	bool allPastEventsDeleted = false;
+	time_t currentTime;
+	time(&currentTime);
+
+	while (allPastEventsDeleted == false) {
+		allPastEventsDeleted = true;
+		for(iter = bank.begin(); iter != bank.end(); iter++) {
+			if ((*iter)->getItemType() == "event" && mktime(&((*iter)->getEndDateTime())) <= currentTime) {
+				bank.erase(iter);
+				allPastEventsDeleted = false;
+				break;
+			}
+			else {
+				continue;
+			}
+		}
+	}
 }
 
 void ItemBank::resetBank() {
