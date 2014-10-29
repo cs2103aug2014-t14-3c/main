@@ -23,8 +23,9 @@ void ActionLog::addCommand(Command* cmd) {
 	numCommands++;
 	assert(numCommands != 0);
 
-	if(state == UNDO) {
+	if(state == READY) {
 		resetUndoStack();
+	} else { // if state == REDO or UNDO
 		state = READY;
 	}
 }
@@ -66,4 +67,6 @@ void ActionLog::redo() {
 		undoStack.pop();
 		lastUndo->execute();
 	}
+	
+	state = REDO;
 }

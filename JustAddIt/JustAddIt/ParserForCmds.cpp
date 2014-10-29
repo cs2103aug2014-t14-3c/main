@@ -21,6 +21,9 @@ CommandType ParserForCmds::determineCommandType(string userCommand, OutputContro
 	if (userCommand == "undo") {
 		return UNDO;
 	}
+	if (userCommand == "redo") {
+		return REDO;
+	}
 	if (userCommand == "home") {
 		return HOME;
 	}
