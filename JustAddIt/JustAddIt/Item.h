@@ -47,7 +47,7 @@ public:
 	void setEndDateTime(struct tm endDateTime);
 	void setStartDate(int day, int month);
 	void setEndDate(int day, int month);
-	void setStartEndDateTimeAsToday();
+	void setStartEndDateTimeAsNull();
 	void setStartDateAsToday();
 	void setEndDateAsToday();
 	void setStartTime(int hour, int min);

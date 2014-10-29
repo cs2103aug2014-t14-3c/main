@@ -7,9 +7,9 @@ int Item::_idCounter = 1;
 Item::Item(void){
 	_title = "-";
 	_description = "-";
-	//default start/end time/date is current time
-	time_t myTempTime;
-	time(&myTempTime);	//set current time to myTempTime
+	//default start/end time/date is null
+	time_t myTempTime = 0;
+	//time(&myTempTime);	//set current time to myTempTime
 	localtime_s (&_startDateTime, &myTempTime); //assign time_t var (myTempTime) to tm variable (_startDateTime)
 	localtime_s (&_endDateTime, &myTempTime);
 	_venue = "-";
@@ -135,9 +135,8 @@ void Item::setEndDate(int day, int month) {
 	_endDateTime.tm_mon = month;
 	mktime(&_endDateTime);
 }
-void Item::setStartEndDateTimeAsToday(){
-	time_t nowTime;
-	time(&nowTime);
+void Item::setStartEndDateTimeAsNull(){
+	time_t nowTime=0;
 	localtime_s (&_startDateTime, &nowTime);
 	localtime_s (&_endDateTime, &nowTime);
 

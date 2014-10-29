@@ -12,6 +12,8 @@
 #define NUM_OF_FIELDS 6
 #define DESCRIP_MARKER_FRONT "("
 #define DESCRIP_MARKER_BACK ")"
+#define TODAY_MARKER "today"
+#define TOMORROW_MARKER "tomorrow"
 
 Parser::Parser(void)
 {
@@ -209,12 +211,13 @@ void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
 		myItem->setStartDate(nowTimeTM.tm_mday, nowTimeTM.tm_mon);
 		myItem->setEndDate(nowTimeTM.tm_mday, nowTimeTM.tm_mon);
 	}
-	//if no date or no time, it is a task
+	
 	if(isDeadline){
 		myItem->setItemType("deadline");
 	}
+	//if no date or no time, it is a task
 	else if(!foundDate && !foundTime){
-		myItem->setStartEndDateTimeAsToday();
+		myItem->setStartEndDateTimeAsNull();
 		myItem->setItemType("task");
 	}
 	else{
@@ -241,7 +244,7 @@ void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 
 	vectorOfStrings = convertStringToVector(stringDetails);
 
-	startWordIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isKeywordDate_StartTime_Deadline);
+	startWordIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isKeywordEndOfTitle);
 	endWordIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isKeywordEndTime);
 	//if didn't find any keywords
 	if(startWordIter==vectorOfStrings.end() && endWordIter==vectorOfStrings.end()){
@@ -361,9 +364,14 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 	while(streamDetails >> currentWord && !isMonth(currentWord)){
 		previousWord = currentWord;
 	}
+	if(isMonth(previousWord)){
+		startMonthFound = previousWord; 
+	}
 	if(isMonth(currentWord)){
 		//store the month name in date found
 		startMonthFound = currentWord; 
+	}
+	if(isMonth(previousWord) || isMonth(currentWord)){	
 		//if the previous word is a integer, it's the date
 		if(isInteger(previousWord)){
 			startDayFound = previousWord;
@@ -408,6 +416,8 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 			}
 			//TODO:: exception for only month found
 			else{
+				endDayFound = DEFAULT_MONTH_START;
+				endDateFound = endMonthFound;
 			}
 			//cut the date out
 			stringDetails.replace(stringDetails.find(endDateFound),endDateFound.length(),"");
@@ -709,15 +719,30 @@ int Parser::convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek){
 	
 	const string dayOfWeek[] = {"sunday", "monday", "tuesday", "wednesday","thursday",
 								"friday", "saturday"};
+	const string dayOfWeek3[] = {"sun", "mon", "tue", "wed","thu",
+								"fri", "sat"};
 	convertStringToLowercase(query);
 	int i;
 	int daysAfterSunday=-1;
 	bool dayOfWeekFound=false;
-	for(i=0; i<7 && !dayOfWeekFound; i++){
-			if(query==dayOfWeek[i]){
-				daysAfterSunday=i;
-				dayOfWeekFound = true;
-			}
+
+	//account for "today"
+	if(query==TODAY_MARKER){
+		return 0;
+	}
+	//account for "tomorrow"
+	else if(query==TOMORROW_MARKER){
+		return 1;
+	}
+	//else, search for other days of the week
+	else{
+
+		for(i=0; i<7 && !dayOfWeekFound; i++){
+				if(query==dayOfWeek[i] || query==dayOfWeek3[i]){
+					daysAfterSunday=i;
+					dayOfWeekFound = true;
+				}
+		}
 	}
 	if(dayOfWeekFound){
 		time_t nowTime;
@@ -766,8 +791,8 @@ bool Parser::isKeywordDeadline(string myWord){
 bool Parser::isKeywordDate(string myWord){
 	return myWord=="on";
 }
-bool Parser::isKeywordDate_StartTime_Deadline(string myWord){
-	return isKeywordDate(myWord) || isKeywordStartTime(myWord) || isKeywordDeadline(myWord);
+bool Parser::isKeywordEndOfTitle(string myWord){
+	return isKeywordDate(myWord) || isKeywordStartTime(myWord) || isKeywordDeadline(myWord) || isMonth(myWord) || isDayOfWeek(myWord);
 }
 
 vector <Item*> Parser::convertItemNumsToItemPtrs(string itemNumsStr){

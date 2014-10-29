@@ -1,6 +1,7 @@
 #pragma once
 #include "command.h"
 #include "ActionLog.h"
+#include "CmdGoToBaseScreen.h"
 
 class CmdRedo :
 	public Command

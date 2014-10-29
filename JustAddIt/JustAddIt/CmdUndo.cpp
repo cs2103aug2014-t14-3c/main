@@ -21,6 +21,8 @@ vector<string> CmdUndo::execute() {
 	};
 
 	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
+	outputMessageStorage.clear();
+	outputMessageStorage = cmdBase->execute();
 	return outputMessageStorage;
 }
 

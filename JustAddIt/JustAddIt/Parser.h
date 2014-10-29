@@ -52,7 +52,7 @@ public:
 	static bool isKeywordEndTime(string myWord);
 	static bool isKeywordDeadline(string myWord);
 	static bool isKeywordDate(string myWord);
-	static bool isKeywordDate_StartTime_Deadline(string myWord);
+	static bool isKeywordEndOfTitle(string myWord);
 	vector <Item*> convertItemNumsToItemPtrs(string itemNumsStr);
 	vector <string> convertStringToVector(string inputString);
 	string convertVectorToString(vector<string>::iterator start, vector<string>::iterator end);
