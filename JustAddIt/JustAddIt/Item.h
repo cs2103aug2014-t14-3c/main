@@ -27,6 +27,7 @@ public:
 	Item(void);
 	~Item(void);
 
+	int getId();
 	string getTitle();
 	string getDescription();
 	struct tm getStartDateTime();

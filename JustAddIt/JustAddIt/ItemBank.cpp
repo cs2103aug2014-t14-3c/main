@@ -33,10 +33,24 @@ void ItemBank::deleteFromBank(vector<Item*> itemPtr) {
 	vector<Item*>::iterator myIter;
 	myIter = itemPtr.begin();
 	while(myIter!=itemPtr.end()){
-		bank.erase(find(bank.begin(), bank.end(), *myIter));
+		vector<Item*>::iterator itemInBank = findIter(*myIter);
+		bank.erase(itemInBank);
 		myIter++;
 	}
 	update();
+}
+
+vector<Item*>::iterator ItemBank::findIter(Item* itemPtr) {
+	vector<Item*>::iterator iter = bank.begin();
+
+	while(iter != bank.end()) {
+		if((*iter)->getId() == itemPtr->getId()) {
+			return iter;
+		}
+		iter++;
+	}
+
+	throw exception("item does not exist!");
 }
 
 void ItemBank::deleteAllDoneItemsFromBank() {
@@ -486,7 +500,9 @@ void ItemBank::deletePastEvents() {
 void ItemBank::resetBank() {
 	bank.clear();
 	for(vector<Item*>::iterator iter = initialBank.begin(); iter != initialBank.end(); iter++) {
-		bank.push_back(*iter);
+		Item* itemPtr = new Item;
+		*itemPtr = **iter;
+		bank.push_back(itemPtr);
 	}
 	update();
 }

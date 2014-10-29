@@ -98,8 +98,13 @@ string Item::getPriorityInString() {
 bool Item::getIsDone() { 
 	return _isDone;
 }
+
 string Item::getItemType(){
 	return _itemType;
+}
+
+int Item::getId() {
+	return _id;
 }
 
 void Item::updateIdCounter(int lastIdUsed) {
