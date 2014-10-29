@@ -100,7 +100,8 @@ void ItemBank::markItemsInBank(vector<Item*> itemPtr) {
 	vector<Item*>::iterator myIter;
 	myIter = itemPtr.begin();
 	while(myIter!=itemPtr.end()){
-		(*myIter)->toggleDone();
+		vector<Item*>::iterator itemInBank = findIter(*myIter);
+		(*itemInBank)->toggleDone();
 		myIter++;
 	}
 	update();
