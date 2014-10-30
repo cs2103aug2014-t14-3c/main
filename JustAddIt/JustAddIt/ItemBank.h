@@ -34,6 +34,7 @@ public:
 	static vector<Item*> searchEvents(string keyword);
 	static vector<Item*> searchDeadlines(string keyword);
 	static vector<Item*> searchTasks(string keyword);
+	static vector<Item*>::iterator findIter(Item* itemPtr);
 
 	static vector<Item*>::iterator findItemById(int id);
 	static Item findItemByVectorPos(int i);
