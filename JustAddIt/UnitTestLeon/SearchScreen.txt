@@ -1,0 +1,19 @@
+		    ____________________________________
+		    |	   			       |
+		    |	          JustAddIt            |
+		    |__________________________________|
+
+Showing results:
+
+================================================================================
+
+[e #] Edit {result number}
+[m #] Mark {result number}
+[d #] Delete {result number}
+[a] Clear all completed items
+[p] Export
+
+Tip: To perform multiple deletes/marks, leave a space between each Item number.
+For example: d 1 2 5
+
+================================================================================

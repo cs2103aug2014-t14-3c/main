@@ -3,8 +3,8 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-string FILL = "This is a random filler text to test code";
-string DATE = "Thursday 23 Oct 08:00AM";
+const string FILL = "This is a random filler text to test code";
+const string DATE = "Thursday 23 Oct 08:00AM";
 
 namespace UnitTestLeon
 {		
