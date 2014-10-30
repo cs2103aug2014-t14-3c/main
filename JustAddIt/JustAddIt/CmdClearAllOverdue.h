@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Command.h"
 #include "CmdGoToBaseScreen.h"
+#include "ActionLog.h"
 
 class CmdClearAllOverdue :
 	public Command

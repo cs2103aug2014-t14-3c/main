@@ -4,6 +4,7 @@
 #include "ItemBank.h"
 #include "DisplayScreenConstructor.h"
 #include "CmdGoToBaseScreen.h"
+#include "ActionLog.h"
 
 class CmdClearAllDone :
 	public Command

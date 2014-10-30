@@ -22,5 +22,7 @@ vector<string> CmdClearAllOverdue::execute() {
 
 	outputMessageStorage.push_back("All overdue Deadline(s) successfully deleted!");
 
+	ActionLog::addCommand(this);
+
 	return outputMessageStorage;
 }
