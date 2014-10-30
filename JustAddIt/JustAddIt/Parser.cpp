@@ -82,7 +82,7 @@ Command* Parser::stringToCommand(string userCommand) {
 			string buffer;
 			int fieldNum;
 			commandStream >> fieldNum;
-			if(fieldNum=0 || fieldNum > NUM_OF_FIELDS){
+			if(fieldNum==0 || fieldNum > NUM_OF_FIELDS){
 				throw invalid_argument("Invalid field number! Please enter a field number 1 - 6."); 
 			}	
 			commandStream >> newFieldInfo;
