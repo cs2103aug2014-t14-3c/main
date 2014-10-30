@@ -19,5 +19,7 @@ vector<string> CmdClearAllDone::execute() {
 
 	outputMessageStorage.push_back("All completed Item(s) successfully deleted!");
 
+	ActionLog::addCommand(this);
+
 	return outputMessageStorage;
 }
