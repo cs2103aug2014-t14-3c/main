@@ -27,6 +27,10 @@ CommandType ParserForCmds::determineCommandType(string userCommand, OutputContro
 	if (userCommand == "home") {
 		return HOME;
 	}
+	if (userCommand == "export") {
+		return EXPORT;
+	}
+
 
 	switch (currentScreen) {
 	case OutputControl::HOME_SCREEN: {
@@ -61,7 +65,8 @@ CommandType ParserForCmds::determineCommandType(string userCommand, OutputContro
 										 
 
 	default: {
-				break;
+		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
+		break;
 			 }
 	}
 

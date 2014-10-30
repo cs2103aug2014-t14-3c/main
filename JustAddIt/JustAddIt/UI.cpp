@@ -27,8 +27,8 @@ void UI::main() {
 			for (iter = outputMessageStorage.begin(); iter != outputMessageStorage.end(); iter++) {
 				cout << *iter << endl;
 				}
-
-			outputMessageStorage.clear();
+			//for export, keep previous oms info
+			//outputMessageStorage.clear(); 
 			}
 		catch(exception& e){
 			cerr << "error: " << e.what() << endl;

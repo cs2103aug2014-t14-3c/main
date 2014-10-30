@@ -176,7 +176,11 @@ Command* Parser::stringToCommand(string userCommand) {
 			return myOverdue;
 			break;
 								 }
-	
+		case EXPORT : {
+			CmdExport* myExport = new CmdExport();
+			return myExport;
+			break;
+					  }
 		//TODO: INVALID CASE AND DEFAULT CASE
 	}
 	return NULL;

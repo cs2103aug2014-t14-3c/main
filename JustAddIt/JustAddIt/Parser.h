@@ -16,6 +16,7 @@
 #include "CmdRedo.h"
 #include "CmdClearAllDone.h"
 #include "CmdClearAllOverdue.h"
+#include "CmdExport.h"
 #include "ParserForCmds.h"
 #include "Item.h"
 
