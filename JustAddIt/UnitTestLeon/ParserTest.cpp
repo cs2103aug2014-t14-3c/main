@@ -155,16 +155,15 @@ namespace UnitTestLeon
 			const int buffer_size = 256;
 			char buffer1[256];
 			char buffer2[256];
-			time_t rawtime;
+			time_t rawtime=0;
 			struct tm  timeinfo;
-			time (&rawtime);
 			localtime_s (&timeinfo, &rawtime); 
 
 			Item* myItem = new Item;
 
 			
-			strftime (buffer1, buffer_size,"Now it's %I:%M%p.",&timeinfo);
-			strftime (buffer2, buffer_size ,"Now it's %I:%M%p.",&myItem->getStartDateTime());
+			strftime (buffer1, buffer_size,"Now it's %c.",&timeinfo);
+			strftime (buffer2, buffer_size ,"Now it's %c.",&myItem->getStartDateTime());
 			Assert::AreEqual(buffer1, buffer2);
 			
 		}
@@ -185,17 +184,29 @@ namespace UnitTestLeon
 			Assert::AreEqual("20 Sep 09:00PM.", buffer);
 			
 		}
-		//	TEST_METHOD(TestExecutor1)
-		//{
-		//	Executor myExec;
-		//	Parser myParser;
-		//	Item item1;
-		//	Command* myAdd;
-		//	myAdd = myParser.stringToCommand("add wake up on 20 Sep at 7");
-		//	Assert::AreEqual(1,1);
-		//  vector <string> actualString = myAdd->execute();
-		//	//vector<string> actualString = myExec.execute("add wake up on 20 Sep at 7");
-		//	
-		//}
+			TEST_METHOD(TestExecutor1)
+		{
+			Executor* myExec = new Executor();
+			//ItemBank* myIB = new ItemBank();
+			//DisplayScreenConstructor* myDSC = DisplayScreenConstructor::getInstance();
+			//OutputControl* myOC = new OutputControl();
+
+			myExec->execute("add wake up on 29 Oct at 7 #category (more info)");
+
+		
+			Assert::AreEqual("wake up", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("Wednesday 29 Oct 07:00AM", OutputControl::getItemAddr(1)->getStartDateInString().c_str());
+			Assert::AreEqual("Wednesday 29 Oct 08:00AM", OutputControl::getItemAddr(1)->getEndDateInString().c_str());
+			Assert::AreEqual("category", OutputControl::getItemAddr(1)->getCategory().c_str());
+			Assert::AreEqual("more info", OutputControl::getItemAddr(1)->getDescription().c_str());
+			Assert::AreEqual("Low", OutputControl::getItemAddr(1)->getPriorityInString().c_str());
+		
+			try{
+				myExec->execute("add more info(");
+			}
+			catch (exception& e){
+				Assert::AreEqual("Invalid brackets! Please follow e.g. add event at 7pm (description)", e.what() );
+			}
+		}
 	};
 }

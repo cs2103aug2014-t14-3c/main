@@ -19,7 +19,7 @@ vector<string> CmdAddItem::execute() {
 	outputMessageStorage = displayScreenConstructor -> constructEditScreen(_itemAddress);
 	outputMessageStorage.push_back("Just added it successfully!");
 	if (isConflicted == true) {
-	outputMessageStorage.push_back("This conflicts with another event!");
+		outputMessageStorage.push_back("This conflicts with another event!");
 	}
 
 	OutputControl::setCurrentScreen(OutputControl::EDIT_SCREEN);

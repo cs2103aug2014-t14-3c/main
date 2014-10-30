@@ -125,14 +125,64 @@ void Item::setEndDateTime(struct tm endDateTime) {
 }
 
 void Item::setStartDate(int day, int month) {
+	time_t nowTime;
+	tm nowTimeTM;
+	int currMonth;
+	int currDay;
+	int yearToSet;
+	
+	time(&nowTime);
+	localtime_s (&nowTimeTM, &nowTime);
+
+	currDay = nowTimeTM.tm_mday;
+	currMonth=nowTimeTM.tm_mon;
+	yearToSet=nowTimeTM.tm_year;
+	//if input month is earlier in the year, assume it is for next year
+	if(month < currMonth){
+		yearToSet++;
+	}
+	//if day has passed, assume it is for next year.
+	else if(month == currMonth){
+		if(day < currDay){
+			yearToSet++;
+		}
+	}
+
+
 	_startDateTime.tm_mday = day;
 	_startDateTime.tm_mon = month;
+	_startDateTime.tm_year = yearToSet;
 	mktime(&_startDateTime); 
 }
 
 void Item::setEndDate(int day, int month) {
+	
+	time_t nowTime;
+	tm nowTimeTM;
+	int currMonth;
+	int currDay;
+	int yearToSet;
+	time(&nowTime);
+	localtime_s (&nowTimeTM, &nowTime);
+
+
+	currDay = nowTimeTM.tm_mday;
+	currMonth=nowTimeTM.tm_mon;
+	yearToSet=nowTimeTM.tm_year;
+	//if input month is earlier in the year, assume it is for next year
+	if(month < currMonth){
+		yearToSet++;
+	}
+	//if day has passed, assume it is for next year.
+	else if(month == currMonth){
+		if(day < currDay){
+			yearToSet++;
+		}
+	}
+
 	_endDateTime.tm_mday = day;
 	_endDateTime.tm_mon = month;
+	_endDateTime.tm_year = yearToSet;
 	mktime(&_endDateTime);
 }
 void Item::setStartEndDateTimeAsNull(){

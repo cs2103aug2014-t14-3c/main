@@ -792,7 +792,7 @@ bool Parser::isKeywordDate(string myWord){
 	return myWord=="on";
 }
 bool Parser::isKeywordEndOfTitle(string myWord){
-	return isKeywordDate(myWord) || isKeywordStartTime(myWord) || isKeywordDeadline(myWord) || isMonth(myWord) || isDayOfWeek(myWord);
+	return isKeywordDate(myWord) || isKeywordStartTime(myWord) || isKeywordDeadline(myWord) || isDayOfWeek(myWord);
 }
 
 vector <Item*> Parser::convertItemNumsToItemPtrs(string itemNumsStr){
