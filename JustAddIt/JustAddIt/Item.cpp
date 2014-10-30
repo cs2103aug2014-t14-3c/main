@@ -42,7 +42,7 @@ string Item::getStartDateInString() {
 		return "";
 	}
 	else{
-	strftime(tempArray, MAX_SIZE, "%A %d %b %I:%M%p", &_startDateTime);
+	strftime(tempArray, MAX_SIZE, "%A %d %b %Y %I:%M%p %Y", &_startDateTime);
 
 	string str(tempArray);
 
@@ -60,7 +60,7 @@ string Item::getEndDateInString() {
 		return "";
 	}
 	else{
-		strftime(tempArray, MAX_SIZE, "%A %d %b %I:%M%p", &_endDateTime);
+		strftime(tempArray, MAX_SIZE, "%A %d %b %Y %I:%M%p", &_endDateTime);
 
 		string str(tempArray);
 
