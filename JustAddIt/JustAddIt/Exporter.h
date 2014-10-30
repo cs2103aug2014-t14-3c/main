@@ -4,7 +4,7 @@
 class Exporter
 {
 private:
-	static string filename;
+	static string exportFilename;
 	static Exporter* exporter;
 
 	Exporter(void);

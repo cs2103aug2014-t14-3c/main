@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Exporter.h"
 
-string fileName = "JustAddIt_Exports.txt";
+string exportFileName = "JustAddIt_Exports.txt";
 Exporter* Exporter::exporter = NULL;
 
 Exporter::Exporter(void) {
@@ -19,7 +19,7 @@ Exporter* Exporter::getInstance(void) {
 
 void Exporter::writeToFile(vector<string>screenToBeExported) {
 	ofstream mytextfile;
-	mytextfile.open(fileName);
+	mytextfile.open(exportFileName);
 	vector<string>::iterator iter;
 
 	for (iter = screenToBeExported.begin(); iter != screenToBeExported.end(); iter++) {

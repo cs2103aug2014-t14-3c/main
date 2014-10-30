@@ -85,6 +85,7 @@
     <ClInclude Include="CmdClearAllOverdue.h" />
     <ClInclude Include="CmdDeleteItem.h" />
     <ClInclude Include="CmdEditItem.h" />
+    <ClInclude Include="CmdExport.h" />
     <ClInclude Include="CmdGoToBaseScreen.h" />
     <ClInclude Include="CmdGoToListView.h" />
     <ClInclude Include="CmdHome.h" />
@@ -98,6 +99,7 @@
     <ClInclude Include="DisplayScreenConstructor.h" />
     <ClInclude Include="Executor.h" />
     <ClInclude Include="CmdInitialiseBank.h" />
+    <ClInclude Include="Exporter.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemBank.h" />
     <ClInclude Include="OutputControl.h" />
@@ -114,6 +116,7 @@
     <ClCompile Include="CmdClearAllOverdue.cpp" />
     <ClCompile Include="CmdDeleteItem.cpp" />
     <ClCompile Include="CmdEditItem.cpp" />
+    <ClCompile Include="CmdExport.cpp" />
     <ClCompile Include="CmdGoToBaseScreen.cpp" />
     <ClCompile Include="CmdGoToListView.cpp" />
     <ClCompile Include="CmdHome.cpp" />
@@ -127,6 +130,7 @@
     <ClCompile Include="DisplayScreenConstructor.cpp" />
     <ClCompile Include="Executor.cpp" />
     <ClCompile Include="CmdInitialiseBank.cpp" />
+    <ClCompile Include="Exporter.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemBank.cpp" />
     <ClCompile Include="JustAddIt.cpp" />
