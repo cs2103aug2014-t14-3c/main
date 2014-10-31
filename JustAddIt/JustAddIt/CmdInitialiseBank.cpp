@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "CmdInitialiseBank.h"
-#include "CmdHome.h"
 
 CmdInitialiseBank::CmdInitialiseBank(void)
 {

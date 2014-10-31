@@ -13,5 +13,5 @@ public:
 	static Exporter* getInstance(void);
 	~Exporter(void);
 
-	static void writeToFile(vector<string>screenToBeExported);
+	static void writeToFile(vector<string>displayScreenToBeExported);
 };

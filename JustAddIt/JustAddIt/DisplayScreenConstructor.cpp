@@ -33,7 +33,7 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasksT
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += "*DONE* ";
+					dummyLine += "[DONE] ";
 				}
 
 				dummyLine += (*iter)->getTitle() + " from " + (*iter)->getStartDateInString() + " to " + (*iter)->getEndDateInString();
@@ -45,7 +45,7 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasksT
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += "*DONE* ";
+					dummyLine += "[DONE] ";
 				}
 
 				dummyLine += (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
@@ -57,7 +57,7 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasksT
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += "*DONE* ";
+					dummyLine += "[DONE] ";
 				}
 
 				dummyLine += (*iter)->getTitle();
@@ -70,6 +70,18 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasksT
 			outputMessageStorage.push_back(dummyLine);
 		}
 	}
+
+	Exporter* exporter = Exporter::getInstance();
+	exporter->writeToFile(outputMessageStorage);
+
+	cout << "start of wad will be exported" << endl;
+
+	for (vector<string>::iterator iter = outputMessageStorage.begin(); iter != outputMessageStorage.end(); iter++) 
+	{cout << *iter << endl;}
+
+	cout << "end of wad will be exported" << endl;
+
+
 	return outputMessageStorage;
 }
 
@@ -86,7 +98,7 @@ vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
 		else if (dummyLine == "1) Title: ") {
 
 			if (item->getIsDone() == true) {
-				dummyLine += "*DONE* ";
+				dummyLine += "[DONE] ";
 			}
 
 			dummyLine += item->getTitle();
@@ -131,6 +143,9 @@ vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
 		outputMessageStorage.push_back(dummyLine);
 	}
 
+	Exporter* exporter = Exporter::getInstance();
+	exporter->writeToFile(outputMessageStorage);
+
 	return outputMessageStorage;
 }
 
@@ -149,7 +164,7 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += "*DONE* ";
+					dummyLine += "[DONE] ";
 				}
 
 				dummyLine += (*iter)->getTitle() + " from " + (*iter)->getStartDateInString() + " to " + (*iter)->getEndDateInString();
@@ -161,7 +176,7 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += "*DONE* ";
+					dummyLine += "[DONE] ";
 				}
 
 				dummyLine += (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
@@ -173,7 +188,7 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += "*DONE* ";
+					dummyLine += "[DONE] ";
 				}
 
 				dummyLine += (*iter)->getTitle();
@@ -186,6 +201,10 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 			outputMessageStorage.push_back(dummyLine);
 		}
 	}
+
+	Exporter* exporter = Exporter::getInstance();
+	exporter->writeToFile(outputMessageStorage);
+
 	return outputMessageStorage;
 }
 
@@ -207,7 +226,7 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasksT
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += "*DONE* ";
+					dummyLine += "[DONE] ";
 				}
 
 				dummyLine += (*iter)->getTitle() + " from " + (*iter)->getStartDateInString() + " to " + (*iter)->getEndDateInString();
@@ -229,7 +248,7 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasksT
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += "*DONE* ";
+					dummyLine += "[DONE] ";
 				}
 
 				dummyLine += (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
@@ -251,7 +270,7 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasksT
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += "*DONE* ";
+					dummyLine += "[DONE] ";
 				}
 
 				dummyLine += (*iter)->getTitle();
@@ -264,6 +283,10 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasksT
 			outputMessageStorage.push_back(dummyLine);
 		}
 	}
+
+	Exporter* exporter = Exporter::getInstance();
+	exporter->writeToFile(outputMessageStorage);
+
 	return outputMessageStorage;
 }
 
@@ -282,7 +305,7 @@ vector<string> DisplayScreenConstructor::constructOverdueScreen(vector<Item*>ite
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->getIsDone() == true) {
-					dummyLine += "*DONE* ";
+					dummyLine += "[DONE] ";
 				}
 
 				dummyLine += (*iter)->getTitle() + " was due " + (*iter)->getEndDateInString();
@@ -295,6 +318,10 @@ vector<string> DisplayScreenConstructor::constructOverdueScreen(vector<Item*>ite
 			outputMessageStorage.push_back(dummyLine);
 		}
 	}
+
+	Exporter* exporter = Exporter::getInstance();
+	exporter->writeToFile(outputMessageStorage);
+
 	return outputMessageStorage;
 }
 

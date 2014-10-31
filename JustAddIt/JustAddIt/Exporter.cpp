@@ -17,13 +17,15 @@ Exporter* Exporter::getInstance(void) {
 	return exporter;
 }
 
-void Exporter::writeToFile(vector<string>screenToBeExported) {
+void Exporter::writeToFile(vector<string>displayScreenToBeExported) {
 	ofstream mytextfile;
 	mytextfile.open(exportFileName);
 	vector<string>::iterator iter;
 
-	for (iter = screenToBeExported.begin(); iter != screenToBeExported.end(); iter++) {
-		mytextfile << *iter << endl;
+	for (iter = displayScreenToBeExported.begin(); iter != displayScreenToBeExported.end(); iter++) {
+		if (*iter != "") {
+			mytextfile << *iter << endl;
+		}
 	}
 
 	mytextfile.close();

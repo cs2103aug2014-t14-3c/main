@@ -2,17 +2,16 @@
 		    |	   			       |
 		    |	    Welcome to JustAddIt       |
 		    |__________________________________|
-
+ 
 What's going on this week?
-
-
+ 
 What do you want to do?
-
+ 
 Universal commands:
-add {task details}, search {keyword}, undo, redo, home, exit
+add {task details}, search {keyword}, export, undo, redo, home, exit
 ================================================================================
-
+ 
 [t] View To-do list
 [o] Check for overdue task
-
+ 
 ================================================================================

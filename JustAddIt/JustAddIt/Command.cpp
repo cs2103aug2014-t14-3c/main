@@ -12,6 +12,5 @@ Command::~Command(void)
 }
 
 vector<string> Command::execute() {
-	outputMessageStorage.clear();
 	return outputMessageStorage;
 }
