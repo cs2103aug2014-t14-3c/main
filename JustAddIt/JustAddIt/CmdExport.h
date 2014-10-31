@@ -1,13 +1,16 @@
 #pragma once
+#include "stdafx.h"
 #include "Command.h"
-#include "Exporter.h"
-#include "CmdGoToBaseScreen.h"
 
 class CmdExport :
-	public Command
-{
+	public Command {
+
 public:
+
+	static const string MESSAGE_EXPORT_SUCCESSFUL;
+
 	CmdExport(void);
 	~CmdExport(void);
 	vector<string> CmdExport::execute();
+
 };
