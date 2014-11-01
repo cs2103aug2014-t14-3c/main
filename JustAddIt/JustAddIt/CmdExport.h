@@ -6,7 +6,6 @@ class CmdExport :
 	public Command {
 
 public:
-
 	static const string MESSAGE_EXPORT_SUCCESSFUL;
 
 	CmdExport(void);

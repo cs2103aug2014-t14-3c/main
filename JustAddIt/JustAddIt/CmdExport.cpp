@@ -14,7 +14,8 @@ CmdExport::~CmdExport(void) {
 vector<string> CmdExport::execute() {
 
 	assert(outputMessageStorage.size() == 0);
+
 	outputMessageStorage.push_back(MESSAGE_EXPORT_SUCCESSFUL);
-	
+
 	return outputMessageStorage;
 }
