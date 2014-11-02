@@ -153,16 +153,32 @@ void ItemBank::editItemPriorityInBank(vector<Item*>::iterator itemPtr, string ne
 	update();
 }
 
-vector<Item*> ItemBank::getEvents(struct tm cutOffDateTime) {
+vector<Item*> ItemBank::getEvents() {
 	vector<Item*>eventsToBeDisplayed;
 	time_t currentTime;
 	time(&currentTime);
+	time_t timeInOneWeekTime_time_t;
+	struct tm timeInOneWeekTime_struct_tm;
+	localtime_s (&timeInOneWeekTime_struct_tm, &currentTime);
 
-	assert(mktime(&(cutOffDateTime)) >= currentTime);
+	timeInOneWeekTime_struct_tm.tm_mday += 7;
+	timeInOneWeekTime_time_t = mktime(&(timeInOneWeekTime_struct_tm));
+	localtime_s (&timeInOneWeekTime_struct_tm, &timeInOneWeekTime_time_t);
 
 	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
-		if ((*iter)->getItemType() == "event" && mktime(&((*iter)->getEndDateTime())) <= mktime(&(cutOffDateTime)) && mktime(&((*iter)->getEndDateTime())) >= currentTime) {
-			eventsToBeDisplayed.push_back(*iter);
+		if ((*iter)->getItemType() == "event" && 
+			mktime(&((*iter)->getEndDateTime())) <= mktime(&(timeInOneWeekTime_struct_tm)) && 
+			mktime(&((*iter)->getEndDateTime())) >= currentTime ||
+			
+			(*iter)->getItemType() == "event" && 
+			mktime(&((*iter)->getEndDateTime())) >= mktime(&(timeInOneWeekTime_struct_tm)) && 
+			mktime(&((*iter)->getStartDateTime())) <= currentTime ||
+			
+			(*iter)->getItemType() == "event" && 
+			mktime(&((*iter)->getStartDateTime())) <= mktime(&(timeInOneWeekTime_struct_tm)) && 
+			mktime(&((*iter)->getStartDateTime())) >= currentTime
+			) {
+				eventsToBeDisplayed.push_back(*iter);
 		}
 		else {
 			continue;
@@ -172,16 +188,23 @@ vector<Item*> ItemBank::getEvents(struct tm cutOffDateTime) {
 	return eventsToBeDisplayed;
 }
 
-vector<Item*> ItemBank::getDeadlines(struct tm cutOffDateTime) {
+vector<Item*> ItemBank::getDeadlines() {
 	vector<Item*>deadlinesToBeDisplayed;
 	time_t currentTime;
 	time(&currentTime);
+	time_t timeInOneWeekTime_time_t;
+	struct tm timeInOneWeekTime_struct_tm;
+	localtime_s (&timeInOneWeekTime_struct_tm, &currentTime);
 
-	assert(mktime(&(cutOffDateTime)) >= currentTime);
+	timeInOneWeekTime_struct_tm.tm_mday += 7;
+	timeInOneWeekTime_time_t = mktime(&(timeInOneWeekTime_struct_tm));
+	localtime_s (&timeInOneWeekTime_struct_tm, &timeInOneWeekTime_time_t);
 
 	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
-		if ((*iter)->getItemType() == "deadline" && mktime(&((*iter)->getEndDateTime())) <= mktime(&(cutOffDateTime)) && mktime(&((*iter)->getEndDateTime())) >= currentTime) {
-			deadlinesToBeDisplayed.push_back(*iter);
+		if ((*iter)->getItemType() == "deadline" && 
+			mktime(&((*iter)->getEndDateTime())) <= mktime(&(timeInOneWeekTime_struct_tm)) && 
+			mktime(&((*iter)->getEndDateTime())) >= currentTime) {
+				deadlinesToBeDisplayed.push_back(*iter);
 		}
 		else {
 			continue;

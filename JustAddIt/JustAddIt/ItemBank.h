@@ -24,8 +24,8 @@ public:
 	static void editItemVenueInBank(vector<Item*>::iterator itemPtr, string newVenue);
 	static void editItemCategoryInBank(vector<Item*>::iterator itemPtr, string newCategory);
 	static void editItemPriorityInBank(vector<Item*>::iterator itemPtr, string newPriority);
-	static vector<Item*> getEvents(struct tm cutOffDateTime);
-	static vector<Item*> getDeadlines(struct tm cutOffDateTime);
+	static vector<Item*> getEvents();
+	static vector<Item*> getDeadlines();
 	static vector<Item*> getAllEvents();
 	static vector<Item*> getAllDeadlines(); 
 	static vector<Item*> getTasks();
