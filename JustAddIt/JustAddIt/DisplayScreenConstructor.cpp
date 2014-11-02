@@ -19,7 +19,7 @@ DisplayScreenConstructor* DisplayScreenConstructor::getInstance(void) {
 }
 
 vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasksToBeDisplayed, vector<Item*>deadlinesToBeDisplayed, vector<Item*>eventsToBeDisplayed) {
-	ifstream mytextfile ("HomeScreen.txt");
+	ifstream mytextfile ("../JustAddIt/HomeScreen.txt");
 	string dummyLine;
 	int resultCounter = 1;
 
@@ -86,7 +86,7 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasksT
 }
 
 vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
-	ifstream mytextfile ("EditScreen.txt");
+	ifstream mytextfile ("../JustAddIt/EditScreen.txt");
 	string dummyLine;
 
 	while (!mytextfile.eof()) {
@@ -150,7 +150,7 @@ vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
 }
 
 vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>tasksToBeDisplayed, vector<Item*>deadlinesToBeDisplayed, vector<Item*>eventsToBeDisplayed) {
-	ifstream mytextfile ("SearchScreen.txt");
+	ifstream mytextfile ("../JustAddIt/SearchScreen.txt");
 	string dummyLine;
 	int resultCounter = 1;
 
@@ -209,7 +209,7 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 }
 
 vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasksToBeDisplayed, vector<Item*>deadlinesToBeDisplayed, vector<Item*>eventsToBeDisplayed) {
-	ifstream mytextfile ("ListViewScreen.txt");
+	ifstream mytextfile ("../JustAddIt/ListViewScreen.txt");
 	string dummyLine;
 	int resultCounter = 1;
 	vector<Item*>::iterator iter;
@@ -291,7 +291,7 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasksT
 }
 
 vector<string> DisplayScreenConstructor::constructOverdueScreen(vector<Item*>itemsToBeDisplayed) {
-	ifstream mytextfile ("OverdueScreen.txt");
+	ifstream mytextfile ("../JustAddIt/OverdueScreen.txt");
 	string dummyLine;
 	int resultCounter = 1;
 	vector<Item*>::iterator iter;
