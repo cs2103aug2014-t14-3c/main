@@ -74,14 +74,6 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasksT
 	Exporter* exporter = Exporter::getInstance();
 	exporter->writeToFile(outputMessageStorage);
 
-	cout << "start of wad will be exported" << endl;
-
-	for (vector<string>::iterator iter = outputMessageStorage.begin(); iter != outputMessageStorage.end(); iter++) 
-	{cout << *iter << endl;}
-
-	cout << "end of wad will be exported" << endl;
-
-
 	return outputMessageStorage;
 }
 

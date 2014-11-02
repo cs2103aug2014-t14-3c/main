@@ -41,5 +41,8 @@
     <ClCompile Include="CmdDeleteItemTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CmdMarkItemDoneTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

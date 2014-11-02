@@ -13,12 +13,13 @@ private:
 	vector<Item*> _itemsToBeDeleted;
 
 public:
-	static const string CmdDeleteItem::MESSAGE_DELETION_SUCCESSFUL;
-	static const string CmdDeleteItem::LOGGING_ITEMS_DELETED;
-	static const string CmdDeleteItem::LOGGING_BASE_SCREEN_STORED;
-	static const string CmdDeleteItem::LOGGING_SUCCESS_MESSAGE_STORED;
-	static const string CmdDeleteItem::LOGGING_COMMAND_STORED_IN_ACTION_LOG;
-	static const string CmdDeleteItem::TEXT_FILE_NAME;
+	static const string MESSAGE_DELETION_SUCCESSFUL;
+	static const string LOG_ITEMS_DELETED;
+	static const string LOG_BASE_SCREEN_STORED;
+	static const string LOG_SUCCESS_MESSAGE_STORED;
+	static const string LOG_COMMAND_STORED_IN_ACTION_LOG;
+	static const string ERROR_EMPTY_VECTOR;
+	static const string TEXT_FILE_NAME;
 
 	CmdDeleteItem(vector<Item*> itemsToBeDeleted);
 	~CmdDeleteItem(void);

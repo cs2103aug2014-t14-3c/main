@@ -385,6 +385,16 @@ int ItemBank::getBankSize() {
 	return (int)bank.size();
 }
 
+int ItemBank::getNumberOfMarkedItems() {
+	int numberOfMarkedItems = 0;
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getIsDone() == true) {
+			numberOfMarkedItems++;
+		}
+	}
+	return numberOfMarkedItems;
+}
+
 void ItemBank::initialiseBank() {
 	vector<string>itemsToBeReadToBank;
 	string startDateTimeInStringForm;

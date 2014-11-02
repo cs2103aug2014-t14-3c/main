@@ -40,6 +40,7 @@ public:
 	static Item findItemByVectorPos(int i);
 
 	static int getBankSize();
+	static int getNumberOfMarkedItems();
 	static void initialiseBank();
 	static void deletePastEvents();
 	static void resetBank();
