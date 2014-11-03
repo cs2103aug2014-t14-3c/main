@@ -92,18 +92,14 @@ Command* Parser::stringToCommand(string userCommand) {
 			if(fieldNum == START_TIME_FIELD_INDEX){
 				//check for all the possible types of time input
 				Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());
-				detectMonthDateAndEmbedIsOk(&myNewItem, newFieldInfo, false);
-				detectDayOfWeekDateAndEmbedIsOk(&myNewItem, newFieldInfo, false);
-				detectTimeAndEmbedIsOk(&myNewItem, newFieldInfo, false);
+				detectTypesOfDatesAndEmbed(myNewItem, newFieldInfo, false);
 				CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, myNewItem.getStartDateTime());
 				return myEdit;
 			}
 			else if(fieldNum == END_TIME_FIELD_INDEX){
 				//check for all the possible types of time input
 				Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());
-				detectMonthDateAndEmbedIsOk(&myNewItem, newFieldInfo, true);
-				detectDayOfWeekDateAndEmbedIsOk(&myNewItem, newFieldInfo, true);
-				detectTimeAndEmbedIsOk(&myNewItem, newFieldInfo, true);
+				detectTypesOfDatesAndEmbed(myNewItem, newFieldInfo, true);
 				CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, myNewItem.getEndDateTime());
 				return myEdit;
 			
@@ -599,6 +595,12 @@ void Parser::detectDescriptionAndEmbed(Item* myItem, string &stringDetails){
 
 	return ;
 }
+void Parser::detectTypesOfDatesAndEmbed(Item &myNewItem, string newFieldInfo, bool isDeadline){
+	detectMonthDateAndEmbedIsOk(&myNewItem, newFieldInfo, isDeadline);
+	detectDayOfWeekDateAndEmbedIsOk(&myNewItem, newFieldInfo, isDeadline);
+	detectTimeAndEmbedIsOk(&myNewItem, newFieldInfo, isDeadline);
+}
+
 bool Parser::isInteger(string query){
     unsigned int i;
 
@@ -691,6 +693,7 @@ int Parser::convertStringToIntMin(string stringTime){
 	return stoi (stringTime);
 }
 int Parser::convertStrToIntMonth(string month){
+
 	convertStringToLowercase(month);
 	const string month3[] = {"jan", "feb", "mar", "apr", "may", "jun",
 								"jul", "aug", "sep", "oct", "nov", "dec"};

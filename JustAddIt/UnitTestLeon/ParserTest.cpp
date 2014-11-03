@@ -199,13 +199,13 @@ namespace UnitTestLeon
 			localtime_s (&nowTimeTM, &nowTime);
 
 
-			myParser.embedDetailsInItem(myItem, "band practice at 5pm on 7 Sep");
+			myParser.embedDetailsInItem(myItem, "band practice at 5pm next Monday");
 
 			Assert::AreEqual("band practice", myItem->getTitle().c_str());
 			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getStartDateTime());
-			Assert::AreEqual("07 Sep 2015 05:00PM.", actualBuffer);
+			Assert::AreEqual("10 Nov 2014 05:00PM.", actualBuffer);
 			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
-			Assert::AreEqual("07 Sep 2015 06:00PM.", actualBuffer);
+			Assert::AreEqual("10 Nov 2014 06:00PM.", actualBuffer);
 
 			myParser.embedDetailsInItem(myItem, "Dinner date (buy flowers) on 14 February at 9PM");
 
@@ -252,7 +252,7 @@ namespace UnitTestLeon
 			strcat_s(expectedBuffer, buffer_size, " 02:00PM.");
 			Assert::AreEqual(expectedBuffer, actualBuffer);
 
-			myParser.embedDetailsInItem(myItem, "night cycling event 2.20 - 4am");
+			myParser.embedDetailsInItem(myItem, "night cycling event today 2.20 - 4am");
 			
 			Assert::AreEqual("night cycling event", myItem->getTitle().c_str());
 			
@@ -276,15 +276,20 @@ namespace UnitTestLeon
 			Assert::AreEqual(expectedBuffer, actualBuffer);
 			Assert::AreEqual("deadline", myItem->getItemType().c_str());
 
-			myParser.embedDetailsInItem(myItem, "Book flight by 25 December (change currency)");
+			myParser.embedDetailsInItem(myItem, "Book flight by tomorrow (change currency)");
 			
 			Assert::AreEqual("Book flight", myItem->getTitle().c_str());
+			nowTimeTM.tm_mday++;
+			mktime(&nowTimeTM);
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
 			
 			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
-			Assert::AreEqual("25 Dec 2014 11:59PM.", actualBuffer);
+			strcat_s(expectedBuffer, buffer_size, " 11:59PM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
 			Assert::AreEqual("deadline", myItem->getItemType().c_str());
 			Assert::AreEqual("change currency", myItem->getDescription().c_str());
-
+			time(&nowTime);
+			localtime_s (&nowTimeTM, &nowTime);
 
 			myParser.embedDetailsInItem(myItem, "complete job by 28 March 9pm");
 		

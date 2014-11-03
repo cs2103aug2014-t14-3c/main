@@ -31,6 +31,7 @@ public:
 	bool detectTimeAndEmbedIsOk(Item* myItem, string stringDetails, bool isDeadline);
 	bool detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails, bool isDeadline);
 	bool detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails, bool isDeadline);
+	void detectTypesOfDatesAndEmbed(Item &myNewItem, string newFieldInfo, bool isDeadline);
 	void detectCategoryAndEmbed(Item* myItem, string &stringDetails);
 	void detectPriorityAndEmbed(Item* myItem, string &stringDetails);
 	void detectDescriptionAndEmbed(Item* myItem, string &stringDetails);
