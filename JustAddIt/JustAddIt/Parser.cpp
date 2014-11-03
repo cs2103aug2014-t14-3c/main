@@ -145,11 +145,6 @@ Command* Parser::stringToCommand(string userCommand) {
 			return myRedo;
 			break;
 					}
-		//case VIEW_CALENDAR : {
-		//	//CmdGoToCalendarView* myCalendar = new CmdGoToCalendarView();
-		//	//return myCalendar;
-		//	//break;
-		//			}
 		case VIEW_TODOLIST : {
 			CmdGoToListView* myList = new CmdGoToListView();
 			return myList;
@@ -181,9 +176,13 @@ Command* Parser::stringToCommand(string userCommand) {
 			return myExport;
 			break;
 					  }
-		//TODO: INVALID CASE AND DEFAULT CASE
+		default: {
+			throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
+			break;
+				 }
+
 	}
-	return NULL;
+
 }
 
 void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
@@ -291,14 +290,19 @@ void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 	return;
 }
 bool Parser::detectDeadlineKeywordAndTrim(string &stringDetails){
-	size_t position;
+	vector<string> vectorOfStrings;
+	vector<string>::iterator deadlineWordIter;
 	bool isFound = false;
-	position = stringDetails.find("by");
+	
+	vectorOfStrings = convertStringToVector(stringDetails);
+	deadlineWordIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isKeywordDeadline);
+	
 	//if found
-	if (position!=string::npos){
-		stringDetails = stringDetails.substr(position);
+	if (deadlineWordIter!=vectorOfStrings.end()){
+		vectorOfStrings.erase(deadlineWordIter);
 		isFound = true;
 	}
+	stringDetails = convertVectorToString(vectorOfStrings.begin(), vectorOfStrings.end());
 	return isFound;
 }
 bool Parser::detectTimeAndEmbedIsOk(Item* myItem, string stringDetails, bool isDeadline){
@@ -585,7 +589,7 @@ void Parser::detectDescriptionAndEmbed(Item* myItem, string &stringDetails){
 				throw invalid_argument("Invalid brackets! Please follow e.g. add event at 7pm (description)");
 			}
 			if(positionBack!=string::npos && positionBack!=0){
-				descripToSet = stringDetails.substr(positionFront, positionBack);
+				descripToSet = stringDetails.substr(positionFront, positionBack-positionFront+1);
 				stringDetails.replace(stringDetails.find(descripToSet),descripToSet.length(),"");
 				
 				descripToSet = descripToSet.substr(1, descripToSet.length()-2);
@@ -790,7 +794,7 @@ bool Parser::isKeywordEndTime(string myWord){
 	return myWord=="to" || myWord == "-"  || myWord == "and";
 }
 bool Parser::isKeywordDeadline(string myWord){
-	return myWord == "by" ;
+	return myWord == "by" || myWord == "due";
 }
 bool Parser::isKeywordDate(string myWord){
 	return myWord=="on";

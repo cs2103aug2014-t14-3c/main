@@ -90,6 +90,7 @@
     <ClCompile Include="CmdDeleteItemTest.cpp" />
     <ClCompile Include="CmdExportTest.cpp" />
     <ClCompile Include="CmdMarkItemDoneTest.cpp" />
+    <ClCompile Include="ExecutorTest.cpp" />
     <ClCompile Include="ItemTest.cpp" />
     <ClCompile Include="CmdTest.cpp" />
     <ClCompile Include="stdafx.cpp">

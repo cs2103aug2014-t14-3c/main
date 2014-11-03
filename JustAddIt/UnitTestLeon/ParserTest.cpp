@@ -172,6 +172,7 @@ namespace UnitTestLeon
 		{
 			const int buffer_size = 256;
 			char buffer[256];
+			
 
 			Parser myParser;
 			Item* myItem = new Item;
@@ -184,29 +185,126 @@ namespace UnitTestLeon
 			Assert::AreEqual("20 Sep 09:00PM.", buffer);
 			
 		}
-			TEST_METHOD(TestExecutor1)
+			TEST_METHOD(TestUserGuideExamples)
 		{
-			Executor* myExec = new Executor();
-			//ItemBank* myIB = new ItemBank();
-			//DisplayScreenConstructor* myDSC = DisplayScreenConstructor::getInstance();
-			//OutputControl* myOC = new OutputControl();
+			const int buffer_size = 256;
+			char expectedBuffer[256];
+			char actualBuffer[256];
+			Parser myParser;
+			Item* myItem = new Item;
 
-			myExec->execute("add wake up on 30 Dec at 7 #category (more info)");
+			time_t nowTime;
+			tm nowTimeTM;
+			time(&nowTime);
+			localtime_s (&nowTimeTM, &nowTime);
 
+
+			myParser.embedDetailsInItem(myItem, "band practice at 5pm on 7 Sep");
+
+			Assert::AreEqual("band practice", myItem->getTitle().c_str());
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getStartDateTime());
+			Assert::AreEqual("07 Sep 2015 05:00PM.", actualBuffer);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			Assert::AreEqual("07 Sep 2015 06:00PM.", actualBuffer);
+
+			myParser.embedDetailsInItem(myItem, "Dinner date (buy flowers) on 14 February at 9PM");
+
+			Assert::AreEqual("Dinner date", myItem->getTitle().c_str());
+			Assert::AreEqual("buy flowers", myItem->getDescription().c_str());
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getStartDateTime());
+			Assert::AreEqual("14 Feb 2015 09:00PM.", actualBuffer);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			Assert::AreEqual("14 Feb 2015 10:00PM.", actualBuffer);
+
+			myParser.embedDetailsInItem(myItem, "project meeting from 5:30pm - 9pm #school");
+
+			Assert::AreEqual("project meeting", myItem->getTitle().c_str());
+			Assert::AreEqual("school", myItem->getCategory().c_str());
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getStartDateTime());
+			strcat_s(expectedBuffer, buffer_size, " 05:30PM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
+
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			strcat_s(expectedBuffer, buffer_size, " 09:00PM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
+
+			myParser.embedDetailsInItem(myItem, "Holiday period from 10 May - 10 Jul");
+
+			Assert::AreEqual("Holiday period", myItem->getTitle().c_str());
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getStartDateTime());
+			Assert::AreEqual("10 May 2015 12:00AM.", actualBuffer);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			Assert::AreEqual("10 Jul 2015 11:59PM.", actualBuffer);
+
+			myParser.embedDetailsInItem(myItem, "Presentation slot 1.40pm - 1400");
+
+			Assert::AreEqual("Presentation slot", myItem->getTitle().c_str());
+			
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getStartDateTime());
+			strcat_s(expectedBuffer, buffer_size, " 01:40PM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
+
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			strcat_s(expectedBuffer, buffer_size, " 02:00PM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
+
+			myParser.embedDetailsInItem(myItem, "night cycling event 2.20 - 4am");
+			
+			Assert::AreEqual("night cycling event", myItem->getTitle().c_str());
+			
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getStartDateTime());
+			strcat_s(expectedBuffer, buffer_size, " 02:20AM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
+
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			strcat_s(expectedBuffer, buffer_size, " 04:00AM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
+
+			myParser.embedDetailsInItem(myItem, "submit assignment by 8pm");
+			
+			Assert::AreEqual("submit assignment", myItem->getTitle().c_str());
+			
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			strcat_s(expectedBuffer, buffer_size, " 08:00PM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
+			Assert::AreEqual("deadline", myItem->getItemType().c_str());
+
+			myParser.embedDetailsInItem(myItem, "Book flight by 25 December (change currency)");
+			
+			Assert::AreEqual("Book flight", myItem->getTitle().c_str());
+			
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			Assert::AreEqual("25 Dec 2014 11:59PM.", actualBuffer);
+			Assert::AreEqual("deadline", myItem->getItemType().c_str());
+			Assert::AreEqual("change currency", myItem->getDescription().c_str());
+
+
+			myParser.embedDetailsInItem(myItem, "complete job by 28 March 9pm");
 		
-			Assert::AreEqual("wake up", OutputControl::getItemAddr(1)->getTitle().c_str());
-			Assert::AreEqual("Tuesday 30 Dec 07:00AM", OutputControl::getItemAddr(1)->getStartDateInString().c_str());
-			Assert::AreEqual("Tuesday 30 Dec 08:00AM", OutputControl::getItemAddr(1)->getEndDateInString().c_str());
-			Assert::AreEqual("category", OutputControl::getItemAddr(1)->getCategory().c_str());
-			Assert::AreEqual("more info", OutputControl::getItemAddr(1)->getDescription().c_str());
-			Assert::AreEqual("Low", OutputControl::getItemAddr(1)->getPriorityInString().c_str());
+			Assert::AreEqual("complete job", myItem->getTitle().c_str());
+			
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			Assert::AreEqual("28 Mar 2015 09:00PM.", actualBuffer);
+
+			Assert::AreEqual("deadline", myItem->getItemType().c_str());
+
+			myParser.embedDetailsInItem(myItem, "call Sarah");
 		
-			try{
-				myExec->execute("add more info(");
-			}
-			catch (exception& e){
-				Assert::AreEqual("Invalid brackets! Please follow e.g. add event at 7pm (description)", e.what() );
-			}
-		}
+			Assert::AreEqual("call Sarah", myItem->getTitle().c_str());
+			Assert::AreEqual("task", myItem->getItemType().c_str());
+
+			myParser.embedDetailsInItem(myItem, "Clean dormitory room #personal");
+		
+			Assert::AreEqual("Clean dormitory room", myItem->getTitle().c_str());
+			Assert::AreEqual("task", myItem->getItemType().c_str());
+			Assert::AreEqual("personal", myItem->getCategory().c_str());
+}
 	};
 }
