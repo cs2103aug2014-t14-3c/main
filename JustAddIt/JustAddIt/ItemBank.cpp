@@ -29,14 +29,16 @@ bool ItemBank::checkForConflict(Item* item) {
 	return isConflicted;
 }
 
-void ItemBank::deleteFromBank(vector<Item*> itemPtr) {
+void ItemBank::deleteFromBank(vector<Item*> itemsToBeDeleted) {
 	vector<Item*>::iterator myIter;
-	myIter = itemPtr.begin();
-	while(myIter!=itemPtr.end()){
+	myIter = itemsToBeDeleted.begin();
+
+	while(myIter!=itemsToBeDeleted.end()){
 		vector<Item*>::iterator itemInBank = findIter(*myIter);
 		bank.erase(itemInBank);
 		myIter++;
 	}
+
 	update();
 }
 
@@ -54,22 +56,16 @@ vector<Item*>::iterator ItemBank::findIter(Item* itemPtr) {
 }
 
 void ItemBank::deleteAllDoneItemsFromBank() {
-	vector<Item*>::iterator iter;
-	bool allDoneItemsDeleted = false;
+	vector<Item*> doneItems;
 
-	while (allDoneItemsDeleted == false) {
-		allDoneItemsDeleted = true;
-		for(iter = bank.begin(); iter != bank.end(); iter++) {
-			if ((*iter)->getIsDone() == true) {
-				bank.erase(iter);
-				allDoneItemsDeleted = false;
-				break;
-			}
-			else {
-				continue;
-			}
+	for(vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if((*iter)->getIsDone()) {
+			doneItems.push_back(*iter);
 		}
 	}
+
+	deleteFromBank(doneItems);
+	
 	update();
 }
 
@@ -107,37 +103,45 @@ void ItemBank::markItemsInBank(vector<Item*> itemPtr) {
 	update();
 }
 
-void ItemBank::editItemTitleInBank(vector<Item*>::iterator itemPtr, string newTitle) {
+void ItemBank::editItemTitleInBank(Item* item, string newTitle) {
+	vector<Item*>::iterator itemPtr = findIter(item);
 	(*itemPtr)->setTitle(newTitle);
 	update();
 }
 
-void ItemBank::editItemDescriptionInBank(vector<Item*>::iterator itemPtr, string newDescription) {
+void ItemBank::editItemDescriptionInBank(Item* item, string newDescription) {
+	vector<Item*>::iterator itemPtr = findIter(item);
 	(*itemPtr)->setDescription(newDescription);
 	update();
 }
 
-void ItemBank::editItemStartDateTimeInBank(vector<Item*>::iterator itemPtr, tm newStartDateTime) {
+void ItemBank::editItemStartDateTimeInBank(Item* item, tm newStartDateTime) {
+	vector<Item*>::iterator itemPtr = findIter(item);
 	(*itemPtr)->setStartDateTime(newStartDateTime);
 	update();
 }
 
-void ItemBank::editItemEndDateTimeInBank(vector<Item*>::iterator itemPtr, tm newEndDateTime) {
+void ItemBank::editItemEndDateTimeInBank(Item* item, tm newEndDateTime) {
+	vector<Item*>::iterator itemPtr = findIter(item);
 	(*itemPtr)->setEndDateTime(newEndDateTime);
 	update();
 }
 
-void ItemBank::editItemVenueInBank(vector<Item*>::iterator itemPtr, string newVenue) {
+void ItemBank::editItemVenueInBank(Item* item, string newVenue) {
+	vector<Item*>::iterator itemPtr = findIter(item);
 	(*itemPtr)->setVenue(newVenue);
 	update();
 }
 
-void ItemBank::editItemCategoryInBank(vector<Item*>::iterator itemPtr, string newCategory) {
+void ItemBank::editItemCategoryInBank(Item* item, string newCategory) {
+	vector<Item*>::iterator itemPtr = findIter(item);
 	(*itemPtr)->setCategory(newCategory);
 	update();
 }
 
-void ItemBank::editItemPriorityInBank(vector<Item*>::iterator itemPtr, string newPriority) {
+void ItemBank::editItemPriorityInBank(Item* item, string newPriority) {
+	vector<Item*>::iterator itemPtr = findIter(item);
+
 	if (newPriority == "High" || newPriority == "H" || newPriority == "high" || newPriority == "h" || newPriority == "hi") {
 		(*itemPtr)->setPriority(static_cast<Item::PriorityLevel>(2));
 	}
