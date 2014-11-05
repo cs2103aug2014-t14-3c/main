@@ -42,6 +42,10 @@ void GUI::on_pushButton_clicked() {
 	QString qs = ui.lineEdit->text();
 	string str = qs.toLocal8Bit().constData();
 	
+	if(qs == "exit") {
+		exit(0);
+	}
+
 	vector<string> output = IReceiver::receive(str);
 
 	updateTextEdit(output);

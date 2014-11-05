@@ -22,27 +22,3 @@ add {task details}, search {keyword}, export, undo, redo, home, exit
 [o] Check for overdue task
  
 ================================================================================
-<div align = "center" style = "color: red;">                    ____________________________________<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Welcome to JustAddIt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |____________________________________|</div>
-What's going on this week?
-1. hello
-2. task nothing
-3. hihi
-4. 2
-5. 3
-6. task
-7. event tomorrow
-8. hello
-9. hello
-10. helloooo
-11. hello
- 
-What do you want to do?
- 
-Universal commands:
-add {task details}, search {keyword}, export, undo, redo, home, exit
-================================================================================
- 
-[t] View To-do list
-[o] Check for overdue task
- 
-================================================================================
