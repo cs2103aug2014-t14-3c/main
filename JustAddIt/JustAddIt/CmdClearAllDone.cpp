@@ -9,8 +9,7 @@ CmdClearAllDone::~CmdClearAllDone(void) {
 }
 
 vector<string> CmdClearAllDone::execute() {
-	ItemBank::deleteAllDoneItemsFromBank();
-
+	ItemBank::deleteAllDoneItems();
 
 	//returns to base screen
 	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());

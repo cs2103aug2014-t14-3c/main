@@ -4,32 +4,7 @@
 vector<Item*> ItemBank::bank;
 vector<Item*> ItemBank::initialBank;
 
-bool ItemBank::addToBank(Item* item) {
-	bank.push_back(item);
-	update();
-
-	return checkForConflict(item);
-
-}
-
-bool ItemBank::checkForConflict(Item* item) {
-	vector<Item*>::iterator iter;
-	bool isConflicted = false;
-
-	for (iter = bank.begin(); iter != bank.end(); iter++) {
-		if ((*iter)->getItemType() == "event") {
-			if (mktime(&(item->getStartDateTime())) >= mktime(&((*iter)->getStartDateTime())) && mktime(&(item->getStartDateTime())) <= mktime(&((*iter)->getEndDateTime())) ||
-				mktime(&(item->getEndDateTime())) >= mktime(&((*iter)->getStartDateTime())) && mktime(&(item->getEndDateTime())) <= mktime(&((*iter)->getEndDateTime())) ||
-				mktime(&(item->getStartDateTime())) <= mktime(&((*iter)->getStartDateTime())) && mktime(&(item->getEndDateTime())) >= mktime(&((*iter)->getEndDateTime()))) {
-					isConflicted = true;
-			}
-		}
-	}
-
-	return isConflicted;
-}
-
-void ItemBank::deleteFromBank(vector<Item*> itemsToBeDeleted) {
+void ItemBank::deleteItems(vector<Item*> itemsToBeDeleted) {
 	vector<Item*>::iterator myIter;
 	myIter = itemsToBeDeleted.begin();
 
@@ -42,20 +17,7 @@ void ItemBank::deleteFromBank(vector<Item*> itemsToBeDeleted) {
 	update();
 }
 
-vector<Item*>::iterator ItemBank::findIter(Item* itemPtr) {
-	vector<Item*>::iterator iter = bank.begin();
-
-	while(iter != bank.end()) {
-		if((*iter)->getId() == itemPtr->getId()) {
-			return iter;
-		}
-		iter++;
-	}
-
-	throw exception("item does not exist!");
-}
-
-void ItemBank::deleteAllDoneItemsFromBank() {
+void ItemBank::deleteAllDoneItems() {
 	vector<Item*> doneItems;
 
 	for(vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
@@ -64,12 +26,12 @@ void ItemBank::deleteAllDoneItemsFromBank() {
 		}
 	}
 
-	deleteFromBank(doneItems);
+	deleteItems(doneItems);
 	
 	update();
 }
 
-void ItemBank::deleteAllOverdueDeadlinesFromBank() {
+void ItemBank::deleteAllOverdueDeadlines() {
 	vector<Item*>::iterator iter;
 	bool allOverdueDeadlinesDeleted = false;
 	time_t currentTime;
@@ -91,6 +53,29 @@ void ItemBank::deleteAllOverdueDeadlinesFromBank() {
 	update();
 }
 
+void ItemBank::deletePastEvents() {
+	vector<Item*>::iterator iter;
+	bool allPastEventsDeleted = false;
+	time_t currentTime;
+	time(&currentTime);
+
+	while (allPastEventsDeleted == false) {
+		allPastEventsDeleted = true;
+		for(iter = bank.begin(); iter != bank.end(); iter++) {
+			if ((*iter)->getItemType() == "event" && mktime(&((*iter)->getEndDateTime())) <= currentTime) {
+				bank.erase(iter);
+				allPastEventsDeleted = false;
+				break;
+			}
+			else {
+				continue;
+			}
+		}
+	}
+	update();
+}
+
+
 void ItemBank::markItemsInBank(vector<Item*> itemPtr) {
 
 	vector<Item*>::iterator myIter;
@@ -102,6 +87,7 @@ void ItemBank::markItemsInBank(vector<Item*> itemPtr) {
 	}
 	update();
 }
+
 
 void ItemBank::editItemTitleInBank(Item* item, string newTitle) {
 	vector<Item*>::iterator itemPtr = findIter(item);
@@ -157,135 +143,6 @@ void ItemBank::editItemPriorityInBank(Item* item, string newPriority) {
 	update();
 }
 
-vector<Item*> ItemBank::getEvents() {
-	vector<Item*>eventsToBeDisplayed;
-	time_t currentTime;
-	time(&currentTime);
-	time_t timeInOneWeekTime_time_t;
-	struct tm timeInOneWeekTime_struct_tm;
-	localtime_s (&timeInOneWeekTime_struct_tm, &currentTime);
-
-	timeInOneWeekTime_struct_tm.tm_mday += 7;
-	timeInOneWeekTime_time_t = mktime(&(timeInOneWeekTime_struct_tm));
-	localtime_s (&timeInOneWeekTime_struct_tm, &timeInOneWeekTime_time_t);
-
-	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
-		if ((*iter)->getItemType() == "event" && 
-			mktime(&((*iter)->getEndDateTime())) <= mktime(&(timeInOneWeekTime_struct_tm)) && 
-			mktime(&((*iter)->getEndDateTime())) >= currentTime ||
-			
-			(*iter)->getItemType() == "event" && 
-			mktime(&((*iter)->getEndDateTime())) >= mktime(&(timeInOneWeekTime_struct_tm)) && 
-			mktime(&((*iter)->getStartDateTime())) <= currentTime ||
-			
-			(*iter)->getItemType() == "event" && 
-			mktime(&((*iter)->getStartDateTime())) <= mktime(&(timeInOneWeekTime_struct_tm)) && 
-			mktime(&((*iter)->getStartDateTime())) >= currentTime
-			) {
-				eventsToBeDisplayed.push_back(*iter);
-		}
-		else {
-			continue;
-		}
-	}
-
-	return eventsToBeDisplayed;
-}
-
-vector<Item*> ItemBank::getDeadlines() {
-	vector<Item*>deadlinesToBeDisplayed;
-	time_t currentTime;
-	time(&currentTime);
-	time_t timeInOneWeekTime_time_t;
-	struct tm timeInOneWeekTime_struct_tm;
-	localtime_s (&timeInOneWeekTime_struct_tm, &currentTime);
-
-	timeInOneWeekTime_struct_tm.tm_mday += 7;
-	timeInOneWeekTime_time_t = mktime(&(timeInOneWeekTime_struct_tm));
-	localtime_s (&timeInOneWeekTime_struct_tm, &timeInOneWeekTime_time_t);
-
-	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
-		if ((*iter)->getItemType() == "deadline" && 
-			mktime(&((*iter)->getEndDateTime())) <= mktime(&(timeInOneWeekTime_struct_tm)) && 
-			mktime(&((*iter)->getEndDateTime())) >= currentTime) {
-				deadlinesToBeDisplayed.push_back(*iter);
-		}
-		else {
-			continue;
-		}
-	}
-
-	return deadlinesToBeDisplayed;
-}
-
-vector<Item*> ItemBank::getAllEvents() {
-	vector<Item*>eventsToBeDisplayed;
-	time_t currentTime;
-	time(&currentTime);
-
-	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
-		if ((*iter)->getItemType() == "event") {
-			eventsToBeDisplayed.push_back(*iter);
-		}
-		else {
-			continue;
-		}
-	}
-
-	return eventsToBeDisplayed;
-}
-
-vector<Item*> ItemBank::getAllDeadlines() {
-	vector<Item*>deadlinesToBeDisplayed;
-	time_t currentTime;
-	time(&currentTime);
-
-	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
-		if ((*iter)->getItemType() == "deadline") {
-			deadlinesToBeDisplayed.push_back(*iter);
-		}
-		else {
-			continue;
-		}
-	}
-
-	return deadlinesToBeDisplayed;
-}
-
-vector<Item*> ItemBank::getTasks() {
-	vector<Item*> tasksToBeDisplayed;
-
-	for(vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
-		if((*iter)->getItemType() == "task") {
-			assert((*iter)->getTitle() != "");
-			tasksToBeDisplayed.push_back(*iter);
-		}
-		else {
-			continue;
-		}
-	}
-
-	return tasksToBeDisplayed;
-}
-
-vector<Item*> ItemBank::getOverdueDeadlines() {
-	vector<Item*>overdueDeadlinesToBeDisplayed;
-	vector<Item*>::iterator iter;
-
-	time_t currentTime;
-	time(&currentTime);
-
-	for (iter = bank.begin(); iter != bank.end(); iter++) {
-		if ((*iter)->getItemType() == "deadline" && mktime(&((*iter)->getEndDateTime())) <= currentTime) {
-			overdueDeadlinesToBeDisplayed.push_back(*iter);
-		}
-		else {
-			continue;
-		}
-	}
-
-	return overdueDeadlinesToBeDisplayed;
-}
 
 bool ItemBank::searchKeywordInItemAttribute(string itemAttribute, string keyword) {
 	bool isFound = false;
@@ -408,6 +265,137 @@ vector<Item*> ItemBank::searchTasks(string keyword) {
 	return tasksToBeDisplayed;
 }
 
+
+vector<Item*> ItemBank::getTasks() {
+	vector<Item*> tasksToBeDisplayed;
+
+	for(vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if((*iter)->getItemType() == "task") {
+			assert((*iter)->getTitle() != "");
+			tasksToBeDisplayed.push_back(*iter);
+		}
+		else {
+			continue;
+		}
+	}
+
+	return tasksToBeDisplayed;
+}
+
+vector<Item*> ItemBank::getEvents() {
+	vector<Item*>eventsToBeDisplayed;
+	time_t currentTime;
+	time(&currentTime);
+	time_t timeInOneWeekTime_time_t;
+	struct tm timeInOneWeekTime_struct_tm;
+	localtime_s (&timeInOneWeekTime_struct_tm, &currentTime);
+
+	timeInOneWeekTime_struct_tm.tm_mday += 7;
+	timeInOneWeekTime_time_t = mktime(&(timeInOneWeekTime_struct_tm));
+	localtime_s (&timeInOneWeekTime_struct_tm, &timeInOneWeekTime_time_t);
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "event" && 
+			mktime(&((*iter)->getEndDateTime())) <= mktime(&(timeInOneWeekTime_struct_tm)) && 
+			mktime(&((*iter)->getEndDateTime())) >= currentTime ||
+			
+			(*iter)->getItemType() == "event" && 
+			mktime(&((*iter)->getEndDateTime())) >= mktime(&(timeInOneWeekTime_struct_tm)) && 
+			mktime(&((*iter)->getStartDateTime())) <= currentTime ||
+			
+			(*iter)->getItemType() == "event" && 
+			mktime(&((*iter)->getStartDateTime())) <= mktime(&(timeInOneWeekTime_struct_tm)) && 
+			mktime(&((*iter)->getStartDateTime())) >= currentTime
+			) {
+				eventsToBeDisplayed.push_back(*iter);
+		}
+		else {
+			continue;
+		}
+	}
+
+	return eventsToBeDisplayed;
+}
+
+vector<Item*> ItemBank::getAllEvents() {
+	vector<Item*>eventsToBeDisplayed;
+	time_t currentTime;
+	time(&currentTime);
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "event") {
+			eventsToBeDisplayed.push_back(*iter);
+		}
+		else {
+			continue;
+		}
+	}
+
+	return eventsToBeDisplayed;
+}
+
+vector<Item*> ItemBank::getDeadlines() {
+	vector<Item*>deadlinesToBeDisplayed;
+	time_t currentTime;
+	time(&currentTime);
+	time_t timeInOneWeekTime_time_t;
+	struct tm timeInOneWeekTime_struct_tm;
+	localtime_s (&timeInOneWeekTime_struct_tm, &currentTime);
+
+	timeInOneWeekTime_struct_tm.tm_mday += 7;
+	timeInOneWeekTime_time_t = mktime(&(timeInOneWeekTime_struct_tm));
+	localtime_s (&timeInOneWeekTime_struct_tm, &timeInOneWeekTime_time_t);
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "deadline" && 
+			mktime(&((*iter)->getEndDateTime())) <= mktime(&(timeInOneWeekTime_struct_tm)) && 
+			mktime(&((*iter)->getEndDateTime())) >= currentTime) {
+				deadlinesToBeDisplayed.push_back(*iter);
+		}
+		else {
+			continue;
+		}
+	}
+
+	return deadlinesToBeDisplayed;
+}
+
+vector<Item*> ItemBank::getAllDeadlines() {
+	vector<Item*>deadlinesToBeDisplayed;
+	time_t currentTime;
+	time(&currentTime);
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "deadline") {
+			deadlinesToBeDisplayed.push_back(*iter);
+		}
+		else {
+			continue;
+		}
+	}
+
+	return deadlinesToBeDisplayed;
+}
+
+vector<Item*> ItemBank::getOverdueDeadlines() {
+	vector<Item*>overdueDeadlinesToBeDisplayed;
+	vector<Item*>::iterator iter;
+
+	time_t currentTime;
+	time(&currentTime);
+
+	for (iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "deadline" && mktime(&((*iter)->getEndDateTime())) <= currentTime) {
+			overdueDeadlinesToBeDisplayed.push_back(*iter);
+		}
+		else {
+			continue;
+		}
+	}
+
+	return overdueDeadlinesToBeDisplayed;
+}
+
 int ItemBank::getBankSize() {
 	return (int)bank.size();
 }
@@ -421,6 +409,21 @@ int ItemBank::getNumberOfMarkedItems() {
 	}
 	return numberOfMarkedItems;
 }
+
+
+vector<Item*>::iterator ItemBank::findIter(Item* itemPtr) {
+	vector<Item*>::iterator iter = bank.begin();
+
+	while(iter != bank.end()) {
+		if((*iter)->getId() == itemPtr->getId()) {
+			return iter;
+		}
+		iter++;
+	}
+
+	throw exception("item does not exist!");
+}
+
 
 void ItemBank::initialiseBank() {
 	vector<string>itemsToBeReadToBank;
@@ -513,28 +516,6 @@ void ItemBank::initialiseBank() {
 	return;
 }
 
-void ItemBank::deletePastEvents() {
-	vector<Item*>::iterator iter;
-	bool allPastEventsDeleted = false;
-	time_t currentTime;
-	time(&currentTime);
-
-	while (allPastEventsDeleted == false) {
-		allPastEventsDeleted = true;
-		for(iter = bank.begin(); iter != bank.end(); iter++) {
-			if ((*iter)->getItemType() == "event" && mktime(&((*iter)->getEndDateTime())) <= currentTime) {
-				bank.erase(iter);
-				allPastEventsDeleted = false;
-				break;
-			}
-			else {
-				continue;
-			}
-		}
-	}
-	update();
-}
-
 void ItemBank::resetBank() {
 	bank.clear();
 	for(vector<Item*>::iterator iter = initialBank.begin(); iter != initialBank.end(); iter++) {
@@ -544,6 +525,15 @@ void ItemBank::resetBank() {
 	}
 	update();
 }
+
+bool ItemBank::addToBank(Item* item) {
+	bank.push_back(item);
+	update();
+
+	return checkForConflict(item);
+}
+
+
 
 void ItemBank::update() {
 	vector<string>itemsToBeWrittenToFile;
@@ -566,4 +556,21 @@ void ItemBank::update() {
 	dataStorage->writeToFile(itemsToBeWrittenToFile);
 
 	return;
+}
+
+bool ItemBank::checkForConflict(Item* item) {
+	vector<Item*>::iterator iter;
+	bool isConflicted = false;
+
+	for (iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "event") {
+			if (mktime(&(item->getStartDateTime())) >= mktime(&((*iter)->getStartDateTime())) && mktime(&(item->getStartDateTime())) <= mktime(&((*iter)->getEndDateTime())) ||
+				mktime(&(item->getEndDateTime())) >= mktime(&((*iter)->getStartDateTime())) && mktime(&(item->getEndDateTime())) <= mktime(&((*iter)->getEndDateTime())) ||
+				mktime(&(item->getStartDateTime())) <= mktime(&((*iter)->getStartDateTime())) && mktime(&(item->getEndDateTime())) >= mktime(&((*iter)->getEndDateTime()))) {
+					isConflicted = true;
+			}
+		}
+	}
+
+	return isConflicted;
 }

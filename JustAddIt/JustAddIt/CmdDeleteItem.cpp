@@ -40,7 +40,7 @@ vector<string> CmdDeleteItem::execute() {
 
 //This function calls for Itembank to delete the items in the _itemsToBeDeleted vector
 void CmdDeleteItem::deleteItemsFromBank(void) {
-	ItemBank::deleteFromBank(_itemsToBeDeleted);
+	ItemBank::deleteItems(_itemsToBeDeleted);
 
 	writeToLog(LOG_ITEMS_DELETED);
 }
