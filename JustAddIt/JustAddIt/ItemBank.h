@@ -30,7 +30,8 @@ public:
 	static void deleteItems(vector<Item*> itemPtr);
 	static void deleteDoneItems();
 	static void deleteOverdueDeadlines();
-	static void deletePastEvents();	
+	static void deletePastEvents();
+	static void clearBank();
 
 	static void toggleItemsDone(vector<Item*> itemPtrs);
 

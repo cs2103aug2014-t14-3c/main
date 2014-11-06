@@ -4,7 +4,7 @@
 
 const string CmdEditItem::MESSAGE_EDIT_SUCCESSFUL = "Item is successfully edited!";
 const string CmdEditItem::ERROR_PROGRAM_MALFUNCTION = "An error has occurred!";
-const string CmdEditItem::ERROR_INVALID_FIELD_NUMBER = "Invalid field number! Please enter a valid field number from 1 to 6.";
+const string CmdEditItem::ERROR_INVALID_FIELD_NUMBER = "Invalid field number! Please enter a valid field number 1-6.";
 const string CmdEditItem::ERROR_EMPTY_FIELD = "Empty input! Please enter a valid input.";
 const string CmdEditItem::LOG_OUTPUTCONTROL_UPDATED = "INFO: Output control is updated";
 const string CmdEditItem::LOG_ACTION_LOG_UPDATED = "INFO: Command is stored into ActionLog";
@@ -20,7 +20,7 @@ enum FIELD_TO_BE_EDITED {EDIT_TITLE, EDIT_DESCRIPTION, EDIT_START_TIME, EDIT_END
 CmdEditItem::CmdEditItem(vector<Item*>::iterator bankPtr, int fieldNum, string newFieldInfo) {
 	assert(*bankPtr != nullptr);
 
-	if (fieldNum != 1 || fieldNum != 2 || fieldNum != 3 || fieldNum != 4 || fieldNum != 5 || fieldNum != 6) {
+	if (fieldNum != 1 && fieldNum != 2 && fieldNum != 3 && fieldNum != 4 && fieldNum != 5 && fieldNum != 6) {
 		throw invalid_argument(ERROR_INVALID_FIELD_NUMBER);
 	}
 
@@ -78,32 +78,31 @@ vector<string> CmdEditItem::execute() {
 //This function invokes the corresponding edit functions in the ItemBank class based on the user's input
 void CmdEditItem::editItem() {
 	if(_isEditField){
-<<<<<<< HEAD
 		FIELD_TO_BE_EDITED editField = determineEditField();
 
 		switch (editField) {
 		case EDIT_TITLE: {
-			ItemBank::editItemTitleInBank(_itemAddr, _newFieldInfo);
+			ItemBank::editItemTitle(_itemAddr, _newFieldInfo);
 			break;
 						 }
 		case EDIT_DESCRIPTION: {
-			ItemBank::editItemDescriptionInBank(_itemAddr, _newFieldInfo);
+			ItemBank::editItemDescription(_itemAddr, _newFieldInfo);
 			break;
 							   }
 		case EDIT_START_TIME: {
-			ItemBank::editItemStartDateTimeInBank(_itemAddr, _newTimeInfo);
+			ItemBank::editItemStartDateTime(_itemAddr, _newTimeInfo);
 			break;
 							  }
 		case EDIT_END_TIME: {
-			ItemBank::editItemEndDateTimeInBank(_itemAddr, _newTimeInfo);
+			ItemBank::editItemEndDateTime(_itemAddr, _newTimeInfo);
 			break;
 							}
 		case EDIT_PRIORITY: {
-			ItemBank::editItemPriorityInBank(_itemAddr, _newFieldInfo);
+			ItemBank::editItemPriority(_itemAddr, _newFieldInfo);
 			break;
 							}
 		case EDIT_CATEGORY: {
-			ItemBank::editItemCategoryInBank(_itemAddr, _newFieldInfo);
+			ItemBank::editItemCategory(_itemAddr, _newFieldInfo);
 			break;
 							}
 		case INVALID: {
@@ -114,40 +113,6 @@ void CmdEditItem::editItem() {
 			throw invalid_argument(ERROR_PROGRAM_MALFUNCTION);
 			break;
 				 }
-=======
-		switch (_editFieldNumber) {
-			case 1: {
-				ItemBank::editItemTitle(_itemAddr, _newFieldInfo);
-				break;
-			}
-			case 2: {
-				ItemBank::editItemDescription(_itemAddr, _newFieldInfo);
-				break;
-			}
-			case 3: {
-				ItemBank::editItemStartDateTime(_itemAddr, _newTimeInfo);
-				break;
-			}
-			case 4: {
-				ItemBank::editItemEndDateTime(_itemAddr, _newTimeInfo);
-				break;
-			}
-			//case 5: {
-			//	ItemBank::editItemVenue(_itemPtr, _newFieldInfo);
-			//	break;
-			//}
-			case 5: {
-				ItemBank::editItemPriority(_itemAddr, _newFieldInfo);
-				break;
-			}
-			case 6: {
-				ItemBank::editItemCategory(_itemAddr, _newFieldInfo);
-				break;
-			}
-			default: {
-				outputMessageStorage.push_back("An error has occcurred!");
-			}
->>>>>>> 551ce82ec438c8da07f28ce4169c32055e33867b
 		}
 	}
 

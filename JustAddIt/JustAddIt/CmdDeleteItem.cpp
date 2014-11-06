@@ -45,7 +45,6 @@ void CmdDeleteItem::deleteItemsFromBank(void) {
 	writeToLog(LOG_ITEMS_DELETED);
 }
 
-<<<<<<< HEAD
 //This function first retrieve the base screen information from OutputControl, constructs it and stores it
 //inside baseScreenToBeDisplayed. baseScreenToBeDiplayed is then returned.
 vector<string> CmdDeleteItem::returnToBaseScreen(void) {
@@ -63,19 +62,6 @@ void CmdDeleteItem::storeSuccessMessage() {
 	outputMessageStorage.push_back(MESSAGE_DELETION_SUCCESSFUL);
 
 	writeToLog(LOG_SUCCESS_MESSAGE_STORED);
-=======
-//This function first retrieve the base screen information from OutputControl, contructs it and stores it
-//inside screen. screenToBeDiplayed is then returned.
-vector<string> CmdDeleteItem::returnToBaseScreen(void) {
-	vector<string>screen;
-
-	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
-	screen = cmdBase->execute();
-
-	writeToLog(LOG_BASE_SCREEN_STORED);
-
-	return screen;
->>>>>>> 551ce82ec438c8da07f28ce4169c32055e33867b
 }
 
 //This function updates the ActionLog which will be used during undo/redo functions
