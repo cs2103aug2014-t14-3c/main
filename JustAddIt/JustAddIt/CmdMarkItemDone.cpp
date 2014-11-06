@@ -26,7 +26,7 @@ CmdMarkItemDone::~CmdMarkItemDone(void) {
 //display.
 vector<string> CmdMarkItemDone::execute() {
 
-	markItemsInBank();
+	toggleItemsDone();
 
 	outputMessageStorage.clear();
 	outputMessageStorage = returnToBaseScreen();
@@ -40,8 +40,8 @@ vector<string> CmdMarkItemDone::execute() {
 }
 
 //This function calls for Itembank to mark the items in the _itemsToBeMarked vector
-void CmdMarkItemDone::markItemsInBank(void) {
-	ItemBank::markItemsInBank(_itemsToBeMarked);
+void CmdMarkItemDone::toggleItemsDone(void) {
+	ItemBank::toggleItemsDone(_itemsToBeMarked);
 
 	writeToLog(LOG_ITEMS_MARKED);
 }

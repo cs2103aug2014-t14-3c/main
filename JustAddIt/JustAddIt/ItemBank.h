@@ -11,6 +11,9 @@ private:
 
 	static void update();
 	static bool checkForConflict(Item* item);
+	static bool isEventPast(Item* itemPtr);
+	static bool isTimePastCurrent(tm time);
+	static void toggleItemDone(Item* itemPtr);
 
 public:
 
@@ -20,7 +23,8 @@ public:
 	static void deleteAllOverdueDeadlines();
 	static void deletePastEvents();	
 
-	static void markItemsInBank(vector<Item*> itemPtr);
+	static void toggleItemsDone(vector<Item*> itemPtrs);
+
 	
 	static void editItemTitleInBank(Item* item, string newTitle);
 	static void editItemDescriptionInBank(Item* item, string newDescription);
@@ -40,6 +44,7 @@ public:
 	static vector<Item*> getTasks();
 	static vector<Item*> getEvents();
 	static vector<Item*> getAllEvents();
+	static vector<Item*> getPastEvents();
 	static vector<Item*> getDeadlines();
 	static vector<Item*> getAllDeadlines(); 
 	static vector<Item*> getOverdueDeadlines();
