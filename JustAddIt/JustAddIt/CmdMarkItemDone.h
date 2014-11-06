@@ -22,7 +22,7 @@ public:
 	CmdMarkItemDone(vector<Item*> itemsToBeMarked);
 	~CmdMarkItemDone(void);
 	vector<string> CmdMarkItemDone::execute();
-	void markItemsInBank(void);
+	void toggleItemsDone(void);
 	vector<string> returnToBaseScreen(void);
 	void storeCommandIntoActionLog(void);
 	void writeToLog (string logEntry);

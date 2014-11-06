@@ -1,18 +1,126 @@
-hey
+refactor ActionLog in JustAddIt
 -
 -1
 -1
 -
 Low
--
+cs2103
 0
 task
-hihihihi
-hmmmm whats up
+refactor CmdInitialiseBank in JustAddIt
+-
 -1
 -1
 -
 Low
-ads
+cs2103
 0
 task
+refactor CmdRedo in JustAddIt
+-
+-1
+-1
+-
+Low
+cs2103
+0
+task
+write ie2101 project report abstract
+-
+-1
+-1
+-
+Low
+ie2101
+0
+task
+refactor CmdUndo in JustAddIt
+-
+-1
+-1
+-
+Low
+cs2103
+0
+task
+refactor ItemBank class in JustAddIt
+-
+-1
+-1
+-
+Low
+cs2103
+0
+task
+ie2101 mock presentation
+-
+1415307600
+1415311200
+-
+Low
+ie2101
+0
+event
+cs2103 project meeting
+-
+1415311200
+1415314800
+-
+Low
+cs2103
+0
+event
+ie2101 project meeting
+-
+1415152800
+1415156400
+-
+Low
+ie2101
+0
+event
+prepare cs1010e lesson
+-
+1415088000
+1415174340
+-
+Low
+cs1010e
+0
+deadline
+ssu2003 presentation slides
+-
+-1
+-1
+-
+Low
+ssu2003
+0
+task
+ie2110 quiz
+at ea
+1415127600
+1415131200
+-
+Low
+#ie2110
+1
+event
+ie2101 quiz
+at lt50 
+1415001600
+1415087940
+-
+High
+ie2101
+1
+event
+ie2110 assn 8
+-
+1414569600
+1415260740
+-
+Low
+ie2110
+0
+deadline

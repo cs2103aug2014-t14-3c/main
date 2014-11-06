@@ -32,62 +32,61 @@ void ItemBank::deleteAllDoneItems() {
 }
 
 void ItemBank::deleteAllOverdueDeadlines() {
-	vector<Item*>::iterator iter;
-	bool allOverdueDeadlinesDeleted = false;
-	time_t currentTime;
-	time(&currentTime);
+	vector<Item*> overdueItems;
 
-	while (allOverdueDeadlinesDeleted == false) {
-		allOverdueDeadlinesDeleted = true;
-		for(iter = bank.begin(); iter != bank.end(); iter++) {
-			if ((*iter)->getItemType() == "deadline" && mktime(&((*iter)->getEndDateTime())) <= currentTime) {
-				bank.erase(iter);
-				allOverdueDeadlinesDeleted = false;
-				break;
-			}
-			else {
-				continue;
-			}
-		}
-	}
+	overdueItems = getOverdueDeadlines();
+
+	deleteItems(overdueItems);
+	
 	update();
 }
 
 void ItemBank::deletePastEvents() {
-	vector<Item*>::iterator iter;
-	bool allPastEventsDeleted = false;
-	time_t currentTime;
-	time(&currentTime);
+	vector<Item*> pastEvents;
 
-	while (allPastEventsDeleted == false) {
-		allPastEventsDeleted = true;
-		for(iter = bank.begin(); iter != bank.end(); iter++) {
-			if ((*iter)->getItemType() == "event" && mktime(&((*iter)->getEndDateTime())) <= currentTime) {
-				bank.erase(iter);
-				allPastEventsDeleted = false;
-				break;
-			}
-			else {
-				continue;
-			}
+	pastEvents = getPastEvents();
+
+	deleteItems(pastEvents);
+
+	update();
+}
+
+vector<Item*> ItemBank::getPastEvents() {
+
+	vector<Item*> pastEvents;
+
+	for(vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if(isEventPast(*iter)) {
+			pastEvents.push_back(*iter);
 		}
 	}
-	update();
+	
+	return pastEvents;
 }
 
+bool ItemBank::isEventPast(Item* itemPtr) {
+	return itemPtr->getItemType() == "events" && isTimePastCurrent(itemPtr->getEndDateTime());
+}
 
-void ItemBank::markItemsInBank(vector<Item*> itemPtr) {
+bool ItemBank::isTimePastCurrent(tm time) {
+	time_t currentTime;
+	std::time(&currentTime);
 
-	vector<Item*>::iterator myIter;
-	myIter = itemPtr.begin();
-	while(myIter!=itemPtr.end()){
-		vector<Item*>::iterator itemInBank = findIter(*myIter);
-		(*itemInBank)->toggleDone();
-		myIter++;
+	return mktime(&time) <= currentTime;
+}
+
+void ItemBank::toggleItemsDone(vector<Item*> itemPtrs) {
+	for(vector<Item*>::iterator iter = itemPtrs.begin(); iter != itemPtrs.end(); iter++) {
+		toggleItemDone(*iter);
 	}
+	
 	update();
 }
 
+void ItemBank::toggleItemDone(Item* itemPtr) {
+		vector<Item*>::iterator itemInBank = findIter(itemPtr);
+		(*itemInBank)->toggleDone();
+}
 
 void ItemBank::editItemTitleInBank(Item* item, string newTitle) {
 	vector<Item*>::iterator itemPtr = findIter(item);

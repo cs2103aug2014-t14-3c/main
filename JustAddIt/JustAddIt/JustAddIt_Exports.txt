@@ -1,19 +1,44 @@
 		    ____________________________________
 		    |	   			       |
-		    |	    Welcome to JustAddIt       |
+		    |	          JustAddIt            |
 		    |__________________________________|
  
-What's going on this week?
-1. hey
-2. hihihihi
+To-do list
  
-What do you want to do?
+==========
+All Events
+==========
+1. ie2101 mock presentation from Friday 07 Nov 2014 05:00AM to Friday 07 Nov 2014 06:00AM
+2. cs2103 project meeting from Friday 07 Nov 2014 06:00AM to Friday 07 Nov 2014 07:00AM
+3. ie2101 project meeting from Wednesday 05 Nov 2014 10:00AM to Wednesday 05 Nov 2014 11:00AM
+4. [DONE] ie2110 quiz from Wednesday 05 Nov 2014 03:00AM to Wednesday 05 Nov 2014 04:00AM
+5. [DONE] ie2101 quiz from Monday 03 Nov 2014 04:00PM to Tuesday 04 Nov 2014 03:59PM
  
-Universal commands:
-add {task details}, search {keyword}, export, undo, redo, home, exit
+=============
+All Deadlines
+=============
+6. prepare cs1010e lesson by Wednesday 05 Nov 2014 03:59PM
+7. ie2110 assn 8 by Thursday 06 Nov 2014 03:59PM
+ 
+=====
+Tasks
+=====
+8. refactor ActionLog in JustAddIt
+9. refactor CmdInitialiseBank in JustAddIt
+10. refactor CmdRedo in JustAddIt
+11. write ie2101 project report abstract
+12. refactor CmdUndo in JustAddIt
+13. refactor ItemBank class in JustAddIt
+14. ssu2003 presentation slides
+ 
 ================================================================================
  
-[t] View To-do list
-[o] Check for overdue task
+[e #] Edit {Item number}
+[m #] Mark {Item number}
+[d #] Delete {Item number}
+[c] Clear all completed items
+ 
+Tip: To perform multiple deletes/marks, leave a space between each Item number.
+For example: d 1 2 5
  
 ================================================================================
