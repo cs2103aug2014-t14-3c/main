@@ -6,7 +6,7 @@ const string CmdMarkItemDone::MESSAGE_MARK_SUCCESSFUL = "Item(s) successfully ma
 const string CmdMarkItemDone::LOG_ITEMS_MARKED = "INFO: Items marked in ItemBank::bank";
 const string CmdMarkItemDone::LOG_BASE_SCREEN_STORED = "INFO: outputMessageStorage stores base screen";
 const string CmdMarkItemDone::LOG_SUCCESS_MESSAGE_STORED = "INfO: Success message is stored into outputMessageStorage";
-const string CmdMarkItemDone::LOG_COMMAND_STORED_IN_ACTION_LOG = "INFO: Command is stored into ActionLog";
+const string CmdMarkItemDone::LOG_ACTION_LOG_UPDATED = "INFO: Command is stored into ActionLog";
 const string CmdMarkItemDone::ERROR_EMPTY_VECTOR = "Please choose one or more Items to mark!";
 const string CmdMarkItemDone::TEXT_FILE_NAME = "CmdMarkItemDone_Log.txt";
 
@@ -31,8 +31,7 @@ vector<string> CmdMarkItemDone::execute() {
 	outputMessageStorage.clear();
 	outputMessageStorage = returnToBaseScreen();
 
-	outputMessageStorage.push_back(MESSAGE_MARK_SUCCESSFUL);
-	writeToLog(LOG_SUCCESS_MESSAGE_STORED);
+	storeSuccessMessage();
 
 	storeCommandIntoActionLog();
 
@@ -59,11 +58,17 @@ vector<string> CmdMarkItemDone::returnToBaseScreen(void) {
 	return screenToBeDisplayed;
 }
 
+void CmdMarkItemDone::storeSuccessMessage(void) {
+	outputMessageStorage.push_back(MESSAGE_MARK_SUCCESSFUL);
+
+	writeToLog(LOG_SUCCESS_MESSAGE_STORED);
+}
+
 //This function updates the ActionLog which will be used during undo/redo functions
 void CmdMarkItemDone::storeCommandIntoActionLog(void) {
 	ActionLog::addCommand(this);
 
-	writeToLog(LOG_COMMAND_STORED_IN_ACTION_LOG);
+	writeToLog(LOG_ACTION_LOG_UPDATED);
 }
 
 void CmdMarkItemDone::writeToLog (string logEntry) {
