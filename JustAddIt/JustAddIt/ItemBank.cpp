@@ -334,6 +334,46 @@ vector<Item*> ItemBank::searchEvents(string keyword) {
 	return eventsToBeDisplayed;
 }
 
+bool ItemBank::isFoundForSearchingEvents(string keyword) {
+	vector<Item*> eventsToBeDisplayed;
+	bool isFound = false;
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "event") {
+
+			if (searchKeywordInItemAttribute((*iter)->getTitle(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getDescription(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getStartDateInString(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getEndDateInString(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getVenue(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getCategory(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+
+			if (isFound == true) {
+				eventsToBeDisplayed.push_back(*iter);
+			}
+
+			isFound = false;
+		}
+	}
+
+	return isFound;
+}
+
 vector<Item*> ItemBank::searchDeadlines(string keyword) {
 	vector<Item*> deadlinesToBeDisplayed;
 	bool isFound = false;
@@ -370,6 +410,42 @@ vector<Item*> ItemBank::searchDeadlines(string keyword) {
 	return deadlinesToBeDisplayed;
 }
 
+bool ItemBank::isFoundForSearchingDeadlines(string keyword) {
+	vector<Item*> deadlinesToBeDisplayed;
+	bool isFound = false;
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "deadline") {
+			if (searchKeywordInItemAttribute((*iter)->getTitle(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getDescription(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getEndDateInString(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getVenue(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getCategory(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+
+			if (isFound == true) {
+				deadlinesToBeDisplayed.push_back(*iter);
+			}
+
+			isFound = false;
+		}
+	}
+
+	return isFound;
+}
+
 vector<Item*> ItemBank::searchTasks(string keyword) {
 	vector<Item*> tasksToBeDisplayed;
 	bool isFound = false;
@@ -402,6 +478,40 @@ vector<Item*> ItemBank::searchTasks(string keyword) {
 	}
 
 	return tasksToBeDisplayed;
+}
+
+bool ItemBank::isFoundForSearchingTasks(string keyword) {
+	vector<Item*> tasksToBeDisplayed;
+	bool isFound = false;
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->getItemType() == "task") {
+
+			if (searchKeywordInItemAttribute((*iter)->getTitle(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getDescription(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getVenue(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getCategory(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+			if (searchKeywordInItemAttribute((*iter)->getPriorityInString(), (keyword.substr(1))) == true) {
+				isFound = true;
+			}
+
+			if (isFound == true) {
+				tasksToBeDisplayed.push_back(*iter);
+			}
+
+			isFound = false;
+		}
+	}
+
+	return isFound;
 }
 
 int ItemBank::getBankSize() {
