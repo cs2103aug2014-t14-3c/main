@@ -53,7 +53,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\Raymond\Documents\main\JustAddIt\JustAddIt;D:\Github\main\JustAddIt\JustAddIt;C:\Users\jumpinjelly\Documents\JAI\main\JustAddIt\JustAddIt;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\J\Desktop\My Files\Poly\Year3\Exchange\5_CS2103\JustAddIt\main\JustAddIt\JustAddIt;C:\Users\Raymond\Documents\main\JustAddIt\JustAddIt;D:\Github\main\JustAddIt\JustAddIt;C:\Users\jumpinjelly\Documents\JAI\main\JustAddIt\JustAddIt;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
     </ClCompile>
