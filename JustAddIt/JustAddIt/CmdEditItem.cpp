@@ -4,7 +4,7 @@
 
 const string CmdEditItem::MESSAGE_EDIT_SUCCESSFUL = "Item is successfully edited!";
 const string CmdEditItem::ERROR_PROGRAM_MALFUNCTION = "An error has occurred!";
-const string CmdEditItem::ERROR_INVALID_FIELD_NUMBER = "Invalid field number! Please enter a valid field number 1-6.";
+const string CmdEditItem::ERROR_INVALID_FIELD_NUMBER = "Invalid field number! Please enter a valid field number 1 - 6.";
 const string CmdEditItem::ERROR_EMPTY_FIELD = "Empty input! Please enter a valid input.";
 const string CmdEditItem::LOG_OUTPUTCONTROL_UPDATED = "INFO: Output control is updated";
 const string CmdEditItem::LOG_ACTION_LOG_UPDATED = "INFO: Command is stored into ActionLog";
