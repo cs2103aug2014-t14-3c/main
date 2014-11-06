@@ -78,6 +78,7 @@ vector<string> CmdEditItem::execute() {
 //This function invokes the corresponding edit functions in the ItemBank class based on the user's input
 void CmdEditItem::editItem() {
 	if(_isEditField){
+<<<<<<< HEAD
 		FIELD_TO_BE_EDITED editField = determineEditField();
 
 		switch (editField) {
@@ -113,6 +114,40 @@ void CmdEditItem::editItem() {
 			throw invalid_argument(ERROR_PROGRAM_MALFUNCTION);
 			break;
 				 }
+=======
+		switch (_editFieldNumber) {
+			case 1: {
+				ItemBank::editItemTitle(_itemAddr, _newFieldInfo);
+				break;
+			}
+			case 2: {
+				ItemBank::editItemDescription(_itemAddr, _newFieldInfo);
+				break;
+			}
+			case 3: {
+				ItemBank::editItemStartDateTime(_itemAddr, _newTimeInfo);
+				break;
+			}
+			case 4: {
+				ItemBank::editItemEndDateTime(_itemAddr, _newTimeInfo);
+				break;
+			}
+			//case 5: {
+			//	ItemBank::editItemVenue(_itemPtr, _newFieldInfo);
+			//	break;
+			//}
+			case 5: {
+				ItemBank::editItemPriority(_itemAddr, _newFieldInfo);
+				break;
+			}
+			case 6: {
+				ItemBank::editItemCategory(_itemAddr, _newFieldInfo);
+				break;
+			}
+			default: {
+				outputMessageStorage.push_back("An error has occcurred!");
+			}
+>>>>>>> 551ce82ec438c8da07f28ce4169c32055e33867b
 		}
 	}
 

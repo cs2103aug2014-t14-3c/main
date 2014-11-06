@@ -12,7 +12,7 @@ CmdClearAllOverdue::~CmdClearAllOverdue(void)
 }
 
 vector<string> CmdClearAllOverdue::execute() {
-	ItemBank::deleteAllOverdueDeadlines();
+	ItemBank::deleteOverdueDeadlines();
 
 
 	//returns to base screen

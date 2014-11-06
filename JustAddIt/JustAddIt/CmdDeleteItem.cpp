@@ -10,10 +10,10 @@ const string CmdDeleteItem::LOG_ACTION_LOG_UPDATED = "INFO: Command is stored in
 const string CmdDeleteItem::ERROR_EMPTY_VECTOR = "Please choose one or more Items to delete!";
 const string CmdDeleteItem::TEXT_FILE_NAME = "CmdDeleteItem_Log.txt";
 
-CmdDeleteItem::CmdDeleteItem(vector<Item*> itemsToBeDeleted) {
-	_itemsToBeDeleted = itemsToBeDeleted;
+CmdDeleteItem::CmdDeleteItem(vector<Item*> itemsToDelete) {
+	_itemsToDelete = itemsToDelete;
 
-	if (_itemsToBeDeleted.size() == 0) {
+	if (_itemsToDelete.size() == 0) {
 		throw invalid_argument(ERROR_EMPTY_VECTOR);
 	}
 }
@@ -38,13 +38,14 @@ vector<string> CmdDeleteItem::execute() {
 	return outputMessageStorage;
 }
 
-//This function calls for Itembank to delete the items in the _itemsToBeDeleted vector
+//This function calls for Itembank to delete the items in the _itemsToDelete vector
 void CmdDeleteItem::deleteItemsFromBank(void) {
-	ItemBank::deleteItems(_itemsToBeDeleted);
+	ItemBank::deleteItems(_itemsToDelete);
 
 	writeToLog(LOG_ITEMS_DELETED);
 }
 
+<<<<<<< HEAD
 //This function first retrieve the base screen information from OutputControl, constructs it and stores it
 //inside baseScreenToBeDisplayed. baseScreenToBeDiplayed is then returned.
 vector<string> CmdDeleteItem::returnToBaseScreen(void) {
@@ -62,6 +63,19 @@ void CmdDeleteItem::storeSuccessMessage() {
 	outputMessageStorage.push_back(MESSAGE_DELETION_SUCCESSFUL);
 
 	writeToLog(LOG_SUCCESS_MESSAGE_STORED);
+=======
+//This function first retrieve the base screen information from OutputControl, contructs it and stores it
+//inside screen. screenToBeDiplayed is then returned.
+vector<string> CmdDeleteItem::returnToBaseScreen(void) {
+	vector<string>screen;
+
+	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
+	screen = cmdBase->execute();
+
+	writeToLog(LOG_BASE_SCREEN_STORED);
+
+	return screen;
+>>>>>>> 551ce82ec438c8da07f28ce4169c32055e33867b
 }
 
 //This function updates the ActionLog which will be used during undo/redo functions
