@@ -1,16 +1,13 @@
-<div align = "center" style = "color: red;">                    ____________________________________<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Welcome to JustAddIt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |____________________________________|</div>
+<div style = "color: red;">                    ____________________________________<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Welcome to JustAddIt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |____________________________________|</div>
 What's going on this week?
-1. hello
-2. task nothing
-3. hihi
-4. 2
-5. 3
-6. task
-7. event tomorrow
-8. hello
-9. hello
-10. helloooo
-11. hello
+1. sort results
+2. refactor ActionLog in JustAddIt
+3. refactor CmdInitialiseBank in JustAddIt
+4. refactor CmdRedo in JustAddIt
+5. write ie2101 project report abstract
+6. refactor CmdUndo in JustAddIt
+7. refactor ItemBank class in JustAddIt
+8. ssu2003 presentation slides
  
 What do you want to do?
  

@@ -10,8 +10,8 @@ GUI::GUI(QWidget *parent)
 	this->setWindowFlags(Qt::FramelessWindowHint);
 	this->resize(700, 500);
 
-	ui.lineEdit->setStyleSheet("QLineEdit { border: 1px solid black; border-radius: 5px; background-color: white; color: black; }");
-	ui.textEdit->setStyleSheet("QTextEdit { border: 1px solid black; border-radius: 5px; background-color: white; color: black; }");
+	ui.lineEdit->setStyleSheet("QLineEdit { border: 1px solid white; border-radius: 5px; background-color: black; color: white; }");
+	ui.textEdit->setStyleSheet("QTextEdit { border: 1px solid white; border-radius: 5px; background-color: black; color: white; }");
 
 	ui.textEdit->setReadOnly(true);
 
