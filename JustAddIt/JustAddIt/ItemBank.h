@@ -10,44 +10,53 @@ private:
 	static vector<Item*> bank;
 
 	static void update();
-	static bool checkForConflict(Item* item);
+	static bool checkForConflict(Item* itemPtr);
+	static bool searchKeyword(string itemAttribute, string keyword);
+
 	static bool isEventPast(Item* itemPtr);
-	static bool isTimePastCurrent(tm time);
+	static bool isOverdue(Item* itemPtr);
+	static bool isTimePast(tm time);
 	static void toggleItemDone(Item* itemPtr);
+	static void deleteItem(Item* itemPtr);
+	static vector<Item*> getDoneItems();
+
+	static bool isHighPriority(string priority);
+	static bool isMedPriority(string priority);
+	static bool isLowPriority(string priority);
 
 public:
 
 	
 	static void deleteItems(vector<Item*> itemPtr);
-	static void deleteAllDoneItems();
-	static void deleteAllOverdueDeadlines();
+	static void deleteDoneItems();
+	static void deleteOverdueDeadlines();
 	static void deletePastEvents();	
 
 	static void toggleItemsDone(vector<Item*> itemPtrs);
 
 	
-	static void editItemTitleInBank(Item* item, string newTitle);
-	static void editItemDescriptionInBank(Item* item, string newDescription);
-	static void editItemStartDateTimeInBank(Item* item, tm newStartDateTime);
-	static void editItemEndDateTimeInBank(Item* item, tm newEndDateTime);
-	static void editItemVenueInBank(Item* item, string newVenue);
-	static void editItemCategoryInBank(Item* item, string newCategory);
-	static void editItemPriorityInBank(Item* item, string newPriority);
+	static void editItemTitle(Item* item, string newTitle);
+	static void editItemDescription(Item* item, string newDescription);
+	static void editItemStartDateTime(Item* item, tm newStartDateTime);
+	static void editItemEndDateTime(Item* item, tm newEndDateTime);
+	static void editItemVenue(Item* item, string newVenue);
+	static void editItemCategory(Item* item, string newCategory);
+	static void editItemPriority(Item* item, string newPriority);
 
-	static bool searchKeywordInItemAttribute(string itemAttribute, string keyword);
 	static vector<Item*> searchEvents(string keyword);
 	static vector<Item*> searchDeadlines(string keyword);
 	static vector<Item*> searchTasks(string keyword);
 	
 	static vector<Item*>::iterator findIter(Item* itemPtr);
 
-	static vector<Item*> getTasks();
-	static vector<Item*> getEvents();
+	static vector<Item*> getAllTasks();
+	static vector<Item*> getEventsThisWeek();
 	static vector<Item*> getAllEvents();
 	static vector<Item*> getPastEvents();
-	static vector<Item*> getDeadlines();
+	static vector<Item*> getDeadlinesThisWeek();
 	static vector<Item*> getAllDeadlines(); 
 	static vector<Item*> getOverdueDeadlines();
+
 	static int getBankSize();
 	static int getNumberOfMarkedItems();
 

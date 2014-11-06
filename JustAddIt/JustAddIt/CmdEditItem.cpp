@@ -33,31 +33,31 @@ vector<string> CmdEditItem::execute() {
 	if(_isEditField){
 		switch (_editFieldNumber) {
 			case 1: {
-				ItemBank::editItemTitleInBank(_itemAddr, _newFieldInfo);
+				ItemBank::editItemTitle(_itemAddr, _newFieldInfo);
 				break;
 			}
 			case 2: {
-				ItemBank::editItemDescriptionInBank(_itemAddr, _newFieldInfo);
+				ItemBank::editItemDescription(_itemAddr, _newFieldInfo);
 				break;
 			}
 			case 3: {
-				ItemBank::editItemStartDateTimeInBank(_itemAddr, _newTimeInfo);
+				ItemBank::editItemStartDateTime(_itemAddr, _newTimeInfo);
 				break;
 			}
 			case 4: {
-				ItemBank::editItemEndDateTimeInBank(_itemAddr, _newTimeInfo);
+				ItemBank::editItemEndDateTime(_itemAddr, _newTimeInfo);
 				break;
 			}
 			//case 5: {
-			//	ItemBank::editItemVenueInBank(_itemPtr, _newFieldInfo);
+			//	ItemBank::editItemVenue(_itemPtr, _newFieldInfo);
 			//	break;
 			//}
 			case 5: {
-				ItemBank::editItemPriorityInBank(_itemAddr, _newFieldInfo);
+				ItemBank::editItemPriority(_itemAddr, _newFieldInfo);
 				break;
 			}
 			case 6: {
-				ItemBank::editItemCategoryInBank(_itemAddr, _newFieldInfo);
+				ItemBank::editItemCategory(_itemAddr, _newFieldInfo);
 				break;
 			}
 			default: {

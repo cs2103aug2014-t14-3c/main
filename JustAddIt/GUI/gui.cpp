@@ -15,6 +15,8 @@ GUI::GUI(QWidget *parent)
 
 	ui.textEdit->setReadOnly(true);
 
+	ui.lineEdit->setFocus();
+
 	initProg();
 }
 

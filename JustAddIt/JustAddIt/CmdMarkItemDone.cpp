@@ -47,16 +47,16 @@ void CmdMarkItemDone::toggleItemsDone(void) {
 }
 
 //This function first retrieve the base screen information from OutputControl, contructs it and stores it
-//inside screenToBeDisplayed. screenToBeDiplayed is then returned.
+//inside screen. screenToBeDiplayed is then returned.
 vector<string> CmdMarkItemDone::returnToBaseScreen(void) {
-	vector<string>screenToBeDisplayed;
+	vector<string>screen;
 
 	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
-	screenToBeDisplayed = cmdBase->execute();
+	screen = cmdBase->execute();
 
 	writeToLog(LOG_BASE_SCREEN_STORED);
 
-	return screenToBeDisplayed;
+	return screen;
 }
 
 //This function updates the ActionLog which will be used during undo/redo functions

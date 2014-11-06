@@ -15,17 +15,17 @@ CmdShowOverdueDeadlines::~CmdShowOverdueDeadlines(void)
 }
 
 vector<string> CmdShowOverdueDeadlines::execute() {
-	vector<Item*>itemsToBeDisplayed;
+	vector<Item*>items;
 
-	itemsToBeDisplayed = ItemBank::getOverdueDeadlines();
+	items = ItemBank::getOverdueDeadlines();
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();
 	outputMessageStorage = displayScreenConstructor->clearScreen();
-	outputMessageStorage = displayScreenConstructor->constructOverdueScreen(itemsToBeDisplayed);
+	outputMessageStorage = displayScreenConstructor->constructOverdueScreen(items);
 	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::OVERDUE_TASKS_SCREEN);
 	OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::OVERDUE_TASKS_SCREEN);
 	//update outputcontrol with currently displayed
-	OutputControl::setCurrentDisplayedItemList(itemsToBeDisplayed);
+	OutputControl::setCurrentDisplayedItemList(items);
 	return outputMessageStorage;
 }

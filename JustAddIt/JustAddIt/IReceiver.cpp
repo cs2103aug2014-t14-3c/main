@@ -10,42 +10,21 @@ vector<string> IReceiver::initialise() {
 }
 
 vector<string> IReceiver::receive(string userCommand) { 
-	//Initialise itembank
-	//Output home screen
-	//Prompt for command
 
-//	string userCommand = "";
-//	vector<string>::iterator iter;
+	try{
+		outputMessageStorage = Executor::execute(userCommand);
+	}
+	catch(exception& e){
+			
+		ofstream file;
+		file.open("error.log");
+		file << "exception occurred: \"" <<  e.what() << "\" \n command entered: \"" << userCommand << "\"" << endl;
+		file.close();
 
-//	outputMessageStorage = Executor::initialise();
+		string errorMessage = "error: ";
+		errorMessage += e.what();
+		outputMessageStorage.push_back(errorMessage);
+	}
 
-//	for (iter = outputMessageStorage.begin(); iter != outputMessageStorage.end(); iter++) {
-//		cout << *iter << endl;
-//	}
-
-//	cout << "command: ";
-//	getline(cin, userCommand);
-
-//	while (userCommand != "exit") {
-		try{ // TODO: Move this to GUI
-			outputMessageStorage = Executor::execute(userCommand);
-
-//			for (iter = outputMessageStorage.begin(); iter != outputMessageStorage.end(); iter++) {
-//				cout << *iter << endl;
-//				}
-			//for export, keep previous oms info
-			//outputMessageStorage.clear(); 
-			}
-		catch(exception& e){
-			cerr << "error: " << e.what() << endl;
-			ofstream file;
-			file.open("error.log");
-			file << "exception occurred: " << userCommand << endl;
-			file.close();
-		}
-
-//		cout << "command: ";
-//		getline(cin, userCommand); 
-//	};
 	return outputMessageStorage;
 }
