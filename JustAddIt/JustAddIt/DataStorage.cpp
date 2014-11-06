@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DataStorage.h"
 
-string fileName = "JustAddIt_ItemBank.txt";
+string fileName = "../JustAddIt/JustAddIt_ItemBank.txt";
 DataStorage* DataStorage::dataStorage = NULL;
 
 DataStorage::DataStorage(void) {
@@ -46,6 +46,7 @@ vector<string> DataStorage::readToBank() {
 		continue;
 		}
 	}
+
 	mytextfile.close();
 	return itemsToBeReadToBank;
 }
