@@ -1,3 +1,4 @@
+//@author A0108397W
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include "OutputControl.h"
