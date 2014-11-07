@@ -1,3 +1,4 @@
+//@LokeJunJie A0110770U
 #include "stdafx.h"
 #include "Parser.h"
 #define MONTHS_IN_YEAR 12
@@ -23,7 +24,9 @@ Parser::Parser(void)
 Parser::~Parser(void)
 {
 }
-
+//This function inteprets a string user command input and
+//returns the corresponding Command subclass object with
+//required information embedded inside.
 Command* Parser::stringToCommand(string userCommand) {
 	
 
@@ -39,14 +42,14 @@ Command* Parser::stringToCommand(string userCommand) {
 	
 	switch (commandAction) {
 		case ADD: {
+					
+			Item* myItem = new Item;
 			//Pass remaining stream as details
-			
-			Item* item1 = new Item;
 			string stringDetails;
 			getline(commandStream, stringDetails);
-			embedDetailsInItem(item1, stringDetails);
+			embedDetailsInItem(myItem, stringDetails);
 
-			CmdAddItem* myAdd = new CmdAddItem(item1);
+			CmdAddItem* myAdd = new CmdAddItem(myItem);
 			return myAdd;
 
 			break;
@@ -70,7 +73,7 @@ Command* Parser::stringToCommand(string userCommand) {
 			int itemNum;
 			commandStream >> itemNum;
 			if(itemNum <= 0 || itemNum > OutputControl::getNumberOfDisplayedItems()){
-				throw invalid_argument("Invalid item number! Please enter a valid number.");
+				throw invalid_argument("Invalid item number! Please enter a valid number from the menu.");
 			}
 			CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList()+itemNum-1);
 			return myEdit;
@@ -180,7 +183,9 @@ Command* Parser::stringToCommand(string userCommand) {
 	}
 
 }
-
+//This function detects all possible details in the input string
+//such as title, date, time, category, priority, description.
+//It sets these values into the input Item*.
 void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
 
 	vector<string> vectorOfStrings;
@@ -228,7 +233,9 @@ void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
 }
 
 
-
+//This function detects the title in the input string
+//and sets its value into the input Item*.
+//The title found is then removed from the input string.
 void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 	
 
@@ -281,10 +288,17 @@ void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 	//for the leftovers
 	stringDetails = convertVectorToString(titleEndIter, vectorOfStrings.end());
 	titleToSet = convertVectorToString(titleStartIter, titleEndIter);
+	if(titleToSet==""){
+		throw invalid_argument("No title detected! Try something like\"add event title at 2pm\"");
+	}
 	myItem->setTitle(titleToSet);
 	//TODO:Exception if no title (first word is a keyword)
 	return;
 }
+
+//This function detects the presence of the deadline keyword 
+//in the input string. It returns 'true' if found and 'false' otherwise.
+//If the keyword is found, it is removed from the input string.
 bool Parser::detectDeadlineKeywordAndTrim(string &stringDetails){
 	vector<string> vectorOfStrings;
 	vector<string>::iterator deadlineWordIter;
@@ -301,6 +315,11 @@ bool Parser::detectDeadlineKeywordAndTrim(string &stringDetails){
 	stringDetails = convertVectorToString(vectorOfStrings.begin(), vectorOfStrings.end());
 	return isFound;
 }
+
+//This function detects the time in the input string
+//and sets its value into the input Item*.
+//If time is detected, this function returns 'true'.
+//Otherwise, it returns false.
 bool Parser::detectTimeAndEmbedIsOk(Item* myItem, string stringDetails, bool isDeadline){
 	istringstream streamDetails(stringDetails);
 	string startTime="";
@@ -347,6 +366,11 @@ bool Parser::detectTimeAndEmbedIsOk(Item* myItem, string stringDetails, bool isD
 
 	return startFound || endFound;
 }
+//This function detects the month date in the input string
+//and sets its value into the input Item*.
+//The month date found is then removed from the input string.
+//If a month date is detected, this function returns 'true'.
+//Otherwise, it returns false.
 bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool isDeadline){
 	istringstream streamDetails(stringDetails);
 	string currentWord="";
@@ -418,7 +442,7 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 				endDateFound = endMonthFound + ' ' + endDayFound;
 				endExists = true;
 			}
-			//TODO:: exception for only month found
+			//if only month is found, set a default day
 			else{
 				endDayFound = DEFAULT_MONTH_START;
 				endDateFound = endMonthFound;
@@ -453,6 +477,12 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 	
 
 }
+
+//This function detects the day of the week in the input string
+//and sets its value into the input Item*.
+//The day of the week found is then removed from the input string.
+//If a day of the week is detected, this function returns 'true'.
+//Otherwise, it returns false.
 bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool isDeadline){
 	
 	
@@ -523,6 +553,10 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 
 
 }
+
+//This function detects the category in the input string
+//and sets its value into the input Item*.
+//The cateogry found is then removed from the input string.
 void Parser::detectCategoryAndEmbed(Item* myItem, string &stringDetails){
 
 	string::iterator myIter;
@@ -545,6 +579,10 @@ void Parser::detectCategoryAndEmbed(Item* myItem, string &stringDetails){
 
 	return;
 }
+
+//This function detects the priority in the input string
+//and sets its value into the input Item*.
+//The priority found is then removed from the input string.
 void Parser::detectPriorityAndEmbed(Item* myItem, string &stringDetails){
 	size_t position;
 	int count = 0;
@@ -572,6 +610,10 @@ void Parser::detectPriorityAndEmbed(Item* myItem, string &stringDetails){
 	}
 	return ;
 }
+
+//This function detects the description in the input string
+//and sets its value into the input Item*.
+//The description found is then removed from the input string.
 void Parser::detectDescriptionAndEmbed(Item* myItem, string &stringDetails){
 	size_t positionFront;
 	size_t positionBack;
@@ -582,7 +624,7 @@ void Parser::detectDescriptionAndEmbed(Item* myItem, string &stringDetails){
 			positionBack = stringDetails.find(DESCRIP_MARKER_BACK);
 			//if found the back
 			if(positionBack<positionFront){
-				throw invalid_argument("Invalid brackets! Please follow e.g. add event at 7pm (description)");
+				throw invalid_argument("Invalid brackets! Try something like \"add event at 7pm (description)\"");
 			}
 			if(positionBack!=string::npos && positionBack!=0){
 				descripToSet = stringDetails.substr(positionFront, positionBack-positionFront+1);
@@ -595,12 +637,18 @@ void Parser::detectDescriptionAndEmbed(Item* myItem, string &stringDetails){
 
 	return ;
 }
+
+//This function detects the different possible formats of date and time
+//in the input string. It then sets its value into the input Item.
 void Parser::detectTypesOfDatesAndEmbed(Item &myNewItem, string newFieldInfo, bool isDeadline){
 	detectMonthDateAndEmbedIsOk(&myNewItem, newFieldInfo, isDeadline);
 	detectDayOfWeekDateAndEmbedIsOk(&myNewItem, newFieldInfo, isDeadline);
 	detectTimeAndEmbedIsOk(&myNewItem, newFieldInfo, isDeadline);
 }
 
+//This function accepts an input string and 
+//returns true if the string consists of digits only.
+//Otherwise, it returns false.
 bool Parser::isInteger(string query){
     unsigned int i;
 
@@ -616,12 +664,19 @@ bool Parser::isInteger(string query){
 		return 1;
 }
 
+//This function accepts an input string and 
+//returns true if the string is a month.
+//Otherwise, it returns false.
 bool Parser::isMonth(string query){
 	if(convertStrToIntMonth(query)>=0)
 		return true;
 	else
 		return false;
 }
+
+//This function accepts an input string and 
+//returns true if the string is in a time format.
+//Otherwise, it returns false.
 bool Parser::isTime(string query){
 	//TODO: For more supported formats
 	if(isdigit(query[0])>0)
@@ -629,14 +684,22 @@ bool Parser::isTime(string query){
 	else
 		return false;
 }
+
+//This function accepts an input string and 
+//returns true if the string is a day of the week. e.g. "Monday"
+//Otherwise, it returns false.
 bool Parser::isDayOfWeek(string query){
 	if(convertDayOfWeekToIntDaysToAdd(query, false)>=0)
 		return true;
 	else
 		return false;
 }
+
+//This function accepts an input string that represents time
+//and returns the number of hours it indicates. 
 int Parser::convertStringToIntHour(string stringTime){
 	
+	assert(isTime(stringTime)==true);
 	convertStringToLowercase(stringTime);
 	size_t positionFound;
 	//set accountForPM to 12 if afternoon
@@ -667,6 +730,9 @@ int Parser::convertStringToIntHour(string stringTime){
 	
 	return actualTime;
 }
+
+//This function accepts an input string that represents time
+//and returns the number of minutes it indicates. 
 int Parser::convertStringToIntMin(string stringTime){
 	
 	size_t positionFound1;
@@ -692,6 +758,10 @@ int Parser::convertStringToIntMin(string stringTime){
 	}
 	return stoi (stringTime);
 }
+
+//This function accepts an input string that represents month
+//and returns the number of months since January. 
+//It returns -1 if input string is not a month.
 int Parser::convertStrToIntMonth(string month){
 
 	convertStringToLowercase(month);
@@ -719,6 +789,7 @@ int Parser::convertStrToIntMonth(string month){
 	//TODO: Throw exeception for bad month
 }
 
+//This function converts the input string to lowercase.
 void Parser::convertStringToLowercase(string &myString){
 	unsigned int i;
 	for(i=0; i<myString.size(); i++){
@@ -726,6 +797,9 @@ void Parser::convertStringToLowercase(string &myString){
 	}
 	return;
 }
+
+//This function converts the input 'day of week' to the
+//number of days between today and that input day.
 int Parser::convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek){
 	
 	const string dayOfWeek[] = {"sunday", "monday", "tuesday", "wednesday","thursday",
@@ -806,6 +880,9 @@ bool Parser::isKeywordEndOfTitle(string myWord){
 	return isKeywordDate(myWord) || isKeywordStartTime(myWord) || isKeywordDeadline(myWord) || isDayOfWeek(myWord);
 }
 
+//This function converts a string of item numbers
+//into a vector of Item*, based on what is currently displayed.
+//If the string is empty, a vector with the first Item* that is displayed is returned.
 vector <Item*> Parser::convertItemNumsToItemPtrs(string itemNumsStr){
 	vector<Item*> itemPtrs;
 	int itemNum;
@@ -817,14 +894,15 @@ vector <Item*> Parser::convertItemNumsToItemPtrs(string itemNumsStr){
 	else{
 		while(itemStream >> itemNum){
 			if(itemNum <= 0 || itemNum > OutputControl::getNumberOfDisplayedItems()){
-				throw invalid_argument("Invalid item number! Please enter a valid number.");
+				throw invalid_argument("Invalid item number! Please enter a valid number from the list.");
 			}
 			itemPtrs.push_back(OutputControl::getItemAddr(itemNum));
 		}
 	}
 	return itemPtrs;
 }
-
+//This function converts an input string to a
+//vector of strings, separating the input string by whitespaces.
 vector<string> Parser::convertStringToVector(string inputString){
 
 	istringstream inputStream(inputString);
@@ -837,7 +915,9 @@ vector<string> Parser::convertStringToVector(string inputString){
 
 	return vectorOfStrings;
 }
-
+//This function accepts two vector iterators and concatenates
+//the vector items in between them to a string.
+//The final concatenated string is returned.
 string Parser::convertVectorToString(vector<string>::iterator start, vector<string>::iterator end){
 	string finalString="";
 	//if start and end are same point, return nothing

@@ -1,3 +1,4 @@
+//@LokeJunJie A0110770
 #include "stdafx.h"
 #include "CmdGoToBaseScreen.h"
 
@@ -20,9 +21,6 @@ CmdGoToBaseScreen::CmdGoToBaseScreen(OutputControl::CurrentScreenType currentBas
 				baseScreenCmd = new CmdShowOverdueDeadlines;
 				break;
 																	 }
-	//case CALENDAR_VIEW: {
-			
-	//						}
 		default:{
 				baseScreenCmd = new CmdHome();
 				break;

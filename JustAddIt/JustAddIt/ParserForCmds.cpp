@@ -1,3 +1,4 @@
+//@LokeJunJie A0110770
 #include "stdafx.h"
 #include "ParserForCmds.h"
 
@@ -39,29 +40,26 @@ CommandType ParserForCmds::determineCommandType(string userCommand, OutputContro
 		return determineCommandType_HomeScreen(userCommand);
 		break;
 			}
+
 	case OutputControl::EDIT_SCREEN: {
 		return determineCommandType_EditScreen(userCommand);
 		break;
-
 			}
 
 	case OutputControl::SEARCH_RESULTS_SCREEN: {
 		return determineCommandType_SearchResultsScreen(userCommand);
 		break;
-
 			}
+
 	case OutputControl::TO_DO_LIST_VIEW: {
 		return determineCommandType_ToDoListView(userCommand);
 		break;
-
 			}
 
 	case OutputControl::OVERDUE_TASKS_SCREEN: {
 		return determineCommandType_OverdueTasksScreen(userCommand);
 		break;
-
 			 }
-										 
 
 	default: {
 		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
@@ -69,24 +67,17 @@ CommandType ParserForCmds::determineCommandType(string userCommand, OutputContro
 			 }
 	}
 
-	
-
-
 }
 
 CommandType ParserForCmds::determineCommandType_HomeScreen(string userCommand){
-	
 
 	if (userCommand == "t") {
 		return VIEW_TODOLIST;
-	}
-	else if (userCommand == "c") {
+	}else if (userCommand == "c") {
 		return VIEW_CALENDAR;
-	}
-	else if (userCommand == "o") {
+	}else if (userCommand == "o") {
 		return VIEW_OVERDUE;
-	}
-	else{
+	}else{
 		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
 	}
 
@@ -95,14 +86,11 @@ CommandType ParserForCmds::determineCommandType_EditScreen(string userCommand){
 	
 	if (userCommand == "e") {
 		return EDIT_FIELD;
-	}
-	else if (userCommand == "o" || userCommand == "") {
+	}else if (userCommand == "o" || userCommand == "") {
 		return determineCommandType_GoToBaseScreen();
-	}
-	else if (userCommand == "d") {
+	}else if (userCommand == "d") {
 		return DELETE;
-	}
-	else{
+	}else{
 		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
 	}
 
@@ -111,17 +99,13 @@ CommandType ParserForCmds::determineCommandType_EditScreen(string userCommand){
 CommandType ParserForCmds::determineCommandType_SearchResultsScreen(string userCommand){
 	if (userCommand == "e") {
 		return EDIT_ITEM;
-	}
-	else if (userCommand == "m") {
+	}else if (userCommand == "m") {
 		return MARK;
-	}
-	else if (userCommand == "d") {
+	}else if (userCommand == "d") {
 		return DELETE;
-	}
-	else if (userCommand == "c") {
+	}else if (userCommand == "c") {
 		return CLEAR_ALL_DONE;
-	}
-	else{
+	}else{
 		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
 	}
 
@@ -130,17 +114,13 @@ CommandType ParserForCmds::determineCommandType_SearchResultsScreen(string userC
 CommandType ParserForCmds::determineCommandType_ToDoListView(string userCommand){
 	if (userCommand == "e") {
 		return EDIT_ITEM;
-	}
-	else if (userCommand == "m") {
+	}else if (userCommand == "m") {
 		return MARK;
-	}
-	else if (userCommand == "d") {
+	}else if (userCommand == "d") {
 		return DELETE;
-	}
-	else if (userCommand == "c") {
+	}else if (userCommand == "c") {
 		return CLEAR_ALL_DONE;
-	}
-	else{
+	}else{
 		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
 	}
 
@@ -150,14 +130,11 @@ CommandType ParserForCmds::determineCommandType_OverdueTasksScreen(string userCo
 	
 	if (userCommand == "m") {
 		return MARK;
-	}
-	else if (userCommand == "d") {
+	}else if (userCommand == "d") {
 		return DELETE;
-	}
-	else if (userCommand == "c") {
+	}else if (userCommand == "c") {
 		return CLEAR_ALL_OVERDUE;
-	}
-	else{
+	}else{
 		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
 	}
 	

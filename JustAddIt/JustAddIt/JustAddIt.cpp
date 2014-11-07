@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "UI.h"
+//#include "IReceiver.h"
 
 using namespace std;
 
 int main(void) {
-	UI::main();
+//	IReceiver::initialise();
 
 	return 0;
 }
