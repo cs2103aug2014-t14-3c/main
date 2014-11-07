@@ -1,3 +1,4 @@
+//@author A0108397W
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include "OutputControl.h"
@@ -35,6 +36,8 @@ namespace UnitTest
 			CmdDeleteItem* cmdDeleteItem = new CmdDeleteItem(itemsToBeDeleted);
 			cmdDeleteItem->deleteItemsFromBank();
 			Assert::AreEqual(itemBank->getBankSize(), 0);
+
+			itemBank->clearBank();
 		}
 
 		TEST_METHOD(CmdDeleteItem_MultipleDeletionTest)
@@ -62,6 +65,8 @@ namespace UnitTest
 			CmdDeleteItem* cmdDeleteItem = new CmdDeleteItem(itemsToBeDeleted);
 			cmdDeleteItem->deleteItemsFromBank();
 			Assert::AreEqual(itemBank->getBankSize(), 1);
+
+			itemBank->clearBank();
 		}
 
 		TEST_METHOD(CmdDeleteItem_DeleteAllTest)
@@ -90,6 +95,8 @@ namespace UnitTest
 			CmdDeleteItem* cmdDeleteItem = new CmdDeleteItem(itemsToBeDeleted);
 			cmdDeleteItem->deleteItemsFromBank();
 			Assert::AreEqual(itemBank->getBankSize(), 0);
+
+			itemBank->clearBank();
 		}
 	};
 }

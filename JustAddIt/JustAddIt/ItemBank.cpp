@@ -17,9 +17,14 @@ void ItemBank::deleteItem(Item* itemPtr) {
 	bank.erase(findIter(itemPtr));
 }
 
+void ItemBank::clearBank() {
+	bank.clear();
+	update();
+}
+
 void ItemBank::deleteDoneItems() {
 	deleteItems(getDoneItems());
-	
+
 	update();
 }
 
@@ -31,13 +36,13 @@ vector<Item*> ItemBank::getDoneItems() {
 			doneItems.push_back(*iter);
 		}
 	}
-	
+
 	return doneItems;
 }
 
 void ItemBank::deleteOverdueDeadlines() {
 	deleteItems(getOverdueDeadlines());
-	
+
 	update();
 }
 
@@ -56,7 +61,7 @@ vector<Item*> ItemBank::getPastEvents() {
 			pastEvents.push_back(*iter);
 		}
 	}
-	
+
 	return pastEvents;
 }
 
@@ -75,7 +80,7 @@ void ItemBank::toggleItemsDone(vector<Item*> itemPtrs) {
 	for(vector<Item*>::iterator iter = itemPtrs.begin(); iter != itemPtrs.end(); iter++) {
 		toggleItemDone(*iter);
 	}
-	
+
 	update();
 }
 
@@ -266,10 +271,10 @@ vector<Item*> ItemBank::getEventsThisWeek() {
 	for (vector<Item*>::iterator iter = allEvents.begin(); iter != allEvents.end(); iter++) {
 		if (mktime(&((*iter)->getEndDateTime())) <= mktime(&(timeInOneWeekTime_struct_tm)) && 
 			mktime(&((*iter)->getEndDateTime())) >= currentTime ||
-			
+
 			mktime(&((*iter)->getEndDateTime())) >= mktime(&(timeInOneWeekTime_struct_tm)) && 
 			mktime(&((*iter)->getStartDateTime())) <= currentTime ||
-			
+
 			mktime(&((*iter)->getStartDateTime())) <= mktime(&(timeInOneWeekTime_struct_tm)) && 
 			mktime(&((*iter)->getStartDateTime())) >= currentTime
 			) {
