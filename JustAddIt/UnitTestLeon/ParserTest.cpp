@@ -274,7 +274,7 @@ namespace UnitTestLeon
 			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
 			strcat_s(expectedBuffer, buffer_size, " 08:00PM.");
 			Assert::AreEqual(expectedBuffer, actualBuffer);
-			Assert::AreEqual("deadline", myItem->getItemType().c_str());
+			Assert::AreEqual("deadline", myItem->getItemTypeInString().c_str());
 
 			myParser.embedDetailsInItem(myItem, "Book flight by tomorrow (change currency)");
 			
@@ -286,7 +286,7 @@ namespace UnitTestLeon
 			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
 			strcat_s(expectedBuffer, buffer_size, " 11:59PM.");
 			Assert::AreEqual(expectedBuffer, actualBuffer);
-			Assert::AreEqual("deadline", myItem->getItemType().c_str());
+			Assert::AreEqual("deadline", myItem->getItemTypeInString().c_str());
 			Assert::AreEqual("change currency", myItem->getDescription().c_str());
 			time(&nowTime);
 			localtime_s (&nowTimeTM, &nowTime);
@@ -298,17 +298,17 @@ namespace UnitTestLeon
 			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
 			Assert::AreEqual("28 Mar 2015 09:00PM.", actualBuffer);
 
-			Assert::AreEqual("deadline", myItem->getItemType().c_str());
+			Assert::AreEqual("deadline", myItem->getItemTypeInString().c_str());
 
 			myParser.embedDetailsInItem(myItem, "call Sarah");
 		
 			Assert::AreEqual("call Sarah", myItem->getTitle().c_str());
-			Assert::AreEqual("task", myItem->getItemType().c_str());
+			Assert::AreEqual("task", myItem->getItemTypeInString().c_str());
 
 			myParser.embedDetailsInItem(myItem, "Clean dormitory room #personal");
 		
 			Assert::AreEqual("Clean dormitory room", myItem->getTitle().c_str());
-			Assert::AreEqual("task", myItem->getItemType().c_str());
+			Assert::AreEqual("task", myItem->getItemTypeInString().c_str());
 			Assert::AreEqual("personal", myItem->getCategory().c_str());
 }
 	};

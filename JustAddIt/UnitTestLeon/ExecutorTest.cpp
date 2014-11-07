@@ -12,9 +12,9 @@ namespace UnitTestLeon
 		TEST_METHOD(TestExecutor)
 		{
 			Executor* myExec = new Executor();
-			//ItemBank* myIB = new ItemBank();
-			//DisplayScreenConstructor* myDSC = DisplayScreenConstructor::getInstance();
-			//OutputControl* myOC = new OutputControl();
+			ItemBank* myIB = new ItemBank();
+			DisplayScreenConstructor* myDSC = DisplayScreenConstructor::getInstance();
+			OutputControl* myOC = new OutputControl();
 
 			myExec->execute("add wake up on 30 Dec at 7 #category (more info)");
 
@@ -33,6 +33,7 @@ namespace UnitTestLeon
 				Assert::AreEqual("Invalid brackets! Please follow e.g. add event at 7pm (description)", e.what() );
 			}
 
+			myIB->clearBank();
 		}
 	};
 }
