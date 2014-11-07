@@ -4,6 +4,19 @@
 
 int Item::_idCounter = 1;
 
+const string Item::STRING_EMPTY = "";
+const string Item::STRING_INVALID = "Invalid";
+
+const string Item::ITEM_TYPE_EVENT = "event";
+const string Item::ITEM_TYPE_DEADLINE = "deadline";
+const string Item::ITEM_TYPE_TASK = "task";
+
+const string Item::PRIORITY_LOW = "Low";
+const string Item::PRIORITY_MED = "Medium";
+const string Item::PRIORITY_HIGH = "High";
+
+const string Item::IS_DONE = "0";
+
 Item::Item(void){
 	_title = "-";
 	_description = "-";
@@ -22,6 +35,18 @@ Item::Item(void){
 
 Item::~Item(void)
 {
+}
+
+bool Item::isEvent() {
+	return _itemType == EVENT;
+}
+
+bool Item::isDeadline() {
+	return _itemType == DEADLINE;
+}
+
+bool Item::isTask() {
+	return _itemType == TASK;
 }
 
 string Item::getTitle() {
@@ -82,25 +107,44 @@ Item::PriorityLevel Item::getPriority() {
 
 string Item::getPriorityInString() {
 	switch(_priority) {
-		case Item::PriorityLevel::LOW:
-			return "Low";
-		case Item::PriorityLevel::MED:
-			return "Medium";
-		case Item::PriorityLevel::HIGH:
-			return "High";
-		case Item::PriorityLevel::INVALID:
-			return "Invalid";
-		default:
-			return "";
+		case LOW: {
+			return PRIORITY_LOW;
+		}
+		case MED: {
+			return PRIORITY_MED;
+		}
+		case HIGH: {
+			return PRIORITY_HIGH;
+		}
+		case INVALID: {
+			return STRING_INVALID;
+		}
+		default: {
+			return STRING_EMPTY;
+		}
 	}
 }
 
-bool Item::getIsDone() { 
+bool Item::isDone() { 
 	return _isDone;
 }
 
-string Item::getItemType(){
-	return _itemType;
+string Item::getItemTypeInString(){
+
+	switch (_itemType) {
+		case EVENT: {
+			return ITEM_TYPE_EVENT;
+		}
+		case DEADLINE: {
+			return ITEM_TYPE_DEADLINE;
+		}
+		case TASK: {
+			return ITEM_TYPE_TASK;
+		}
+		default: {
+			return STRING_EMPTY;
+		}
+	}
 }
 
 int Item::getId() {
@@ -265,5 +309,26 @@ void Item::toggleDone() {
 }
 
 void Item::setItemType(string itemType){
-	_itemType = itemType;
+
+	assert(itemType == ITEM_TYPE_EVENT || itemType == ITEM_TYPE_DEADLINE || itemType == ITEM_TYPE_TASK);
+
+	if(itemType == ITEM_TYPE_EVENT) {
+		setItemTypeEvent();
+	} else if(itemType == ITEM_TYPE_DEADLINE) {
+		setItemTypeDeadline();
+	} else if(itemType == ITEM_TYPE_TASK) {
+		setItemTypeTask();
+	}
+}
+
+void Item::setItemTypeDeadline() {
+	_itemType = DEADLINE;
+}
+
+void Item::setItemTypeEvent() {
+	_itemType = EVENT;
+}
+
+void Item::setItemTypeTask() {
+	_itemType = TASK;
 }

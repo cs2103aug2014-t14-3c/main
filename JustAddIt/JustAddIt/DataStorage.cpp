@@ -31,7 +31,7 @@ void DataStorage::writeToFile(vector<string>itemsToBeWrittenToFile) {
 }
 
 vector<string> DataStorage::readToBank() {
-	vector<string>itemsToBeReadToBank;
+	vector<string> items;
 	string dummyLine;
 	ifstream mytextfile;
 	mytextfile.open(fileName);
@@ -40,14 +40,14 @@ vector<string> DataStorage::readToBank() {
 		getline(mytextfile, dummyLine);
 		if (dummyLine != "") {
 		dummyLine = trimWhiteSpaceOnLeft(dummyLine);
-		itemsToBeReadToBank.push_back(dummyLine);
+		items.push_back(dummyLine);
 		}
 		else {
 		continue;
 		}
 	}
 	mytextfile.close();
-	return itemsToBeReadToBank;
+	return items;
 }
 
 inline string DataStorage::trimWhiteSpaceOnLeft(const string& inputString) {
