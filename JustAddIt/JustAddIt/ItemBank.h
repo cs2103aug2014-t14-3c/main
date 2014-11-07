@@ -1,14 +1,31 @@
 #pragma once
 #include "Item.h"
+#include "DataStorage.h"
+
 
 class ItemBank
 {
 private: 
-	static vector<Item> bank;
+	static vector<Item*> initialBank;
+	static vector<Item*> bank;
+
+	static void update();
+	static bool checkForConflict(Item* itemPtr);
+	static bool searchKeyword(string itemAttribute, string keyword);
+
+	static bool isEventPast(Item* itemPtr);
+	static bool isOverdue(Item* itemPtr);
+	static bool isTimePast(tm time);
+	static void toggleItemDone(Item* itemPtr);
+	static void deleteItem(Item* itemPtr);
+	static vector<Item*> getDoneItems();
+
+	static bool isHighPriority(string priority);
+	static bool isMedPriority(string priority);
+	static bool isLowPriority(string priority);
 
 public:
-	static void addToBank(Item item);
-	static void removeFromBank(vector<Item>::iterator itemPtr);
+
 	
 	static void deleteItems(vector<Item*> itemPtr);
 	static void deleteDoneItems();

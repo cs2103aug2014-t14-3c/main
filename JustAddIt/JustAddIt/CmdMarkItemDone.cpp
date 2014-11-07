@@ -1,3 +1,4 @@
+//@author A0108397W
 #include "stdafx.h"
 #include "CmdMarkItemDone.h"
 
@@ -25,7 +26,7 @@ CmdMarkItemDone::~CmdMarkItemDone(void) {
 //display.
 vector<string> CmdMarkItemDone::execute() {
 
-	markItemsInBank();
+	toggleItemsDone();
 
 	outputMessageStorage.clear();
 	outputMessageStorage = returnToBaseScreen();
@@ -38,23 +39,23 @@ vector<string> CmdMarkItemDone::execute() {
 }
 
 //This function calls for Itembank to mark the items in the _itemsToBeMarked vector
-void CmdMarkItemDone::markItemsInBank(void) {
-	ItemBank::markItemsInBank(_itemsToBeMarked);
+void CmdMarkItemDone::toggleItemsDone(void) {
+	ItemBank::toggleItemsDone(_itemsToBeMarked);
 
 	writeToLog(LOG_ITEMS_MARKED);
 }
 
 //This function first retrieve the base screen information from OutputControl, contructs it and stores it
-//inside screenToBeDisplayed. screenToBeDiplayed is then returned.
+//inside screen. screenToBeDiplayed is then returned.
 vector<string> CmdMarkItemDone::returnToBaseScreen(void) {
-	vector<string>screenToBeDisplayed;
+	vector<string>screen;
 
 	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
-	screenToBeDisplayed = cmdBase->execute();
+	screen = cmdBase->execute();
 
 	writeToLog(LOG_BASE_SCREEN_STORED);
 
-	return screenToBeDisplayed;
+	return screen;
 }
 
 void CmdMarkItemDone::storeSuccessMessage(void) {

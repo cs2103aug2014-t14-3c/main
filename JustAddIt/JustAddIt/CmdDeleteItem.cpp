@@ -10,10 +10,10 @@ const string CmdDeleteItem::LOG_ACTION_LOG_UPDATED = "INFO: Command is stored in
 const string CmdDeleteItem::ERROR_EMPTY_VECTOR = "Please choose one or more Items to delete!";
 const string CmdDeleteItem::TEXT_FILE_NAME = "CmdDeleteItem_Log.txt";
 
-CmdDeleteItem::CmdDeleteItem(vector<Item*> itemsToBeDeleted) {
-	_itemsToBeDeleted = itemsToBeDeleted;
+CmdDeleteItem::CmdDeleteItem(vector<Item*> itemsToDelete) {
+	_itemsToDelete = itemsToDelete;
 
-	if (_itemsToBeDeleted.size() == 0) {
+	if (_itemsToDelete.size() == 0) {
 		throw invalid_argument(ERROR_EMPTY_VECTOR);
 	}
 }
@@ -38,9 +38,9 @@ vector<string> CmdDeleteItem::execute() {
 	return outputMessageStorage;
 }
 
-//This function calls for Itembank to delete the items in the _itemsToBeDeleted vector
+//This function calls for Itembank to delete the items in the _itemsToDelete vector
 void CmdDeleteItem::deleteItemsFromBank(void) {
-	ItemBank::deleteFromBank(_itemsToBeDeleted);
+	ItemBank::deleteItems(_itemsToDelete);
 
 	writeToLog(LOG_ITEMS_DELETED);
 }

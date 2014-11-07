@@ -18,8 +18,8 @@ DisplayScreenConstructor* DisplayScreenConstructor::getInstance(void) {
 	return displayScreenConstructor;
 }
 
-vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasksToBeDisplayed, vector<Item*>deadlinesToBeDisplayed, vector<Item*>eventsToBeDisplayed) {
-	ifstream mytextfile ("HomeScreen.txt");
+vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events) {
+	ifstream mytextfile ("../JustAddIt/HomeScreen.txt");
 	string dummyLine;
 	int resultCounter = 1;
 
@@ -29,10 +29,10 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasksT
 		if (dummyLine == "What's going on this week?") {
 			outputMessageStorage.push_back(dummyLine);
 
-			for (vector<Item*>::iterator iter = eventsToBeDisplayed.begin(); iter != eventsToBeDisplayed.end(); iter++) {
+			for (vector<Item*>::iterator iter = events.begin(); iter != events.end(); iter++) {
 				dummyLine = to_string(resultCounter) + ". ";
 
-				if ((*iter)->getIsDone() == true) {
+				if ((*iter)->isDone()) {
 					dummyLine += "[DONE] ";
 				}
 
@@ -41,10 +41,10 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasksT
 				outputMessageStorage.push_back(dummyLine);
 				resultCounter++;
 			}
-			for (vector<Item*>::iterator iter = deadlinesToBeDisplayed.begin(); iter != deadlinesToBeDisplayed.end(); iter++) {
+			for (vector<Item*>::iterator iter = deadlines.begin(); iter != deadlines.end(); iter++) {
 				dummyLine = to_string(resultCounter) + ". ";
 
-				if ((*iter)->getIsDone() == true) {
+				if ((*iter)->isDone()) {
 					dummyLine += "[DONE] ";
 				}
 
@@ -53,10 +53,10 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasksT
 				outputMessageStorage.push_back(dummyLine);
 				resultCounter++;
 			}
-			for (vector<Item*>::iterator iter = tasksToBeDisplayed.begin(); iter != tasksToBeDisplayed.end(); iter++) {
+			for (vector<Item*>::iterator iter = tasks.begin(); iter != tasks.end(); iter++) {
 				dummyLine = to_string(resultCounter) + ". ";
 
-				if ((*iter)->getIsDone() == true) {
+				if ((*iter)->isDone()) {
 					dummyLine += "[DONE] ";
 				}
 
@@ -78,18 +78,18 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasksT
 }
 
 vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
-	ifstream mytextfile ("EditScreen.txt");
+	ifstream mytextfile ("../JustAddIt/EditScreen.txt");
 	string dummyLine;
 
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
 
 		if (dummyLine == "Edit ") {
-			dummyLine += item->getItemType();
+			dummyLine += item->getItemTypeInString();
 		}
 		else if (dummyLine == "1) Title: ") {
 
-			if (item->getIsDone() == true) {
+			if (item->isDone()) {
 				dummyLine += "[DONE] ";
 			}
 
@@ -105,7 +105,7 @@ vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
 			}
 		}
 		else if (dummyLine == "3) Start: ") {
-			if (item->getItemType() == "task" || item->getItemType() == "deadline") {
+			if (item->isTask() || item->isDeadline()) {
 				dummyLine += "";
 			}
 			else {
@@ -113,7 +113,7 @@ vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
 			}
 		}
 		else if (dummyLine == "4) End: ") {
-			if (item->getItemType() == "task") {
+			if (item->isTask()) {
 				dummyLine += "";
 			}
 			else {
@@ -141,8 +141,8 @@ vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
 	return outputMessageStorage;
 }
 
-vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>tasksToBeDisplayed, vector<Item*>deadlinesToBeDisplayed, vector<Item*>eventsToBeDisplayed) {
-	ifstream mytextfile ("SearchScreen.txt");
+vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events) {
+	ifstream mytextfile ("../JustAddIt/SearchScreen.txt");
 	string dummyLine;
 	int resultCounter = 1;
 
@@ -152,10 +152,10 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 		if (dummyLine == "Showing results:") {
 			outputMessageStorage.push_back(dummyLine);
 
-			for (vector<Item*>::iterator iter = eventsToBeDisplayed.begin(); iter != eventsToBeDisplayed.end(); iter++) {
+			for (vector<Item*>::iterator iter = events.begin(); iter != events.end(); iter++) {
 				dummyLine = to_string(resultCounter) + ". ";
 
-				if ((*iter)->getIsDone() == true) {
+				if ((*iter)->isDone()) {
 					dummyLine += "[DONE] ";
 				}
 
@@ -164,10 +164,10 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 				outputMessageStorage.push_back(dummyLine);
 				resultCounter++;
 			}
-			for (vector<Item*>::iterator iter = deadlinesToBeDisplayed.begin(); iter != deadlinesToBeDisplayed.end(); iter++) {
+			for (vector<Item*>::iterator iter = deadlines.begin(); iter != deadlines.end(); iter++) {
 				dummyLine = to_string(resultCounter) + ". ";
 
-				if ((*iter)->getIsDone() == true) {
+				if ((*iter)->isDone()) {
 					dummyLine += "[DONE] ";
 				}
 
@@ -176,10 +176,10 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 				outputMessageStorage.push_back(dummyLine);
 				resultCounter++;
 			}
-			for (vector<Item*>::iterator iter = tasksToBeDisplayed.begin(); iter != tasksToBeDisplayed.end(); iter++) {
+			for (vector<Item*>::iterator iter = tasks.begin(); iter != tasks.end(); iter++) {
 				dummyLine = to_string(resultCounter) + ". ";
 
-				if ((*iter)->getIsDone() == true) {
+				if ((*iter)->isDone()) {
 					dummyLine += "[DONE] ";
 				}
 
@@ -200,8 +200,8 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 	return outputMessageStorage;
 }
 
-vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasksToBeDisplayed, vector<Item*>deadlinesToBeDisplayed, vector<Item*>eventsToBeDisplayed) {
-	ifstream mytextfile ("ListViewScreen.txt");
+vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events) {
+	ifstream mytextfile ("../JustAddIt/ListViewScreen.txt");
 	string dummyLine;
 	int resultCounter = 1;
 	vector<Item*>::iterator iter;
@@ -214,10 +214,10 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasksT
 			getline(mytextfile, dummyLine);
 			outputMessageStorage.push_back(dummyLine);
 
-			for (vector<Item*>::iterator iter = eventsToBeDisplayed.begin(); iter != eventsToBeDisplayed.end(); iter++) {
+			for (vector<Item*>::iterator iter = events.begin(); iter != events.end(); iter++) {
 				dummyLine = to_string(resultCounter) + ". ";
 
-				if ((*iter)->getIsDone() == true) {
+				if ((*iter)->isDone()) {
 					dummyLine += "[DONE] ";
 				}
 
@@ -236,10 +236,10 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasksT
 			getline(mytextfile, dummyLine);
 			outputMessageStorage.push_back(dummyLine);
 
-			for (vector<Item*>::iterator iter = deadlinesToBeDisplayed.begin(); iter != deadlinesToBeDisplayed.end(); iter++) {
+			for (vector<Item*>::iterator iter = deadlines.begin(); iter != deadlines.end(); iter++) {
 				dummyLine = to_string(resultCounter) + ". ";
 
-				if ((*iter)->getIsDone() == true) {
+				if ((*iter)->isDone()) {
 					dummyLine += "[DONE] ";
 				}
 
@@ -258,10 +258,10 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasksT
 			getline(mytextfile, dummyLine);
 			outputMessageStorage.push_back(dummyLine);
 
-			for (vector<Item*>::iterator iter = tasksToBeDisplayed.begin(); iter != tasksToBeDisplayed.end(); iter++) {
+			for (vector<Item*>::iterator iter = tasks.begin(); iter != tasks.end(); iter++) {
 				dummyLine = to_string(resultCounter) + ". ";
 
-				if ((*iter)->getIsDone() == true) {
+				if ((*iter)->isDone()) {
 					dummyLine += "[DONE] ";
 				}
 
@@ -282,8 +282,8 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasksT
 	return outputMessageStorage;
 }
 
-vector<string> DisplayScreenConstructor::constructOverdueScreen(vector<Item*>itemsToBeDisplayed) {
-	ifstream mytextfile ("OverdueScreen.txt");
+vector<string> DisplayScreenConstructor::constructOverdueScreen(vector<Item*>items) {
+	ifstream mytextfile ("../JustAddIt/OverdueScreen.txt");
 	string dummyLine;
 	int resultCounter = 1;
 	vector<Item*>::iterator iter;
@@ -293,10 +293,10 @@ vector<string> DisplayScreenConstructor::constructOverdueScreen(vector<Item*>ite
 		if (dummyLine == "Overdue Deadlines") {
 			outputMessageStorage.push_back(dummyLine);
 
-			for (iter = itemsToBeDisplayed.begin(); iter != itemsToBeDisplayed.end(); iter++) {
+			for (iter = items.begin(); iter != items.end(); iter++) {
 				dummyLine = to_string(resultCounter) + ". ";
 
-				if ((*iter)->getIsDone() == true) {
+				if ((*iter)->isDone()) {
 					dummyLine += "[DONE] ";
 				}
 

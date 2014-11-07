@@ -10,26 +10,26 @@ CmdGoToListView::~CmdGoToListView(void)
 }
 
 vector<string> CmdGoToListView::execute() {
-	vector<Item*>tasksToBeDisplayed;
-	vector<Item*>deadlinesToBeDisplayed;
-	vector<Item*>eventsToBeDisplayed;
+	vector<Item*>tasks;
+	vector<Item*>deadlines;
+	vector<Item*>events;
 	vector<Item*>collatedList;
 
-	eventsToBeDisplayed = ItemBank::getAllEvents();
-	deadlinesToBeDisplayed = ItemBank::getAllDeadlines();
-	tasksToBeDisplayed = ItemBank::getTasks();
+	events = ItemBank::getAllEvents();
+	deadlines = ItemBank::getAllDeadlines();
+	tasks = ItemBank::getAllTasks();
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();
 	outputMessageStorage = displayScreenConstructor->clearScreen();
-	outputMessageStorage = displayScreenConstructor->constructListScreen(tasksToBeDisplayed, deadlinesToBeDisplayed, eventsToBeDisplayed);
+	outputMessageStorage = displayScreenConstructor->constructListScreen(tasks, deadlines, events);
 	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::TO_DO_LIST_VIEW);
 	OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::TO_DO_LIST_VIEW);
 	
 	//append all items to collated list vector
-	collatedList.insert(collatedList.end(), eventsToBeDisplayed.begin(), eventsToBeDisplayed.end());
-	collatedList.insert(collatedList.end(), deadlinesToBeDisplayed.begin(), deadlinesToBeDisplayed.end());
-	collatedList.insert(collatedList.end(), tasksToBeDisplayed.begin(), tasksToBeDisplayed.end());
+	collatedList.insert(collatedList.end(), events.begin(), events.end());
+	collatedList.insert(collatedList.end(), deadlines.begin(), deadlines.end());
+	collatedList.insert(collatedList.end(), tasks.begin(), tasks.end());
 	OutputControl::setCurrentDisplayedItemList(collatedList);
 
 	return outputMessageStorage;

@@ -100,6 +100,7 @@
     <ClInclude Include="Executor.h" />
     <ClInclude Include="CmdInitialiseBank.h" />
     <ClInclude Include="Exporter.h" />
+    <ClInclude Include="IReceiver.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemBank.h" />
     <ClInclude Include="OutputControl.h" />
@@ -107,7 +108,6 @@
     <ClInclude Include="ParserForCmds.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActionLog.cpp" />
@@ -131,6 +131,7 @@
     <ClCompile Include="Executor.cpp" />
     <ClCompile Include="CmdInitialiseBank.cpp" />
     <ClCompile Include="Exporter.cpp" />
+    <ClCompile Include="IReceiver.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemBank.cpp" />
     <ClCompile Include="JustAddIt.cpp" />
@@ -141,7 +142,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

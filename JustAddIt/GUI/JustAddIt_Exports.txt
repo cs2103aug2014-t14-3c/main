@@ -2,12 +2,12 @@
 		    |	   			       |
 		    |	          JustAddIt            |
 		    |__________________________________|
-Edit event
+Edit task
  
-1) Title: ie2101 presentation
+1) Title: test
 2) Description: 
-3) Start: Tuesday 18 Nov 2014 12:00AM
-4) End: Tuesday 18 Nov 2014 11:59PM
+3) Start: 
+4) End: 
 5) Priority: Low
 6) Category: 
  

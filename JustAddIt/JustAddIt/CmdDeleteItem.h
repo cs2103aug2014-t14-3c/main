@@ -10,7 +10,7 @@ class CmdDeleteItem :
 	public Command {
 
 private:
-	vector<Item*> _itemsToBeDeleted;
+	vector<Item*> _itemsToDelete;
 
 public:
 	static const string MESSAGE_DELETION_SUCCESSFUL;
@@ -21,7 +21,7 @@ public:
 	static const string ERROR_EMPTY_VECTOR;
 	static const string TEXT_FILE_NAME;
 
-	CmdDeleteItem(vector<Item*> itemsToBeDeleted);
+	CmdDeleteItem(vector<Item*> itemsToDelete);
 	~CmdDeleteItem(void);
 
 	vector<string> CmdDeleteItem::execute();

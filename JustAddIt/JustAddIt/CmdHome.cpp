@@ -16,9 +16,9 @@ vector<string> CmdHome::execute() {
 	vector<Item*>deadlinesToBeDisplayed;
 	vector<Item*>eventsToBeDisplayed;
 	
-	eventsToBeDisplayed = ItemBank::getEvents();
-	deadlinesToBeDisplayed = ItemBank::getDeadlines();
-	tasksToBeDisplayed = ItemBank::getTasks();
+	eventsToBeDisplayed = ItemBank::getEventsThisWeek();
+	deadlinesToBeDisplayed = ItemBank::getDeadlinesThisWeek();
+	tasksToBeDisplayed = ItemBank::getAllTasks();
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();
