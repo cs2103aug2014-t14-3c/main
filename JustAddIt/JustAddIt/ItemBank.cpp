@@ -13,6 +13,36 @@ void ItemBank::deleteItems(vector<Item*> itemsToDelete) {
 	update();
 }
 
+bool ItemBank::isFoundForSearchingEvents(string keyword) {
+	vector<Item*> events = searchEvents(keyword);
+	
+	if(events.size() > 0) {
+		return true;
+	}
+
+	return false;
+}
+
+bool ItemBank::isFoundForSearchingDeadlines(string keyword) {
+	vector<Item*> events = searchEvents(keyword);
+	
+	if(events.size() > 0) {
+		return true;
+	}
+
+	return false;
+}
+
+bool ItemBank::isFoundForSearchingTasks(string keyword) {
+	vector<Item*> events = searchEvents(keyword);
+	
+	if(events.size() > 0) {
+		return true;
+	}
+
+	return false;
+}
+
 void ItemBank::deleteItem(Item* itemPtr) {
 	bank.erase(findIter(itemPtr));
 }
