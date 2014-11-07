@@ -25,7 +25,7 @@ namespace UnitTest
 			time(&currentTime);
 
 			Assert::AreEqual(itemPointer->getBankSize(), 3);
-			itemPointer->deleteAllOverdueDeadlinesFromBank();
+			itemPointer->deleteOverdueDeadlines();
 			Assert::AreEqual(itemPointer->getBankSize(), 2);
 		}
 	};

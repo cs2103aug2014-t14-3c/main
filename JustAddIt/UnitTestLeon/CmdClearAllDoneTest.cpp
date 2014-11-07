@@ -21,7 +21,7 @@ namespace UnitTest
 			task->setTitle("testing");
 			itemPointer->addToBank(task);
 			Assert::AreEqual(itemPointer->getBankSize(), 1);
-			Assert::AreEqual(itemPointer->searchKeywordInItemAttribute(task->getItemType(), testing), true);
+			Assert::AreEqual(itemPointer->searchKeyword(task->getItemTypeInString(), testing), true);
 		}
 	};
 }

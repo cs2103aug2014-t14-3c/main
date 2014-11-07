@@ -38,8 +38,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>D:\GitHub\main\JustAddIt\JustAddIt;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\GitHub\main\JustAddIt\JustAddIt;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\J\Desktop\My Files\Poly\Year3\Exchange\5_CS2103\JustAddIt\main\JustAddIt\JustAddIt;D:\GitHub\main\JustAddIt\JustAddIt;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\J\Desktop\My Files\Poly\Year3\Exchange\5_CS2103\JustAddIt\main\JustAddIt\JustAddIt;D:\GitHub\main\JustAddIt\JustAddIt;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>

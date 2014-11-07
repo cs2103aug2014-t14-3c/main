@@ -11,7 +11,6 @@ private:
 
 	static void update();
 	static bool checkForConflict(Item* itemPtr);
-	static bool searchKeyword(string itemAttribute, string keyword);
 
 	static bool isEventPast(Item* itemPtr);
 	static bool isOverdue(Item* itemPtr);
@@ -47,7 +46,9 @@ public:
 	static bool isFoundForSearchingEvents(string keyword);
 	static bool isFoundForSearchingDeadlines(string keyword);
 	static bool isFoundForSearchingTasks(string keyword);
-	
+
+	static bool searchKeyword(string itemAttribute, string keyword);
+
 	static vector<Item*> searchEvents(string keyword);
 	static vector<Item*> searchDeadlines(string keyword);
 	static vector<Item*> searchTasks(string keyword);
@@ -63,7 +64,7 @@ public:
 	static vector<Item*> getOverdueDeadlines();
 
 	static int getBankSize();
-	//static int getNumberOfMarkedItems();
+	static int getNumberOfMarkedItems();
 
 	static void initialiseBank();
 	static void resetBank();

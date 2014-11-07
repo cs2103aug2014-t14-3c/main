@@ -1,20 +1,14 @@
-		    ____________________________________
-		    |	   			       |
-		    |	          JustAddIt            |
-		    |__________________________________|
-Edit task
+<div style = "color: red;">                    ____________________________________<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Welcome to JustAddIt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |____________________________________|</div>
+What's going on this week?
+1. test
  
-1) Title: test
-2) Description: 
-3) Start: 
-4) End: 
-5) Priority: Low
-6) Category: 
+What do you want to do?
  
+Universal commands:
+add {task details}, search {keyword}, export, undo, redo, home, exit
 ================================================================================
  
-[o] Ok
-[e #] Edit {Field number}
-[d] Delete
+[t] View To-do list
+[o] Check for overdue task
  
 ================================================================================

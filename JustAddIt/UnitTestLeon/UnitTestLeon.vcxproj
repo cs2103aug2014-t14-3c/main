@@ -87,13 +87,16 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CmdAddTest.cpp" />
+    <ClCompile Include="CmdClearAllDoneTest.cpp" />
+    <ClCompile Include="CmdClearAllOverdue.cpp" />
     <ClCompile Include="CmdDeleteItemTest.cpp" />
     <ClCompile Include="CmdEditItemTest.cpp" />
     <ClCompile Include="CmdExportTest.cpp" />
     <ClCompile Include="CmdMarkItemDoneTest.cpp" />
+    <ClCompile Include="CmdSearchTest.cpp" />
     <ClCompile Include="ExecutorTest.cpp" />
     <ClCompile Include="ItemTest.cpp" />
-    <ClCompile Include="CmdTest.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

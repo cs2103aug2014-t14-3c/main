@@ -5,6 +5,11 @@
 vector<Item*> ItemBank::bank;
 vector<Item*> ItemBank::initialBank;
 
+int ItemBank::getNumberOfMarkedItems() {
+	vector<Item*> markedDone = getDoneItems();
+
+	return (int)markedDone.size();
+}
 void ItemBank::deleteItems(vector<Item*> itemsToDelete) {
 	for(vector<Item*>::iterator iter = itemsToDelete.begin(); iter != itemsToDelete.end(); iter++) {
 		deleteItem(*iter);
