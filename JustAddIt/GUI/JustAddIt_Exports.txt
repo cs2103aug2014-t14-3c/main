@@ -1,14 +1,30 @@
-<div style = "color: red;">                    ____________________________________<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Welcome to JustAddIt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |____________________________________|</div>
-What's going on this week?
-1. test
+		    ____________________________________
+		    |	   			       |
+		    |	          JustAddIt            |
+		    |__________________________________|
  
-What do you want to do?
+To-do list
  
-Universal commands:
-add {task details}, search {keyword}, export, undo, redo, home, exit
+==========
+All Events
+==========
+ 
+=============
+All Deadlines
+=============
+ 
+=====
+Tasks
+=====
+ 
 ================================================================================
  
-[t] View To-do list
-[o] Check for overdue task
+[e #] Edit {Item number}
+[m #] Mark {Item number}
+[d #] Delete {Item number}
+[c] Clear all completed items
+ 
+Tip: To perform multiple deletes/marks, leave a space between each Item number.
+For example: d 1 2 5
  
 ================================================================================

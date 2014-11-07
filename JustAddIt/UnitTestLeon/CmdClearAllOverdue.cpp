@@ -9,7 +9,7 @@ namespace UnitTest
 	{
 	public:
 		
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(CmdClearAllOverdueTest)
 		{
 			ItemBank* itemPointer = new ItemBank;
 			Item* task1 = new Item;
@@ -27,6 +27,8 @@ namespace UnitTest
 			Assert::AreEqual(itemPointer->getBankSize(), 3);
 			itemPointer->deleteOverdueDeadlines();
 			Assert::AreEqual(itemPointer->getBankSize(), 2);
+
+			itemPointer->clearBank();
 		}
 	};
 }
