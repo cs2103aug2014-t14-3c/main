@@ -18,6 +18,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -29,6 +30,10 @@ class Ui_GUIClass
 public:
     QVBoxLayout *verticalLayout_2;
     QVBoxLayout *verticalLayout;
+    QHBoxLayout *horizontalLayout_2;
+    QSpacerItem *horizontalSpacer;
+    QLabel *label_2;
+    QSpacerItem *horizontalSpacer_2;
     QTextEdit *textEdit;
     QHBoxLayout *horizontalLayout;
     QLabel *label;
@@ -41,61 +46,57 @@ public:
             GUIClass->setObjectName(QStringLiteral("GUIClass"));
         GUIClass->resize(514, 325);
         QPalette palette;
-        QBrush brush(QColor(0, 0, 0, 255));
+        QBrush brush(QColor(255, 255, 255, 255));
         brush.setStyle(Qt::SolidPattern);
         palette.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        QBrush brush1(QColor(255, 255, 255, 255));
+        QBrush brush1(QColor(0, 0, 0, 255));
         brush1.setStyle(Qt::SolidPattern);
         palette.setBrush(QPalette::Active, QPalette::Button, brush1);
         palette.setBrush(QPalette::Active, QPalette::Light, brush1);
         palette.setBrush(QPalette::Active, QPalette::Midlight, brush1);
-        QBrush brush2(QColor(127, 127, 127, 255));
-        brush2.setStyle(Qt::SolidPattern);
-        palette.setBrush(QPalette::Active, QPalette::Dark, brush2);
-        QBrush brush3(QColor(170, 170, 170, 255));
-        brush3.setStyle(Qt::SolidPattern);
-        palette.setBrush(QPalette::Active, QPalette::Mid, brush3);
+        palette.setBrush(QPalette::Active, QPalette::Dark, brush1);
+        palette.setBrush(QPalette::Active, QPalette::Mid, brush1);
         palette.setBrush(QPalette::Active, QPalette::Text, brush);
-        palette.setBrush(QPalette::Active, QPalette::BrightText, brush1);
+        palette.setBrush(QPalette::Active, QPalette::BrightText, brush);
         palette.setBrush(QPalette::Active, QPalette::ButtonText, brush);
         palette.setBrush(QPalette::Active, QPalette::Base, brush1);
         palette.setBrush(QPalette::Active, QPalette::Window, brush1);
-        palette.setBrush(QPalette::Active, QPalette::Shadow, brush);
+        palette.setBrush(QPalette::Active, QPalette::Shadow, brush1);
         palette.setBrush(QPalette::Active, QPalette::AlternateBase, brush1);
-        QBrush brush4(QColor(255, 255, 220, 255));
-        brush4.setStyle(Qt::SolidPattern);
-        palette.setBrush(QPalette::Active, QPalette::ToolTipBase, brush4);
-        palette.setBrush(QPalette::Active, QPalette::ToolTipText, brush);
+        QBrush brush2(QColor(255, 255, 220, 255));
+        brush2.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Active, QPalette::ToolTipBase, brush2);
+        palette.setBrush(QPalette::Active, QPalette::ToolTipText, brush1);
         palette.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
         palette.setBrush(QPalette::Inactive, QPalette::Button, brush1);
         palette.setBrush(QPalette::Inactive, QPalette::Light, brush1);
         palette.setBrush(QPalette::Inactive, QPalette::Midlight, brush1);
-        palette.setBrush(QPalette::Inactive, QPalette::Dark, brush2);
-        palette.setBrush(QPalette::Inactive, QPalette::Mid, brush3);
+        palette.setBrush(QPalette::Inactive, QPalette::Dark, brush1);
+        palette.setBrush(QPalette::Inactive, QPalette::Mid, brush1);
         palette.setBrush(QPalette::Inactive, QPalette::Text, brush);
-        palette.setBrush(QPalette::Inactive, QPalette::BrightText, brush1);
+        palette.setBrush(QPalette::Inactive, QPalette::BrightText, brush);
         palette.setBrush(QPalette::Inactive, QPalette::ButtonText, brush);
         palette.setBrush(QPalette::Inactive, QPalette::Base, brush1);
         palette.setBrush(QPalette::Inactive, QPalette::Window, brush1);
-        palette.setBrush(QPalette::Inactive, QPalette::Shadow, brush);
+        palette.setBrush(QPalette::Inactive, QPalette::Shadow, brush1);
         palette.setBrush(QPalette::Inactive, QPalette::AlternateBase, brush1);
-        palette.setBrush(QPalette::Inactive, QPalette::ToolTipBase, brush4);
-        palette.setBrush(QPalette::Inactive, QPalette::ToolTipText, brush);
-        palette.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        palette.setBrush(QPalette::Inactive, QPalette::ToolTipBase, brush2);
+        palette.setBrush(QPalette::Inactive, QPalette::ToolTipText, brush1);
+        palette.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
         palette.setBrush(QPalette::Disabled, QPalette::Button, brush1);
         palette.setBrush(QPalette::Disabled, QPalette::Light, brush1);
         palette.setBrush(QPalette::Disabled, QPalette::Midlight, brush1);
-        palette.setBrush(QPalette::Disabled, QPalette::Dark, brush2);
-        palette.setBrush(QPalette::Disabled, QPalette::Mid, brush3);
-        palette.setBrush(QPalette::Disabled, QPalette::Text, brush2);
-        palette.setBrush(QPalette::Disabled, QPalette::BrightText, brush1);
-        palette.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
+        palette.setBrush(QPalette::Disabled, QPalette::Dark, brush1);
+        palette.setBrush(QPalette::Disabled, QPalette::Mid, brush1);
+        palette.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        palette.setBrush(QPalette::Disabled, QPalette::BrightText, brush);
+        palette.setBrush(QPalette::Disabled, QPalette::ButtonText, brush1);
         palette.setBrush(QPalette::Disabled, QPalette::Base, brush1);
         palette.setBrush(QPalette::Disabled, QPalette::Window, brush1);
-        palette.setBrush(QPalette::Disabled, QPalette::Shadow, brush);
+        palette.setBrush(QPalette::Disabled, QPalette::Shadow, brush1);
         palette.setBrush(QPalette::Disabled, QPalette::AlternateBase, brush1);
-        palette.setBrush(QPalette::Disabled, QPalette::ToolTipBase, brush4);
-        palette.setBrush(QPalette::Disabled, QPalette::ToolTipText, brush);
+        palette.setBrush(QPalette::Disabled, QPalette::ToolTipBase, brush2);
+        palette.setBrush(QPalette::Disabled, QPalette::ToolTipText, brush1);
         GUIClass->setPalette(palette);
         verticalLayout_2 = new QVBoxLayout(GUIClass);
         verticalLayout_2->setSpacing(6);
@@ -104,6 +105,25 @@ public:
         verticalLayout = new QVBoxLayout();
         verticalLayout->setSpacing(6);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer);
+
+        label_2 = new QLabel(GUIClass);
+        label_2->setObjectName(QStringLiteral("label_2"));
+
+        horizontalLayout_2->addWidget(label_2);
+
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_2);
+
+
+        verticalLayout->addLayout(horizontalLayout_2);
+
         textEdit = new QTextEdit(GUIClass);
         textEdit->setObjectName(QStringLiteral("textEdit"));
         QFont font;
@@ -149,6 +169,7 @@ public:
     void retranslateUi(QWidget *GUIClass)
     {
         GUIClass->setWindowTitle(QApplication::translate("GUIClass", "GUI", 0));
+        label_2->setText(QApplication::translate("GUIClass", "JustAddIt", 0));
         label->setText(QApplication::translate("GUIClass", "Command:", 0));
         pushButton->setText(QApplication::translate("GUIClass", "Enter", 0));
     } // retranslateUi

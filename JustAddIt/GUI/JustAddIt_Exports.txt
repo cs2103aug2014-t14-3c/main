@@ -1,33 +1,42 @@
-		    ____________________________________
-		    |	   			       |
-		    |	          JustAddIt            |
-		    |__________________________________|
+<div style = "color: red;">                    ____________________________________<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Welcome to JustAddIt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |____________________________________|</div>
+What's going on this week?
+1. sort results
+2. refactor ActionLog in JustAddIt
+3. refactor CmdInitialiseBank in JustAddIt
+4. refactor CmdRedo in JustAddIt
+5. write ie2101 project report abstract
+6. refactor CmdUndo in JustAddIt
+7. refactor ItemBank class in JustAddIt
+8. ssu2003 presentation slides
  
-To-do list
+What do you want to do?
  
-==========
-All Events
-==========
- 
-=============
-All Deadlines
-=============
- 
-=====
-Tasks
-=====
-1. kiss
-2. 3jekhjdbwecvsukehbdvcisuyk
-3. kisssesssss
- 
+Universal commands:
+add {task details}, search {keyword}, export, undo, redo, home, exit
 ================================================================================
  
-[e #] Edit {Item number}
-[m #] Mark {Item number}
-[d #] Delete {Item number}
-[c] Clear all completed items
+[t] View To-do list
+[o] Check for overdue task
  
-Tip: To perform multiple deletes/marks, leave a space between each Item number.
-For example: d 1 2 5
+================================================================================
+<div style = "color: red;">                    ____________________________________<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Welcome to JustAddIt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |____________________________________|</div>
+What's going on this week?
+1. sort results
+2. refactor ActionLog in JustAddIt
+3. refactor CmdInitialiseBank in JustAddIt
+4. refactor CmdRedo in JustAddIt
+5. write ie2101 project report abstract
+6. refactor CmdUndo in JustAddIt
+7. refactor ItemBank class in JustAddIt
+8. ssu2003 presentation slides
+ 
+What do you want to do?
+ 
+Universal commands:
+add {task details}, search {keyword}, export, undo, redo, home, exit
+================================================================================
+ 
+[t] View To-do list
+[o] Check for overdue task
  
 ================================================================================

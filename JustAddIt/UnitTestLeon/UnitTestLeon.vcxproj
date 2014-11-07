@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CmdDeleteItemTest.cpp" />
+    <ClCompile Include="CmdEditItemTest.cpp" />
     <ClCompile Include="CmdExportTest.cpp" />
     <ClCompile Include="CmdMarkItemDoneTest.cpp" />
     <ClCompile Include="ExecutorTest.cpp" />
