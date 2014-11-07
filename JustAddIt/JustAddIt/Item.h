@@ -21,6 +21,8 @@ public:
 	static const string PRIORITY_MED;
 	static const string PRIORITY_HIGH;
 
+	static const string IS_DONE;
+
 private:
 	static int _idCounter;
 

@@ -354,17 +354,6 @@ int ItemBank::getBankSize() {
 	return (int)bank.size();
 }
 
-int ItemBank::getNumberOfMarkedItems() {
-	int numberOfMarkedItems = 0;
-	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
-		if ((*iter)->isDone() == true) {
-			numberOfMarkedItems++;
-		}
-	}
-	return numberOfMarkedItems;
-}
-
-
 vector<Item*>::iterator ItemBank::findIter(Item* itemPtr) {
 	vector<Item*>::iterator iter = bank.begin();
 
@@ -380,83 +369,83 @@ vector<Item*>::iterator ItemBank::findIter(Item* itemPtr) {
 
 
 void ItemBank::initialiseBank() {
-	vector<string>itemsToBeReadToBank;
-	string startDateTimeInStringForm;
-	string endDateTimeInStringForm;
-	int startDateTimeInIntForm;
-	int endDateTimeInIntForm;
-	time_t startDateTimeInTimeTForm;
-	time_t endDateTimeInTimeTForm;
-	struct tm startDateTimeInStructTmForm;
-	struct tm endDateTimeInStructTmForm;
+	vector<string> items;
+	string startDateTimeInString;
+	string endDateTimeInString;
+	int startDateTimeInInt;
+	int endDateTimeInInt;
+	time_t startDateTimeInTimeT;
+	time_t endDateTimeInTimeT;
+	struct tm startDateTimeInStructTm;
+	struct tm endDateTimeInStructTm;
 
 	DataStorage* dataStorage = dataStorage->getInstance();
-	itemsToBeReadToBank = dataStorage->readToBank();
+	items = dataStorage->readToBank();
 
 	bank.clear();
 	initialBank.clear();
 
-	while (!itemsToBeReadToBank.empty()) {
+	while (!items.empty()) {
 		Item* newItem = new Item;
 
 		//item type
-		newItem->setItemType(itemsToBeReadToBank.back());
-		itemsToBeReadToBank.pop_back();
+		newItem->setItemType(items.back());
+		items.pop_back();
 
 		//is done
-		if (itemsToBeReadToBank.back() != "0") {
+		if (items.back() != Item::IS_DONE) {
 			newItem->toggleDone();
 		}
-		itemsToBeReadToBank.pop_back();
+		items.pop_back();
 
 		//category
-		newItem->setCategory(itemsToBeReadToBank.back());
-		itemsToBeReadToBank.pop_back();
+		newItem->setCategory(items.back());
+		items.pop_back();
 
 		//priority
-		if (itemsToBeReadToBank.back() == "High") {
-			newItem->setPriority(static_cast<Item::PriorityLevel>(2));
+		if (items.back() == Item::PRIORITY_HIGH) {
+			newItem->setPriority(Item::PriorityLevel::HIGH);
 		}
-		else if (itemsToBeReadToBank.back() == "Medium") {
-			newItem->setPriority(static_cast<Item::PriorityLevel>(1));
+		else if (items.back() == Item::PRIORITY_MED) {
+			newItem->setPriority(Item::PriorityLevel::MED);
 		}
-		else if (itemsToBeReadToBank.back() == "Low") {
-			newItem->setPriority(static_cast<Item::PriorityLevel>(0));
+		else if (items.back() == Item::PRIORITY_LOW) {
+			newItem->setPriority(Item::PriorityLevel::LOW);
 		}
 		else {
-			newItem->setPriority(static_cast<Item::PriorityLevel>(3));
+			newItem->setPriority(Item::PriorityLevel::INVALID);
 		}
-		itemsToBeReadToBank.pop_back();
+		items.pop_back();
 
 		//venue
-		newItem->setVenue(itemsToBeReadToBank.back());
-		itemsToBeReadToBank.pop_back();
+		newItem->setVenue(items.back());
+		items.pop_back();
 
 		//end date time
-		endDateTimeInStringForm = itemsToBeReadToBank.back();
-		endDateTimeInIntForm = stol(endDateTimeInStringForm, nullptr, 10); 
-		endDateTimeInTimeTForm = (time_t)endDateTimeInIntForm;
-		gmtime_s(&endDateTimeInStructTmForm, &endDateTimeInTimeTForm);
-		newItem->setEndDateTime(endDateTimeInStructTmForm);
+		endDateTimeInString = items.back();
+		endDateTimeInInt = stol(endDateTimeInString, nullptr, 10); 
+		endDateTimeInTimeT = (time_t)endDateTimeInInt;
+		gmtime_s(&endDateTimeInStructTm, &endDateTimeInTimeT);
+		newItem->setEndDateTime(endDateTimeInStructTm);
 
-		itemsToBeReadToBank.pop_back();
+		items.pop_back();
 
 		//start date time
-		startDateTimeInStringForm = itemsToBeReadToBank.back();
-		startDateTimeInIntForm = stol(startDateTimeInStringForm, nullptr, 10); 
-		startDateTimeInTimeTForm = (time_t)startDateTimeInIntForm;
-		gmtime_s(&startDateTimeInStructTmForm, &startDateTimeInTimeTForm);
-		newItem->setStartDateTime(startDateTimeInStructTmForm);
+		startDateTimeInString = items.back();
+		startDateTimeInInt = stol(startDateTimeInString, nullptr, 10); 
+		startDateTimeInTimeT = (time_t)startDateTimeInInt;
+		gmtime_s(&startDateTimeInStructTm, &startDateTimeInTimeT);
+		newItem->setStartDateTime(startDateTimeInStructTm);
 
-		itemsToBeReadToBank.pop_back();
+		items.pop_back();
 
 		//description
-		newItem->setDescription(itemsToBeReadToBank.back());
-		itemsToBeReadToBank.pop_back();
+		newItem->setDescription(items.back());
+		items.pop_back();
 
 		//title
-		newItem->setTitle(itemsToBeReadToBank.back());
-		itemsToBeReadToBank.pop_back();
+		newItem->setTitle(items.back());
+		items.pop_back();
 
 		bank.push_back(newItem);
 

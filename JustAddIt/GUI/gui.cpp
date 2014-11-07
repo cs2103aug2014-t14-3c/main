@@ -43,14 +43,16 @@ void GUI::initProg() {
 void GUI::on_pushButton_clicked() {
 	QString qs = ui.lineEdit->text();
 	string str = qs.toLocal8Bit().constData();
+
+	if(!qs.isEmpty()) {
+		if(qs == "exit") {
+			exit(0);
+		}
+
+		vector<string> output = IReceiver::receive(str);
+
+		updateTextEdit(output);
 	
-	if(qs == "exit") {
-		exit(0);
+		ui.lineEdit->clear();
 	}
-
-	vector<string> output = IReceiver::receive(str);
-
-	updateTextEdit(output);
-	
-	ui.lineEdit->clear();
 }

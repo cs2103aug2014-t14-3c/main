@@ -15,6 +15,8 @@ const string Item::PRIORITY_LOW = "Low";
 const string Item::PRIORITY_MED = "Medium";
 const string Item::PRIORITY_HIGH = "High";
 
+const string Item::IS_DONE = "0";
+
 Item::Item(void){
 	_title = "-";
 	_description = "-";

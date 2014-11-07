@@ -43,6 +43,10 @@ public:
 	static void editItemCategory(Item* item, string newCategory);
 	static void editItemPriority(Item* item, string newPriority);
 
+	static bool isFoundForSearchingEvents(string keyword);
+	static bool isFoundForSearchingDeadlines(string keyword);
+	static bool isFoundForSearchingTasks(string keyword);
+	
 	static vector<Item*> searchEvents(string keyword);
 	static vector<Item*> searchDeadlines(string keyword);
 	static vector<Item*> searchTasks(string keyword);
@@ -58,7 +62,7 @@ public:
 	static vector<Item*> getOverdueDeadlines();
 
 	static int getBankSize();
-	static int getNumberOfMarkedItems();
+	//static int getNumberOfMarkedItems();
 
 	static void initialiseBank();
 	static void resetBank();
