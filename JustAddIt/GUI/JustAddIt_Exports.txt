@@ -1,13 +1,9 @@
-<u>What's going on this week?
+<u>What's going on this week?</u>
+ 
 1. buy stuff by Sunday 09 Nov 2014 02:00PM
 2. Write report abstract
-3. [DONE] Refactor class C in coding project
- 
-<u>What do you want to do?
- 
-Universal commands:
-add {task details}, search {keyword}, export, undo, redo, home, exit
- 
-<hr>[t] View To-do list
-[o] Check for overdue task<hr>
+3. Refactor class C in coding project
+<u>What do you want to do?</u>
+  
+<span style="color:#3366FF;">Universal commands:<br>add {task details}, search {keyword}, export, undo, redo, home, exit<br><br>[t] View To-do list<br>[o] Check for overdue task</span>
  

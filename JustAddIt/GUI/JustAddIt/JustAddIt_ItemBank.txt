@@ -14,7 +14,7 @@ At lecture theatre 50
 -
 High
 quiz
-1
+0
 event
 Quiz 2
 At auditorium
@@ -41,7 +41,7 @@ Project meeting
 -
 Low
 project
-1
+0
 event
 Project meeting 2
 -
@@ -77,7 +77,7 @@ Refactor class C in coding project
 -
 Low
 project
-1
+0
 task
 finish project
 -
