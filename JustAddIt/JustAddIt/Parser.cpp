@@ -242,7 +242,7 @@ void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
 //and sets its value into the input Item*.
 //The title found is then removed from the input string.
 void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
-	
+	assert(myItem != nullptr);
 
 	vector<string> vectorOfStrings;
 	vector<string>::iterator titleStartIter;
@@ -329,6 +329,7 @@ bool Parser::detectDeadlineKeywordAndTrim(string &stringDetails){
 //Otherwise, it returns false.
 bool Parser::detectTimeAndEmbedIsOk(Item* myItem, string stringDetails, bool isDeadline){
 	assert(myItem != nullptr);
+
 	istringstream streamDetails(stringDetails);
 	string startTime="";
 	string endTime="";
@@ -379,6 +380,8 @@ bool Parser::detectTimeAndEmbedIsOk(Item* myItem, string stringDetails, bool isD
 //If a month date is detected, this function returns 'true'.
 //Otherwise, it returns false.
 bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool isDeadline){
+	assert(myItem != nullptr);
+
 	istringstream streamDetails(stringDetails);
 	string currentWord="";
 	string previousWord;
@@ -490,8 +493,8 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 //If a day of the week is detected, this function returns 'true'.
 //Otherwise, it returns false.
 bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool isDeadline){
-	
-	
+	assert(myItem != nullptr);
+
 	string startDate="";
 	string endDate="";
 	int startDaysToAdd;
@@ -562,6 +565,7 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 //and sets its value into the input Item*.
 //The cateogry found is then removed from the input string.
 void Parser::detectCategoryAndEmbed(Item* myItem, string &stringDetails){
+	assert(myItem != nullptr);
 
 	string::iterator myIter;
 	string categoryToSet="";
@@ -591,9 +595,10 @@ void Parser::detectCategoryAndEmbed(Item* myItem, string &stringDetails){
 //and sets its value into the input Item*.
 //The priority found is then removed from the input string.
 void Parser::detectPriorityAndEmbed(Item* myItem, string &stringDetails){
+	assert(myItem != nullptr);
+
 	size_t position;
 	int count = 0;
-	
 	
 	while(true){
 		position = stringDetails.find(PRIORITY_MARKER);
@@ -622,6 +627,8 @@ void Parser::detectPriorityAndEmbed(Item* myItem, string &stringDetails){
 //and sets its value into the input Item*.
 //The description found is then removed from the input string.
 void Parser::detectDescriptionAndEmbed(Item* myItem, string &stringDetails){
+	assert(myItem != nullptr);
+
 	size_t positionFront;
 	size_t positionBack;
 	string descripToSet;

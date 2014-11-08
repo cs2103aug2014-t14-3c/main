@@ -29,7 +29,8 @@ vector<string> CmdGoToListView::execute() {
 
 	return outputMessageStorage;
 }
-
+//This function updates the information that OutputControl
+//keeps track of; items displayed, base screen and current screen.
 void CmdGoToListView::updateOutputControl(vector<Item*> events, vector<Item*> deadlines, vector<Item*> tasks){
 	
 	vector<Item*> collatedList;
@@ -42,6 +43,8 @@ void CmdGoToListView::updateOutputControl(vector<Item*> events, vector<Item*> de
 	OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::TO_DO_LIST_VIEW);
 }
 
+//This function uses the input Item* vectors and 
+//returns the list screen as a vector of strings.
 vector<string> CmdGoToListView::storeListScreenForDisplay(vector<Item*> events, vector<Item*> deadlines, vector<Item*> tasks){
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	return displayScreenConstructor->constructListScreen(tasks, deadlines, events);

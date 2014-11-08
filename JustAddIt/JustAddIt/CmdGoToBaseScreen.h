@@ -13,7 +13,7 @@ class CmdGoToBaseScreen :
 {
 
 private:
-	Command* baseScreenCmd;
+	Command* _baseScreenCmd;
 
 public:
 

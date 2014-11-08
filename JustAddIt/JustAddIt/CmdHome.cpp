@@ -19,13 +19,15 @@ vector<string> CmdHome::execute() {
 	
 	return outputMessageStorage;
 }
-
+//This function updates the information that OutputControl
+//keeps track of;base screen and current screen.
 void CmdHome::updateOutputControl(){
 	
 	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
 	OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
 }
-
+//This function returns the current home
+//screen as a vector of strings.
 vector<string> CmdHome::storeHomeScreenForDisplay(){
 	vector<Item*> tasks;
 	vector<Item*> deadlines;
