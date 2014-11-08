@@ -5,7 +5,7 @@ pencil
 -
 Low
 hihi
-1
+0
 task
 pen
 -
@@ -14,7 +14,7 @@ pen
 -
 Low
 hihi
-1
+0
 task
 mouse
 -
@@ -32,7 +32,7 @@ hi
 -
 Low
 -
-0
+1
 task
 hi
 -
@@ -41,5 +41,5 @@ hi
 -
 Low
 -
-0
+1
 task

@@ -360,7 +360,7 @@ void Item::setPriority(PriorityLevel priority) {
 }
 
 void Item::toggleDone(string done) {
-	if(!stoi(done)) {
+	if(stoi(done)) {
 		toggleDone();
 	}
 }

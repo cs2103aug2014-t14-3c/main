@@ -17,9 +17,8 @@ vector<string> CmdUndo::execute() {
 	ActionLog::undo();
 
 	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
-	outputMessageStorage.clear();
-	outputMessageStorage = cmdBase->execute();
-	return outputMessageStorage;
+
+	return cmdBase->execute();
 }
 
 void CmdUndo::addToActionLog() {
