@@ -5,11 +5,11 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTest
 {
-	TEST_CLASS(CmdClearAllDoneTest)
+	TEST_CLASS(CmdClearAllDone)
 	{
 	public:
 		
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(CmdClearAllDoneTest)
 		{
 			// TODO: Your test code here
 			ItemBank* itemPointer = new ItemBank;
@@ -22,6 +22,8 @@ namespace UnitTest
 			itemPointer->addToBank(task);
 			Assert::AreEqual(itemPointer->getBankSize(), 1);
 			Assert::AreEqual(itemPointer->searchKeyword(task->getItemTypeInString(), testing), true);
+
+			itemPointer->clearBank();
 		}
 	};
 }

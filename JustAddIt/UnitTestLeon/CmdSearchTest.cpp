@@ -5,11 +5,11 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTest
 {
-	TEST_CLASS(CmdSearchTest)
+	TEST_CLASS(CmdSearch)
 	{
 	public:
 		
-		TEST_METHOD(CmdSearch)
+		TEST_METHOD(CmdSearchTest)
 		{
 			// TODO: Your test code here
 			ItemBank* itemPointer = new ItemBank;
