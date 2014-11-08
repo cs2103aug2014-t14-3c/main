@@ -2,37 +2,38 @@
 #include "stdafx.h"
 #include "CmdGoToBaseScreen.h"
 
-
+//Depending on the input base screen, a different screen
+//will be constructed and stored.
 CmdGoToBaseScreen::CmdGoToBaseScreen(OutputControl::CurrentScreenType currentBaseScreen){
 	switch (currentBaseScreen) {
 		case OutputControl::CurrentScreenType::HOME_SCREEN: {
-				baseScreenCmd = new CmdHome();
+				_baseScreenCmd = new CmdHome();
 				break;
 															}
 		case OutputControl::CurrentScreenType::TO_DO_LIST_VIEW: {
-				baseScreenCmd = new CmdGoToListView();
+				_baseScreenCmd = new CmdGoToListView();
 				break;
 																}
 		case OutputControl::CurrentScreenType::SEARCH_RESULTS_SCREEN: {
-				baseScreenCmd = new CmdSearch(OutputControl::getCurrentKeywordSearched());
+				_baseScreenCmd = new CmdSearch(OutputControl::getCurrentKeywordSearched());
 				break;
 																	  }
 		case OutputControl::CurrentScreenType::OVERDUE_TASKS_SCREEN: {
-				baseScreenCmd = new CmdShowOverdueDeadlines;
+				_baseScreenCmd = new CmdShowOverdueDeadlines;
 				break;
 																	 }
 		default:{
-				baseScreenCmd = new CmdHome();
+				_baseScreenCmd = new CmdHome();
 				break;
 				}
 	}
 }
 	
 CmdGoToBaseScreen::~CmdGoToBaseScreen(void){
-	delete baseScreenCmd;
+	delete _baseScreenCmd;
 }
 	
 vector<string> CmdGoToBaseScreen::execute(){
-	return baseScreenCmd->execute();
+	return _baseScreenCmd->execute();
 
 }
