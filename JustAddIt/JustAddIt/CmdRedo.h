@@ -11,5 +11,6 @@ public:
 	~CmdRedo(void);
 
 	vector<string> execute();
+	void addToActionLog();
 };
 

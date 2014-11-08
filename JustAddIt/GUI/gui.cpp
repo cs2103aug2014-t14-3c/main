@@ -1,3 +1,4 @@
+//@author A0116781A
 #include "gui.h"
 
 using namespace std;
@@ -8,6 +9,7 @@ GUI::GUI(QWidget *parent)
 	ui.setupUi(this);
 
 	//this->setWindowFlags(Qt::FramelessWindowHint);
+	this->setWindowTitle("JustAddIt!");
 
 	ui.pushButton->setStyleSheet("QPushButton { border: 1px solid white; border-radius: 5px; padding: 3px; background-color: #EFF8FF; color: black; }");
 	ui.lineEdit->setStyleSheet("QLineEdit { border: 1px solid white; border-radius: 5px; background-color: #EFF8FF; color: black; }");

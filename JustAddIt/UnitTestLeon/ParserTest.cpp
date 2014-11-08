@@ -234,9 +234,9 @@ namespace UnitTest
 
 			Assert::AreEqual("band practice", myItem->getTitle().c_str());
 			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getStartDateTime());
-			Assert::AreEqual("10 Nov 2014 05:00PM.", actualBuffer);
+			Assert::AreEqual("17 Nov 2014 05:00PM.", actualBuffer);
 			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
-			Assert::AreEqual("10 Nov 2014 06:00PM.", actualBuffer);
+			Assert::AreEqual("17 Nov 2014 06:00PM.", actualBuffer);
 			Assert::AreEqual("High", myItem->getPriorityInString().c_str());
 
 			myParser.embedDetailsInItem(myItem, "Dinner date (buy flowers) on 14 February at 9PM");

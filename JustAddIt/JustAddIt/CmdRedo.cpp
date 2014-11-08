@@ -15,8 +15,10 @@ vector<string> CmdRedo::execute() {
 	ActionLog::redo();
 
 	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
-	outputMessageStorage.clear();
-	outputMessageStorage = cmdBase->execute();
 
-	return outputMessageStorage;
+	return cmdBase->execute();
+}
+
+void CmdRedo::addToActionLog() {
+	//do nothing
 }

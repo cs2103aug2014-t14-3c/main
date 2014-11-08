@@ -1,0 +1,34 @@
+<strong>To-do list
+ 
+<u>All Events
+ 
+1. [DONE] Quiz 1 from Friday 31 Oct 2014 12:00AM to Friday 31 Oct 2014 11:59PM
+2. [DONE] Quiz 2 from Saturday 01 Nov 2014 11:00AM to Saturday 01 Nov 2014 12:00PM
+3. Project meeting from Saturday 01 Nov 2014 06:00PM to Saturday 01 Nov 2014 07:00PM
+4. Project meeting 2 from Monday 03 Nov 2014 02:00PM to Monday 03 Nov 2014 03:00PM
+5. Mock Presentation from Monday 03 Nov 2014 01:00PM to Monday 03 Nov 2014 02:00PM
+<u>All Deadlines
+6. Assignment 8 by Sunday 02 Nov 2014 11:59PM
+7. Prepare for lesson by Saturday 01 Nov 2014 11:59PM
+8. finish project by Saturday 08 Nov 2014 11:58PM
+9. buy stuff by Sunday 09 Nov 2014 02:00PM
+ 
+<u>Tasks
+10. [DONE] Presentation slides
+11. [DONE] Refactor class A in coding project
+12. [DONE] Refactor class B in coding project
+13. Write report abstract
+14. [DONE] Refactor class C in coding project
+15. Refactor class D in coding project
+16. Refactor class E in coding project
+17. Sort results
+ 
+ 
+<hr>[e #] Edit {Item number}
+[m #] Mark {Item number}
+[d #] Delete {Item number}
+[c] Clear all completed items
+ 
+Tip: To perform multiple deletes/marks, leave a space between each Item number.
+For example: d 1 2 5<hr>
+ 
