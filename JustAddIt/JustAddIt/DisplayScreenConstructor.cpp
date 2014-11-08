@@ -28,14 +28,17 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasks,
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
 
-		if (dummyLine == "<u>What's going on this week?") {
+		if (dummyLine == "<u>What's going on this week?</u>") {
+			outputMessageStorage.push_back(dummyLine);
+
+			getline(mytextfile, dummyLine);
 			outputMessageStorage.push_back(dummyLine);
 
 			for (vector<Item*>::iterator iter = events.begin(); iter != events.end(); iter++) {
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->isDone()) {
-					dummyLine += "[DONE] ";
+					dummyLine += "<span style=\"color:#CC0000;\">[DONE]</span> ";
 				}
 
 				dummyLine += (*iter)->getTitle() + " from " + (*iter)->getStartDateInString() + " to " + (*iter)->getEndDateInString();
@@ -47,7 +50,7 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasks,
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->isDone()) {
-					dummyLine += "[DONE] ";
+					dummyLine += "<span style=\"color:#CC0000;\">[DONE]</span> ";
 				}
 
 				dummyLine += (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
@@ -59,7 +62,7 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasks,
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->isDone()) {
-					dummyLine += "[DONE] ";
+					dummyLine += "<span style=\"color:#CC0000;\">[DONE]</span> ";
 				}
 
 				dummyLine += (*iter)->getTitle();
@@ -94,7 +97,7 @@ vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
 		else if (dummyLine == "1) Title: ") {
 
 			if (item->isDone()) {
-				dummyLine += "[DONE] ";
+				dummyLine += "<span style=\"color:#CC0000;\">[DONE]</span>  ";
 			}
 
 			dummyLine += item->getTitle();
@@ -165,7 +168,7 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->isDone()) {
-					dummyLine += "[DONE] ";
+					dummyLine += "<span style=\"color:#CC0000;\">[DONE]</span>  ";
 				}
 
 				dummyLine += (*iter)->getTitle() + " from " + (*iter)->getStartDateInString() + " to " + (*iter)->getEndDateInString();
@@ -177,7 +180,7 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->isDone()) {
-					dummyLine += "[DONE] ";
+					dummyLine += "<span style=\"color:#CC0000;\">[DONE]</span>  ";
 				}
 
 				dummyLine += (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
@@ -189,7 +192,7 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->isDone()) {
-					dummyLine += "[DONE] ";
+					dummyLine += "<span style=\"color:#CC0000;\">[DONE]</span>  ";
 				}
 
 				dummyLine += (*iter)->getTitle();
@@ -229,7 +232,7 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasks,
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->isDone()) {
-					dummyLine += "[DONE] ";
+					dummyLine += "<span style=\"color:#CC0000;\">[DONE]</span>  ";
 				}
 
 				dummyLine += (*iter)->getTitle() + " from " + (*iter)->getStartDateInString() + " to " + (*iter)->getEndDateInString();
@@ -251,7 +254,7 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasks,
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->isDone()) {
-					dummyLine += "[DONE] ";
+					dummyLine += "<span style=\"color:#CC0000;\">[DONE]</span>  ";
 				}
 
 				dummyLine += (*iter)->getTitle() + " by " + (*iter)->getEndDateInString();
@@ -273,7 +276,7 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasks,
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->isDone()) {
-					dummyLine += "[DONE] ";
+					dummyLine += "<span style=\"color:#CC0000;\">[DONE]</span>  ";
 				}
 
 				dummyLine += (*iter)->getTitle();
@@ -313,7 +316,7 @@ vector<string> DisplayScreenConstructor::constructOverdueScreen(vector<Item*>ite
 				dummyLine = to_string(resultCounter) + ". ";
 
 				if ((*iter)->isDone()) {
-					dummyLine += "[DONE] ";
+					dummyLine += "<span style=\"color:#CC0000;\">[DONE]</span>  ";
 				}
 
 				dummyLine += (*iter)->getTitle() + " was due " + (*iter)->getEndDateInString();

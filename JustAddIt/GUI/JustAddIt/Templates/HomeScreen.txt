@@ -1,11 +1,7 @@
-<u>What's going on this week?
+<u>What's going on this week?</u>
  
-<u>What do you want to do?
- 
-Universal commands:
-add {task details}, search {keyword}, export, undo, redo, home, exit
 
- 
-<hr>[t] View To-do list
-[o] Check for overdue task<hr>
+<u>What do you want to do?</u>
+  
+<span style="color:#3366FF;">Universal commands:<br>add {task details}, search {keyword}, export, undo, redo, home, exit<br><br>[t] View To-do list<br>[o] Check for overdue task</span>
  

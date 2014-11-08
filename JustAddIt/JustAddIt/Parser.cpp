@@ -292,7 +292,7 @@ void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 	
 	titleToSet = convertVectorToString(titleStartIter, titleEndIter);
 	if(titleToSet==""){
-		throw invalid_argument("No title detected! Try something like\"add event title at 2pm\"");
+		throw invalid_argument("No title detected! Try something like \"add event title at 2pm\"");
 	}
 	myItem->setTitle(titleToSet);
 	

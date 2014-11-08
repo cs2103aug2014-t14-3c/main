@@ -21,7 +21,7 @@ vector<string> IReceiver::receive(string userCommand) {
 		file << "exception occurred: \"" <<  e.what() << "\" \n command entered: \"" << userCommand << "\"\n" << endl;
 		file.close();
 
-		string errorMessage = "error: ";
+		string errorMessage = "<span style=\"color:#CC0000;\">Woops! ";
 		errorMessage += e.what();
 		outputMessageStorage.push_back(errorMessage);
 	}

@@ -8,8 +8,4 @@
 6) Category: 
  
 
- 
-<hr>[o] Ok
-[e #] Edit {Field number}
-[d] Delete<hr>
-
+<span style="color:#3366FF;">[o] Ok<br>[e #] Edit {Field number}<br>[d] Delete</span>
