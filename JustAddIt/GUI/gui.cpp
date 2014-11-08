@@ -8,7 +8,6 @@ GUI::GUI(QWidget *parent)
 	ui.setupUi(this);
 
 	this->setWindowFlags(Qt::FramelessWindowHint);
-	this->resize(760, 500);
 
 	ui.pushButton->setStyleSheet("QPushButton { border: 1px solid white; border-radius: 5px; padding: 3px; background-color: black; color: white; }");
 	ui.lineEdit->setStyleSheet("QLineEdit { border: 1px solid white; border-radius: 5px; background-color: black; color: white; }");

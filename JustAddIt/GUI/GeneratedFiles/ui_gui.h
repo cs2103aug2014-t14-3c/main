@@ -44,7 +44,7 @@ public:
     {
         if (GUIClass->objectName().isEmpty())
             GUIClass->setObjectName(QStringLiteral("GUIClass"));
-        GUIClass->resize(514, 325);
+        GUIClass->resize(900, 700);
         QPalette palette;
         QBrush brush(QColor(255, 255, 255, 255));
         brush.setStyle(Qt::SolidPattern);

@@ -1,6 +1,6 @@
+//@author A0110770
 #include "stdafx.h"
 #include "CppUnitTest.h"
-
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTest
@@ -9,7 +9,7 @@ namespace UnitTest
 	{
 	public:
 		
-		TEST_METHOD(TestStringToHourInt)
+		TEST_METHOD(Parser_StringToHourInt)
 		{
 			Parser myParser;
 			Assert::AreEqual(17, myParser.convertStringToIntHour("5pm"));
@@ -22,7 +22,7 @@ namespace UnitTest
 			Assert::AreEqual(12, myParser.convertStringToIntHour("12pm"));
 		}
 
-		TEST_METHOD(TestStringToMinInt)
+		TEST_METHOD(Parser_StringToMinInt)
 		{
 			Parser myParser;
 			Assert::AreEqual(30, myParser.convertStringToIntMin("5.30pm"));
@@ -32,7 +32,7 @@ namespace UnitTest
 			Assert::AreEqual(0, myParser.convertStringToIntMin("5:00"));
 		}
 
-		TEST_METHOD(TestEmbedTitle)
+		TEST_METHOD(Parser_EmbedTitle)
 		{
 			Parser myParser;
 			Item* myItem = new Item;
@@ -71,7 +71,7 @@ namespace UnitTest
 			//Assert::AreEqual(expectedString, myItem->getTitle());
 		}
 
-			TEST_METHOD(TestEmbedDate)
+			TEST_METHOD(Parser_EmbedDate)
 		{
 			const int buffer_size = 256;
 			char buffer[256];
@@ -104,7 +104,7 @@ namespace UnitTest
 		}
 
 
-		TEST_METHOD(TestEmbedTime)
+		TEST_METHOD(Parser_EmbedTime)
 		{
 			const int buffer_size = 256;
 			char buffer[256];
@@ -150,7 +150,7 @@ namespace UnitTest
 			Assert::AreEqual("03:00PM.", buffer);
 			
 		}
-			TEST_METHOD(TestSetDefaultStartTime)
+			TEST_METHOD(Parser_SetDefaultStartTime)
 		{
 			const int buffer_size = 256;
 			char buffer1[256];
@@ -168,7 +168,7 @@ namespace UnitTest
 			
 		}
 
-			TEST_METHOD(TestEmbedTitleAndDateTime)
+			TEST_METHOD(Parser_EmbedTitleAndDateTime)
 		{
 			const int buffer_size = 256;
 			char buffer[256];
@@ -176,16 +176,46 @@ namespace UnitTest
 
 			Parser myParser;
 			Item* myItem = new Item;
-			string expectedString="busy period";
+
 			myParser.embedDetailsInItem(myItem, "busy period on 20 Sep from 1.30am to 9pm");
-			Assert::AreEqual(expectedString, myItem->getTitle());
+			Assert::AreEqual("busy period", myItem->getTitle().c_str());
 			strftime (buffer, buffer_size ,"%d %b %I:%M%p.",&myItem->getStartDateTime());
 			Assert::AreEqual("20 Sep 01:30AM.", buffer);
 			strftime (buffer, buffer_size ,"%d %b %I:%M%p.",&myItem->getEndDateTime());
 			Assert::AreEqual("20 Sep 09:00PM.", buffer);
 			
 		}
-			TEST_METHOD(TestUserGuideExamples)
+			TEST_METHOD(Parser_NegativeTestExceptions)
+		{
+			const int buffer_size = 256;
+			char buffer[256];
+			
+
+			Parser myParser;
+			Item* myItem = new Item;
+
+			try{
+				myParser.embedDetailsInItem(myItem, "20 Sep from 1.30am to 9pm");
+			}
+			catch (exception& e){
+				Assert::AreEqual("No title detected! Try something like\"add event title at 2pm\"", e.what() );
+			}
+			try{
+				myParser.embedDetailsInItem(myItem, "assignment 2 (physics");
+			}
+			catch (exception& e){
+				Assert::AreEqual("Invalid brackets! Try something like \"add event at 7pm (description)\"", e.what() );
+			}
+			try{
+				myParser.embedDetailsInItem(myItem, "assignment 2 physics)");
+			}
+			catch (exception& e){
+				Assert::AreEqual("Invalid brackets! Try something like \"add event at 7pm (description)\"", e.what() );
+			}
+			
+			
+		}
+			TEST_METHOD(Parser_UserGuideExamples)
 		{
 			const int buffer_size = 256;
 			char expectedBuffer[256];
@@ -199,13 +229,14 @@ namespace UnitTest
 			localtime_s (&nowTimeTM, &nowTime);
 
 
-			myParser.embedDetailsInItem(myItem, "band practice at 5pm next Monday");
+			myParser.embedDetailsInItem(myItem, "band practice at 5pm next Monday !!");
 
 			Assert::AreEqual("band practice", myItem->getTitle().c_str());
 			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getStartDateTime());
 			Assert::AreEqual("10 Nov 2014 05:00PM.", actualBuffer);
 			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
 			Assert::AreEqual("10 Nov 2014 06:00PM.", actualBuffer);
+			Assert::AreEqual("High", myItem->getPriorityInString().c_str());
 
 			myParser.embedDetailsInItem(myItem, "Dinner date (buy flowers) on 14 February at 9PM");
 
@@ -266,7 +297,7 @@ namespace UnitTest
 			strcat_s(expectedBuffer, buffer_size, " 04:00AM.");
 			Assert::AreEqual(expectedBuffer, actualBuffer);
 
-			myParser.embedDetailsInItem(myItem, "submit assignment by 8pm");
+			myParser.embedDetailsInItem(myItem, "submit assignment by 8pm !");
 			
 			Assert::AreEqual("submit assignment", myItem->getTitle().c_str());
 			
@@ -275,6 +306,7 @@ namespace UnitTest
 			strcat_s(expectedBuffer, buffer_size, " 08:00PM.");
 			Assert::AreEqual(expectedBuffer, actualBuffer);
 			Assert::AreEqual("deadline", myItem->getItemTypeInString().c_str());
+			Assert::AreEqual("Medium", myItem->getPriorityInString().c_str());
 
 			myParser.embedDetailsInItem(myItem, "Book flight by tomorrow (change currency)");
 			

@@ -1,16 +1,17 @@
-Edit task
+What's going on this week?
+1. pencil
+2. pen
+3. [DONE] mouse
+4. [DONE] hi
+5. [DONE] hi
  
-1) Title: [DONE] pencil
-2) Description: 
-3) Start: 
-4) End: 
-5) Priority: Low
-6) Category: hihi
+What do you want to do?
  
+Universal commands:
+add {task details}, search {keyword}, export, undo, redo, home, exit
 ================================================================================
  
-[o] Ok
-[e #] Edit {Field number}
-[d] Delete
+[t] View To-do list
+[o] Check for overdue task
  
 ================================================================================
