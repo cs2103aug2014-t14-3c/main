@@ -88,5 +88,33 @@ namespace UnitTest
 			Assert::AreEqual(5, (int)itemBank->getAllEvents().size());
 			Assert::AreEqual(8, (int)itemBank->getAllTasks().size());
 		}
+		
+		// reset bank to initial loaded bank
+		TEST_METHOD(resetBank) 
+		{
+			itemBank->clearBank();
+
+			ifstream src(source, ios::binary);
+			ofstream dest(destination, ios::binary);
+
+			dest << src.rdbuf();
+
+			src.close();
+			dest.close();
+
+			itemBank->initialiseBank();
+
+			Item* itemPtr = new Item;
+
+			itemBank->addToBank(itemPtr);
+
+			itemBank->resetBank();
+
+			Assert::AreEqual(15, itemBank->getBankSize());
+			Assert::AreEqual(2, (int)itemBank->getAllDeadlines().size());
+			Assert::AreEqual(5, (int)itemBank->getAllEvents().size());
+			Assert::AreEqual(8, (int)itemBank->getAllTasks().size());
+		}
+
 	};
 }
