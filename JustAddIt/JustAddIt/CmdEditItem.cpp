@@ -38,7 +38,7 @@ CmdEditItem::CmdEditItem(vector<Item*>::iterator bankPtr, int fieldNum, string n
 CmdEditItem::CmdEditItem(vector<Item*>::iterator bankPtr, int fieldNum, tm newTimeInfo) {
 	assert(*bankPtr != nullptr);
 
-	if (fieldNum != 1 || fieldNum != 2 || fieldNum != 3 || fieldNum != 4 || fieldNum != 5 || fieldNum != 6) {
+	if (fieldNum != 1 && fieldNum != 2 && fieldNum != 3 && fieldNum != 4 && fieldNum != 5 && fieldNum != 6) {
 		throw invalid_argument(ERROR_INVALID_FIELD_NUMBER);
 	}
 

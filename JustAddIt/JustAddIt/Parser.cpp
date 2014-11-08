@@ -182,7 +182,7 @@ Command* Parser::stringToCommand(string userCommand) {
 
 	}
 
-}
+	}
 //This function detects all possible details in the input string
 //such as title, date, time, category, priority, description.
 //It sets these values into the input Item*.
