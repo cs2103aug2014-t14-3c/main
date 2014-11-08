@@ -14,24 +14,24 @@ namespace UnitTest
 		
 		TEST_METHOD(CmdAddTest) // all positive test case *using multiple input
 		{
-			/*
 			Item* itemPtr = new Item;
-			itemPtr->setTitle(FILL);
-			itemPtr->setDescription(FILL);
-			itemPtr->setVenue(FILL);
-			itemPtr->setCategory(FILL);
-			itemPtr->setStartDate(15, 10);
-			itemPtr->setStartTime(8, 0);
-			itemPtr->setEndDate(15, 10);
-			itemPtr->setEndTime(8, 0);
+			ItemBank* itemPointer = ItemBank::getInstance();
 
-			Assert::AreEqual(itemPtr->getTitle(), FILL);
-			Assert::AreEqual(itemPtr->getDescription(), FILL);
-			Assert::AreEqual(itemPtr->getVenue(), FILL);
-			Assert::AreEqual(itemPtr->getCategory(), FILL);
-			Assert::AreEqual(itemPtr->getStartDateInString(), DATE);
-			Assert::AreEqual(itemPtr->getEndDateInString(), DATE);
-			*/
+			itemPtr->setTitle("finish JustAddIt");
+			itemPtr->setDescription("cs2103 project");
+			itemPtr->setStartDate(4, 8);
+			itemPtr->setStartTime(8, 0);
+			itemPtr->setEndDate(10, 11);
+			itemPtr->setEndTime(12, 0);
+			itemPtr->setPriority("High");
+			itemPtr->setCategory("Project");
+			itemPtr->setVenue("PGP");
+			
+			itemPointer -> addToBank(itemPtr);
+
+			Assert::AreEqual(itemPointer->getBankSize(), 1);
+			
+			itemPointer->clearBank();
 		}
 	};
 }
