@@ -17,12 +17,12 @@ DataStorage* DataStorage::getInstance(void) {
 	return dataStorage;
 }
 
-void DataStorage::writeToFile(vector<string>itemsToBeWrittenToFile) {
+void DataStorage::writeToFile(vector<string>items) {
 	ofstream mytextfile;
 	mytextfile.open(fileName);
 	vector<string>::iterator iter;
 
-	for (iter = itemsToBeWrittenToFile.begin(); iter != itemsToBeWrittenToFile.end(); iter++) {
+	for (iter = items.begin(); iter != items.end(); iter++) {
 		mytextfile << *iter << endl;
 	}
 

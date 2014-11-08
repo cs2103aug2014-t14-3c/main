@@ -25,7 +25,7 @@ GUI::~GUI()
 
 }
 
-void GUI::updateTextEdit(vector<string> output) {
+void GUI::updateDisplay(vector<string> output) {
 	ui.textEdit->clear();
 	for(vector<string>::iterator iter = output.begin(); iter != output.end(); iter++) {
 		QString string = QString::fromStdString(*iter);
@@ -37,22 +37,21 @@ void GUI::updateTextEdit(vector<string> output) {
 void GUI::initProg() {
 	vector<string> output = IReceiver::initialise();
 
-	updateTextEdit(output);
+	updateDisplay(output);
 }
 
 void GUI::on_pushButton_clicked() {
 	QString qs = ui.lineEdit->text();
 	string str = qs.toLocal8Bit().constData();
 
-	if(!qs.isEmpty()) {
-		if(qs == "exit") {
-			exit(0);
-		}
-
-		vector<string> output = IReceiver::receive(str);
-
-		updateTextEdit(output);
-	
-		ui.lineEdit->clear();
+	if(qs == "exit") {
+		exit(0);
 	}
+
+	vector<string> output = IReceiver::receive(str);
+
+	updateDisplay(output);
+	
+	ui.lineEdit->clear();
+
 }

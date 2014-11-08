@@ -2,7 +2,7 @@
 #include "CmdSearch.h"
 
 CmdSearch::CmdSearch(string keyword) {
-	_searchKeyword = keyword;
+	_searchKeyword = keyword.substr(1);
 }
 
 CmdSearch::~CmdSearch(void) {
