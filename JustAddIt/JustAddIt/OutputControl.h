@@ -1,5 +1,5 @@
 #pragma once
-
+//@author A0110770U
 #include "stdafx.h"
 #include "Command.h"
 
@@ -24,11 +24,12 @@ private:
 public:
 	static void resetCurrentItemList();
 	static void addItemToDisplayList(Item* itemPtr);
+	//setters
 	static void setCurrentScreen(CurrentScreenType newScreen);
 	static void setCurrentBaseScreen(CurrentScreenType newScreen);
 	static void setCurrentDisplayedItemList(vector<Item*> newList);
 	static void setCurrentKeywordSearched(string keyword);
-
+	//getters
 	static int getNumberOfDisplayedItems();
 	static Item* getItemAddr(int itemLocationInList);
 	static vector<Item*>::iterator getCurrentDisplayedItemList();

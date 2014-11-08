@@ -1,4 +1,4 @@
-//@LokeJunJie A0110770
+//@author A0110770
 #include "stdafx.h"
 #include "CmdGoToBaseScreen.h"
 

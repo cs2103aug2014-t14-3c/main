@@ -1,4 +1,5 @@
 #pragma once
+//@author A0110770U
 #include "Command.h"
 #include "DisplayScreenConstructor.h"
 
@@ -7,6 +8,9 @@ class CmdHome :
 {
 private:
 	struct tm _currentTime;
+
+	void updateOutputControl();
+	vector<string> storeHomeScreenForDisplay();
 
 public:
 	CmdHome(void);

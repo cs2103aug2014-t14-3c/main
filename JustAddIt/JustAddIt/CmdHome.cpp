@@ -12,6 +12,21 @@ CmdHome::~CmdHome(void)
 }
 
 vector<string> CmdHome::execute() {
+	updateOutputControl();
+
+	outputMessageStorage.clear();
+	outputMessageStorage = storeHomeScreenForDisplay();
+	
+	return outputMessageStorage;
+}
+
+void CmdHome::updateOutputControl(){
+	
+	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
+	OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
+}
+
+vector<string> CmdHome::storeHomeScreenForDisplay(){
 	vector<Item*> tasks;
 	vector<Item*> deadlines;
 	vector<Item*> events;
@@ -22,11 +37,6 @@ vector<string> CmdHome::execute() {
 	deadlines = itemBank->getDeadlinesThisWeek();
 	tasks = itemBank->getAllTasks();
 
-	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
-	outputMessageStorage.clear();
-	outputMessageStorage = displayScreenConstructor->constructHomeScreen(tasks, deadlines, events);
-	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
-	OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
-
-	return outputMessageStorage;
+	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();	 
+	return displayScreenConstructor->constructHomeScreen(tasks, deadlines, events);
 }

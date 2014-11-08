@@ -158,6 +158,9 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 		if (dummyLine == "<u>Showing results:") {
 			outputMessageStorage.push_back(dummyLine);
 
+			getline(mytextfile, dummyLine);
+			outputMessageStorage.push_back(dummyLine);
+
 			for (vector<Item*>::iterator iter = events.begin(); iter != events.end(); iter++) {
 				dummyLine = to_string(resultCounter) + ". ";
 
@@ -301,6 +304,9 @@ vector<string> DisplayScreenConstructor::constructOverdueScreen(vector<Item*>ite
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
 		if (dummyLine == "<u>Overdue Deadlines") {
+			outputMessageStorage.push_back(dummyLine);
+
+			getline(mytextfile, dummyLine);
 			outputMessageStorage.push_back(dummyLine);
 
 			for (iter = items.begin(); iter != items.end(); iter++) {

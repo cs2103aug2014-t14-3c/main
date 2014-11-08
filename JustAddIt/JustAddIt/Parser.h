@@ -1,5 +1,5 @@
 #pragma once
-//@LokeJunJie A0110770
+//@author A0110770
 #include "stdafx.h"
 
 #include "Command.h"
@@ -20,11 +20,15 @@
 #include "Item.h"
 
 
-
-
+//TODO: REMOVE THIS WHEN NOT IN UNIT TEST MODE
+#define TESTMODE
 class Parser
 {
-public:
+#ifndef TESTMODE 
+private: 
+#else 
+public: 
+#endif
 	void embedDetailsInItem(Item* myItem, string stringDetails);
 	void detectTitleAndEmbed(Item* myItem, string &stringDetails);
 	bool detectDeadlineKeywordAndTrim(string &stringDetails);

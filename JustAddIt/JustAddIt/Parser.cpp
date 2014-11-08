@@ -1,4 +1,4 @@
-//@LokeJunJie A0110770U
+//@author A0110770U
 #include "stdafx.h"
 #include "Parser.h"
 #define MONTHS_IN_YEAR 12

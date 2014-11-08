@@ -1,30 +1,24 @@
-		    ____________________________________
-		    |	   			       |
-		    |	          JustAddIt            |
-		    |__________________________________|
+<strong>To-do list
  
-To-do list
+
+<u>All Events
  
-==========
-All Events
-==========
+
+
+<u>All Deadlines
+
  
-=============
-All Deadlines
-=============
+
+<u>Tasks
+
  
-=====
-Tasks
-=====
+
  
-================================================================================
- 
-[e #] Edit {Item number}
+<hr>[e #] Edit {Item number}
 [m #] Mark {Item number}
 [d #] Delete {Item number}
 [c] Clear all completed items
  
 Tip: To perform multiple deletes/marks, leave a space between each Item number.
-For example: d 1 2 5
+For example: d 1 2 5<hr>
  
-================================================================================

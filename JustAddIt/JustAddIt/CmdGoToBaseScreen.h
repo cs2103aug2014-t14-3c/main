@@ -1,5 +1,5 @@
 #pragma once
-//@LokeJunJie A0110770
+//@author A0110770
 #include "stdafx.h"
 #include "Command.h"
 #include "CmdHome.h"
