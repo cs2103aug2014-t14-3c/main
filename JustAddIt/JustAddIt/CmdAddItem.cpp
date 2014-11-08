@@ -12,6 +12,7 @@ CmdAddItem::~CmdAddItem(void) {
 vector<string> CmdAddItem::execute() {
 
 	bool isTimeOrDateConflicted = ItemBank::getInstance() -> addToBank(_itemAddress);
+	assert(_itemAddress != NULL);
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();

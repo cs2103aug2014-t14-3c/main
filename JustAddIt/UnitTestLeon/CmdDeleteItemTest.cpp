@@ -34,7 +34,7 @@ namespace UnitTest
 			itemsToBeDeleted.push_back(task);
 
 			CmdDeleteItem* cmdDeleteItem = new CmdDeleteItem(itemsToBeDeleted);
-			cmdDeleteItem->deleteItemsFromBank();
+			cmdDeleteItem->execute();
 			Assert::AreEqual(itemBank->getBankSize(), 0);
 
 			itemBank->clearBank();
@@ -63,7 +63,7 @@ namespace UnitTest
 			itemsToBeDeleted.push_back(task2);
 
 			CmdDeleteItem* cmdDeleteItem = new CmdDeleteItem(itemsToBeDeleted);
-			cmdDeleteItem->deleteItemsFromBank();
+			cmdDeleteItem->execute();
 			Assert::AreEqual(itemBank->getBankSize(), 1);
 
 			itemBank->clearBank();
@@ -93,7 +93,7 @@ namespace UnitTest
 			itemsToBeDeleted.push_back(task3);
 
 			CmdDeleteItem* cmdDeleteItem = new CmdDeleteItem(itemsToBeDeleted);
-			cmdDeleteItem->deleteItemsFromBank();
+			cmdDeleteItem->execute();
 			Assert::AreEqual(itemBank->getBankSize(), 0);
 
 			itemBank->clearBank();

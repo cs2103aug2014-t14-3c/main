@@ -1,3 +1,4 @@
+//@author A0108397W
 #pragma once
 #include "stdafx.h"
 #include "Command.h"
@@ -12,6 +13,12 @@ class CmdDeleteItem :
 private:
 	vector<Item*> _itemsToDelete;
 
+	void deleteItemsFromBank(void);
+	vector<string> returnToBaseScreen(void);
+	void storeSuccessMessage(void);
+	void storeCommandIntoActionLog(void);
+	void writeToLog (string logEntry);
+
 public:
 	static const string MESSAGE_DELETION_SUCCESSFUL;
 	static const string LOG_ITEMS_DELETED;
@@ -25,9 +32,4 @@ public:
 	~CmdDeleteItem(void);
 
 	vector<string> CmdDeleteItem::execute();
-	void deleteItemsFromBank(void);
-	vector<string> returnToBaseScreen(void);
-	void storeSuccessMessage(void);
-	void storeCommandIntoActionLog(void);
-	void writeToLog (string logEntry);
 };
