@@ -7,11 +7,11 @@ GUI::GUI(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	this->setWindowFlags(Qt::FramelessWindowHint);
+	//this->setWindowFlags(Qt::FramelessWindowHint);
 
-	ui.pushButton->setStyleSheet("QPushButton { border: 1px solid white; border-radius: 5px; padding: 3px; background-color: black; color: white; }");
-	ui.lineEdit->setStyleSheet("QLineEdit { border: 1px solid white; border-radius: 5px; background-color: black; color: white; }");
-	ui.textEdit->setStyleSheet("QTextEdit { border: 1px solid black; border-radius: 5px; background-color: black; color: white; }");
+	ui.pushButton->setStyleSheet("QPushButton { border: 1px solid white; border-radius: 5px; padding: 3px; background-color: #E0E0E0; color: black; }");
+	ui.lineEdit->setStyleSheet("QLineEdit { border: 1px solid white; border-radius: 5px; background-color: #E0E0E0; color: black; }");
+	ui.textEdit->setStyleSheet("QTextEdit { border: 1px solid black; border-radius: 5px; background-color: #E0E0E0; color: black; }");
 
 	ui.textEdit->setReadOnly(true);
 

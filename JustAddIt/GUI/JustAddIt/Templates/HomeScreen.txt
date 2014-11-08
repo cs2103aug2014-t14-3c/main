@@ -1,12 +1,11 @@
-What's going on this week?
+<u>What's going on this week?
  
-What do you want to do?
+<u>What do you want to do?
  
 Universal commands:
 add {task details}, search {keyword}, export, undo, redo, home, exit
-================================================================================
+
  
-[t] View To-do list
-[o] Check for overdue task
+<hr>[t] View To-do list
+[o] Check for overdue task<hr>
  
-================================================================================

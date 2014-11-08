@@ -1,17 +1,22 @@
-What's going on this week?
-1. pencil
-2. pen
-3. [DONE] mouse
-4. [DONE] hi
-5. [DONE] hi
+<u>What's going on this week?
+1. things by Sunday 09 Nov 2014 11:59PM
+2. [DONE] pencil
+3. [DONE] pen
+4. mouse
+5. hi
+6. hi
+7. [DONE] things
+8. things
+9. [DONE] thigs
+10. [DONE] things
+11. things
+12. things
  
-What do you want to do?
+<u>What do you want to do?
  
 Universal commands:
 add {task details}, search {keyword}, export, undo, redo, home, exit
-================================================================================
  
-[t] View To-do list
-[o] Check for overdue task
+<hr>[t] View To-do list
+[o] Check for overdue task<hr>
  
-================================================================================

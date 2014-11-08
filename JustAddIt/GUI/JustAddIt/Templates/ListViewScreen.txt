@@ -1,25 +1,24 @@
-To-do list
+<strong>To-do list
  
-==========
-All Events
-==========
+
+<u>All Events
  
-=============
-All Deadlines
-=============
+
+
+<u>All Deadlines
+
  
-=====
-Tasks
-=====
+
+<u>Tasks
+
  
-================================================================================
+
  
-[e #] Edit {Item number}
+<hr>[e #] Edit {Item number}
 [m #] Mark {Item number}
 [d #] Delete {Item number}
 [c] Clear all completed items
  
 Tip: To perform multiple deletes/marks, leave a space between each Item number.
-For example: d 1 2 5
+For example: d 1 2 5<hr>
  
-================================================================================

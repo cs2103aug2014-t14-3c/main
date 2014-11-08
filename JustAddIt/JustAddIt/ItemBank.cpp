@@ -1,7 +1,7 @@
 //@author A0116781A
 #include "stdafx.h"
 #include "ItemBank.h"
-
+#define SEVEN_DAYS_IN_SECONDS 604800
 //private attributes and methods
 
 ItemBank* ItemBank::itemBank = NULL;
@@ -11,7 +11,7 @@ vector<Item*> ItemBank::initialBank;
 vector<Item*> ItemBank::bank;
 
 ItemBank::ItemBank() {
-	sevenDaysInSeconds = 604800;
+
 }
 
 ItemBank::~ItemBank() {
@@ -70,7 +70,7 @@ bool ItemBank::isTimePast(tm time) {
 bool ItemBank::isDateThisWeek(tm timeInTm) {
 	time_t currentTime;
 	std::time(&currentTime);
-	time_t oneWeekLaterTime = currentTime + sevenDaysInSeconds;
+	time_t oneWeekLaterTime = currentTime + SEVEN_DAYS_IN_SECONDS;
 	time_t givenTime = mktime(&timeInTm);
 
 
@@ -80,7 +80,7 @@ bool ItemBank::isDateThisWeek(tm timeInTm) {
 bool ItemBank::isDateAfterThisWeek(tm timeInTm) {
 	time_t oneWeekLaterTime;
 	std::time(&oneWeekLaterTime);
-	oneWeekLaterTime += sevenDaysInSeconds;
+	oneWeekLaterTime += SEVEN_DAYS_IN_SECONDS;
 	time_t givenTime = mktime(&timeInTm);
 
 

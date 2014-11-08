@@ -28,7 +28,7 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasks,
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
 
-		if (dummyLine == "What's going on this week?") {
+		if (dummyLine == "<u>What's going on this week?") {
 			outputMessageStorage.push_back(dummyLine);
 
 			for (vector<Item*>::iterator iter = events.begin(); iter != events.end(); iter++) {
@@ -88,7 +88,7 @@ vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
 
-		if (dummyLine == "Edit ") {
+		if (dummyLine == "<u>Edit ") {
 			dummyLine += item->getItemTypeInString();
 		}
 		else if (dummyLine == "1) Title: ") {
@@ -155,7 +155,7 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
 
-		if (dummyLine == "Showing results:") {
+		if (dummyLine == "<u>Showing results:") {
 			outputMessageStorage.push_back(dummyLine);
 
 			for (vector<Item*>::iterator iter = events.begin(); iter != events.end(); iter++) {
@@ -217,7 +217,7 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasks,
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
 
-		if (dummyLine == "All Events") {
+		if (dummyLine == "<u>All Events") {
 			outputMessageStorage.push_back(dummyLine);
 			getline(mytextfile, dummyLine);
 			outputMessageStorage.push_back(dummyLine);
@@ -300,7 +300,7 @@ vector<string> DisplayScreenConstructor::constructOverdueScreen(vector<Item*>ite
 
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
-		if (dummyLine == "Overdue Deadlines") {
+		if (dummyLine == "<u>Overdue Deadlines") {
 			outputMessageStorage.push_back(dummyLine);
 
 			for (iter = items.begin(); iter != items.end(); iter++) {
