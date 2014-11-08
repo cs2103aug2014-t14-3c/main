@@ -1,3 +1,4 @@
+//@author A0116781A
 #include "stdafx.h"
 #include "ActionLog.h"
 
@@ -5,17 +6,6 @@ vector<Command*> ActionLog::log;
 stack<Command*> ActionLog::undoStack;
 int ActionLog::numCommands = 0;
 ActionLog::State ActionLog::state = READY;
-
-void ActionLog::resetLog() {
-	log.clear();
-	numCommands = 0;
-}
-
-void ActionLog::resetUndoStack() {
-	while(undoStack.size() != 0) {
-		undoStack.pop();
-	}
-}
 
 void ActionLog::addCommand(Command* cmd) {
 	log.push_back(cmd);
@@ -69,4 +59,15 @@ void ActionLog::redo() {
 	}
 	
 	state = REDO;
+}
+
+void ActionLog::resetLog() {
+	log.clear();
+	numCommands = 0;
+}
+
+void ActionLog::resetUndoStack() {
+	while(undoStack.size() != 0) {
+		undoStack.pop();
+	}
 }

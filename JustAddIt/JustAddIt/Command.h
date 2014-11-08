@@ -16,5 +16,4 @@ public:
 	Command(void);
 	~Command(void);
 	virtual vector<string> execute();
-
 };
