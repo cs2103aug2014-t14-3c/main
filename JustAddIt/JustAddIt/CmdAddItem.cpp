@@ -1,3 +1,4 @@
+//@author A0128461H
 #include "stdafx.h"
 #include "CmdAddItem.h"
 
@@ -10,15 +11,15 @@ CmdAddItem::~CmdAddItem(void) {
 
 vector<string> CmdAddItem::execute() {
 
-
-	bool isConflicted = ItemBank::getInstance()->addToBank(_itemAddress);
+	bool isTimeOrDateConflicted = ItemBank::getInstance() -> addToBank(_itemAddress);
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();
 	outputMessageStorage = displayScreenConstructor -> clearScreen();
 	outputMessageStorage = displayScreenConstructor -> constructEditScreen(_itemAddress);
 	outputMessageStorage.push_back("Just added it successfully!");
-	if (isConflicted == true) {
+
+	if (isTimeOrDateConflicted == true) {
 		outputMessageStorage.push_back("This conflicts with another event!");
 	}
 
