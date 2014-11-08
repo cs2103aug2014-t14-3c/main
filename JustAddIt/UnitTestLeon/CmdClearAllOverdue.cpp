@@ -11,7 +11,7 @@ namespace UnitTest
 		
 		TEST_METHOD(CmdClearAllOverdueTest)
 		{
-			ItemBank* itemPointer = new ItemBank;
+			ItemBank* itemPointer = ItemBank::getInstance();
 			Item* task1 = new Item;
 			Item* task2 = new Item;
 			Item* task3 = new Item;

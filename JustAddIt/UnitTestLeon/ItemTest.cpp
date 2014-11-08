@@ -6,7 +6,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 const string FILL = "This is a random filler text to test code";
 const string DATE = "Saturday 15 Nov 2014 08:00AM";
 
-namespace UnitTestLeon
+namespace UnitTest
 {		
 	TEST_CLASS(ItemTest)
 	{

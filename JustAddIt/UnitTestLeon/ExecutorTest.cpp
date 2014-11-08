@@ -3,7 +3,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace UnitTestLeon
+namespace UnitTest
 {		
 	TEST_CLASS(ParserTest)
 	{
@@ -12,7 +12,7 @@ namespace UnitTestLeon
 		TEST_METHOD(TestExecutor)
 		{
 			Executor* myExec = new Executor();
-			ItemBank* myIB = new ItemBank();
+			ItemBank* myIB = ItemBank::getInstance();
 			DisplayScreenConstructor* myDSC = DisplayScreenConstructor::getInstance();
 			OutputControl* myOC = new OutputControl();
 

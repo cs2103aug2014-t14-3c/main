@@ -22,7 +22,7 @@ namespace UnitTest
 
 		TEST_METHOD(CmdEditItem_EditTitleTest)
 		{
-			ItemBank* itemBank = new ItemBank();
+			ItemBank* itemBank = ItemBank::getInstance();
 
 			Item* itemPtr = new Item;
 			itemPtr->setTitle("Title");
@@ -49,7 +49,7 @@ namespace UnitTest
 
 		TEST_METHOD(CmdEditItem_EditDescriptionTest)
 		{
-			ItemBank* itemBank = new ItemBank();
+			ItemBank* itemBank = ItemBank::getInstance();
 
 			Item* itemPtr = new Item;
 			itemPtr->setTitle("Title");
@@ -76,7 +76,7 @@ namespace UnitTest
 
 		TEST_METHOD(CmdEditItem_EditStartTimeTest)
 		{
-			ItemBank* itemBank = new ItemBank();
+			ItemBank* itemBank = ItemBank::getInstance();
 
 			Item* itemPtr = new Item;
 
@@ -101,7 +101,7 @@ namespace UnitTest
 		}
 		TEST_METHOD(CmdEditItem_EditEndTimeTest)
 		{
-			ItemBank* itemBank = new ItemBank();
+			ItemBank* itemBank = ItemBank::getInstance();
 
 			Item* itemPtr = new Item;
 
@@ -126,7 +126,7 @@ namespace UnitTest
 		}
 		TEST_METHOD(CmdEditItem_EditPriorityTest)
 		{
-			ItemBank* itemBank = new ItemBank();
+			ItemBank* itemBank = ItemBank::getInstance();
 
 			Item* itemPtr = new Item;
 			itemPtr->setTitle("Title");
@@ -152,7 +152,7 @@ namespace UnitTest
 		}
 		TEST_METHOD(CmdEditItem_EditCategoryTest)
 		{
-			ItemBank* itemBank = new ItemBank();
+			ItemBank* itemBank = ItemBank::getInstance();
 
 			Item* itemPtr = new Item;
 			itemPtr->setTitle("Title");

@@ -1,33 +1,16 @@
-		    ____________________________________
-		    |	   			       |
-		    |	          JustAddIt            |
-		    |__________________________________|
+<div style = "color: red;">                    ____________________________________<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Welcome to JustAddIt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>                    |____________________________________|</div>
+What's going on this week?
+1. pencil
+2. pen
+3. mouse
  
-To-do list
+What do you want to do?
  
-==========
-All Events
-==========
- 
-=============
-All Deadlines
-=============
- 
-=====
-Tasks
-=====
-1. [DONE] pencil
-2. [DONE] pen
-3. [DONE] mouse
- 
+Universal commands:
+add {task details}, search {keyword}, export, undo, redo, home, exit
 ================================================================================
  
-[e #] Edit {Item number}
-[m #] Mark {Item number}
-[d #] Delete {Item number}
-[c] Clear all completed items
- 
-Tip: To perform multiple deletes/marks, leave a space between each Item number.
-For example: d 1 2 5
+[t] View To-do list
+[o] Check for overdue task
  
 ================================================================================

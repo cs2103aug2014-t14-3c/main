@@ -3,7 +3,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace UnitTestLeon
+namespace UnitTest
 {		
 	TEST_CLASS(ParserTest)
 	{

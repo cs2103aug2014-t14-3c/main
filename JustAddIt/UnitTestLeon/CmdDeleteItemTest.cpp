@@ -22,7 +22,7 @@ namespace UnitTest
 
 		TEST_METHOD(CmdDeleteItem_SingleDeletionTest)
 		{
-			ItemBank* itemBank = new ItemBank();
+			ItemBank* itemBank = ItemBank::getInstance();
 			Item* task = new Item();
 			OutputControl* outputControl = new OutputControl();
 			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
@@ -42,7 +42,7 @@ namespace UnitTest
 
 		TEST_METHOD(CmdDeleteItem_MultipleDeletionTest)
 		{
-			ItemBank* itemBank = new ItemBank();
+			ItemBank* itemBank = ItemBank::getInstance();
 			OutputControl* outputControl = new OutputControl();
 			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
 
@@ -71,7 +71,7 @@ namespace UnitTest
 
 		TEST_METHOD(CmdDeleteItem_DeleteAllTest)
 		{
-			ItemBank* itemBank = new ItemBank();
+			ItemBank* itemBank = ItemBank::getInstance();
 			OutputControl* outputControl = new OutputControl();
 			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
 

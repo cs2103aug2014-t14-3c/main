@@ -11,8 +11,7 @@ namespace UnitTest
 		
 		TEST_METHOD(CmdClearAllDoneTest)
 		{
-			// TODO: Your test code here
-			ItemBank* itemPointer = new ItemBank;
+			ItemBank* itemPointer = ItemBank::getInstance();
 			Item* task = new Item;
 			string title = "study";
 			string testing = "event";
