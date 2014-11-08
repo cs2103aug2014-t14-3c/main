@@ -37,7 +37,7 @@ void ActionLog::undo() {
 	if(numCommands == 0) {
 		throw invalid_argument("no previous command to undo!");
 	} else {
-		ItemBank::resetBank();
+		ItemBank::getInstance()->resetBank();
 
 		vector<Command*> tempLog;
 		

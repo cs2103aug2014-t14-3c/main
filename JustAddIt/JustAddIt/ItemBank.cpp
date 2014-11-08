@@ -4,12 +4,28 @@
 
 //private attributes and methods
 
+ItemBank* ItemBank::itemBank = NULL;
+bool ItemBank::instanceFlag = false;
 
-const int ItemBank::sevenDaysInSeconds = 604800;
-
-vector<Item*> ItemBank::bank;
 vector<Item*> ItemBank::initialBank;
+vector<Item*> ItemBank::bank;
 
+ItemBank::ItemBank() {
+	sevenDaysInSeconds = 604800;
+}
+
+ItemBank::~ItemBank() {
+	instanceFlag = false;
+}
+
+ItemBank* ItemBank::getInstance() {
+	if(!instanceFlag) {
+		ItemBank();
+		instanceFlag = true;
+	}
+	
+	return itemBank;
+}
 
 bool ItemBank::checkForConflict(Item* itemPtr) {
 	vector<Item*>::iterator iter;

@@ -42,9 +42,6 @@ vector<string> DataStorage::readToBank() {
 		dummyLine = trimWhiteSpaceOnLeft(dummyLine);
 		items.push_back(dummyLine);
 		}
-		else {
-		continue;
-		}
 	}
 	mytextfile.close();
 	return items;

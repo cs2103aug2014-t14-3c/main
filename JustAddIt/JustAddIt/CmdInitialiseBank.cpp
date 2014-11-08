@@ -10,7 +10,7 @@ CmdInitialiseBank::~CmdInitialiseBank(void)
 }
 
 vector<string> CmdInitialiseBank::execute() {
-	ItemBank::initialiseBank();
+	ItemBank::getInstance()->initialiseBank();
 
 	Command* cmdHome = new CmdHome;
 	outputMessageStorage.clear();

@@ -10,14 +10,16 @@ CmdGoToListView::~CmdGoToListView(void)
 }
 
 vector<string> CmdGoToListView::execute() {
-	vector<Item*>tasks;
-	vector<Item*>deadlines;
-	vector<Item*>events;
-	vector<Item*>collatedList;
+	vector<Item*> tasks;
+	vector<Item*> deadlines;
+	vector<Item*> events;
+	vector<Item*> collatedList;
 
-	events = ItemBank::getAllEvents();
-	deadlines = ItemBank::getAllDeadlines();
-	tasks = ItemBank::getAllTasks();
+	ItemBank* itemBank = ItemBank::getInstance();
+
+	events = itemBank->getAllEvents();
+	deadlines = itemBank->getAllDeadlines();
+	tasks = itemBank->getAllTasks();
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();

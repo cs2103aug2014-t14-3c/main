@@ -8,20 +8,17 @@ To-do list
 ==========
 All Events
 ==========
-1. ie2101 quiz from Friday 31 Oct 2014 12:00AM to Friday 31 Oct 2014 11:59PM
-2. ie2110 quiz from Saturday 01 Nov 2014 11:00AM to Saturday 01 Nov 2014 12:00PM
-3. [DONE] buy notebook from Saturday 08 Nov 2014 02:00PM to Saturday 08 Nov 2014 06:00PM
  
 =============
 All Deadlines
 =============
-4. [DONE] ie2110 assn 8 by Sunday 02 Nov 2014 11:59PM
-5. prepare cs1010e lesson by Saturday 01 Nov 2014 07:00PM
  
 =====
 Tasks
 =====
-6. [DONE] ssu2003 presentation slides
+1. [DONE] pencil
+2. [DONE] pen
+3. [DONE] mouse
  
 ================================================================================
  

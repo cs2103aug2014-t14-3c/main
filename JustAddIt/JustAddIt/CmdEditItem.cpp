@@ -77,32 +77,34 @@ vector<string> CmdEditItem::execute() {
 
 //This function invokes the corresponding edit functions in the ItemBank class based on the user's input
 void CmdEditItem::editItem() {
+	ItemBank* itemBank = ItemBank::getInstance();
+
 	if(_isEditField){
 		FIELD_TO_BE_EDITED editField = determineEditField();
 
 		switch (editField) {
 		case EDIT_TITLE: {
-			ItemBank::editItemTitle(_itemAddr, _newFieldInfo);
+			itemBank->editItemTitle(_itemAddr, _newFieldInfo);
 			break;
 						 }
 		case EDIT_DESCRIPTION: {
-			ItemBank::editItemDescription(_itemAddr, _newFieldInfo);
+			itemBank->editItemDescription(_itemAddr, _newFieldInfo);
 			break;
 							   }
 		case EDIT_START_TIME: {
-			ItemBank::editItemStartDateTime(_itemAddr, _newTimeInfo);
+			itemBank->editItemStartDateTime(_itemAddr, _newTimeInfo);
 			break;
 							  }
 		case EDIT_END_TIME: {
-			ItemBank::editItemEndDateTime(_itemAddr, _newTimeInfo);
+			itemBank->editItemEndDateTime(_itemAddr, _newTimeInfo);
 			break;
 							}
 		case EDIT_PRIORITY: {
-			ItemBank::editItemPriority(_itemAddr, _newFieldInfo);
+			itemBank->editItemPriority(_itemAddr, _newFieldInfo);
 			break;
 							}
 		case EDIT_CATEGORY: {
-			ItemBank::editItemCategory(_itemAddr, _newFieldInfo);
+			itemBank->editItemCategory(_itemAddr, _newFieldInfo);
 			break;
 							}
 		case INVALID: {

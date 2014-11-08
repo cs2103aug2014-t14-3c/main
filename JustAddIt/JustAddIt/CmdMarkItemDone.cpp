@@ -40,7 +40,7 @@ vector<string> CmdMarkItemDone::execute() {
 
 //This function calls for Itembank to mark the items in the _itemsToBeMarked vector
 void CmdMarkItemDone::toggleItemsDone(void) {
-	ItemBank::toggleItemsDone(_itemsToBeMarked);
+	ItemBank::getInstance()->toggleItemsDone(_itemsToBeMarked);
 
 	writeToLog(LOG_ITEMS_MARKED);
 }
