@@ -16,13 +16,15 @@ vector<string> CmdHome::execute() {
 	vector<Item*> deadlines;
 	vector<Item*> events;
 	
-	events = ItemBank::getEventsThisWeek();
-	deadlines = ItemBank::getDeadlinesThisWeek();
-	tasks = ItemBank::getAllTasks();
+	ItemBank* itemBank = ItemBank::getInstance();
+
+	events = itemBank->getEventsThisWeek();
+	deadlines = itemBank->getDeadlinesThisWeek();
+	tasks = itemBank->getAllTasks();
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();
-	//outputMessageStorage = displayScreenConstructor->clearScreen();
+	outputMessageStorage = displayScreenConstructor->clearScreen();
 	outputMessageStorage = displayScreenConstructor->constructHomeScreen(tasks, deadlines, events);
 	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
 	OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::HOME_SCREEN);

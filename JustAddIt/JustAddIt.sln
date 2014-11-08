@@ -6,9 +6,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTestLeon\UnitTestLeon.vcxproj", "{685B6174-29C2-46C1-81E9-C8EF52AA1E53}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GUI", "GUI\GUI.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
-	ProjectSection(ProjectDependencies) = postProject
-		{14FBACBD-BC1C-4F92-86D8-9EC9E496400F} = {14FBACBD-BC1C-4F92-86D8-9EC9E496400F}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

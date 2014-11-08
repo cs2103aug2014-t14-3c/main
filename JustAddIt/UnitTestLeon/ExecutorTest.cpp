@@ -3,7 +3,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace UnitTestLeon
+namespace UnitTest
 {		
 	TEST_CLASS(ParserTest)
 	{
@@ -12,7 +12,9 @@ namespace UnitTestLeon
 		TEST_METHOD(TestExecutor)
 		{
 			Executor* myExec = new Executor();
-
+			ItemBank* myIB = ItemBank::getInstance();
+			DisplayScreenConstructor* myDSC = DisplayScreenConstructor::getInstance();
+			OutputControl* myOC = new OutputControl();
 
 			myExec->execute("add wake up on 30 Dec at 7 #category (more info)");
 
@@ -28,9 +30,10 @@ namespace UnitTestLeon
 				myExec->execute("add more info(");
 			}
 			catch (exception& e){
-				Assert::AreEqual("Invalid brackets! Try something like \"add event at 7pm (description)\"", e.what() );
+				Assert::AreEqual("Invalid brackets! Please follow e.g. add event at 7pm (description)", e.what() );
 			}
 
+			myIB->clearBank();
 		}
 	};
 }

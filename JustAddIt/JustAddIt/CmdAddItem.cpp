@@ -11,7 +11,7 @@ CmdAddItem::~CmdAddItem(void) {
 vector<string> CmdAddItem::execute() {
 
 
-	bool isConflicted = ItemBank::addToBank(_itemAddress);
+	bool isConflicted = ItemBank::getInstance()->addToBank(_itemAddress);
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();

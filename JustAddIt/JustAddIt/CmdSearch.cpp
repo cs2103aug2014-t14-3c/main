@@ -13,10 +13,11 @@ vector<string> CmdSearch::execute() {
 	vector<Item*> deadlines;
 	vector<Item*> events;
 
-	
-	events = ItemBank::searchEvents(_searchKeyword);
-	deadlines = ItemBank::searchDeadlines(_searchKeyword);
-	tasks = ItemBank::searchTasks(_searchKeyword);
+	ItemBank* itemBank = ItemBank::getInstance();
+
+	events = itemBank->searchEvents(_searchKeyword);
+	deadlines = itemBank->searchDeadlines(_searchKeyword);
+	tasks = itemBank->searchTasks(_searchKeyword);
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();

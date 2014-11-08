@@ -1,3 +1,4 @@
+//@author A0116781A
 #ifndef GUI_H
 #define GUI_H
 
@@ -18,7 +19,7 @@ private:
 	Ui::GUIClass ui;
 
 	void initProg(); 
-	void updateTextEdit(std::vector<std::string> output);
+	void updateDisplay(vector<string> output);
 
 private slots:
 	void on_pushButton_clicked();

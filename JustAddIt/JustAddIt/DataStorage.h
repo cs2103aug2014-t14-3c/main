@@ -14,7 +14,7 @@ public:
 	static DataStorage* getInstance(void);
 	~DataStorage(void);
 
-	static void writeToFile(vector<string>itemsToBeWrittenToFile);
+	static void writeToFile(vector<string> items);
 	vector<string> readToBank();
 };
 

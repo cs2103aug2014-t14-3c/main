@@ -3,7 +3,7 @@
 #include "CmdDeleteItem.h"
 
 const string CmdDeleteItem::MESSAGE_DELETION_SUCCESSFUL = "Item(s) successfully deleted!";
-const string CmdDeleteItem::LOG_ITEMS_DELETED = "INFO: Items deleted from ItemBank::bank";
+const string CmdDeleteItem::LOG_ITEMS_DELETED = "INFO: Items deleted from ItemBank::getInstance()->bank";
 const string CmdDeleteItem::LOG_BASE_SCREEN_STORED = "INFO: outputMessageStorage stores base screen";
 const string CmdDeleteItem::LOG_SUCCESS_MESSAGE_STORED = "INfO: Success message is stored into outputMessageStorage";
 const string CmdDeleteItem::LOG_ACTION_LOG_UPDATED = "INFO: Command is stored into ActionLog";
@@ -21,7 +21,7 @@ CmdDeleteItem::CmdDeleteItem(vector<Item*> itemsToDelete) {
 CmdDeleteItem::~CmdDeleteItem(void) {
 }
 
-//This function first deletes items based on their addresses in ItemBank::bank and then stores the base screen
+//This function first deletes items based on their addresses in ItemBank::getInstance()->bank and then stores the base screen
 //together with a success message into outputMessageStorage. The outputMessageStorage is then returned for 
 //display.
 vector<string> CmdDeleteItem::execute() {
@@ -40,7 +40,7 @@ vector<string> CmdDeleteItem::execute() {
 
 //This function calls for Itembank to delete the items in the _itemsToDelete vector
 void CmdDeleteItem::deleteItemsFromBank(void) {
-	ItemBank::deleteItems(_itemsToDelete);
+	ItemBank::getInstance()->deleteItems(_itemsToDelete);
 
 	writeToLog(LOG_ITEMS_DELETED);
 }

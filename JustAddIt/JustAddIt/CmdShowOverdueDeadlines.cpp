@@ -15,9 +15,9 @@ CmdShowOverdueDeadlines::~CmdShowOverdueDeadlines(void)
 }
 
 vector<string> CmdShowOverdueDeadlines::execute() {
-	vector<Item*>items;
+	vector<Item*> items;
 
-	items = ItemBank::getOverdueDeadlines();
+	items = ItemBank::getInstance()->getOverdueDeadlines();
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();

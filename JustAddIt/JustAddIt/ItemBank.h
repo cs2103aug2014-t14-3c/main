@@ -1,3 +1,4 @@
+//@author A0116781A
 #pragma once
 #include "Item.h"
 #include "DataStorage.h"
@@ -6,63 +7,88 @@
 class ItemBank
 {
 private: 
+	static bool instanceFlag;
+	static ItemBank* itemBank;
+
+	ItemBank();
+
+	int sevenDaysInSeconds;
+
 	static vector<Item*> initialBank;
 	static vector<Item*> bank;
 
-	static void update();
-	static bool checkForConflict(Item* itemPtr);
-	static bool searchKeyword(string itemAttribute, string keyword);
+	bool checkForConflict(Item* itemPtr);
 
-	static bool isEventPast(Item* itemPtr);
-	static bool isOverdue(Item* itemPtr);
-	static bool isTimePast(tm time);
-	static void toggleItemDone(Item* itemPtr);
-	static void deleteItem(Item* itemPtr);
-	static vector<Item*> getDoneItems();
+	void deleteItem(Item* itemPtr);
 
-	static bool isHighPriority(string priority);
-	static bool isMedPriority(string priority);
-	static bool isLowPriority(string priority);
+	vector<Item*> getDoneItems();
+
+	bool isTimePast(tm time);
+	bool isDateThisWeek(tm time);
+	bool isDateAfterThisWeek(tm timeInTm);
+	bool isThisWeekInPeriod(tm timeStart, tm timeEnd);
+	bool isEventPast(Item* itemPtr);
+	bool isOverdue(Item* itemPtr);
+
+	bool isHighPriority(string priority);
+	bool isMedPriority(string priority);
+	bool isLowPriority(string priority);
+
+	void setItemType(vector<string> items, Item* item);
+	void setDone(vector<string> items, Item* item);
+	void setCategory(vector<string> items, Item* item);
+
+	void toggleItemDone(Item* itemPtr);	
+
+	void update();
+	vector<string> updateItem(vector<string> items, Item* item);
 
 public:
+	~ItemBank();
+	static ItemBank* getInstance();
 
+	bool addToBank(Item* item);
+	void initialiseBank();
+	void clearBank();
+	void resetBank();
+
+	void deleteItems(vector<Item*> itemPtr);
+	void deleteDoneItems();
+	void deleteOverdueDeadlines();
+	void deletePastEvents();
+
+	void editItemTitle(Item* item, string newTitle);
+	void editItemDescription(Item* item, string newDescription);
+	void editItemStartDateTime(Item* item, tm newStartDateTime);
+	void editItemEndDateTime(Item* item, tm newEndDateTime);
+	void editItemVenue(Item* item, string newVenue);
+	void editItemCategory(Item* item, string newCategory);
+	void editItemPriority(Item* item, string newPriority);
 	
-	static void deleteItems(vector<Item*> itemPtr);
-	static void deleteDoneItems();
-	static void deleteOverdueDeadlines();
-	static void deletePastEvents();
-	static void clearBank();
+	vector<Item*>::iterator findIter(Item* itemPtr);
 
-	static void toggleItemsDone(vector<Item*> itemPtrs);
+	vector<Item*> getAllTasks();
+	vector<Item*> getEventsThisWeek();
+	vector<Item*> getAllEvents();
+	vector<Item*> getPastEvents();
+	vector<Item*> getDeadlinesThisWeek();
+	vector<Item*> getAllDeadlines(); 
+	vector<Item*> getOverdueDeadlines();
 
-	
-	static void editItemTitle(Item* item, string newTitle);
-	static void editItemDescription(Item* item, string newDescription);
-	static void editItemStartDateTime(Item* item, tm newStartDateTime);
-	static void editItemEndDateTime(Item* item, tm newEndDateTime);
-	static void editItemVenue(Item* item, string newVenue);
-	static void editItemCategory(Item* item, string newCategory);
-	static void editItemPriority(Item* item, string newPriority);
+	int getBankSize();
+	int getNumberOfMarkedItems();
 
-	static vector<Item*> searchEvents(string keyword);
-	static vector<Item*> searchDeadlines(string keyword);
-	static vector<Item*> searchTasks(string keyword);
-	
-	static vector<Item*>::iterator findIter(Item* itemPtr);
+	bool isFoundForSearchingEvents(string keyword);
+	bool isFoundForSearchingDeadlines(string keyword);
+	bool isFoundForSearchingTasks(string keyword);
 
-	static vector<Item*> getAllTasks();
-	static vector<Item*> getEventsThisWeek();
-	static vector<Item*> getAllEvents();
-	static vector<Item*> getPastEvents();
-	static vector<Item*> getDeadlinesThisWeek();
-	static vector<Item*> getAllDeadlines(); 
-	static vector<Item*> getOverdueDeadlines();
+	void toggleItemsDone(vector<Item*> itemPtrs);
 
-	static int getBankSize();
-	static int getNumberOfMarkedItems();
+	bool searchKeyword(string itemAttribute, string keyword);
 
-	static void initialiseBank();
-	static void resetBank();
-	static bool addToBank(Item* item);
+	vector<Item*> searchEvents(string keyword);
+	vector<Item*> searchDeadlines(string keyword);
+	vector<Item*> searchTasks(string keyword);
+
 };
 

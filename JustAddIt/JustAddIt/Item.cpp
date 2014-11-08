@@ -4,6 +4,8 @@
 
 int Item::_idCounter = 1;
 
+const string Item::MESSAGE_INVALID_ARGUMENT = "invalid argument entered";
+
 const string Item::STRING_EMPTY = "";
 const string Item::STRING_INVALID = "Invalid";
 
@@ -14,6 +16,8 @@ const string Item::ITEM_TYPE_TASK = "task";
 const string Item::PRIORITY_LOW = "Low";
 const string Item::PRIORITY_MED = "Medium";
 const string Item::PRIORITY_HIGH = "High";
+
+const string Item::IS_DONE = "0";
 
 Item::Item(void){
 	_title = "-";
@@ -30,9 +34,22 @@ Item::Item(void){
 	_id = _idCounter++;
 }
 
-
 Item::~Item(void)
 {
+}
+
+vector<string>::iterator Item::strToItem(vector<string>::iterator iter) {
+	setTitle(*iter++);
+	setDescription(*iter++);
+	setStartDateTime(*iter++);
+	setEndDateTime(*iter++);
+	setVenue(*iter++);
+	setPriority(*iter++);
+	setCategory(*iter++);
+	toggleDone(*iter++);
+	setItemType(*iter++);
+
+	return iter;
 }
 
 bool Item::isEvent() {
@@ -59,12 +76,17 @@ struct tm Item::getStartDateTime() {
 	return _startDateTime;
 }
 
+time_t Item::getStartDateTime_T() {
+	return mktime(&_startDateTime);
+}
+
 string Item::getStartDateInString() {
 	char tempArray[MAX_SIZE];
 	if(&_startDateTime==NULL){
 		return "";
-	}
-	else{
+	} else if (_startDateTime.tm_hour == -1) {
+		return "-1";
+	} else {
 	strftime(tempArray, MAX_SIZE, "%A %d %b %Y %I:%M%p", &_startDateTime);
 
 	string str(tempArray);
@@ -77,12 +99,17 @@ struct tm Item::getEndDateTime() {
 	return _endDateTime;
 }
 
+time_t Item::getEndDateTime_T() {
+	return mktime(&_endDateTime);
+}
+
 string Item::getEndDateInString() {
 	char tempArray[MAX_SIZE];
 	if(&_endDateTime==NULL){
 		return "";
-	}
-	else{
+	} else if (_endDateTime.tm_hour == -1) {
+		return "-1";
+	} else {
 		strftime(tempArray, MAX_SIZE, "%A %d %b %Y %I:%M%p", &_endDateTime);
 
 		string str(tempArray);
@@ -161,9 +188,25 @@ void Item::setDescription(string description) {
 	_description = description;
 }
 
+void Item::setStartDateTime(string startDateTimeStr) {
+	struct tm startDateTime;
+	time_t startDateTimeT = stoi(startDateTimeStr);
+
+	localtime_s(&startDateTime, &startDateTimeT);
+	setStartDateTime(startDateTime);
+}
+
 void Item::setStartDateTime(struct tm startDateTime) {
 	_startDateTime = startDateTime;
 	mktime(&_startDateTime);
+}
+
+void Item::setEndDateTime(string endDateTimeStr) {
+	struct tm endDateTime;
+	time_t endDateTimeT = stoi(endDateTimeStr);
+
+	localtime_s(&endDateTime, &endDateTimeT);
+	setEndDateTime(endDateTime);
 }
 
 void Item::setEndDateTime(struct tm endDateTime) {
@@ -232,12 +275,14 @@ void Item::setEndDate(int day, int month) {
 	_endDateTime.tm_year = yearToSet;
 	mktime(&_endDateTime);
 }
+
 void Item::setStartEndDateTimeAsNull(){
 	time_t nowTime=0;
 	localtime_s (&_startDateTime, &nowTime);
 	localtime_s (&_endDateTime, &nowTime);
 
 }
+
 void Item::setStartDateAsToday(){
 	time_t nowTime;
 	tm nowTimeTM;
@@ -251,6 +296,7 @@ void Item::setStartDateAsToday(){
 	_startDateTime.tm_year=nowTimeTM.tm_year;
 	mktime(&_startDateTime);
 }
+
 void Item::setEndDateAsToday(){
 	time_t nowTime;
 	tm nowTimeTM;
@@ -264,18 +310,21 @@ void Item::setEndDateAsToday(){
 	_endDateTime.tm_year=nowTimeTM.tm_year;
 	mktime(&_endDateTime);
 }
+
 void Item::setStartTime(int hour, int min){
 	_startDateTime.tm_hour = hour;
 	_startDateTime.tm_min = min;
 	mktime(&_startDateTime);
 
 }
+
 void Item::setEndTime(int hour, int min){
 	_endDateTime.tm_hour = hour;
 	_endDateTime.tm_min = min;
 	mktime(&_endDateTime);
 
 }
+
 void Item::addToStartDate(int daysToAdd){
 	setStartDateAsToday();
 	_startDateTime.tm_mday += daysToAdd;
@@ -294,8 +343,26 @@ void Item::setCategory(string category) {
 	_category = category;
 }
 
+void Item::setPriority(string priority) {
+	if(priority == PRIORITY_HIGH) {
+		setPriority(HIGH);
+	} else if (priority == PRIORITY_MED) {
+		setPriority(MED);
+	} else if (priority == PRIORITY_LOW) {
+		setPriority(LOW);
+	} else {
+		throw invalid_argument(MESSAGE_INVALID_ARGUMENT);
+	}
+}
+
 void Item::setPriority(PriorityLevel priority) {
 	_priority = priority;
+}
+
+void Item::toggleDone(string done) {
+	if(!stoi(done)) {
+		toggleDone();
+	}
 }
 
 void Item::toggleDone() {

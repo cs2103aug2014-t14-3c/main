@@ -3,10 +3,10 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-string FILL = "This is a random filler text to test code";
-string DATE = "Thursday 23 Oct 08:00AM";
+const string FILL = "This is a random filler text to test code";
+const string DATE = "Saturday 15 Nov 2014 08:00AM";
 
-namespace UnitTestLeon
+namespace UnitTest
 {		
 	TEST_CLASS(ItemTest)
 	{
@@ -14,15 +14,14 @@ namespace UnitTestLeon
 		
 		TEST_METHOD(ItemAllPos) // all positive test case *using multiple input
 		{
-			Item* itemPtr;
-			itemPtr = new Item;
+			Item* itemPtr = new Item;
 			itemPtr->setTitle(FILL);
 			itemPtr->setDescription(FILL);
 			itemPtr->setVenue(FILL);
 			itemPtr->setCategory(FILL);
-			itemPtr->setStartDate(23, 9);
+			itemPtr->setStartDate(15, 10);
 			itemPtr->setStartTime(8, 0);
-			itemPtr->setEndDate(23, 9);
+			itemPtr->setEndDate(15, 10);
 			itemPtr->setEndTime(8, 0);
 
 			Assert::AreEqual(itemPtr->getTitle(), FILL);

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DataStorage.h"
 
-string fileName = "../JustAddIt/JustAddIt_ItemBank.txt";
+string fileName = "JustAddIt_ItemBank.txt";
 DataStorage* DataStorage::dataStorage = NULL;
 
 DataStorage::DataStorage(void) {
@@ -17,12 +17,12 @@ DataStorage* DataStorage::getInstance(void) {
 	return dataStorage;
 }
 
-void DataStorage::writeToFile(vector<string>itemsToBeWrittenToFile) {
+void DataStorage::writeToFile(vector<string>items) {
 	ofstream mytextfile;
 	mytextfile.open(fileName);
 	vector<string>::iterator iter;
 
-	for (iter = itemsToBeWrittenToFile.begin(); iter != itemsToBeWrittenToFile.end(); iter++) {
+	for (iter = items.begin(); iter != items.end(); iter++) {
 		mytextfile << *iter << endl;
 	}
 
@@ -31,7 +31,7 @@ void DataStorage::writeToFile(vector<string>itemsToBeWrittenToFile) {
 }
 
 vector<string> DataStorage::readToBank() {
-	vector<string>itemsToBeReadToBank;
+	vector<string> items;
 	string dummyLine;
 	ifstream mytextfile;
 	mytextfile.open(fileName);
@@ -40,12 +40,11 @@ vector<string> DataStorage::readToBank() {
 		getline(mytextfile, dummyLine);
 		if (dummyLine != "") {
 		dummyLine = trimWhiteSpaceOnLeft(dummyLine);
-		itemsToBeReadToBank.push_back(dummyLine);
+		items.push_back(dummyLine);
 		}
 	}
-
 	mytextfile.close();
-	return itemsToBeReadToBank;
+	return items;
 }
 
 inline string DataStorage::trimWhiteSpaceOnLeft(const string& inputString) {

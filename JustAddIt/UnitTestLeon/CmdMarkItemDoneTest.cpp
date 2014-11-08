@@ -1,4 +1,3 @@
-//@author A0108397W
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include "OutputControl.h"
@@ -22,7 +21,7 @@ namespace UnitTest
 
 		TEST_METHOD(CmdMarkItemDone_SingleMarkTest)
 		{
-			ItemBank* itemBank = new ItemBank();
+			ItemBank* itemBank = ItemBank::getInstance();
 			OutputControl* outputControl = new OutputControl();
 			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
 
@@ -50,7 +49,7 @@ namespace UnitTest
 
 		TEST_METHOD(CmdMarkItemDone_MultipleMarkTest)
 		{
-			ItemBank* itemBank = new ItemBank();
+			ItemBank* itemBank = ItemBank::getInstance();
 			OutputControl* outputControl = new OutputControl();
 			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
 
@@ -79,7 +78,7 @@ namespace UnitTest
 
 		TEST_METHOD(CmdMarkItemDone_MarkAllTest)
 		{
-			ItemBank* itemBank = new ItemBank();
+			ItemBank* itemBank = ItemBank::getInstance();
 			OutputControl* outputControl = new OutputControl();
 			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
 

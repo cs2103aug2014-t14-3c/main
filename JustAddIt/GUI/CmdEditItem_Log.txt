@@ -1,0 +1,81 @@
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Success message is stored into outputMessageStorage
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Success message is stored into outputMessageStorage
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Success message is stored into outputMessageStorage
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Success message is stored into outputMessageStorage
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Success message is stored into outputMessageStorage
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Success message is stored into outputMessageStorage
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Success message is stored into outputMessageStorage
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Success message is stored into outputMessageStorage
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Success message is stored into outputMessageStorage
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Output control is updated
+INFO: Command is stored into ActionLog
+INFO: Item field is edited
+INFO: Edit screen is stored and returned to be displayed
+INFO: Output control is updated
+INFO: Command is stored into ActionLog

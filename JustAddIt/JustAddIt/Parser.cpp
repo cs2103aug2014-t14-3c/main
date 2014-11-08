@@ -217,15 +217,15 @@ void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
 	}
 	
 	if(isDeadline){
-		myItem->setItemTypeDeadline();
+		myItem->setItemType("deadline");
 	}
 	//if no date or no time, it is a task
 	else if(!foundDate && !foundTime){
 		myItem->setStartEndDateTimeAsNull();
-		myItem->setItemTypeTask();
+		myItem->setItemType("task");
 	}
 	else{
-		myItem->setItemTypeEvent();
+		myItem->setItemType("event");
 	}
 
 
