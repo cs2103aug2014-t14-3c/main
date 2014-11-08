@@ -1,3 +1,4 @@
+//@author A0116781A
 #pragma once
 #include "stdafx.h"
 
@@ -39,6 +40,11 @@ private:
 	bool _isDone;
 	ItemType _itemType;
 
+	void setTime(int hour, int min, tm &date);
+	void setDate(int day, int month, tm &date);
+	void setDate(tm input, tm &output);
+	
+
 public:
 	Item(void);
 	~Item(void);
@@ -57,9 +63,9 @@ public:
 	void setStartTime(int hour, int min);
 	void setEndTime(int hour, int min);
 	void setStartEndDateTimeAsNull();
-	void setStartDateAsToday();
-	void setEndDateAsToday();	
-	
+	void setStartDate();
+	void setEndDate();
+
 	void updateIdCounter(int lastIdUsed);
 	void setTitle(string title);
 	void setDescription(string description);

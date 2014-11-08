@@ -1,0 +1,19 @@
+<u>What's going on this week?
+1. buy stuff by Sunday 09 Nov 2014 02:00PM
+2. [DONE] Presentation slides
+3. [DONE] Refactor class A in coding project
+4. [DONE] Refactor class B in coding project
+5. Write report abstract
+6. [DONE] Refactor class C in coding project
+7. Refactor class D in coding project
+8. Refactor class E in coding project
+9. Sort results
+ 
+<u>What do you want to do?
+ 
+Universal commands:
+add {task details}, search {keyword}, export, undo, redo, home, exit
+ 
+<hr>[t] View To-do list
+[o] Check for overdue task<hr>
+ 

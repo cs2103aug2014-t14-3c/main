@@ -1,3 +1,4 @@
+//@author A0116781A
 #include "stdafx.h"
 #include "Item.h"
 #include <time.h>
@@ -196,11 +197,6 @@ void Item::setStartDateTime(string startDateTimeStr) {
 	setStartDateTime(startDateTime);
 }
 
-void Item::setStartDateTime(struct tm startDateTime) {
-	_startDateTime = startDateTime;
-	mktime(&_startDateTime);
-}
-
 void Item::setEndDateTime(string endDateTimeStr) {
 	struct tm endDateTime;
 	time_t endDateTimeT = stoi(endDateTimeStr);
@@ -209,132 +205,108 @@ void Item::setEndDateTime(string endDateTimeStr) {
 	setEndDateTime(endDateTime);
 }
 
+void Item::addToStartDate(int daysToAdd){
+	setStartDate();
+	_startDateTime.tm_mday += daysToAdd;
+	mktime(&_startDateTime);
+}
+
+void Item::addToEndDate(int daysToAdd){
+	setEndDate();
+	_endDateTime.tm_mday += daysToAdd;
+	mktime(&_endDateTime);
+}
+
+//default function with no parameter input sets date to current date
+void Item::setStartDate(){
+	time_t currTime;
+	tm currTimeTM;
+
+	time(&currTime);
+	localtime_s (&currTimeTM, &currTime);
+	setDate(currTimeTM, _startDateTime);
+	mktime(&_startDateTime);
+}
+
+//default function with no parameter input sets date to current date
+void Item::setEndDate(){
+	time_t currTime;
+	tm currTimeTM;
+
+	time(&currTime);
+	localtime_s (&currTimeTM, &currTime);
+	setDate(currTimeTM, _endDateTime);
+	mktime(&_endDateTime);
+}
+
+void Item::setStartDateTime(struct tm startDateTime) {
+	_startDateTime = startDateTime;
+	mktime(&_startDateTime);
+}
+
 void Item::setEndDateTime(struct tm endDateTime) {
 	_endDateTime = endDateTime;
 	mktime(&_endDateTime);
 }
 
 void Item::setStartDate(int day, int month) {
-	time_t nowTime;
-	tm nowTimeTM;
-	int currMonth;
-	int currDay;
-	int yearToSet;
-	
-	time(&nowTime);
-	localtime_s (&nowTimeTM, &nowTime);
-
-	currDay = nowTimeTM.tm_mday;
-	currMonth=nowTimeTM.tm_mon;
-	yearToSet=nowTimeTM.tm_year;
-	//if input month is earlier in the year, assume it is for next year
-	if(month < currMonth){
-		yearToSet++;
-	}
-	//if day has passed, assume it is for next year.
-	else if(month == currMonth){
-		if(day < currDay){
-			yearToSet++;
-		}
-	}
-
-
-	_startDateTime.tm_mday = day;
-	_startDateTime.tm_mon = month;
-	_startDateTime.tm_year = yearToSet;
-	mktime(&_startDateTime); 
+	setDate(day, month, _startDateTime);
 }
 
 void Item::setEndDate(int day, int month) {
-	
-	time_t nowTime;
-	tm nowTimeTM;
-	int currMonth;
-	int currDay;
-	int yearToSet;
-	time(&nowTime);
-	localtime_s (&nowTimeTM, &nowTime);
-
-
-	currDay = nowTimeTM.tm_mday;
-	currMonth=nowTimeTM.tm_mon;
-	yearToSet=nowTimeTM.tm_year;
-	//if input month is earlier in the year, assume it is for next year
-	if(month < currMonth){
-		yearToSet++;
-	}
-	//if day has passed, assume it is for next year.
-	else if(month == currMonth){
-		if(day < currDay){
-			yearToSet++;
-		}
-	}
-
-	_endDateTime.tm_mday = day;
-	_endDateTime.tm_mon = month;
-	_endDateTime.tm_year = yearToSet;
-	mktime(&_endDateTime);
+	setDate(day, month, _endDateTime);
 }
 
 void Item::setStartEndDateTimeAsNull(){
-	time_t nowTime=0;
-	localtime_s (&_startDateTime, &nowTime);
-	localtime_s (&_endDateTime, &nowTime);
-
-}
-
-void Item::setStartDateAsToday(){
-	time_t nowTime;
-	tm nowTimeTM;
-
-	time(&nowTime);
-	localtime_s (&nowTimeTM, &nowTime);
-	_startDateTime.tm_mday=nowTimeTM.tm_mday;
-	_startDateTime.tm_wday=nowTimeTM.tm_wday;
-	_startDateTime.tm_mon=nowTimeTM.tm_mon;
-	_startDateTime.tm_yday=nowTimeTM.tm_yday;
-	_startDateTime.tm_year=nowTimeTM.tm_year;
-	mktime(&_startDateTime);
-}
-
-void Item::setEndDateAsToday(){
-	time_t nowTime;
-	tm nowTimeTM;
-
-	time(&nowTime);
-	localtime_s (&nowTimeTM, &nowTime);
-	_endDateTime.tm_mday=nowTimeTM.tm_mday;
-	_endDateTime.tm_wday=nowTimeTM.tm_wday;
-	_endDateTime.tm_mon=nowTimeTM.tm_mon;
-	_endDateTime.tm_yday=nowTimeTM.tm_yday;
-	_endDateTime.tm_year=nowTimeTM.tm_year;
-	mktime(&_endDateTime);
+	time_t currTime=0;
+	localtime_s (&_startDateTime, &currTime);
+	localtime_s (&_endDateTime, &currTime);
 }
 
 void Item::setStartTime(int hour, int min){
-	_startDateTime.tm_hour = hour;
-	_startDateTime.tm_min = min;
-	mktime(&_startDateTime);
-
+	setTime(hour, min, _startDateTime);
 }
 
 void Item::setEndTime(int hour, int min){
-	_endDateTime.tm_hour = hour;
-	_endDateTime.tm_min = min;
-	mktime(&_endDateTime);
-
+	setTime(hour, min, _endDateTime);
 }
 
-void Item::addToStartDate(int daysToAdd){
-	setStartDateAsToday();
-	_startDateTime.tm_mday += daysToAdd;
-	mktime(&_startDateTime);
+void Item::setTime(int hour, int min, tm &date) {
+	date.tm_hour = hour;
+	date.tm_min = min;
+	mktime(&date);
 }
-void Item::addToEndDate(int daysToAdd){
-	setEndDateAsToday();
-	_endDateTime.tm_mday += daysToAdd;
-	mktime(&_endDateTime);
+
+void Item::setDate(int day, int month, tm &date) {
+	time_t currTime;
+	tm currTimeTM;
+
+	time(&currTime);
+	localtime_s (&date, &currTime);
+
+	//if input month is earlier in the year, assume it is for next year
+	if(month < date.tm_mon){
+		date.tm_year++;
+	}
+	//if day has passed, assume it is for next year.
+	else if(month == date.tm_mon && day < date.tm_mday){
+			date.tm_year++;
+	}
+
+	date.tm_mday = day;
+	date.tm_mon = month;
+
+	mktime(&date);
 }
+
+void Item::setDate(tm input, tm &output) {
+	output.tm_mday = input.tm_mday;
+	output.tm_wday = input.tm_wday;
+	output.tm_mon = input.tm_mon;
+	output.tm_yday = input.tm_yday;
+	output.tm_year = input.tm_year;
+}
+
 void Item::setVenue(string venue) {
 	_venue = venue;
 }

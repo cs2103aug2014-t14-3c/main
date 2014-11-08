@@ -12,8 +12,6 @@ private:
 
 	ItemBank();
 
-	int sevenDaysInSeconds;
-
 	static vector<Item*> initialBank;
 	static vector<Item*> bank;
 
