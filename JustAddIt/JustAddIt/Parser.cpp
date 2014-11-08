@@ -124,8 +124,7 @@ Command* Parser::stringToCommand(string userCommand) {
 			vector<Item*> collatedList;
 			string itemNumsStr;
 			getline(commandStream, itemNumsStr);
-			collatedList = convertItemNumsToItemPtrs(itemNumsStr);
-			CmdDeleteItem* myDelete = new CmdDeleteItem(collatedList);
+			CmdDeleteItem* myDelete = new CmdDeleteItem(convertItemNumsToItemPtrs(itemNumsStr));
 			return myDelete;
 			break;
 					 }
@@ -134,8 +133,7 @@ Command* Parser::stringToCommand(string userCommand) {
 			vector<Item*> collatedList;
 			string itemNumsStr;
 			getline(commandStream, itemNumsStr);
-			collatedList = convertItemNumsToItemPtrs(itemNumsStr);
-			CmdMarkItemDone* myMark = new CmdMarkItemDone(collatedList);
+			CmdMarkItemDone* myMark = new CmdMarkItemDone(convertItemNumsToItemPtrs(itemNumsStr));
 			return myMark;
 			break;
 					 }
@@ -188,7 +186,8 @@ Command* Parser::stringToCommand(string userCommand) {
 
 	}
 
-	}
+}
+
 //This function detects all possible details in the input string
 //such as title, date, time, category, priority, description.
 //It sets these values into the input Item*.
@@ -263,7 +262,7 @@ void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 		titleStartIter = vectorOfStrings.begin();
 		titleEndIter = vectorOfStrings.end();
 	}
-	//if found start keyword before end keyword
+	//if found start keyword before end keyword, cut title till start keyword
 	else if(startWordIter<endWordIter){
 		titleStartIter= vectorOfStrings.begin();
 		titleEndIter = startWordIter;
@@ -274,31 +273,33 @@ void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 		vector<string>::iterator monthIter;
 		timeIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isTime);
 		monthIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isMonth);
-		//if month before endword and before time
+		//if month before endkeyword and before time, cut title till month
 		if(monthIter<endWordIter && monthIter < timeIter){
 			titleStartIter= vectorOfStrings.begin();
 			titleEndIter = monthIter;
 		}
 
-		//if time before endword and before month
+		//if time before endkeyword and before month, cut title till time
 		else if(timeIter<endWordIter && timeIter < monthIter){
 			titleStartIter= vectorOfStrings.begin();
 			titleEndIter = timeIter;
 		}
+		//else, cut title till endkeyword
 		else{
 			titleStartIter= vectorOfStrings.begin();
 			titleEndIter = endWordIter;
 		}
 	}
 	
-	//for the leftovers
+	//update the remaining string
 	stringDetails = convertVectorToString(titleEndIter, vectorOfStrings.end());
+	
 	titleToSet = convertVectorToString(titleStartIter, titleEndIter);
 	if(titleToSet==""){
 		throw invalid_argument("No title detected! Try something like\"add event title at 2pm\"");
 	}
 	myItem->setTitle(titleToSet);
-	//TODO:Exception if no title (first word is a keyword)
+	
 	return;
 }
 
@@ -313,7 +314,7 @@ bool Parser::detectDeadlineKeywordAndTrim(string &stringDetails){
 	vectorOfStrings = convertStringToVector(stringDetails);
 	deadlineWordIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isKeywordDeadline);
 	
-	//if found
+	//if deadline keyword found
 	if (deadlineWordIter!=vectorOfStrings.end()){
 		vectorOfStrings.erase(deadlineWordIter);
 		isFound = true;
@@ -327,6 +328,7 @@ bool Parser::detectDeadlineKeywordAndTrim(string &stringDetails){
 //If time is detected, this function returns 'true'.
 //Otherwise, it returns false.
 bool Parser::detectTimeAndEmbedIsOk(Item* myItem, string stringDetails, bool isDeadline){
+	assert(myItem != nullptr);
 	istringstream streamDetails(stringDetails);
 	string startTime="";
 	string endTime="";
@@ -350,7 +352,6 @@ bool Parser::detectTimeAndEmbedIsOk(Item* myItem, string stringDetails, bool isD
 			myItem->setEndTime(startHourToBeSet, startMinToBeSet);
 		}
 		else{
-			//TODO:Assuming deadlines only have one time/date
 			//start exists and end exists
 			if(isTime(endTime)){
 				endHourToBeSet = convertStringToIntHour(endTime);
@@ -402,7 +403,6 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 		startMonthFound = previousWord; 
 	}
 	if(isMonth(currentWord)){
-		//store the month name in date found
 		startMonthFound = currentWord; 
 	}
 	if(isMonth(previousWord) || isMonth(currentWord)){	
@@ -416,14 +416,15 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 			startDayFound = nextWord;
 			startDateFound = startMonthFound + ' ' + startDayFound;
 		}
-		//TODO:: exception for only month found
+		//if only month is found, set a default day
 		else{
 			startDayFound = DEFAULT_MONTH_START;
 			startDateFound = startMonthFound;
 		}
 
-		//cut out the date
+		//remove date from input string
 		stringDetails.replace(stringDetails.find(startDateFound),startDateFound.length(),"");
+		
 		startDayInt = stoi(startDayFound);
 		startMonthInt = convertStrToIntMonth(startMonthFound);
 		
@@ -434,7 +435,6 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 		}
 
 		if(isMonth(currentWord)){
-			//store the month name in date found
 			endMonthFound = currentWord; 
 			//if the previous word is a integer, it's the date
 			if(isInteger(previousWord)){
@@ -453,7 +453,7 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 				endDayFound = DEFAULT_MONTH_START;
 				endDateFound = endMonthFound;
 			}
-			//cut the date out
+			//remove date from input string
 			stringDetails.replace(stringDetails.find(endDateFound),endDateFound.length(),"");
 			endDayInt = stoi(endDayFound);
 			endMonthInt = convertStrToIntMonth(endMonthFound);
@@ -461,7 +461,7 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 		}
 
 		if(isDeadline){
-			myItem->setStartDate(startDayInt, startMonthInt); //for safety
+			myItem->setStartDate(startDayInt, startMonthInt);
 			myItem->setEndDate(startDayInt, startMonthInt);
 		}
 		else{
@@ -479,7 +479,7 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 	else{
 		return false;
 	}
-	//TODO: exception if first word is a month
+	
 	
 
 }
@@ -512,8 +512,7 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 	if(isDayOfWeek(startDate)){
 
 		startFound = true;
-		//cut the start day out
-		//if "next" keyword is found
+		//remove day from input string
 		if(stringDetails.find("next " + startDate)!=string::npos){
 			isWordNextStart=true;
 			stringDetails.replace(stringDetails.find("next " + startDate),startDate.length(),"");
@@ -521,24 +520,23 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 		else{
 			stringDetails.replace(stringDetails.find(startDate),startDate.length(),"");
 		}
+		
 		startDaysToAdd = convertDayOfWeekToIntDaysToAdd(startDate, isWordNextStart);
 		myItem->addToStartDate(startDaysToAdd);
 		if(isDeadline){
 			myItem->addToEndDate(startDaysToAdd);
 		}
 		else{
-			//TODO:Assuming deadlines only have one time/date
 			//start exists and end exists
 			if(isDayOfWeek(endDate)){
 				
 				endFound = true;
-				//if "next" keyword is found
+				//remove the end day from input string
 				if(stringDetails.find("next " + endDate)!=string::npos){
 					isWordNextEnd=true;
 					stringDetails.replace(stringDetails.find("next " + endDate),endDate.length(),"");
 				}
 				else{
-					//cut the end day out
 					stringDetails.replace(stringDetails.find(endDate),endDate.length(),"");
 				}
 				
@@ -567,13 +565,16 @@ void Parser::detectCategoryAndEmbed(Item* myItem, string &stringDetails){
 
 	string::iterator myIter;
 	string categoryToSet="";
-	size_t pos;
-	pos = stringDetails.find(CATEGORY_MARKER);
+	size_t position;
+	position = stringDetails.find(CATEGORY_MARKER);
 	 
-	//if found
-	if(pos!=string::npos){
-		myIter = stringDetails.begin() + pos;
+	//if found, get the text after the marker
+	if(position!=string::npos){
+		myIter = stringDetails.begin() + position;
 		myIter++;
+		if(*myIter==' '){
+			throw invalid_argument("No category detected! Please try e.g. \"add homework #school\"");
+		}
 		while(myIter!=stringDetails.end() && *myIter!=' '){
 			categoryToSet += *myIter;
 			myIter++;
@@ -641,7 +642,7 @@ void Parser::detectDescriptionAndEmbed(Item* myItem, string &stringDetails){
 			}
 		}
 
-	return ;
+	return;
 }
 
 //This function detects the different possible formats of date and time
@@ -740,7 +741,7 @@ int Parser::convertStringToIntHour(string stringTime){
 //This function accepts an input string that represents time
 //and returns the number of minutes it indicates. 
 int Parser::convertStringToIntMin(string stringTime){
-	
+	assert(isTime(stringTime)==true);
 	size_t positionFound1;
 	size_t positionFound2;
 
@@ -791,8 +792,9 @@ int Parser::convertStrToIntMonth(string month){
 		}
 	
 	}
+	
 	return -1; 
-	//TODO: Throw exeception for bad month
+
 }
 
 //This function converts the input string to lowercase.
@@ -862,7 +864,8 @@ int Parser::convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek){
 
 }
 
-
+//These functions determine if the input string
+//match any of the supported keywords.
 bool Parser::isKeyword(string myWord){
 	return isKeywordTime(myWord) || isKeywordDate(myWord);
 }
@@ -944,6 +947,8 @@ string Parser::convertVectorToString(vector<string>::iterator start, vector<stri
 	return finalString;
 	
 }
+//This function converts a priority string to 
+//an enum Item::PriorityLevel type.
 Item::PriorityLevel Parser::convertStrToPriorityLevel(string priority){
 	if(isHighPriority(priority)){
 		return Item::PriorityLevel::HIGH;

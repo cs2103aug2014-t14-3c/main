@@ -150,7 +150,7 @@ namespace UnitTest
 
 			itemBank->addToBank(itemPtr);
 			Assert::AreEqual(itemBank->getBankSize(), 1);
-			CmdEditItem* cmdEditItem = new CmdEditItem(itemBank->findIter(itemPtr), 5, "High");
+			CmdEditItem* cmdEditItem = new CmdEditItem(itemBank->findIter(itemPtr), 5, static_cast<Item::PriorityLevel>(2));
 			cmdEditItem->execute();
 			Assert::AreEqual((*itemBank->findIter(itemPtr))->getPriorityInString().c_str(), "High");
 			itemBank->clearBank();

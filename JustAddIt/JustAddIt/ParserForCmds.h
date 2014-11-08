@@ -1,5 +1,5 @@
 #pragma once
-//@author A0110770
+//@author A0110770U
 #include "stdafx.h"
 #include "OutputControl.h"
 using namespace std;

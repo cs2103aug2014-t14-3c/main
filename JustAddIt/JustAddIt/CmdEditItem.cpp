@@ -15,7 +15,7 @@ const string CmdEditItem::LOG_ITEM_EDITED = "INFO: Item field is edited";
 const string CmdEditItem::TEXT_FILE_NAME = "JustAddIt/Logs/CmdEditItem_Log.txt";
 enum FIELD_TO_BE_EDITED {EDIT_TITLE, EDIT_DESCRIPTION, EDIT_START_TIME, EDIT_END_TIME, EDIT_PRIORITY, EDIT_CATEGORY, INVALID};
 
-//This constructor is used when editing items fields that contain strings variables (i.e. title, description, priority,
+//This constructor is used when editing items fields that contain strings variables (i.e. title, description,
 //category)
 CmdEditItem::CmdEditItem(vector<Item*>::iterator itemPtr, int fieldNum, string newFieldInfo) {
 	assert(*itemPtr != nullptr);
