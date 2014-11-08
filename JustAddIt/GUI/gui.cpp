@@ -8,10 +8,11 @@ GUI::GUI(QWidget *parent)
 	ui.setupUi(this);
 
 	this->setWindowFlags(Qt::FramelessWindowHint);
-	this->resize(700, 500);
+	this->resize(760, 500);
 
+	ui.pushButton->setStyleSheet("QPushButton { border: 1px solid white; border-radius: 5px; padding: 3px; background-color: black; color: white; }");
 	ui.lineEdit->setStyleSheet("QLineEdit { border: 1px solid white; border-radius: 5px; background-color: black; color: white; }");
-	ui.textEdit->setStyleSheet("QTextEdit { border: 1px solid white; border-radius: 5px; background-color: black; color: white; }");
+	ui.textEdit->setStyleSheet("QTextEdit { border: 1px solid black; border-radius: 5px; background-color: black; color: white; }");
 
 	ui.textEdit->setReadOnly(true);
 
@@ -47,8 +48,11 @@ void GUI::on_pushButton_clicked() {
 	if(qs == "exit") {
 		exit(0);
 	}
+	
+	vector<string> output;
+	output.clear();
 
-	vector<string> output = IReceiver::receive(str);
+	output = IReceiver::receive(str);
 
 	updateDisplay(output);
 	

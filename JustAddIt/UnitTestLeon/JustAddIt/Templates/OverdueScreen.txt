@@ -1,0 +1,17 @@
+		    ____________________________________
+		    |	   			       |
+		    |	          JustAddIt            |
+		    |__________________________________|
+
+Overdue Deadlines
+
+================================================================================
+
+[m #] Mark {Item number}
+[d #] Delete {Item number}
+[a] Clear all overdue deadlines
+
+Tip: To perform multiple deletes/marks, leave a space between each Item number.
+For example: d1 2 5
+
+================================================================================

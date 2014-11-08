@@ -23,7 +23,6 @@ vector<string> CmdGoToListView::execute() {
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();
-	outputMessageStorage = displayScreenConstructor->clearScreen();
 	outputMessageStorage = displayScreenConstructor->constructListScreen(tasks, deadlines, events);
 	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::TO_DO_LIST_VIEW);
 	OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::TO_DO_LIST_VIEW);

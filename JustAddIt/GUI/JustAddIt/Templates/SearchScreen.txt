@@ -1,0 +1,13 @@
+Showing results:
+ 
+================================================================================
+ 
+[e #] Edit {result number}
+[m #] Mark {result number}
+[d #] Delete {result number}
+[c] Clear all completed items
+ 
+Tip: To perform multiple deletes/marks, leave a space between each Item number.
+For example: d 1 2 5
+ 
+================================================================================

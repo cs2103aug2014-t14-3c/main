@@ -12,7 +12,7 @@ const string CmdEditItem::LOG_SUCCESS_MESSAGE_STORED = "INFO: Success message is
 const string CmdEditItem::LOG_EDIT_SCREEN_STORED = "INFO: Edit screen is stored and returned to be displayed";
 const string CmdEditItem::LOG_EDIT_FIELD_DETERMINED = "INFO: Field to be edited is determined";
 const string CmdEditItem::LOG_ITEM_EDITED = "INFO: Item field is edited";
-const string CmdEditItem::TEXT_FILE_NAME = "CmdEditItem_Log.txt";
+const string CmdEditItem::TEXT_FILE_NAME = "JustAddIt/Logs/CmdEditItem_Log.txt";
 enum FIELD_TO_BE_EDITED {EDIT_TITLE, EDIT_DESCRIPTION, EDIT_START_TIME, EDIT_END_TIME, EDIT_PRIORITY, EDIT_CATEGORY, INVALID};
 
 //This constructor is used when editing items fields that contain strings variables (i.e. title, description, priority,
@@ -70,8 +70,6 @@ vector<string> CmdEditItem::execute() {
 
 	updateOutputControl();
 
-	storeCommandIntoActionLog();
-
 	return outputMessageStorage;
 }
 
@@ -116,6 +114,8 @@ void CmdEditItem::editItem() {
 			break;
 				 }
 		}
+
+		storeCommandIntoActionLog();
 	}
 
 	writeToLog(LOG_ITEM_EDITED);

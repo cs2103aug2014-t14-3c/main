@@ -1,11 +1,11 @@
-Edit task
+Edit 
  
-1) Title: [DONE] pencil
+1) Title: 
 2) Description: 
 3) Start: 
 4) End: 
-5) Priority: Low
-6) Category: hihi
+5) Priority: 
+6) Category: 
  
 ================================================================================
  

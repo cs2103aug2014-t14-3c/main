@@ -1,0 +1,135 @@
+Assignment 8
+-
+1414252800
+1414943940
+-
+Low
+assignment
+0
+deadline
+Quiz 1
+At lecture theatre 50 
+1414684800
+1414771140
+-
+High
+quiz
+1
+event
+Quiz 2
+At auditorium
+1414810800
+1414814400
+-
+Low
+quiz
+1
+event
+Presentation slides
+-
+-1
+-1
+-
+Medium
+presentation
+1
+task
+Prepare for lesson
+-
+1414771200
+1414857540
+-
+High
+lessonprep
+0
+deadline
+Project meeting
+-
+1414836000
+1414839600
+-
+Low
+project
+0
+event
+Project meeting 2
+-
+1414994400
+1414998000
+-
+Low
+project
+0
+event
+Mock Presentation
+-
+1414990800
+1414994400
+-
+Low
+presentation
+0
+event
+Refactor class A in coding project
+-
+-1
+-1
+-
+Low
+project
+0
+task
+Refactor class B in coding project
+-
+-1
+-1
+-
+Low
+project
+1
+task
+Write report abstract
+-
+-1
+-1
+-
+Low
+project
+1
+task
+Refactor class C in coding project
+-
+-1
+-1
+-
+Low
+project
+0
+task
+Refactor class D in coding project
+-
+-1
+-1
+-
+Low
+project
+0
+task
+Refactor class E in coding project
+-
+-1
+-1
+-
+Low
+project
+0
+task
+Sort results
+add functionality to project
+1415375999
+-1
+-
+High
+project
+0
+task

@@ -21,7 +21,6 @@ vector<string> CmdShowOverdueDeadlines::execute() {
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();
-	outputMessageStorage = displayScreenConstructor->clearScreen();
 	outputMessageStorage = displayScreenConstructor->constructOverdueScreen(items);
 	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::OVERDUE_TASKS_SCREEN);
 	OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::OVERDUE_TASKS_SCREEN);

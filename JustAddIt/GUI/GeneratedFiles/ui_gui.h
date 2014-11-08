@@ -32,11 +32,11 @@ public:
     QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer;
-    QLabel *label_2;
+    QLabel *labelTitle;
     QSpacerItem *horizontalSpacer_2;
     QTextEdit *textEdit;
     QHBoxLayout *horizontalLayout;
-    QLabel *label;
+    QLabel *labelPrompt;
     QLineEdit *lineEdit;
     QPushButton *pushButton;
 
@@ -98,6 +98,9 @@ public:
         palette.setBrush(QPalette::Disabled, QPalette::ToolTipBase, brush2);
         palette.setBrush(QPalette::Disabled, QPalette::ToolTipText, brush1);
         GUIClass->setPalette(palette);
+        QFont font;
+        font.setFamily(QStringLiteral("Verdana"));
+        GUIClass->setFont(font);
         verticalLayout_2 = new QVBoxLayout(GUIClass);
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
@@ -112,10 +115,12 @@ public:
 
         horizontalLayout_2->addItem(horizontalSpacer);
 
-        label_2 = new QLabel(GUIClass);
-        label_2->setObjectName(QStringLiteral("label_2"));
+        labelTitle = new QLabel(GUIClass);
+        labelTitle->setObjectName(QStringLiteral("labelTitle"));
+        labelTitle->setPixmap(QPixmap(QString::fromUtf8("../JustAddIt.jpeg")));
+        labelTitle->setScaledContents(false);
 
-        horizontalLayout_2->addWidget(label_2);
+        horizontalLayout_2->addWidget(labelTitle);
 
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -126,25 +131,25 @@ public:
 
         textEdit = new QTextEdit(GUIClass);
         textEdit->setObjectName(QStringLiteral("textEdit"));
-        QFont font;
-        font.setFamily(QStringLiteral("Courier"));
-        font.setPointSize(10);
-        textEdit->setFont(font);
+        QFont font1;
+        font1.setFamily(QStringLiteral("Verdana"));
+        font1.setPointSize(10);
+        textEdit->setFont(font1);
 
         verticalLayout->addWidget(textEdit);
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        label = new QLabel(GUIClass);
-        label->setObjectName(QStringLiteral("label"));
-        label->setFont(font);
+        labelPrompt = new QLabel(GUIClass);
+        labelPrompt->setObjectName(QStringLiteral("labelPrompt"));
+        labelPrompt->setFont(font1);
 
-        horizontalLayout->addWidget(label);
+        horizontalLayout->addWidget(labelPrompt);
 
         lineEdit = new QLineEdit(GUIClass);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
-        lineEdit->setFont(font);
+        lineEdit->setFont(font1);
 
         horizontalLayout->addWidget(lineEdit);
 
@@ -169,8 +174,8 @@ public:
     void retranslateUi(QWidget *GUIClass)
     {
         GUIClass->setWindowTitle(QApplication::translate("GUIClass", "GUI", 0));
-        label_2->setText(QApplication::translate("GUIClass", "JustAddIt", 0));
-        label->setText(QApplication::translate("GUIClass", "Command:", 0));
+        labelTitle->setText(QString());
+        labelPrompt->setText(QApplication::translate("GUIClass", "Command:", 0));
         pushButton->setText(QApplication::translate("GUIClass", "Enter", 0));
     } // retranslateUi
 

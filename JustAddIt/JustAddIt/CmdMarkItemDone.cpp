@@ -8,7 +8,7 @@ const string CmdMarkItemDone::LOG_BASE_SCREEN_STORED = "INFO: outputMessageStora
 const string CmdMarkItemDone::LOG_SUCCESS_MESSAGE_STORED = "INfO: Success message is stored into outputMessageStorage";
 const string CmdMarkItemDone::LOG_ACTION_LOG_UPDATED = "INFO: Command is stored into ActionLog";
 const string CmdMarkItemDone::ERROR_EMPTY_VECTOR = "Please choose one or more Items to mark!";
-const string CmdMarkItemDone::TEXT_FILE_NAME = "CmdMarkItemDone_Log.txt";
+const string CmdMarkItemDone::TEXT_FILE_NAME = "JustAddIt/Logs/CmdMarkItemDone_Log.txt";
 
 CmdMarkItemDone::CmdMarkItemDone(vector<Item*> itemsToBeMarked) {
 	_itemsToBeMarked = itemsToBeMarked;

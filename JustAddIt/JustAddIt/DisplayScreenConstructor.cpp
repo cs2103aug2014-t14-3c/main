@@ -19,9 +19,11 @@ DisplayScreenConstructor* DisplayScreenConstructor::getInstance(void) {
 }
 
 vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events) {
-	ifstream mytextfile ("../JustAddIt/HomeScreen.txt");
+	ifstream mytextfile ("JustAddIt/Templates/HomeScreen.txt");
 	string dummyLine;
 	int resultCounter = 1;
+
+	outputMessageStorage.clear();
 
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
@@ -78,8 +80,10 @@ vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasks,
 }
 
 vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
-	ifstream mytextfile ("../JustAddIt/EditScreen.txt");
+	ifstream mytextfile ("JustAddIt/Templates/EditScreen.txt");
 	string dummyLine;
+
+	outputMessageStorage.clear();
 
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
@@ -142,9 +146,11 @@ vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
 }
 
 vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events) {
-	ifstream mytextfile ("../JustAddIt/SearchScreen.txt");
+	ifstream mytextfile ("JustAddIt/Templates/SearchScreen.txt");
 	string dummyLine;
 	int resultCounter = 1;
+
+	outputMessageStorage.clear();
 
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
@@ -201,10 +207,12 @@ vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>task
 }
 
 vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events) {
-	ifstream mytextfile ("../JustAddIt/ListViewScreen.txt");
+	ifstream mytextfile ("JustAddIt/Templates/ListViewScreen.txt");
 	string dummyLine;
 	int resultCounter = 1;
 	vector<Item*>::iterator iter;
+
+	outputMessageStorage.clear();
 
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
@@ -283,10 +291,12 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasks,
 }
 
 vector<string> DisplayScreenConstructor::constructOverdueScreen(vector<Item*>items) {
-	ifstream mytextfile ("../JustAddIt/OverdueScreen.txt");
+	ifstream mytextfile ("JustAddIt/Templates/OverdueScreen.txt");
 	string dummyLine;
 	int resultCounter = 1;
 	vector<Item*>::iterator iter;
+
+	outputMessageStorage.clear();
 
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
@@ -317,6 +327,7 @@ vector<string> DisplayScreenConstructor::constructOverdueScreen(vector<Item*>ite
 	return outputMessageStorage;
 }
 
+//@author A0116781A-unused
 vector<string> DisplayScreenConstructor::clearScreen() {
 	outputMessageStorage.clear();
 	for (int i = 0; i != 50; i++) {

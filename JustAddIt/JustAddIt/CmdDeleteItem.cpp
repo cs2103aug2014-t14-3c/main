@@ -8,7 +8,7 @@ const string CmdDeleteItem::LOG_BASE_SCREEN_STORED = "INFO: outputMessageStorage
 const string CmdDeleteItem::LOG_SUCCESS_MESSAGE_STORED = "INfO: Success message is stored into outputMessageStorage";
 const string CmdDeleteItem::LOG_ACTION_LOG_UPDATED = "INFO: Command is stored into ActionLog";
 const string CmdDeleteItem::ERROR_EMPTY_VECTOR = "Please choose one or more Items to delete!";
-const string CmdDeleteItem::TEXT_FILE_NAME = "CmdDeleteItem_Log.txt";
+const string CmdDeleteItem::TEXT_FILE_NAME = "JustAddIt/Logs/CmdDeleteItem_Log.txt";
 
 CmdDeleteItem::CmdDeleteItem(vector<Item*> itemsToDelete) {
 	_itemsToDelete = itemsToDelete;

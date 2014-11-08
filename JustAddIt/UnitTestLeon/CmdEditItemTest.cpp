@@ -23,6 +23,7 @@ namespace UnitTest
 		TEST_METHOD(CmdEditItem_EditTitleTest)
 		{
 			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
 
 			Item* itemPtr = new Item;
 			itemPtr->setTitle("Title");
@@ -50,6 +51,7 @@ namespace UnitTest
 		TEST_METHOD(CmdEditItem_EditDescriptionTest)
 		{
 			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
 
 			Item* itemPtr = new Item;
 			itemPtr->setTitle("Title");
@@ -77,6 +79,7 @@ namespace UnitTest
 		TEST_METHOD(CmdEditItem_EditStartTimeTest)
 		{
 			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
 
 			Item* itemPtr = new Item;
 
@@ -102,6 +105,7 @@ namespace UnitTest
 		TEST_METHOD(CmdEditItem_EditEndTimeTest)
 		{
 			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
 
 			Item* itemPtr = new Item;
 
@@ -127,6 +131,7 @@ namespace UnitTest
 		TEST_METHOD(CmdEditItem_EditPriorityTest)
 		{
 			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
 
 			Item* itemPtr = new Item;
 			itemPtr->setTitle("Title");
@@ -153,13 +158,14 @@ namespace UnitTest
 		TEST_METHOD(CmdEditItem_EditCategoryTest)
 		{
 			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
 
 			Item* itemPtr = new Item;
 			itemPtr->setTitle("Title");
 			itemPtr->setDescription("Description");
 			itemPtr->setVenue("-");
 			itemPtr->setCategory("Category");
-			itemPtr->setPriority(static_cast<Item::PriorityLevel>(1));
+			itemPtr->setPriority(Item::PriorityLevel::MED);
 			itemPtr->setStartDate(23, 9);
 			itemPtr->setStartTime(8, 0);
 			itemPtr->setEndDate(23, 9);
@@ -167,7 +173,7 @@ namespace UnitTest
 			itemPtr->setItemTypeTask();
 
 			OutputControl* outputControl = new OutputControl();
-			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
+			outputControl->setCurrentScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
 
 			itemBank->addToBank(itemPtr);
 			Assert::AreEqual(itemBank->getBankSize(), 1);

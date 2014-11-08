@@ -425,6 +425,11 @@
     </disabled>
    </palette>
   </property>
+  <property name="font">
+   <font>
+    <family>Verdana</family>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>GUI</string>
   </property>
@@ -447,9 +452,15 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="labelTitle">
          <property name="text">
-          <string>JustAddIt</string>
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap>../JustAddIt.jpeg</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -472,7 +483,7 @@
       <widget class="QTextEdit" name="textEdit">
        <property name="font">
         <font>
-         <family>Courier</family>
+         <family>Verdana</family>
          <pointsize>10</pointsize>
         </font>
        </property>
@@ -481,10 +492,10 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="labelPrompt">
          <property name="font">
           <font>
-           <family>Courier</family>
+           <family>Verdana</family>
            <pointsize>10</pointsize>
           </font>
          </property>
@@ -497,7 +508,7 @@
         <widget class="QLineEdit" name="lineEdit">
          <property name="font">
           <font>
-           <family>Courier</family>
+           <family>Verdana</family>
            <pointsize>10</pointsize>
           </font>
          </property>

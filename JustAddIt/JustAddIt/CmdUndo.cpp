@@ -13,12 +13,8 @@ CmdUndo::~CmdUndo(void)
 
 
 vector<string> CmdUndo::execute() {
-	try {
-		ActionLog::undo();
-	} 
-	catch(invalid_argument inv) {
-		cerr << inv.what() << endl;
-	};
+
+	ActionLog::undo();
 
 	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
 	outputMessageStorage.clear();

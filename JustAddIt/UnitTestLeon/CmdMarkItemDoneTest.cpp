@@ -22,6 +22,7 @@ namespace UnitTest
 		TEST_METHOD(CmdMarkItemDone_SingleMarkTest)
 		{
 			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
 			OutputControl* outputControl = new OutputControl();
 			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
 
@@ -50,6 +51,7 @@ namespace UnitTest
 		TEST_METHOD(CmdMarkItemDone_MultipleMarkTest)
 		{
 			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
 			OutputControl* outputControl = new OutputControl();
 			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
 
@@ -79,6 +81,7 @@ namespace UnitTest
 		TEST_METHOD(CmdMarkItemDone_MarkAllTest)
 		{
 			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
 			OutputControl* outputControl = new OutputControl();
 			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
 

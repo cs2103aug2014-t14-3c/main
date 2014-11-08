@@ -17,7 +17,7 @@ vector<string> IReceiver::receive(string userCommand) {
 	catch(exception& e){
 			
 		ofstream file;
-		file.open("../JustAddIt/error.log", ios::app);
+		file.open("JustAddIt/Logs/error.log", ios::app);
 		file << "exception occurred: \"" <<  e.what() << "\" \n command entered: \"" << userCommand << "\"\n" << endl;
 		file.close();
 

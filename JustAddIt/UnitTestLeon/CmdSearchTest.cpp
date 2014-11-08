@@ -13,6 +13,7 @@ namespace UnitTest
 		{
 			// TODO: Your test code here
 			ItemBank* itemPointer = ItemBank::getInstance();
+			itemPointer->clearBank();
 			Item* task = new Item;
 			string title = "study";
 			string testing = "event";
