@@ -16,6 +16,14 @@ private:
 	Item::PriorityLevel _newPriorityInfo;
 	bool _isEditField;
 
+	void editItem();
+	enum FIELD_TO_BE_EDITED determineEditField();
+	vector<string> storeEditScreenForDisplay();
+	void storeSuccessMessage();
+	void updateOutputControl();
+	void storeCommandIntoActionLog();
+	void writeToLog (string logEntry);
+
 public:
 	static const string CmdEditItem::MESSAGE_EDIT_SUCCESSFUL;
 	static const string CmdEditItem::ERROR_PROGRAM_MALFUNCTION;
@@ -36,11 +44,4 @@ public:
 	~CmdEditItem(void);
 
 	vector<string> execute();
-	void editItem();
-	enum FIELD_TO_BE_EDITED determineEditField();
-	vector<string> storeEditScreenForDisplay();
-	void storeSuccessMessage();
-	void updateOutputControl();
-	void storeCommandIntoActionLog();
-	void writeToLog (string logEntry);
 };

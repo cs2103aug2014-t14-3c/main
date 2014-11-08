@@ -42,7 +42,7 @@ namespace UnitTest
 			itemsToBeMarked.push_back(task1);
 
 			CmdMarkItemDone* cmdMarkItemDone = new CmdMarkItemDone(itemsToBeMarked);
-			cmdMarkItemDone->toggleItemsDone();
+			cmdMarkItemDone->execute();
 			Assert::AreEqual(itemBank->getNumberOfMarkedItems(), 1);
 
 			itemBank->clearBank();
@@ -72,7 +72,7 @@ namespace UnitTest
 			itemsToBeMarked.push_back(task2);
 
 			CmdMarkItemDone* cmdMarkItemDone = new CmdMarkItemDone(itemsToBeMarked);
-			cmdMarkItemDone->toggleItemsDone();
+			cmdMarkItemDone->execute();
 			Assert::AreEqual(itemBank->getNumberOfMarkedItems(), 2);
 
 			itemBank->clearBank();
@@ -103,7 +103,7 @@ namespace UnitTest
 			itemsToBeMarked.push_back(task3);
 
 			CmdMarkItemDone* cmdMarkItemDone = new CmdMarkItemDone(itemsToBeMarked);
-			cmdMarkItemDone->toggleItemsDone();
+			cmdMarkItemDone->execute();
 			Assert::AreEqual(itemBank->getNumberOfMarkedItems(), 3);
 
 			itemBank->clearBank();
