@@ -47,7 +47,7 @@ public:
 	int convertStringToIntMin(string stringTime);
 	static int convertStrToIntMonth(string month);
 	static int convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek);
-	
+	Item::PriorityLevel convertStrToPriorityLevel(string priority);
 	static void convertStringToLowercase(string &myString);
 
 
@@ -58,6 +58,9 @@ public:
 	static bool isKeywordDeadline(string myWord);
 	static bool isKeywordDate(string myWord);
 	static bool isKeywordEndOfTitle(string myWord);
+	bool isHighPriority(string priority);
+	bool isMedPriority(string priority);
+	bool isLowPriority(string priority);
 	vector <Item*> convertItemNumsToItemPtrs(string itemNumsStr);
 	vector <string> convertStringToVector(string inputString);
 	string convertVectorToString(vector<string>::iterator start, vector<string>::iterator end);

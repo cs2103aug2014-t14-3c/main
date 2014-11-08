@@ -13,6 +13,7 @@ private:
 	int _editFieldNumber;
 	string _newFieldInfo;
 	tm _newTimeInfo;
+	Item::PriorityLevel _newPriorityInfo;
 	bool _isEditField;
 
 public:
@@ -30,6 +31,7 @@ public:
 
 	CmdEditItem(vector<Item*>::iterator itemPtr, int fieldNum, string newFieldInfo);
 	CmdEditItem(vector<Item*>::iterator itemPtr, int fieldNum, tm newTimeInfo);
+	CmdEditItem(vector<Item*>::iterator itemPtr, int fieldNum, Item::PriorityLevel newPriorityInfo);
 	CmdEditItem(vector<Item*>::iterator itemPtr);
 	~CmdEditItem(void);
 

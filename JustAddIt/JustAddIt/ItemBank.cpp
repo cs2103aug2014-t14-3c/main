@@ -321,21 +321,24 @@ void ItemBank::editItemCategory(Item* item, string newCategory) {
 	update();
 }
 
-void ItemBank::editItemPriority(Item* item, string newPriority) {
+void ItemBank::editItemPriority(Item* item, Item::PriorityLevel newPriority) {
 	vector<Item*>::iterator itemIter = findIter(item);
 
-	if (isHighPriority(newPriority)) {
-		(*itemIter)->setPriority(Item::PriorityLevel::HIGH);
-	}
-	else if (isMedPriority(newPriority)) {
-		(*itemIter)->setPriority(Item::PriorityLevel::MED);
-	}
-	else if (isLowPriority(newPriority)) {
-		(*itemIter)->setPriority(Item::PriorityLevel::LOW);
-	}
-	else {
-		(*itemIter)->setPriority(Item::PriorityLevel::INVALID);
-	}
+	//if (isHighPriority(newPriority)) {
+	//	(*itemIter)->setPriority(Item::PriorityLevel::HIGH);
+	//}
+	//else if (isMedPriority(newPriority)) {
+	//	(*itemIter)->setPriority(Item::PriorityLevel::MED);
+	//}
+	//else if (isLowPriority(newPriority)) {
+	//	(*itemIter)->setPriority(Item::PriorityLevel::LOW);
+	//}
+	//else {
+	//	(*itemIter)->setPriority(Item::PriorityLevel::INVALID);
+	//}
+	(*itemIter)->setPriority(newPriority);
+
+
 	update();
 }
 

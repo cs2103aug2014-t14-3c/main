@@ -155,3 +155,7 @@ JustAddIt/JustAddIt/JustAddIt_ItemBank.txt
 JustAddIt/GUI/JustAddIt_ItemBank.txt
 JustAddIt/GUI/JustAddIt_ItemBank.txt
 JustAddIt/UnitTestLeon/JustAddIt/JustAddIt_ItemBank.txt
+JustAddIt/GUI/JustAddIt/Logs/CmdMarkItemDone_Log.txt
+JustAddIt/GUI/JustAddIt/JustAddIt_ItemBank.txt
+JustAddIt/GUI/JustAddIt/Logs/CmdEditItem_Log.txt
+JustAddIt/GUI/JustAddIt_Exports.txt

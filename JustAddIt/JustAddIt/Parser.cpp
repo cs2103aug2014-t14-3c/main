@@ -6,6 +6,7 @@
 #define FORMAT_24H_SIZE 4
 #define START_TIME_FIELD_INDEX 3
 #define END_TIME_FIELD_INDEX 4
+#define PRIORITY_FIELD_INDEX 5
 #define DEFAULT_FIRST_INDEX "1"
 #define CATEGORY_MARKER "#"
 #define PRIORITY_MARKER "!"
@@ -104,6 +105,11 @@ Command* Parser::stringToCommand(string userCommand) {
 				Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());
 				detectTypesOfDatesAndEmbed(myNewItem, newFieldInfo, true);
 				CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, myNewItem.getEndDateTime());
+				return myEdit;
+			
+			}
+			else if(fieldNum == PRIORITY_FIELD_INDEX){
+				CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, convertStrToPriorityLevel(newFieldInfo));
 				return myEdit;
 			
 			}
@@ -938,6 +944,29 @@ string Parser::convertVectorToString(vector<string>::iterator start, vector<stri
 	return finalString;
 	
 }
+Item::PriorityLevel Parser::convertStrToPriorityLevel(string priority){
+	if(isHighPriority(priority)){
+		return Item::PriorityLevel::HIGH;
+	}else if(isMedPriority(priority)){
+		return Item::PriorityLevel::MED;
+	}else if(isLowPriority(priority)){
+		return Item::PriorityLevel::LOW;
+	}else{
+		throw invalid_argument("Wrong priority format entered. Please type \"high\", \"med\" or \"low\"");
+	}
+}
+bool Parser::isHighPriority(string priority){
+	convertStringToLowercase(priority);
+	return priority == "high" || priority == "h" || priority == "hi";
+}
 
+bool Parser::isMedPriority(string priority){
+	convertStringToLowercase(priority);
+	return priority == "medium" || priority == "med" || priority == "m";
+}
+bool Parser::isLowPriority(string priority){
+	convertStringToLowercase(priority);
+	return priority == "low" || priority == "l";
+}
 
 

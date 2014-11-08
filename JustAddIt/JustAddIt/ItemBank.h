@@ -63,7 +63,7 @@ public:
 	void editItemEndDateTime(Item* item, tm newEndDateTime);
 	void editItemVenue(Item* item, string newVenue);
 	void editItemCategory(Item* item, string newCategory);
-	void editItemPriority(Item* item, string newPriority);
+	void editItemPriority(Item* item, Item::PriorityLevel newPriority);
 	
 	vector<Item*>::iterator findIter(Item* itemPtr);
 

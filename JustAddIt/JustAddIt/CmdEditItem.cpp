@@ -17,8 +17,8 @@ enum FIELD_TO_BE_EDITED {EDIT_TITLE, EDIT_DESCRIPTION, EDIT_START_TIME, EDIT_END
 
 //This constructor is used when editing items fields that contain strings variables (i.e. title, description, priority,
 //category)
-CmdEditItem::CmdEditItem(vector<Item*>::iterator bankPtr, int fieldNum, string newFieldInfo) {
-	assert(*bankPtr != nullptr);
+CmdEditItem::CmdEditItem(vector<Item*>::iterator itemPtr, int fieldNum, string newFieldInfo) {
+	assert(*itemPtr != nullptr);
 
 	if (fieldNum != 1 && fieldNum != 2 && fieldNum != 3 && fieldNum != 4 && fieldNum != 5 && fieldNum != 6) {
 		throw invalid_argument(ERROR_INVALID_FIELD_NUMBER);
@@ -28,33 +28,48 @@ CmdEditItem::CmdEditItem(vector<Item*>::iterator bankPtr, int fieldNum, string n
 		newFieldInfo = "-"; //storing "" into DataStorage will cause the program to crash during reinitialisation
 	}
 
-	_itemAddr = *bankPtr;
+	_itemAddr = *itemPtr;
 	_editFieldNumber = fieldNum;
 	_newFieldInfo = newFieldInfo;
 	_isEditField = true;
 }
 
 //This constructor is used when editing start and end date time
-CmdEditItem::CmdEditItem(vector<Item*>::iterator bankPtr, int fieldNum, tm newTimeInfo) {
-	assert(*bankPtr != nullptr);
+CmdEditItem::CmdEditItem(vector<Item*>::iterator itemPtr, int fieldNum, tm newTimeInfo) {
+	assert(*itemPtr != nullptr);
 
 	if (fieldNum != 1 && fieldNum != 2 && fieldNum != 3 && fieldNum != 4 && fieldNum != 5 && fieldNum != 6) {
 		throw invalid_argument(ERROR_INVALID_FIELD_NUMBER);
 	}
 
-	_itemAddr = *bankPtr;
+	_itemAddr = *itemPtr;
 	_editFieldNumber = fieldNum;
 	_newTimeInfo = newTimeInfo;
 	_isEditField = true;
 }
+//This constructor is used when editing priority
+CmdEditItem::CmdEditItem(vector<Item*>::iterator itemPtr, int fieldNum, Item::PriorityLevel newPriorityInfo) {
+	assert(*itemPtr != nullptr);
+
+	if (fieldNum != 1 && fieldNum != 2 && fieldNum != 3 && fieldNum != 4 && fieldNum != 5 && fieldNum != 6) {
+		throw invalid_argument(ERROR_INVALID_FIELD_NUMBER);
+	}
+
+	_itemAddr = *itemPtr;
+	_editFieldNumber = fieldNum;
+	_newPriorityInfo = newPriorityInfo;
+	_isEditField = true;
+}
 
 //This constructor is used when selecting an item to be edited from a list
-CmdEditItem::CmdEditItem(vector<Item*>::iterator bankPtr) {
-	assert(*bankPtr != nullptr);
+CmdEditItem::CmdEditItem(vector<Item*>::iterator itemPtr) {
+	assert(*itemPtr != nullptr);
 
-	_itemAddr = *bankPtr;
+	_itemAddr = *itemPtr;
 	_isEditField = false;
 }
+
+
 
 CmdEditItem::~CmdEditItem(void) {
 }
@@ -98,7 +113,7 @@ void CmdEditItem::editItem() {
 			break;
 							}
 		case EDIT_PRIORITY: {
-			itemBank->editItemPriority(_itemAddr, _newFieldInfo);
+			itemBank->editItemPriority(_itemAddr, _newPriorityInfo);
 			break;
 							}
 		case EDIT_CATEGORY: {

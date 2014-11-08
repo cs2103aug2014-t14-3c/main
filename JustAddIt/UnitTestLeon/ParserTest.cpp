@@ -1,7 +1,7 @@
 //@author A0110770
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#define TESTMODE
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTest
