@@ -5,7 +5,7 @@
 #include <QtWidgets/QWidget>
 #include "ui_gui.h"
 #include "stdafx.h"
-#include "IReceiver.h"
+#include "Executor.h"
 
 class GUI : public QWidget
 {

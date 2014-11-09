@@ -33,6 +33,9 @@ CommandType ParserForCmds::determineCommandType(string userCommand, OutputContro
 		 || userCommand == "expo" || userCommand == "expor") {
 		return EXPORT;
 	}
+	if (userCommand == "exit") {
+		exit(0);
+	}
 
 
 	switch (currentScreen) {

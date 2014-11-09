@@ -1,24 +1,9 @@
-<strong>To-do list
+<u>What's going on this week?</u>
  
-<u>All Events
- 
-1. Quiz 1 from Friday 31 Oct 2014 12:00AM to Friday 31 Oct 2014 11:59PM
-2. <span style="color:#CC0000;">[DONE]</span>  Quiz 2 from Saturday 01 Nov 2014 11:00AM to Saturday 01 Nov 2014 12:00PM
-3. Project meeting from Saturday 01 Nov 2014 06:00PM to Saturday 01 Nov 2014 07:00PM
-4. <span style="color:#CC0000;">[DONE]</span>  Project meeting 2 from Monday 03 Nov 2014 02:00PM to Monday 03 Nov 2014 03:00PM
-5. Mock Presentation from Monday 03 Nov 2014 01:00PM to Monday 03 Nov 2014 02:00PM
-<u>All Deadlines
-6. Assignment 8 by Sunday 02 Nov 2014 11:59PM
-7. <span style="color:#CC0000;">[DONE]</span>  Prepare for lesson by Saturday 01 Nov 2014 11:59PM
-8. finish project by Saturday 08 Nov 2014 11:58PM
-9. <span style="color:#CC0000;">[DONE]</span>  buy stuff by Sunday 09 Nov 2014 02:00PM
- 
-<u>Tasks
-10. Write report abstract
-11. <span style="color:#CC0000;">[DONE]</span>  Refactor class C in coding project
- 
-<span style="color:#3366FF;">[e #] Edit {Item number}<br>[m #] Mark {Item number}<br>[d #] Delete {Item number}<br>[c] Clear all completed items</span>
- 
-Tip: To perform multiple deletes/marks, leave a space between each Item number.
-For example: d 1 2 5
+1. Write report abstract
+2. Refactor class C in coding project
+3. do something
+<u>What do you want to do?</u>
+  
+<span style="color:#3366FF;">Universal commands:<br>add {task details}, search {keyword}, export, undo, redo, home, exit<br><br>[t] View To-do list<br>[o] Check for overdue task</span>
  

@@ -1,3 +1,4 @@
+//@author A0116781A-unused
 #include "stdafx.h"
 #include "IReceiver.h"
 

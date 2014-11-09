@@ -1,3 +1,4 @@
+//@author A0116781A
 #include "stdafx.h"
 #include "CmdInitialiseBank.h"
 
@@ -13,8 +14,6 @@ vector<string> CmdInitialiseBank::execute() {
 	ItemBank::getInstance()->initialiseBank();
 
 	Command* cmdHome = new CmdHome;
-	outputMessageStorage.clear();
-	outputMessageStorage = cmdHome->execute();
 
-	return outputMessageStorage;
+	return cmdHome->execute();
 }
