@@ -1,3 +1,4 @@
+//@author A0116781A
 #include "stdafx.h"
 #include "CmdGoToListView.h"
 
@@ -19,16 +20,14 @@ vector<string> CmdGoToListView::execute() {
 	events = itemBank->getAllEvents();
 	deadlines = itemBank->getAllDeadlines();
 	tasks = itemBank->getAllTasks();
-
 	
 	outputMessageStorage.clear();
 	outputMessageStorage = storeListScreenForDisplay(events, deadlines, tasks);
 	updateOutputControl(events, deadlines, tasks);
-	
-
 
 	return outputMessageStorage;
 }
+
 //This function updates the information that OutputControl
 //keeps track of; items displayed, base screen and current screen.
 void CmdGoToListView::updateOutputControl(vector<Item*> events, vector<Item*> deadlines, vector<Item*> tasks){

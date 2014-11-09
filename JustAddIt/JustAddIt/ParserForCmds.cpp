@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "ParserForCmds.h"
 
+const string ParserForCmds::ERROR_INVALID_COMMAND = "Invalid command! Please enter a valid command from the menu.";
+
 ParserForCmds::ParserForCmds(void)
 {
 }
@@ -34,6 +36,7 @@ CommandType ParserForCmds::determineCommandType(string userCommand, OutputContro
 		return EXPORT;
 	}
 	if (userCommand == "exit") {
+		//UnregisterHotKey(NULL, 1);
 		exit(0);
 	}
 
@@ -65,7 +68,7 @@ CommandType ParserForCmds::determineCommandType(string userCommand, OutputContro
 			 }
 
 	default: {
-		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
+		throw invalid_argument(ERROR_INVALID_COMMAND);
 		break;
 			 }
 	}
@@ -81,7 +84,7 @@ CommandType ParserForCmds::determineCommandType_HomeScreen(string userCommand){
 	}else if (userCommand == "o") {
 		return VIEW_OVERDUE;
 	}else{
-		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
+		throw invalid_argument(ERROR_INVALID_COMMAND);
 	}
 
 }
@@ -94,7 +97,7 @@ CommandType ParserForCmds::determineCommandType_EditScreen(string userCommand){
 	}else if (userCommand == "d") {
 		return DELETE;
 	}else{
-		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
+		throw invalid_argument(ERROR_INVALID_COMMAND);
 	}
 
 }
@@ -109,7 +112,7 @@ CommandType ParserForCmds::determineCommandType_SearchResultsScreen(string userC
 	}else if (userCommand == "c") {
 		return CLEAR_ALL_DONE;
 	}else{
-		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
+		throw invalid_argument(ERROR_INVALID_COMMAND);
 	}
 
 
@@ -124,7 +127,7 @@ CommandType ParserForCmds::determineCommandType_ToDoListView(string userCommand)
 	}else if (userCommand == "c") {
 		return CLEAR_ALL_DONE;
 	}else{
-		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
+		throw invalid_argument(ERROR_INVALID_COMMAND);
 	}
 
 }
@@ -138,7 +141,7 @@ CommandType ParserForCmds::determineCommandType_OverdueTasksScreen(string userCo
 	}else if (userCommand == "c") {
 		return CLEAR_ALL_OVERDUE;
 	}else{
-		throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
+		throw invalid_argument(ERROR_INVALID_COMMAND);
 	}
 	
 }

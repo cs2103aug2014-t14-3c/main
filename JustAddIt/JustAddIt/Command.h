@@ -1,7 +1,6 @@
-#pragma once
-
-#include "stdafx.h"
 //@author A0110770U
+#pragma once
+#include "stdafx.h"
 #include "ItemBank.h"
 #include "OutputControl.h"
 

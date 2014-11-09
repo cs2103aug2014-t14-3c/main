@@ -10,6 +10,8 @@ bool ItemBank::instanceFlag = false;
 vector<Item*> ItemBank::initialBank;
 vector<Item*> ItemBank::bank;
 
+const string ItemBank::MESSAGE_INVALID_ITEM = "item does not exist!";
+
 ItemBank::ItemBank() {
 
 }
@@ -441,7 +443,7 @@ vector<Item*>::iterator ItemBank::findIter(Item* itemPtr) {
 		iter++;
 	}
 
-	throw exception("item does not exist!");
+	throw logic_error(MESSAGE_INVALID_ITEM);
 }
 
 vector<string> ItemBank::updateItem(vector<string> items, Item* item) {

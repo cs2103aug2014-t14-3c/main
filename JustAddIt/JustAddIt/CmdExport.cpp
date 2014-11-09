@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "CmdExport.h"
 
-const string CmdExport::MESSAGE_EXPORT_SUCCESSFUL = "The current screen has been exported into text file \"JustAddIt_Exports.txt\"!";
+const string CmdExport::MESSAGE_EXPORT_SUCCESSFUL = "The current screen has been exported into the file \"JustAddIt_Exports.html\"!";
 
 CmdExport::CmdExport(void) {
 }

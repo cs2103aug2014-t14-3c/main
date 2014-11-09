@@ -36,6 +36,8 @@ private:
 	static vector<Item*> initialBank;
 	static vector<Item*> bank;
 
+	static const string MESSAGE_INVALID_ITEM;
+
 	void deleteItem(Item* itemPtr);
 
 	vector<Item*> getDoneItems();

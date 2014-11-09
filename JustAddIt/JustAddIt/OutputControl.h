@@ -1,5 +1,5 @@
-#pragma once
 //@author A0110770U
+#pragma once
 #include "stdafx.h"
 #include "Command.h"
 

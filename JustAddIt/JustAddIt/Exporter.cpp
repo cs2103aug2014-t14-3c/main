@@ -1,8 +1,11 @@
+//@author A0108397W
 #include "stdafx.h"
 #include "Exporter.h"
 
-string exportFileName = "JustAddIt_Exports.txt";
+string exportFileName = "JustAddIt_Exports.html";
 Exporter* Exporter::exporter = NULL;
+
+const string Exporter::newLine = "<br>";
 
 Exporter::Exporter(void) {
 }
@@ -24,7 +27,7 @@ void Exporter::writeToFile(vector<string>displayScreenToBeExported) {
 
 	for (iter = displayScreenToBeExported.begin(); iter != displayScreenToBeExported.end(); iter++) {
 		if (*iter != "") {
-			mytextfile << *iter << endl;
+			mytextfile << *iter << newLine << endl;
 		}
 	}
 
