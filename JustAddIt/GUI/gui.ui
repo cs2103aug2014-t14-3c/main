@@ -460,10 +460,10 @@
           </font>
          </property>
          <property name="text">
-          <string>JustAddIt!</string>
+          <string/>
          </property>
          <property name="pixmap">
-          <pixmap>../JustAddIt.jpeg</pixmap>
+          <pixmap>JustAddIt/JustAddIt.jpeg</pixmap>
          </property>
          <property name="scaledContents">
           <bool>false</bool>
@@ -506,7 +506,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Command:</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Command:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>

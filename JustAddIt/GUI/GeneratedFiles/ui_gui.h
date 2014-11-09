@@ -133,7 +133,7 @@ public:
         font1.setFamily(QStringLiteral("Braxton"));
         font1.setPointSize(36);
         labelTitle->setFont(font1);
-        labelTitle->setPixmap(QPixmap(QString::fromUtf8("../JustAddIt.jpeg")));
+        labelTitle->setPixmap(QPixmap(QString::fromUtf8("JustAddIt/JustAddIt.jpeg")));
         labelTitle->setScaledContents(false);
 
         horizontalLayout_2->addWidget(labelTitle);
@@ -190,8 +190,8 @@ public:
     void retranslateUi(QWidget *GUIClass)
     {
         GUIClass->setWindowTitle(QApplication::translate("GUIClass", "GUI", 0));
-        labelTitle->setText(QApplication::translate("GUIClass", "JustAddIt!", 0));
-        labelPrompt->setText(QApplication::translate("GUIClass", "Command:", 0));
+        labelTitle->setText(QString());
+        labelPrompt->setText(QApplication::translate("GUIClass", "<html><head/><body><p><span style=\" color:#ffffff;\">Command:</span></p></body></html>", 0));
         pushButton->setText(QApplication::translate("GUIClass", "Enter", 0));
     } // retranslateUi
 
