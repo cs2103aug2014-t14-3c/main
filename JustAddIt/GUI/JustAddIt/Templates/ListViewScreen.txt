@@ -3,13 +3,10 @@
 <u>All Events</u>
  
 
-
 <u>All Deadlines</u>
 
  
-
 <u>Tasks</u>
-
  
 
 <span style="color:#3366FF;">[e #] Edit {Item number}<br>[m #] Mark {Item number}<br>[d #] Delete {Item number}<br>[c] Clear all completed items</span>

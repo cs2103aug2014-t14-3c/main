@@ -260,7 +260,7 @@ namespace UnitTest
 			catch(exception& e){
 				Assert::AreEqual(Parser::ERROR_INVALID_ITEM_NO.c_str(), e.what());
 			};
-			myExec->execute("e 3");
+			myExec->execute("e 1");
 			try{
 				myExec->execute("e 7");
 			}
@@ -272,6 +272,18 @@ namespace UnitTest
 			}
 			catch(exception& e){
 				Assert::AreEqual(Parser::ERROR_INVALID_PRIORITY.c_str(), e.what());
+			};
+			try{
+				myExec->execute("e 3 10pm");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_LOGIC_START_END.c_str(), e.what());
+			};
+			try{
+				myExec->execute("e 4 1pm");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_LOGIC_START_END.c_str(), e.what());
 			};
 		}	
 	

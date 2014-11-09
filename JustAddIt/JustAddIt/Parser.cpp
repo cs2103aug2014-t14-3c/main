@@ -24,7 +24,7 @@ const string Parser::ERROR_MISSING_TITLE =	"No title detected! Try something lik
 const string Parser::ERROR_MISSING_CATEGORY = "No category detected! Please try e.g. \"add homework #school\"";
 const string Parser::ERROR_INVALID_BRACKETS = "Invalid brackets! Try something like \"add event at 7pm (description)\"";
 const string Parser::ERROR_INVALID_PRIORITY = "Wrong priority format entered. Please type \"high\", \"med\" or \"low\"";
-const string Parser::ERROR_LOGIC_START_END = "You can't go back in time!. Please try e.g. add event from Friday 2pm to Sunday 3pm";
+const string Parser::ERROR_LOGIC_START_END = "You can't go back in time! Please try e.g. add event from 2 May 2pm to 3 May 3pm";
 
 Parser::Parser(void)
 {
@@ -63,7 +63,7 @@ Command* Parser::stringToCommand(string userCommand) {
 			return myAdd;
 
 			break;
-		}
+				  }
 
 		case SEARCH: {
 			string keyword;
@@ -101,33 +101,9 @@ Command* Parser::stringToCommand(string userCommand) {
 			commandStream >> newFieldInfo;
 			getline(commandStream, buffer);
 			newFieldInfo += buffer;
-			
-			if(fieldNum == START_TIME_FIELD_INDEX){
-				//check for all the possible types of time input
-				Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());
-				detectTypesOfDatesAndEmbed(myNewItem, newFieldInfo, false);
-				CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, myNewItem.getStartDateTime());
-				return myEdit;
-			}
-			else if(fieldNum == END_TIME_FIELD_INDEX){
-				//check for all the possible types of time input
-				Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());
-				detectTypesOfDatesAndEmbed(myNewItem, newFieldInfo, true);
-				CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, myNewItem.getEndDateTime());
-				return myEdit;
-			
-			}
-			else if(fieldNum == PRIORITY_FIELD_INDEX){
-				CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, convertStrToPriorityLevel(newFieldInfo));
-				return myEdit;
-			
-			}
-			else{
-				CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, newFieldInfo);
-				return myEdit;
-			}
+			return constructRespectiveCmdEdit(fieldNum, newFieldInfo);
 			break;
-				   }
+						 }
 
 		case DELETE: {
 			vector<Item*> collatedList;
@@ -145,7 +121,7 @@ Command* Parser::stringToCommand(string userCommand) {
 			CmdMarkItemDone* myMark = new CmdMarkItemDone(convertItemNumsToItemPtrs(itemNumsStr));
 			return myMark;
 			break;
-					 }
+				   }
 
 		case UNDO : {
 			CmdUndo* myUndo = new CmdUndo();
@@ -672,6 +648,7 @@ void Parser::detectTypesOfDatesAndEmbed(Item &myNewItem, string newFieldInfo, bo
 	detectMonthDateAndEmbedIsOk(&myNewItem, newFieldInfo, isDeadline);
 	detectDayOfWeekDateAndEmbedIsOk(&myNewItem, newFieldInfo, isDeadline);
 	detectTimeAndEmbedIsOk(&myNewItem, newFieldInfo, isDeadline);
+
 }
 
 //This function accepts an input string and 
@@ -999,3 +976,35 @@ void Parser::trimWordFromString(string &originalString, string toTrim){
 	originalString.replace(originalString.find(toTrim),toTrim.length(),"");	
 }
 
+CmdEditItem* Parser::constructRespectiveCmdEdit(int fieldNum, string newFieldInfo){
+	switch (fieldNum) {
+		case START_TIME_FIELD_INDEX: {
+			//check for all the possible types of time input
+			Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());
+			detectTypesOfDatesAndEmbed(myNewItem, newFieldInfo, false);		
+			if(OutputControl::getItemAddr(1)->getEndDateTime_T() < myNewItem.getStartDateTime_T()){
+				throw logic_error(ERROR_LOGIC_START_END);
+			}
+			CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, myNewItem.getStartDateTime());
+			return myEdit;
+									 }
+		case END_TIME_FIELD_INDEX: {
+			//check for all the possible types of time input
+			Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());;
+			detectTypesOfDatesAndEmbed(myNewItem, newFieldInfo, true);
+			if(myNewItem.getEndDateTime_T() < OutputControl::getItemAddr(1)->getStartDateTime_T()){
+				throw logic_error(ERROR_LOGIC_START_END);
+			}
+			CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, myNewItem.getEndDateTime());
+			return myEdit;
+								   }
+		case PRIORITY_FIELD_INDEX: {
+			CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, convertStrToPriorityLevel(newFieldInfo));
+			return myEdit;
+								   }
+		default :{
+			CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, newFieldInfo);
+			return myEdit;
+				 }
+	}
+}

@@ -65,6 +65,7 @@ public:
 	vector <string> convertStringToVector(string inputString);
 	string convertVectorToString(vector<string>::iterator start, vector<string>::iterator end);
 	void trimWordFromString(string &originalString, string toTrim);
+	CmdEditItem* constructRespectiveCmdEdit(int fieldNum, string newFieldInfo);
 public:
 	static const string Parser::ERROR_INVALID_ITEM_NO;
 	static const string Parser::ERROR_INVALID_FIELD_NO;
