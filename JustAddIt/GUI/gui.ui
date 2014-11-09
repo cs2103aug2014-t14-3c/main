@@ -453,8 +453,14 @@
        </item>
        <item>
         <widget class="QLabel" name="labelTitle">
+         <property name="font">
+          <font>
+           <family>Braxton</family>
+           <pointsize>36</pointsize>
+          </font>
+         </property>
          <property name="text">
-          <string/>
+          <string>JustAddIt!</string>
          </property>
          <property name="pixmap">
           <pixmap>../JustAddIt.jpeg</pixmap>

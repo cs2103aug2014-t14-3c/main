@@ -11,9 +11,9 @@ GUI::GUI(QWidget *parent)
 	//this->setWindowFlags(Qt::FramelessWindowHint);
 	this->setWindowTitle("JustAddIt!");
 
-	ui.pushButton->setStyleSheet("QPushButton { border: 1px solid white; border-radius: 5px; padding: 3px; background-color: #EFF8FF; color: black; }");
-	ui.lineEdit->setStyleSheet("QLineEdit { border: 1px solid white; border-radius: 5px; background-color: #EFF8FF; color: black; }");
-	ui.textEdit->setStyleSheet("QTextEdit { border: 1px solid black; border-radius: 5px; background-color: #EFF8FF; color: black; }");
+	ui.pushButton->setStyleSheet("QPushButton { border: 1px solid grey; border-radius: 5px; padding: 3px; background-color: #EFF8FF; color: black; }");
+	ui.lineEdit->setStyleSheet("QLineEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: black; }");
+	ui.textEdit->setStyleSheet("QTextEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: black; }");
 
 	ui.textEdit->setReadOnly(true);
 

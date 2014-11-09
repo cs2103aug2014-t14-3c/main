@@ -36,9 +36,12 @@ private:
 	enum State { READY, UNDO, REDO };
 	static vector<Command*> log;
 	static stack<Command*> undoStack;
-	static int numCommands;
 	static State state;
 
+	static const string MESSAGE_INVALID_UNDO;
+	static const string MESSAGE_INVALID_REDO;
+
+	static vector<Command*> copyLog();
 	static void resetLog();
 	static void resetUndoStack();
 

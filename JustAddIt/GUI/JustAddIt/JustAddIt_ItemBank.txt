@@ -14,7 +14,7 @@ At lecture theatre 50
 -
 High
 quiz
-1
+0
 event
 Quiz 2
 At auditorium
@@ -23,7 +23,7 @@ At auditorium
 -
 Low
 quiz
-0
+1
 event
 Prepare for lesson
 -
@@ -32,7 +32,7 @@ Prepare for lesson
 -
 High
 lessonprep
-0
+1
 deadline
 Project meeting
 -
@@ -41,7 +41,7 @@ Project meeting
 -
 Low
 project
-1
+0
 event
 Project meeting 2
 -
@@ -50,7 +50,7 @@ Project meeting 2
 -
 Low
 project
-0
+1
 event
 Mock Presentation
 -
@@ -95,5 +95,5 @@ buy stuff
 -
 Low
 -
-0
+1
 deadline
