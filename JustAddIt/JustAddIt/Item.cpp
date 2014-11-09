@@ -8,19 +8,7 @@ int Item::_idCounter = 1;
 
 const string Item::MESSAGE_INVALID_ARGUMENT = "invalid argument entered";
 
-const string Item::STRING_EMPTY = "";
-const string Item::STRING_INVALID = "Invalid";
-
-const string Item::ITEM_TYPE_EVENT = "event";
-const string Item::ITEM_TYPE_DEADLINE = "deadline";
-const string Item::ITEM_TYPE_TASK = "task";
-
-const string Item::PRIORITY_LOW = "Low";
-const string Item::PRIORITY_MED = "Medium";
-const string Item::PRIORITY_HIGH = "High";
-
-const string Item::IS_DONE = "0";
-
+//@author A0128461H
 Item::Item(void){
 	_title = "-";
 	_description = "-";
@@ -32,7 +20,7 @@ Item::Item(void){
 	_venue = "-";
 	_category = "-";
 	_priority = MED;
-	toggleDone();
+	_isDone = false;
 	_id = _idCounter++;
 }
 
@@ -40,6 +28,7 @@ Item::~Item(void)
 {
 }
 
+//@author A0116781A
 vector<string>::iterator Item::strToItem(vector<string>::iterator iter) {
 	setTitle(*iter++);
 	setDescription(*iter++);
@@ -206,6 +195,7 @@ void Item::setEndDateTime(string endDateTimeStr) {
 	setEndDateTime(endDateTime);
 }
 
+//@author A0128461H
 void Item::addToStartDate(int daysToAdd){
 	setStartDate();
 	_startDateTime.tm_mday += daysToAdd;
@@ -218,6 +208,7 @@ void Item::addToEndDate(int daysToAdd){
 	mktime(&_endDateTime);
 }
 
+//@author A0116781A
 //default function with no parameter input sets date to current date
 void Item::setStartDate(){
 	time_t currTime;
@@ -240,6 +231,7 @@ void Item::setEndDate(){
 	mktime(&_endDateTime);
 }
 
+//@author A0128461H
 void Item::setStartDateTime(struct tm startDateTime) {
 	_startDateTime = startDateTime;
 	mktime(&_startDateTime);
@@ -280,7 +272,6 @@ void Item::setTime(int hour, int min, tm &date) {
 
 void Item::setDate(int day, int month, tm &date) {
 	time_t currTime;
-	tm currTimeTM;
 
 	time(&currTime);
 	localtime_s (&date, &currTime);
@@ -308,6 +299,7 @@ void Item::setDate(tm input, tm &output) {
 	output.tm_year = input.tm_year;
 }
 
+//@author A0116781A
 void Item::setVenue(string venue) {
 	_venue = venue;
 }

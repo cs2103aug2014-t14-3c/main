@@ -1,5 +1,5 @@
-#pragma once
 //@author A0110770U
+#pragma once
 #include "stdafx.h"
 #include "OutputControl.h"
 using namespace std;
@@ -20,5 +20,6 @@ public:
 	CommandType determineCommandType_GoToBaseScreen();
 
 private:
+	static const string ERROR_INVALID_COMMAND;
 
 };

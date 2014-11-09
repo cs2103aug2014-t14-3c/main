@@ -1,3 +1,4 @@
+//@author A0108397W
 #pragma once
 #include "ItemBank.h"
 
@@ -6,6 +7,8 @@ class Exporter
 private:
 	static string exportFilename;
 	static Exporter* exporter;
+
+	static const string newLine;
 
 	Exporter(void);
 

@@ -3,13 +3,15 @@
 
 using namespace std;
 
+const QString GUI::title = "JustAddIt";
+
 GUI::GUI(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
 
 	//this->setWindowFlags(Qt::FramelessWindowHint);
-	this->setWindowTitle("JustAddIt!");
+	this->setWindowTitle(title);
 
 	ui.pushButton->setStyleSheet("QPushButton { border: 1px solid grey; border-radius: 5px; padding: 3px; background-color: #EFF8FF; color: black; }");
 	ui.lineEdit->setStyleSheet("QLineEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: black; }");
@@ -38,7 +40,7 @@ void GUI::updateDisplay(vector<string> output) {
 
 void GUI::initProg() {
 	vector<string> output = Executor::initialise();
-
+	//RegisterHotKey(NULL, 1, MOD_CONTROL | MOD_ALT, 'J');
 	updateDisplay(output);
 }
 

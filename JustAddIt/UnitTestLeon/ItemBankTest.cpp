@@ -8,7 +8,6 @@ const string source = "../UnitTestLeon/TestItems.txt";
 const string destination = "JustAddIt/JustAddIt_ItemBank.txt";
 const string FILL = "Filler text to test code";
 const string DATE = "Saturday 15 Nov 2014 08:00AM";
-const string PRIORITY_HIGH = "High";
 const string SEARCH_TERM_EVENTS = "quiz";
 const string SEARCH_TERM_DEADLINES = "assignment";
 const string SEARCH_TERM_TASKS = "project";

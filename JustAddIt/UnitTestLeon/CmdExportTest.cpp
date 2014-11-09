@@ -3,7 +3,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-const string MESSAGE_EXPORT_SUCCESSFUL = "The current screen has been exported into text file \"JustAddIt_Exports.txt\"!";
+const string MESSAGE_EXPORT_SUCCESSFUL = "The current screen has been exported into the file \"JustAddIt_Exports.html\"!";
 
 namespace UnitTest
 {		
