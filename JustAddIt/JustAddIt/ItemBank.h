@@ -1,4 +1,25 @@
 //@author A0116781A
+//
+//-----------------------------------------------
+//This is the ItemBank class. It is responsible 
+//for storing all the items in JustAddIt.
+//
+//Whenever a command that creates, modifies or 
+//deletes an item, the appropriate item is found/
+//created and the respective method called by the
+//command will act on it.
+//
+//ItemBank will edit, create, delete and filter 
+//the items based on item type, whether it is 
+//overdue, et cetera.  
+// 
+//On initialisation, ItemBank will translate a 
+//strings taken from DataStorage into items and
+//load it into the bank. A backup copy is kept 
+//to support undo capability.
+//
+//-----------------------------------------------
+
 #pragma once
 #include "Item.h"
 #include "DataStorage.h"
@@ -9,13 +30,11 @@ class ItemBank
 private: 
 	static bool instanceFlag;
 	static ItemBank* itemBank;
-
+	
 	ItemBank();
 
 	static vector<Item*> initialBank;
 	static vector<Item*> bank;
-
-	bool checkForConflict(Item* itemPtr);
 
 	void deleteItem(Item* itemPtr);
 
@@ -27,7 +46,7 @@ private:
 	bool isThisWeekInPeriod(tm timeStart, tm timeEnd);
 	bool isEventPast(Item* itemPtr);
 	bool isOverdue(Item* itemPtr);
-	bool isConflicted(Item* item1, Item* item2);
+
 
 	void strToBank(vector<string> items);
 	void copyItemToInitialBank(Item* itemPtr);
@@ -49,6 +68,9 @@ public:
 	void initialiseBank();
 	void clearBank();
 	void resetBank();
+
+	bool checkForConflict(Item* itemPtr);
+	bool isConflicted(Item* item1, Item* item2);
 
 	void deleteItems(vector<Item*> itemPtr);
 	void deleteDoneItems();

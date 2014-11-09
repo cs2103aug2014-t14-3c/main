@@ -1,11 +1,20 @@
-<u>What's going on this week?</u>
+<strong>To-do list</strong
+<u>All Events</u>
  
-1. item from Monday 10 Nov 2014 02:00PM to Monday 10 Nov 2014 03:00PM
-2. item from Monday 10 Nov 2014 02:00PM to Monday 10 Nov 2014 03:00PM
-3. Write report abstract
-4. Refactor class C in coding project
-5. do something
-<u>What do you want to do?</u>
-  
-<span style="color:#3366FF;">Universal commands:<br>add {task details}, search {keyword}, export, undo, redo, home, exit<br><br>[t] View To-do list<br>[o] Check for overdue task</span>
+1. item<br>&nbsp;&nbsp;&nbsp;&nbsp;from: Monday 10 Nov 2014 02:00PM<br>&nbsp;&nbsp;&nbsp;&nbsp;to:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Monday 10 Nov 2014 03:00PM
+2. item<br>&nbsp;&nbsp;&nbsp;&nbsp;from: Monday 10 Nov 2014 02:00PM<br>&nbsp;&nbsp;&nbsp;&nbsp;to:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Monday 10 Nov 2014 03:00PM
+3. item<br>&nbsp;&nbsp;&nbsp;&nbsp;from: Thursday 20 Nov 2014 08:00AM<br>&nbsp;&nbsp;&nbsp;&nbsp;to:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thursday 20 Nov 2014 10:00AM
+4. item2<br>&nbsp;&nbsp;&nbsp;&nbsp;from: Thursday 20 Nov 2014 08:00AM<br>&nbsp;&nbsp;&nbsp;&nbsp;to:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thursday 20 Nov 2014 10:00AM
+<u>All Deadlines</u>
+<span style="color:#d3d3d3;">No deadlines found</span>
+ 
+<u>Tasks</u>
+ 
+5. Write report abstract
+6. Refactor class C in coding project
+7. do something
+<span style="color:#3366FF;">[e #] Edit {Item number}<br>[m #] Mark {Item number}<br>[d #] Delete {Item number}<br>[c] Clear all completed items</span>
+ 
+Tip: To perform multiple deletes/marks, leave a space between each Item number.
+For example: d 1 2 5
  

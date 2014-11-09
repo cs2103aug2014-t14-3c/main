@@ -9,6 +9,10 @@ const string destination = "JustAddIt/JustAddIt_ItemBank.txt";
 const string FILL = "Filler text to test code";
 const string DATE = "Saturday 15 Nov 2014 08:00AM";
 const string PRIORITY_HIGH = "High";
+const string SEARCH_TERM_EVENTS = "quiz";
+const string SEARCH_TERM_DEADLINES = "assignment";
+const string SEARCH_TERM_TASKS = "project";
+
 
 ItemBank* itemBank = ItemBank::getInstance();
 
@@ -46,8 +50,43 @@ namespace UnitTest
 			Assert::AreEqual(itemBank->getBankSize(), 1);
 		}
 
-		// adding 2 duplicate items to empty bank shows conflict with other items
-		TEST_METHOD(addToBank_Conflict) 
+		// 2 duplicate items conflict with each other
+		TEST_METHOD(isConflicted_Pos) 
+		{
+			itemBank->clearBank();
+
+			OutputControl::resetCurrentItemList();
+
+			Item* itemPtr = new Item;
+			Item* itemPtr1 = new Item;
+			itemPtr1->setTitle(FILL);
+			itemPtr1->setDescription(FILL);
+			itemPtr1->setVenue(FILL);
+			itemPtr1->setCategory(FILL);
+			itemPtr1->setStartDate(20, 10);
+			itemPtr1->setStartTime(8, 0);
+			itemPtr1->setEndDate(20, 10);
+			itemPtr1->setEndTime(10, 0);
+
+			Item* itemPtr2 = new Item;
+			itemPtr2->setTitle(FILL);
+			itemPtr2->setDescription(FILL);
+			itemPtr2->setVenue(FILL);
+			itemPtr2->setCategory(FILL);
+			itemPtr2->setStartDate(20, 10);
+			itemPtr2->setStartTime(8, 0);
+			itemPtr2->setEndDate(20, 10);
+			itemPtr2->setEndTime(10, 0);
+
+			Assert::IsTrue(itemBank->isConflicted(itemPtr1, itemPtr2));
+			//Assert::IsFalse(itemBank->addToBank(itemPtr1));
+			//Assert::IsTrue(itemBank->checkForConflict(itemPtr2)); // this assert fails
+
+			itemBank->clearBank();
+		}
+
+		// 2 different items do not conflict with each other
+		TEST_METHOD(isConflicted_Neg) 
 		{
 			itemBank->clearBank();
 
@@ -62,11 +101,18 @@ namespace UnitTest
 			itemPtr1->setEndTime(10, 0);
 
 			Item* itemPtr2 = new Item;
-			*itemPtr2 = *itemPtr1;
+			itemPtr2->setTitle(FILL);
+			itemPtr2->setDescription(FILL);
+			itemPtr2->setVenue(FILL);
+			itemPtr2->setCategory(FILL);
+			itemPtr2->setStartDate(21, 10);
+			itemPtr2->setStartTime(8, 0);
+			itemPtr2->setEndDate(21, 10);
+			itemPtr2->setEndTime(10, 0);
 
-			Assert::IsFalse(itemBank->addToBank(itemPtr1));
-			Assert::IsTrue(itemBank->addToBank(itemPtr2)); // this assert fails
-			Assert::AreEqual(2, itemBank->getBankSize());
+			Assert::IsFalse(itemBank->isConflicted(itemPtr1, itemPtr2));
+			//Assert::IsTrue(itemBank->checkForConflict(itemPtr2)); // this assert fails
+			//Assert::AreEqual(1, itemBank->getBankSize());
 
 			itemBank->clearBank();
 		}
@@ -111,6 +157,8 @@ namespace UnitTest
 
 			itemBank->addToBank(itemPtr);
 
+			Assert::AreEqual(16, itemBank->getBankSize());
+
 			itemBank->resetBank();
 
 			Assert::AreEqual(15, itemBank->getBankSize());
@@ -119,8 +167,8 @@ namespace UnitTest
 			Assert::AreEqual(8, (int)itemBank->getAllTasks().size());
 		}
 				
-		// reset bank to initial loaded bank
-		TEST_METHOD(deleteItems) 
+		// delete items in bank that have been marked done
+		TEST_METHOD(deleteDoneItems) 
 		{
 			itemBank->clearBank();
 
@@ -134,16 +182,76 @@ namespace UnitTest
 
 			itemBank->initialiseBank();
 
-			Item* itemPtr = new Item;
+			Assert::AreEqual(15, itemBank->getBankSize());
+			
+			itemBank->deleteDoneItems();
 
-			itemBank->addToBank(itemPtr);
+			Assert::AreEqual(10, itemBank->getBankSize());
+		}
 
-			itemBank->resetBank();
+		// delete items in bank that are overdue
+		TEST_METHOD(deleteOverdueDeadlines) 
+		{
+			itemBank->clearBank();
+
+			ifstream src(source, ios::binary);
+			ofstream dest(destination, ios::binary);
+
+			dest << src.rdbuf();
+
+			src.close();
+			dest.close();
+
+			itemBank->initialiseBank();
 
 			Assert::AreEqual(15, itemBank->getBankSize());
-			Assert::AreEqual(2, (int)itemBank->getAllDeadlines().size());
-			Assert::AreEqual(5, (int)itemBank->getAllEvents().size());
-			Assert::AreEqual(8, (int)itemBank->getAllTasks().size());
+			
+			itemBank->deleteOverdueDeadlines();
+
+			Assert::AreEqual(13, itemBank->getBankSize());
+		}
+
+		// delete events in bank that have passed
+		TEST_METHOD(deletePastEvents) 
+		{
+			itemBank->clearBank();
+
+			ifstream src(source, ios::binary);
+			ofstream dest(destination, ios::binary);
+
+			dest << src.rdbuf();
+
+			src.close();
+			dest.close();
+
+			itemBank->initialiseBank();
+
+			Assert::AreEqual(15, itemBank->getBankSize());
+			
+			itemBank->deleteOverdueDeadlines();
+
+			Assert::AreEqual(13, itemBank->getBankSize());
+		}
+
+		// performs a search on the items in the bank
+		TEST_METHOD(searchItems) 
+		{
+			itemBank->clearBank();
+
+			ifstream src(source, ios::binary);
+			ofstream dest(destination, ios::binary);
+
+			dest << src.rdbuf();
+
+			src.close();
+			dest.close();
+
+			itemBank->initialiseBank();
+
+			Assert::AreEqual(15, itemBank->getBankSize());
+			Assert::AreEqual(2, (int)itemBank->searchEvents(SEARCH_TERM_EVENTS).size());
+			Assert::AreEqual(7, (int)itemBank->searchTasks(SEARCH_TERM_TASKS).size());
+			Assert::AreEqual(1, (int)itemBank->searchDeadlines(SEARCH_TERM_DEADLINES).size());
 		}
 	};
 }

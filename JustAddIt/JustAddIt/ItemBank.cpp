@@ -1,6 +1,7 @@
 //@author A0116781A
 #include "stdafx.h"
 #include "ItemBank.h"
+
 #define SEVEN_DAYS_IN_SECONDS 604800
 
 ItemBank* ItemBank::itemBank = NULL;
