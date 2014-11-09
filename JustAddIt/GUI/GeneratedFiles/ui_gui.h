@@ -129,6 +129,10 @@ public:
 
         labelTitle = new QLabel(GUIClass);
         labelTitle->setObjectName(QStringLiteral("labelTitle"));
+        QFont font1;
+        font1.setFamily(QStringLiteral("Braxton"));
+        font1.setPointSize(36);
+        labelTitle->setFont(font1);
         labelTitle->setPixmap(QPixmap(QString::fromUtf8("../JustAddIt.jpeg")));
         labelTitle->setScaledContents(false);
 
@@ -143,10 +147,10 @@ public:
 
         textEdit = new QTextEdit(GUIClass);
         textEdit->setObjectName(QStringLiteral("textEdit"));
-        QFont font1;
-        font1.setFamily(QStringLiteral("Verdana"));
-        font1.setPointSize(10);
-        textEdit->setFont(font1);
+        QFont font2;
+        font2.setFamily(QStringLiteral("Verdana"));
+        font2.setPointSize(10);
+        textEdit->setFont(font2);
 
         verticalLayout->addWidget(textEdit);
 
@@ -155,13 +159,13 @@ public:
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         labelPrompt = new QLabel(GUIClass);
         labelPrompt->setObjectName(QStringLiteral("labelPrompt"));
-        labelPrompt->setFont(font1);
+        labelPrompt->setFont(font2);
 
         horizontalLayout->addWidget(labelPrompt);
 
         lineEdit = new QLineEdit(GUIClass);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
-        lineEdit->setFont(font1);
+        lineEdit->setFont(font2);
 
         horizontalLayout->addWidget(lineEdit);
 
@@ -186,7 +190,7 @@ public:
     void retranslateUi(QWidget *GUIClass)
     {
         GUIClass->setWindowTitle(QApplication::translate("GUIClass", "GUI", 0));
-        labelTitle->setText(QString());
+        labelTitle->setText(QApplication::translate("GUIClass", "JustAddIt!", 0));
         labelPrompt->setText(QApplication::translate("GUIClass", "Command:", 0));
         pushButton->setText(QApplication::translate("GUIClass", "Enter", 0));
     } // retranslateUi

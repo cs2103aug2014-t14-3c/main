@@ -4,46 +4,45 @@
 
 vector<Command*> ActionLog::log;
 stack<Command*> ActionLog::undoStack;
-int ActionLog::numCommands = 0;
 ActionLog::State ActionLog::state = READY;
+
+const string ActionLog::MESSAGE_INVALID_UNDO = "nothing to undo!";
+const string ActionLog::MESSAGE_INVALID_REDO = "nothing to redo!";
+const string ActionLog::ERROR_LOGIC = "logic error in setting state when adding command";
 
 void ActionLog::addCommand(Command* cmd) {
 	log.push_back(cmd);
 
-	numCommands++;
-	assert(numCommands != 0);
-
+	assert(log.size() != 0);
+	
+	//reset the undo stack to zero if the current command is not redo
 	if(state == READY) {
 		resetUndoStack();
-	} else { // if state == REDO or UNDO
+	} else if(state == UNDO || state == REDO) { 
 		state = READY;
+	} else {
+		throw logic_error(ERROR_LOGIC);
 	}
 }
 
 void ActionLog::undo() {
-
-	state = READY;
-
-	if(numCommands == 0) {
-		throw invalid_argument("no previous command to undo!");
+	if(log.size() == 0) {
+		throw invalid_argument(MESSAGE_INVALID_UNDO);
 	} else {
 		ItemBank::getInstance()->resetBank();
 
-		vector<Command*> tempLog;
-		
-		for(vector<Command*>::iterator iter = log.begin(); iter != log.end(); iter++) {
-			tempLog.push_back(*iter);
-		}
+		vector<Command*> tempLog = copyLog();
 
-		int initialNumCommands = numCommands;
+		int numCommands = tempLog.size();
 
 		resetLog();
 
-		for(int i = 0; i < initialNumCommands - 1; i++) {
+		//executes the commands from when the software is started
+		for(int i = 0; i < numCommands - 1; i++) {
 			tempLog[i]->execute();
 		}
-
-		undoStack.push(tempLog[--initialNumCommands]);
+		//adds the last command in tempLog (not executed) to a stack
+		undoStack.push(tempLog[--numCommands]);		
 	} 
 
 	state = UNDO;
@@ -51,8 +50,9 @@ void ActionLog::undo() {
 
 void ActionLog::redo() {
 	if(undoStack.empty()) {
-		throw invalid_argument("nothing to redo!");
+		throw invalid_argument(MESSAGE_INVALID_REDO);
 	} else {
+		//executes the last command undone (top command in the stack)
 		Command* lastUndo = undoStack.top();
 		undoStack.pop();
 		lastUndo->execute();
@@ -61,13 +61,22 @@ void ActionLog::redo() {
 	state = REDO;
 }
 
-void ActionLog::resetLog() {
-	log.clear();
-	numCommands = 0;
+vector<Command*> ActionLog::copyLog() {
+	vector<Command*> tempLog;
+		
+	for(vector<Command*>::iterator iter = log.begin(); iter != log.end(); iter++) {
+		tempLog.push_back(*iter);
+	}
+
+	return tempLog;
 }
 
 void ActionLog::resetUndoStack() {
 	while(undoStack.size() != 0) {
 		undoStack.pop();
 	}
+}
+
+void ActionLog::resetLog() {
+	log.clear();
 }

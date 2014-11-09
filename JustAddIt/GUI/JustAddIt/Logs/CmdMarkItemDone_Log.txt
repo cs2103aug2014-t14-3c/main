@@ -70,3 +70,75 @@ INFO: Items marked in ItemBank::bank
 INFO: outputMessageStorage stores base screen
 INfO: Success message is stored into outputMessageStorage
 INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items marked in ItemBank::bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
