@@ -32,7 +32,7 @@ ItemBank* ItemBank::getInstance() {
 void ItemBank::initialiseBank() {
 	DataStorage* dataStorage = dataStorage->getInstance();
 
-	strToBank(dataStorage->readToBank());
+	strToBank(dataStorage->readFromLocalMemory());
 
 	return;
 }
