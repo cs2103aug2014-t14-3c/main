@@ -2,9 +2,10 @@
 #include "stdafx.h"
 #include "CmdClearAllOverdue.h"
 
-const string CmdClearAllOverdue::ERROR_MESSAGE = "No more overdue deadlines to be cleared!";
 const string CmdClearAllOverdue::TEXT_FILE_NAME = "JustAddIt/Logs/CmdEditItem_Log.txt";
 const string CmdClearAllOverdue::CLEARED_ALL_OVERDUE_DEADLINES_LOG = "All the overdue deadlines are cleared.";
+const string CmdClearAllOverdue::ERROR_MESSAGE = "No more overdue deadlines to be cleared!";
+const string CmdClearAllOverdue::SUCCESS_MESSAGE = "All overdue Deadline(s) successfully deleted!";
 
 CmdClearAllOverdue::CmdClearAllOverdue(void) {
 }
@@ -33,7 +34,7 @@ vector<string> CmdClearAllOverdue::execute() {
 	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
 	outputMessageStorage.clear();
 	outputMessageStorage = cmdBase -> execute();
-	outputMessageStorage.push_back("All overdue Deadline(s) successfully deleted!");
+	outputMessageStorage.push_back(SUCCESS_MESSAGE);
 
 	ActionLog::addCommand(this);
 

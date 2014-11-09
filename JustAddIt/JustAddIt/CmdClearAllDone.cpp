@@ -2,10 +2,10 @@
 #include "stdafx.h"
 #include "CmdClearAllDone.h"
 
-const string CmdClearAllDone::ERROR_MESSAGE = "No more done items to be cleared!";
-const string CmdClearAllDone::SUCCESS_MESSAGE = "All completed Item(s) successfully deleted!";
 const string CmdClearAllDone::TEXT_FILE_NAME = "../JustAddIt/JustAddIt/JustAddIt/Logs/CmdClearItem_Log.txt";
 const string CmdClearAllDone::CLEARED_ALL_DONE_ITEMS_LOG = "All the done items are cleared.";
+const string CmdClearAllDone::ERROR_MESSAGE = "No more done items to be cleared!";
+const string CmdClearAllDone::SUCCESS_MESSAGE = "All completed Item(s) successfully deleted!";
 
 CmdClearAllDone::CmdClearAllDone(void) {
 }

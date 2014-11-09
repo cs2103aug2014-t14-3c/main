@@ -40,6 +40,7 @@ private:
 
 	static const string MESSAGE_INVALID_UNDO;
 	static const string MESSAGE_INVALID_REDO;
+	static const string ERROR_LOGIC;
 
 	static vector<Command*> copyLog();
 	static void resetLog();
