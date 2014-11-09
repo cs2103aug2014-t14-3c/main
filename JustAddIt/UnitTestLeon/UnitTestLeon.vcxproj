@@ -95,7 +95,7 @@
     <ClCompile Include="CmdExportTest.cpp" />
     <ClCompile Include="CmdMarkItemDoneTest.cpp" />
     <ClCompile Include="CmdSearchTest.cpp" />
-    <ClCompile Include="ExecutorTest.cpp" />
+    <ClCompile Include="SystemTest.cpp" />
     <ClCompile Include="ItemBankTest.cpp" />
     <ClCompile Include="ItemTest.cpp" />
     <ClCompile Include="stdafx.cpp">
