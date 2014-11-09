@@ -27,6 +27,7 @@ private:
 	bool isThisWeekInPeriod(tm timeStart, tm timeEnd);
 	bool isEventPast(Item* itemPtr);
 	bool isOverdue(Item* itemPtr);
+	bool isConflicted(Item* item1, Item* item2);
 
 	void strToBank(vector<string> items);
 	void copyItemToInitialBank(Item* itemPtr);
@@ -44,7 +45,7 @@ public:
 	~ItemBank();
 	static ItemBank* getInstance();
 
-	bool addToBank(Item* item);
+	bool addToBank(Item* itemPtr);
 	void initialiseBank();
 	void clearBank();
 	void resetBank();

@@ -64,11 +64,11 @@ void ItemBank::clearBank() {
 	update();
 }
 
-bool ItemBank::addToBank(Item* item) {
-	bank.push_back(item);
+bool ItemBank::addToBank(Item* itemPtr) {
+	bank.push_back(itemPtr);
 	update();
 
-	return checkForConflict(item);
+	return checkForConflict(itemPtr);
 }
 
 void ItemBank::deleteDoneItems() {
@@ -191,7 +191,6 @@ vector<Item*> ItemBank::getDeadlinesThisWeek() {
 	return deadlinesThisWeek;
 }
 
-
 vector<Item*> ItemBank::getEventsThisWeek() {
 	vector<Item*> eventsThisWeek;
 	vector<Item*> allEvents;
@@ -225,7 +224,6 @@ vector<Item*> ItemBank::getDoneItems() {
 	return doneItems;
 }
 
-
 bool ItemBank::isFoundForSearchingEvents(string keyword) {
 	vector<Item*> events = searchEvents(keyword);
 	
@@ -255,26 +253,6 @@ bool ItemBank::isFoundForSearchingTasks(string keyword) {
 
 	return false;
 }
-
-bool ItemBank::checkForConflict(Item* itemPtr) {
-	vector<Item*>::iterator iter;
-	bool isConflicted = false;
-
-	for (iter = bank.begin(); iter != bank.end(); iter++) {
-		if ((*iter)->isEvent()) {
-			if (mktime(&(itemPtr->getStartDateTime())) >= mktime(&((*iter)->getStartDateTime())) && mktime(&(itemPtr->getStartDateTime())) <= mktime(&((*iter)->getEndDateTime())) ||
-				mktime(&(itemPtr->getEndDateTime())) >= mktime(&((*iter)->getStartDateTime())) && mktime(&(itemPtr->getEndDateTime())) <= mktime(&((*iter)->getEndDateTime())) ||
-				mktime(&(itemPtr->getStartDateTime())) <= mktime(&((*iter)->getStartDateTime())) && mktime(&(itemPtr->getEndDateTime())) >= mktime(&((*iter)->getEndDateTime()))) {
-					isConflicted = true;
-			}
-		}
-	}
-
-	return isConflicted;
-}
-
-
-
 
 vector<Item*> ItemBank::searchEvents(string keyword) {
 	vector<Item*> allEvents;
@@ -398,6 +376,35 @@ void ItemBank::update() {
 	dataStorage->writeToFile(items);
 
 	return;
+}
+
+bool ItemBank::checkForConflict(Item* itemPtr) {
+	vector<Item*> allEvents;
+	vector<Item*> conflictedEvents;
+
+	allEvents = getAllEvents();
+
+	for (vector<Item*>::iterator iter = allEvents.begin(); iter != allEvents.end(); iter++) {
+		if (*iter != itemPtr && isConflicted(itemPtr, *iter)) {
+			conflictedEvents.push_back(*iter);
+		}
+	}
+
+	return !conflictedEvents.empty();
+}
+
+bool ItemBank::isConflicted(Item* itemPtr1, Item* itemPtr2) {
+	time_t item1Start = itemPtr1->getStartDateTime_T();
+	time_t item1End = itemPtr1->getEndDateTime_T();
+	time_t item2Start = itemPtr2->getStartDateTime_T();
+	time_t item2End = itemPtr2->getEndDateTime_T();
+
+	if(item1Start >= item2End || 
+		item1End <= item2Start) {
+		return false;
+	}
+
+	return true;
 }
 
 bool ItemBank::isEventPast(Item* itemPtr) {

@@ -1,9 +1,10 @@
-<u>What's going on this week?</u>
+<u>Edit event
  
-1. Write report abstract
-2. Refactor class C in coding project
-3. do something
-<u>What do you want to do?</u>
-  
-<span style="color:#3366FF;">Universal commands:<br>add {task details}, search {keyword}, export, undo, redo, home, exit<br><br>[t] View To-do list<br>[o] Check for overdue task</span>
+1) Title: item2
+2) Description: 
+3) Start: Thursday 20 Nov 2014 08:00AM
+4) End: Thursday 20 Nov 2014 10:00AM
+5) Priority: Low
+6) Category: 
  
+<span style="color:#3366FF;">[o] Ok<br>[e #] Edit {Field number}<br>[d] Delete</span>
