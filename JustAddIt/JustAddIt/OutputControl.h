@@ -1,5 +1,19 @@
 #pragma once
 //@author A0110770U
+//
+//------------------------------------------
+//OutputControl mainly acts as a record of what
+//items is currently displayed on the screen,
+//and what screen the application is on now.
+//CurrentBaseScreens: main screens
+//CurrentScreens: main screens and temporary screens
+
+//All of its methods are static and can be 
+//accessed without creating a new OutputControl
+//object. As such, screen information can be 
+//obtained or set by any other object.
+//------------------------------------------
+
 #include "stdafx.h"
 #include "Command.h"
 

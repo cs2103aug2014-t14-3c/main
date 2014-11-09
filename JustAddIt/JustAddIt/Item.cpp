@@ -280,7 +280,6 @@ void Item::setTime(int hour, int min, tm &date) {
 
 void Item::setDate(int day, int month, tm &date) {
 	time_t currTime;
-	tm currTimeTM;
 
 	time(&currTime);
 	localtime_s (&date, &currTime);
