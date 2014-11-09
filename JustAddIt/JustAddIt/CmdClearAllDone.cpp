@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include "CmdClearAllDone.h"
 
-
 CmdClearAllDone::CmdClearAllDone(void) {
 }
 
@@ -10,13 +9,18 @@ CmdClearAllDone::~CmdClearAllDone(void) {
 }
 
 vector<string> CmdClearAllDone::execute() {
-	ItemBank::getInstance()->deleteDoneItems();
+	ItemBank* itemPointer = ItemBank::getInstance();
+	if (itemPointer -> getNumberOfMarkedItems() == 0) {
+		throw invalid_argument("No more done items to be cleared!");
+	}
+	else {
+		ItemBank::getInstance() -> deleteDoneItems();
+	}
 
-	//returns to base screen
 	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
+	
 	outputMessageStorage.clear();
-	outputMessageStorage = cmdBase->execute();
-
+	outputMessageStorage = cmdBase -> execute();
 	outputMessageStorage.push_back("All completed Item(s) successfully deleted!");
 
 	ActionLog::addCommand(this);

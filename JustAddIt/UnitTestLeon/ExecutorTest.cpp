@@ -11,13 +11,13 @@ namespace UnitTest
 		
 		TEST_METHOD(TestExecutor)
 		{
-			Executor* myExec = new Executor();
+						Executor* myExec = new Executor();
+			Executor* myExec2 = new Executor();
 			ItemBank* myIB = ItemBank::getInstance();
 			DisplayScreenConstructor* myDSC = DisplayScreenConstructor::getInstance();
 			OutputControl* myOC = new OutputControl();
 
 			myExec->execute("add wake up on 30 Dec at 7 #category (more info)");
-
 		
 			Assert::AreEqual("wake up", OutputControl::getItemAddr(1)->getTitle().c_str());
 			Assert::AreEqual("Tuesday 30 Dec 2014 07:00AM", OutputControl::getItemAddr(1)->getStartDateInString().c_str());
@@ -26,12 +26,17 @@ namespace UnitTest
 			Assert::AreEqual("more info", OutputControl::getItemAddr(1)->getDescription().c_str());
 			Assert::AreEqual("Low", OutputControl::getItemAddr(1)->getPriorityInString().c_str());
 		
+			/*
 			try{
 				myExec->execute("add more info(");
 			}
 			catch (exception& e){
 				Assert::AreEqual("Invalid brackets! Please follow e.g. add event at 7pm (description)", e.what() );
 			}
+			*/
+
+			myExec2->execute("search wake");
+			Assert::AreEqual(OutputControl::getNumberOfDisplayedItems(), 1);
 
 			myIB->clearBank();
 		}

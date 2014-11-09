@@ -1,3 +1,4 @@
+//@author: A0128461H
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
@@ -11,16 +12,30 @@ namespace UnitTest
 		
 		TEST_METHOD(CmdClearAllDoneTest)
 		{
+			Item* itemTest1 = new Item;
+			Item* itemTest2 = new Item;
 			ItemBank* itemPointer = ItemBank::getInstance();
-			Item* task = new Item;
-			string title = "study";
-			string testing = "event";
-			string description = "study cs2103";
-			task->setItemType("event");
-			task->setTitle("testing");
-			itemPointer->addToBank(task);
-			Assert::AreEqual(itemPointer->getBankSize(), 1);
-			Assert::AreEqual(itemPointer->searchKeyword(task->getItemTypeInString(), testing), true);
+
+			itemTest1 -> setTitle("study cs2103");
+			itemTest1 -> setItemType("task");
+			itemPointer -> addToBank(itemTest1);
+			Assert::AreEqual(itemPointer -> getBankSize(), 1);
+
+			itemTest1 -> toggleDone();
+			itemPointer -> deleteDoneItems();
+			Assert::AreEqual(itemPointer -> getBankSize(), 0);
+
+			itemTest2 -> setTitle("study cs2105");
+			itemTest2 -> setItemType("task");
+			itemPointer -> addToBank(itemTest1);
+			Assert::AreEqual(itemPointer -> getBankSize(), 1);
+
+			try {
+				itemPointer -> deleteDoneItems();
+			}
+			catch (exception &e) {
+				Assert::AreEqual("No more done items to be cleared!", e.what());
+			}
 
 			itemPointer->clearBank();
 		}
