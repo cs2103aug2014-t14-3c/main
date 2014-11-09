@@ -12,16 +12,37 @@ vector<string> Executor::execute(string userCommand) {
 	//outputMessageStorage.clear();
 	//outputMessageStorage = displayScreenConstructor->clearScreen();
 
-	command = parser.stringToCommand(userCommand);
-//	outputMessageStorage = ;
+	try {
+		command = parser.stringToCommand(userCommand);
+		outputMessageStorage = command->execute();
+	} catch (exception& e) {
+		ofstream file;
+		file.open("JustAddIt/Logs/error.log", ios::app);
+		file << "exception occurred: \"" <<  e.what() << "\" \n command entered: \"" << userCommand << "\"\n" << endl;
+		file.close();
 
-	return command->execute();
+		string errorMessage = "<span style=\"color:#CC0000;\">Woops! ";
+		errorMessage += e.what();
+		outputMessageStorage.push_back(errorMessage);
+	}
+
+	return outputMessageStorage;
 }
 
 vector<string> Executor::initialise() {
-	Command* command = new CmdInitialiseBank();
-//	outputMessageStorage.clear();
-//	outputMessageStorage = ;
+	try {
+		Command* command = new CmdInitialiseBank();
+		outputMessageStorage = command->execute();
+	} catch (exception& e) {
+		ofstream file;
+		file.open("JustAddIt/Logs/error.log", ios::app);
+		file << "exception occurred when initialising bank: \"" <<  e.what() << "\"\n" << endl;
+		file.close();
+
+		string errorMessage = "<span style=\"color:#CC0000;\">Woops! ";
+		errorMessage += e.what();
+		outputMessageStorage.push_back(errorMessage);
+	}
 	
-	return command->execute();
+	return outputMessageStorage;
 }
