@@ -10,19 +10,47 @@ namespace UnitTest
 	TEST_CLASS(SystemTest)
 	{
 	public:
-		
-		TEST_METHOD(SystemTest_AddSearch)
+			TEST_METHOD(SystemTest_ListAndEditItems)
 		{
 			Executor* myExec = new Executor();
 			ItemBank* myIB = ItemBank::getInstance();
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
+			myExec->execute("add event on 30 Dec at 7 #category (more info)");		
+			myExec->execute("add deadline by 28 December !!");
+			myExec->execute("add floating task");
+			myExec->execute("home");
+			myExec->execute("t");
+			Assert::AreEqual(3, OutputControl::getNumberOfDisplayedItems());	
+
+			myExec->execute("e 1");
+			Assert::AreEqual("event", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("Tuesday 30 Dec 2014 07:00AM", OutputControl::getItemAddr(1)->getStartDateInString().c_str());
+			myExec->execute("o");
+
+			myExec->execute("e 2");
+			Assert::AreEqual("deadline", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("Sunday 28 Dec 2014 11:59PM", OutputControl::getItemAddr(1)->getEndDateInString().c_str());
+			myExec->execute("o");
+
+			myExec->execute("e 3");
+			Assert::AreEqual("floating task", OutputControl::getItemAddr(1)->getTitle().c_str());
 			
+			
+		}
+		TEST_METHOD(SystemTest_SearchAndEditScenarios)
+		{
+			Executor* myExec = new Executor();
+			ItemBank* myIB = ItemBank::getInstance();
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
 
 			myExec->execute("add wake up on 30 Dec at 7 #category (more info)");
 			myExec->execute("add dinner on 30 Nov at 8 #personal (bring cash)");
 			myExec->execute("add expensive dinner on 25 Dec 2300");
 				
 			myExec->execute("search wake");
-			Assert::AreEqual(OutputControl::getNumberOfDisplayedItems(), 1);
+			Assert::AreEqual(1, OutputControl::getNumberOfDisplayedItems());
 			Assert::AreEqual("wake up", OutputControl::getItemAddr(1)->getTitle().c_str());
 			Assert::AreEqual("Tuesday 30 Dec 2014 07:00AM", OutputControl::getItemAddr(1)->getStartDateInString().c_str());
 			Assert::AreEqual("Tuesday 30 Dec 2014 08:00AM", OutputControl::getItemAddr(1)->getEndDateInString().c_str());
@@ -31,7 +59,7 @@ namespace UnitTest
 			Assert::AreEqual("Low", OutputControl::getItemAddr(1)->getPriorityInString().c_str());
 			
 			myExec->execute("search dinner");
-			Assert::AreEqual(OutputControl::getNumberOfDisplayedItems(), 2);
+			Assert::AreEqual(2, OutputControl::getNumberOfDisplayedItems());
 			Assert::AreEqual("dinner", OutputControl::getItemAddr(1)->getTitle().c_str());
 			Assert::AreEqual("Sunday 30 Nov 2014 08:00AM", OutputControl::getItemAddr(1)->getStartDateInString().c_str());
 			Assert::AreEqual("Sunday 30 Nov 2014 09:00AM", OutputControl::getItemAddr(1)->getEndDateInString().c_str());
@@ -39,20 +67,33 @@ namespace UnitTest
 			Assert::AreEqual("bring cash", OutputControl::getItemAddr(1)->getDescription().c_str());
 			Assert::AreEqual("Low", OutputControl::getItemAddr(1)->getPriorityInString().c_str());
 			
+			myExec->execute("e 1");
+			myExec->execute("e 1 new title");
+			myExec->execute("o");
+
+			Assert::AreEqual(1, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("expensive dinner", OutputControl::getItemAddr(1)->getTitle().c_str());
+
+			myExec->execute("search cash");
+			Assert::AreEqual(OutputControl::getNumberOfDisplayedItems(), 1);
+			Assert::AreEqual("new title", OutputControl::getItemAddr(1)->getTitle().c_str());
 			
+			myExec->execute("e 1");
+			myExec->execute("e 2 bring money");
+			myExec->execute("o");
+			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
 			
-			
-			myIB->clearBank();
 		}
 		TEST_METHOD(SystemTest_AddEditFields)
 		{
 			Executor* myExec = new Executor();
 			ItemBank* myIB = ItemBank::getInstance();
-			
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
 
 			myExec->execute("add concert on 30 Dec at 7 #category (more info)");		
 			myExec->execute("e 1 new title");
-			Assert::AreEqual(OutputControl::getNumberOfDisplayedItems(), 1);
+			Assert::AreEqual(1, OutputControl::getNumberOfDisplayedItems());;
 			Assert::AreEqual("new title", OutputControl::getItemAddr(1)->getTitle().c_str());
 
 			myExec->execute("e 2 new description");
@@ -71,51 +112,21 @@ namespace UnitTest
 			Assert::AreEqual("new cat", OutputControl::getItemAddr(1)->getCategory().c_str());
 		
 				
-			
-			myIB->clearBank();
 		}
-		TEST_METHOD(SystemTest_ListEditItems)
+	
+		TEST_METHOD(SystemTest_MarkAndClearScenarios)
 		{
 			Executor* myExec = new Executor();
 			ItemBank* myIB = ItemBank::getInstance();
-			
-
-			myExec->execute("add event on 30 Dec at 7 #category (more info)");		
-			myExec->execute("add deadline by 28 December !!");
-			myExec->execute("add floating task");
-			myExec->execute("o");
-			myExec->execute("t");
-			Assert::AreEqual(OutputControl::getNumberOfDisplayedItems(), 3);
-		
-			myExec->execute("e 1");
-			Assert::AreEqual("event", OutputControl::getItemAddr(1)->getTitle().c_str());
-			Assert::AreEqual("Tuesday 30 Dec 2014 07:00AM", OutputControl::getItemAddr(1)->getStartDateInString().c_str());
-			myExec->execute("o");
-
-			myExec->execute("e 2");
-			Assert::AreEqual("deadline", OutputControl::getItemAddr(1)->getTitle().c_str());
-			Assert::AreEqual("Sunday 28 Dec 2014 11:59PM", OutputControl::getItemAddr(1)->getEndDateInString().c_str());
-			myExec->execute("o");
-
-			myExec->execute("e 3");
-			Assert::AreEqual("floating task", OutputControl::getItemAddr(1)->getTitle().c_str());
-			
-				
-			
+			ActionLog::resetLog();
+			OutputControl::resetCurrentItemList();
 			myIB->clearBank();
-		}
-		TEST_METHOD(SystemTest_MarkAndClearScenario)
-		{
-			Executor* myExec = new Executor();
-			ItemBank* myIB = ItemBank::getInstance();
-			
-
 			myExec->execute("add event on 30 Dec at 7 #category (more info)");		
 			myExec->execute("add deadline by 28 December !!");
 			myExec->execute("add floating task");
-			myExec->execute("o");
+			myExec->execute("home");
 			myExec->execute("t");
-			Assert::AreEqual(OutputControl::getNumberOfDisplayedItems(), 3);
+			Assert::AreEqual(3, OutputControl::getNumberOfDisplayedItems());
 		
 			myExec->execute("e 1");
 			Assert::AreEqual("event", OutputControl::getItemAddr(1)->getTitle().c_str());
@@ -140,37 +151,129 @@ namespace UnitTest
 			Assert::IsTrue(OutputControl::getItemAddr(1)->isDone());
 			Assert::IsFalse(OutputControl::getItemAddr(2)->isDone());
 			Assert::IsFalse(OutputControl::getItemAddr(3)->isDone());
-
+			
 			myExec->execute("c");
 			Assert::AreEqual("deadline", OutputControl::getItemAddr(1)->getTitle().c_str());
 			Assert::AreEqual("floating task", OutputControl::getItemAddr(2)->getTitle().c_str());
+			
 			
 			myExec->execute("undo");
 			Assert::AreEqual("event", OutputControl::getItemAddr(1)->getTitle().c_str());
 			Assert::AreEqual("deadline", OutputControl::getItemAddr(2)->getTitle().c_str());
 			Assert::AreEqual("floating task", OutputControl::getItemAddr(3)->getTitle().c_str());
-			Assert::AreEqual(true, OutputControl::getItemAddr(1)->isDone());
-			Assert::AreEqual(false, OutputControl::getItemAddr(2)->isDone());
-			Assert::AreEqual(false, OutputControl::getItemAddr(3)->isDone());
+			//Assert::AreEqual(true, OutputControl::getItemAddr(1)->isDone());
+			//Assert::AreEqual(false, OutputControl::getItemAddr(2)->isDone());
+			//Assert::AreEqual(false, OutputControl::getItemAddr(3)->isDone());
 
 			//myExec->execute("undo");
 			//Assert::IsTrue(OutputControl::getItemAddr(1)->isDone());
 			//Assert::IsFalse(OutputControl::getItemAddr(2)->isDone());
 			//Assert::IsTrue(OutputControl::getItemAddr(3)->isDone());
-
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
+		}
+		TEST_METHOD(SystemTest_DeleteScenarios)
+		{
+			Executor* myExec = new Executor();
+			ItemBank* myIB = ItemBank::getInstance();
+			ActionLog::resetLog();
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
+			myExec->execute("add eoy party on 30 Dec at 7 #category (more info)");
+			myExec->execute("add eoy dinner on 29 Dec at 8");
+			myExec->execute("add tutorial by 28 December !");
+			myExec->execute("add floaters");
+			myExec->execute("home");
+			myExec->execute("t");
+			Assert::AreEqual(4, OutputControl::getNumberOfDisplayedItems());
+			//deleting in list view
+			myExec->execute("d 1 3");
+			Assert::AreEqual(2, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("eoy dinner", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("floaters", OutputControl::getItemAddr(2)->getTitle().c_str());
+			//undoing delete
+			myExec->execute("undo");
+			Assert::AreEqual(4, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("eoy party", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("eoy dinner", OutputControl::getItemAddr(2)->getTitle().c_str());
+			Assert::AreEqual("tutorial", OutputControl::getItemAddr(3)->getTitle().c_str());
+			Assert::AreEqual("floaters", OutputControl::getItemAddr(4)->getTitle().c_str());
+			//deleting in edit screen
+			myExec->execute("e 4");
+			myExec->execute("d");
+			Assert::AreEqual(3, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("eoy party", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("eoy dinner", OutputControl::getItemAddr(2)->getTitle().c_str());
+			Assert::AreEqual("tutorial", OutputControl::getItemAddr(3)->getTitle().c_str());
+			//deleting in search screen
+			myExec->execute("search eoy");
+			Assert::AreEqual(2, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("eoy party", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("eoy dinner", OutputControl::getItemAddr(2)->getTitle().c_str());
+			myExec->execute("d 1");
+			Assert::AreEqual(1, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("eoy dinner", OutputControl::getItemAddr(1)->getTitle().c_str());
+			OutputControl::resetCurrentItemList();
 			myIB->clearBank();
 		}
 		TEST_METHOD(SystemTest_NegExceptions)
 		{
-					/*
+			Executor* myExec = new Executor();
+			ItemBank* myIB = ItemBank::getInstance();
+			ActionLog::resetLog();
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
+			myExec->execute("home");
 			try{
-				myExec->execute("add more info(");
+				myExec->execute("rubbish");
 			}
-			catch (exception& e){
-				Assert::AreEqual("Invalid brackets! Please follow e.g. add event at 7pm (description)", e.what() );
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_INVALID_COMMAND.c_str(), e.what());
+			};
+			try{
+				myExec->execute("add on Saturday");
 			}
-			*/
-		}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_MISSING_TITLE.c_str(), e.what());
+			};
+			try{
+				myExec->execute("add event at 2pm )description");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_INVALID_BRACKETS.c_str(), e.what());
+			};
+			try{
+				myExec->execute("add event # category");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_MISSING_CATEGORY.c_str(), e.what());
+			};
+			myExec->execute("add birthday at 2pm");
+			myExec->execute("add assignemnt due 6pm !!");
+			myExec->execute("add cloud");
+			myExec->execute("o");
+			myExec->execute("t");
+			
+			try{
+				myExec->execute("e 4");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_INVALID_ITEM_NO.c_str(), e.what());
+			};
+			myExec->execute("e 3");
+			try{
+				myExec->execute("e 7");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_INVALID_FIELD_NO.c_str(), e.what());
+			};
+			try{
+				myExec->execute("e 5 whatever");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_INVALID_PRIORITY.c_str(), e.what());
+			};
+		}	
 	
 	};
 }

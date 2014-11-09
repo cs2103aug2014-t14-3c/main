@@ -17,6 +17,15 @@
 #define TODAY_MARKER "today"
 #define TOMORROW_MARKER "tomorrow"
 
+const string Parser::ERROR_INVALID_ITEM_NO = "Invalid item number! Please enter a valid number from the menu.";
+const string Parser::ERROR_INVALID_FIELD_NO = "Invalid field number! Please enter a field number 1 - 6.";
+const string Parser::ERROR_INVALID_COMMAND = "Invalid command! Please enter a valid command from the menu.";
+const string Parser::ERROR_MISSING_TITLE =	"No title detected! Try something like \"add event title at 2pm\"";
+const string Parser::ERROR_MISSING_CATEGORY = "No category detected! Please try e.g. \"add homework #school\"";
+const string Parser::ERROR_INVALID_BRACKETS = "Invalid brackets! Try something like \"add event at 7pm (description)\"";
+const string Parser::ERROR_INVALID_PRIORITY = "Wrong priority format entered. Please type \"high\", \"med\" or \"low\"";
+const string Parser::ERROR_LOGIC_START_END = "You can't go back in time!. Please try e.g. add event from Friday 2pm to Sunday 3pm";
+
 Parser::Parser(void)
 {
 }
@@ -74,7 +83,7 @@ Command* Parser::stringToCommand(string userCommand) {
 			int itemNum;
 			commandStream >> itemNum;
 			if(itemNum <= 0 || itemNum > OutputControl::getNumberOfDisplayedItems()){
-				throw invalid_argument("Invalid item number! Please enter a valid number from the menu.");
+				throw invalid_argument(ERROR_INVALID_ITEM_NO);
 			}
 			CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList()+itemNum-1);
 			return myEdit;
@@ -87,7 +96,7 @@ Command* Parser::stringToCommand(string userCommand) {
 			int fieldNum;
 			commandStream >> fieldNum;
 			if(fieldNum==0 || fieldNum > NUM_OF_FIELDS){
-				throw invalid_argument("Invalid field number! Please enter a field number 1 - 6."); 
+				throw invalid_argument(ERROR_INVALID_FIELD_NO);
 			}	
 			commandStream >> newFieldInfo;
 			getline(commandStream, buffer);
@@ -180,7 +189,7 @@ Command* Parser::stringToCommand(string userCommand) {
 			break;
 					  }
 		default: {
-			throw invalid_argument("Invalid command! Please enter a valid command from the menu.");
+			throw invalid_argument(ERROR_INVALID_COMMAND);
 			break;
 				 }
 
@@ -216,7 +225,9 @@ void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
 		myItem->setStartDate();
 		myItem->setEndDate();
 	}
-	
+	if(myItem->getEndDateTime_T()<myItem->getStartDateTime_T()){
+		throw logic_error(ERROR_LOGIC_START_END);
+	}
 	if(isDeadline){
 		myItem->setItemTypeDeadline();
 	}
@@ -292,7 +303,7 @@ void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 	
 	titleToSet = convertVectorToString(titleStartIter, titleEndIter);
 	if(titleToSet==""){
-		throw invalid_argument("No title detected! Try something like \"add event title at 2pm\"");
+		throw invalid_argument(ERROR_MISSING_TITLE);
 	}
 	myItem->setTitle(titleToSet);
 	
@@ -422,8 +433,8 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 		}
 
 		//remove date from input string
-		stringDetails.replace(stringDetails.find(startDateFound),startDateFound.length(),"");
-		
+		//XXXstringDetails.replace(stringDetails.find(startDateFound),startDateFound.length(),"");
+		trimWordFromString(stringDetails, startDateFound);
 		startDayInt = stoi(startDayFound);
 		startMonthInt = convertStrToIntMonth(startMonthFound);
 		
@@ -453,7 +464,8 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 				endDateFound = endMonthFound;
 			}
 			//remove date from input string
-			stringDetails.replace(stringDetails.find(endDateFound),endDateFound.length(),"");
+			//XXXstringDetails.replace(stringDetails.find(endDateFound),endDateFound.length(),"");
+			trimWordFromString(stringDetails, endDateFound);
 			endDayInt = stoi(endDayFound);
 			endMonthInt = convertStrToIntMonth(endMonthFound);
 
@@ -514,10 +526,12 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 		//remove day from input string
 		if(stringDetails.find("next " + startDate)!=string::npos){
 			isWordNextStart=true;
-			stringDetails.replace(stringDetails.find("next " + startDate),startDate.length(),"");
+			//xxxstringDetails.replace(stringDetails.find("next " + startDate),startDate.length(),"");
+			trimWordFromString(stringDetails, "next " + startDate);
 		}
 		else{
-			stringDetails.replace(stringDetails.find(startDate),startDate.length(),"");
+			//xxxstringDetails.replace(stringDetails.find(startDate),startDate.length(),"");
+			trimWordFromString(stringDetails, startDate);
 		}
 		
 		startDaysToAdd = convertDayOfWeekToIntDaysToAdd(startDate, isWordNextStart);
@@ -533,10 +547,12 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 				//remove the end day from input string
 				if(stringDetails.find("next " + endDate)!=string::npos){
 					isWordNextEnd=true;
-					stringDetails.replace(stringDetails.find("next " + endDate),endDate.length(),"");
+					//xxxstringDetails.replace(stringDetails.find("next " + endDate),endDate.length(),"");
+					trimWordFromString(stringDetails, "next " + endDate);
 				}
 				else{
-					stringDetails.replace(stringDetails.find(endDate),endDate.length(),"");
+					//xxxstringDetails.replace(stringDetails.find(endDate),endDate.length(),"");
+					trimWordFromString(stringDetails, endDate);
 				}
 				
 			
@@ -573,7 +589,7 @@ void Parser::detectCategoryAndEmbed(Item* myItem, string &stringDetails){
 		myIter = stringDetails.begin() + position;
 		myIter++;
 		if(*myIter==' '){
-			throw invalid_argument("No category detected! Please try e.g. \"add homework #school\"");
+			throw invalid_argument(ERROR_MISSING_CATEGORY);
 		}
 		while(myIter!=stringDetails.end() && *myIter!=' '){
 			categoryToSet += *myIter;
@@ -581,7 +597,8 @@ void Parser::detectCategoryAndEmbed(Item* myItem, string &stringDetails){
 		}
 		myItem->setCategory(categoryToSet);
 		string categoryFound = CATEGORY_MARKER + categoryToSet;
-		stringDetails.replace(stringDetails.find(categoryFound),categoryFound.length(),"");	
+		//XXXstringDetails.replace(stringDetails.find(categoryFound),categoryFound.length(),"");	
+		trimWordFromString(stringDetails, categoryFound);
 	}
 
 	return;
@@ -601,7 +618,8 @@ void Parser::detectPriorityAndEmbed(Item* myItem, string &stringDetails){
 		//if found, count and trim "!"
 		if(position!=string::npos){
 			count++;
-			stringDetails.replace(stringDetails.find(PRIORITY_MARKER),PRIORITY_MARKER_SIZE,"");
+			//xxxstringDetails.replace(stringDetails.find(PRIORITY_MARKER),PRIORITY_MARKER_SIZE,"");
+			trimWordFromString(stringDetails, PRIORITY_MARKER);
 		}
 		else{
 			break;
@@ -634,12 +652,12 @@ void Parser::detectDescriptionAndEmbed(Item* myItem, string &stringDetails){
 			positionBack = stringDetails.find(DESCRIP_MARKER_BACK);
 			//if found the back
 			if(positionBack<positionFront){
-				throw invalid_argument("Invalid brackets! Try something like \"add event at 7pm (description)\"");
+				throw invalid_argument(ERROR_INVALID_BRACKETS);
 			}
 			if(positionBack!=string::npos && positionBack!=0){
 				descripToSet = stringDetails.substr(positionFront, positionBack-positionFront+1);
-				stringDetails.replace(stringDetails.find(descripToSet),descripToSet.length(),"");
-				
+				//xxxstringDetails.replace(stringDetails.find(descripToSet),descripToSet.length(),"");
+				trimWordFromString(stringDetails, descripToSet);
 				descripToSet = descripToSet.substr(1, descripToSet.length()-2);
 				myItem->setDescription(descripToSet);
 			}
@@ -906,7 +924,7 @@ vector <Item*> Parser::convertItemNumsToItemPtrs(string itemNumsStr){
 	else{
 		while(itemStream >> itemNum){
 			if(itemNum <= 0 || itemNum > OutputControl::getNumberOfDisplayedItems()){
-				throw invalid_argument("Invalid item number! Please enter a valid number from the list.");
+				throw invalid_argument(ERROR_INVALID_ITEM_NO);
 			}
 			itemPtrs.push_back(OutputControl::getItemAddr(itemNum));
 		}
@@ -960,7 +978,7 @@ Item::PriorityLevel Parser::convertStrToPriorityLevel(string priority){
 	}else if(isLowPriority(priority)){
 		return Item::PriorityLevel::LOW;
 	}else{
-		throw invalid_argument("Wrong priority format entered. Please type \"high\", \"med\" or \"low\"");
+		throw invalid_argument(ERROR_INVALID_PRIORITY);
 	}
 }
 bool Parser::isHighPriority(string priority){
@@ -977,4 +995,7 @@ bool Parser::isLowPriority(string priority){
 	return priority == "low" || priority == "l";
 }
 
+void Parser::trimWordFromString(string &originalString, string toTrim){
+	originalString.replace(originalString.find(toTrim),toTrim.length(),"");	
+}
 

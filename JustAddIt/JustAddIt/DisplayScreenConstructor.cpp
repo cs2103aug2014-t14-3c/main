@@ -223,7 +223,7 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasks,
 	while (!mytextfile.eof()) {
 		getline(mytextfile, dummyLine);
 
-		if (dummyLine == "<u>All Events") {
+		if (dummyLine == "<u>All Events</u>") {
 			outputMessageStorage.push_back(dummyLine);
 			getline(mytextfile, dummyLine);
 			outputMessageStorage.push_back(dummyLine);
@@ -235,7 +235,7 @@ vector<string> DisplayScreenConstructor::constructListScreen(vector<Item*>tasks,
 					dummyLine += "<span style=\"color:#CC0000;\">[DONE]</span>  ";
 				}
 
-				dummyLine += (*iter)->getTitle() + " from " + (*iter)->getStartDateInString() + " to " + (*iter)->getEndDateInString();
+				dummyLine += (*iter)->getTitle() + "<br>" + "&nbsp;&nbsp;&nbsp;&nbsp;from: " + (*iter)->getStartDateInString() + "<br>" + "&nbsp;&nbsp;&nbsp;&nbsp;to:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + (*iter)->getEndDateInString();
 
 				outputMessageStorage.push_back(dummyLine);
 				resultCounter++;

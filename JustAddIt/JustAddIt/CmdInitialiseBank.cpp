@@ -11,7 +11,7 @@ CmdInitialiseBank::~CmdInitialiseBank(void)
 
 vector<string> CmdInitialiseBank::execute() {
 	ItemBank::getInstance()->initialiseBank();
-
+	
 	Command* cmdHome = new CmdHome;
 	outputMessageStorage.clear();
 	outputMessageStorage = cmdHome->execute();

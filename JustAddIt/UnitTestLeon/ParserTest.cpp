@@ -199,19 +199,19 @@ namespace UnitTest
 				myParser.embedDetailsInItem(myItem, "20 Sep from 1.30am to 9pm");
 			}
 			catch (exception& e){
-				Assert::AreEqual("No title detected! Try something like\"add event title at 2pm\"", e.what() );
+				Assert::AreEqual(Parser::ERROR_MISSING_TITLE.c_str(), e.what() );
 			}
 			try{
 				myParser.embedDetailsInItem(myItem, "assignment 2 (physics");
 			}
 			catch (exception& e){
-				Assert::AreEqual("Invalid brackets! Try something like \"add event at 7pm (description)\"", e.what() );
+				Assert::AreEqual(Parser::ERROR_INVALID_BRACKETS.c_str(), e.what() );
 			}
 			try{
 				myParser.embedDetailsInItem(myItem, "assignment 2 physics)");
 			}
 			catch (exception& e){
-				Assert::AreEqual("Invalid brackets! Try something like \"add event at 7pm (description)\"", e.what() );
+				Assert::AreEqual(Parser::ERROR_INVALID_BRACKETS.c_str(), e.what() );
 			}
 			
 			

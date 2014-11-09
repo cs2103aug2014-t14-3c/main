@@ -43,7 +43,7 @@ private:
 	static const string ERROR_LOGIC;
 
 	static vector<Command*> copyLog();
-	static void resetLog();
+	
 	static void resetUndoStack();
 
 	//ActionLog();
@@ -54,4 +54,5 @@ public:
 	static void addCommand(Command* cmd);
 	static void undo();
 	static void redo();
+	static void resetLog();
 };

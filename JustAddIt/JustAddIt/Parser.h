@@ -64,9 +64,16 @@ public:
 	vector <Item*> convertItemNumsToItemPtrs(string itemNumsStr);
 	vector <string> convertStringToVector(string inputString);
 	string convertVectorToString(vector<string>::iterator start, vector<string>::iterator end);
-	
+	void trimWordFromString(string &originalString, string toTrim);
 public:
-
+	static const string Parser::ERROR_INVALID_ITEM_NO;
+	static const string Parser::ERROR_INVALID_FIELD_NO;
+	static const string Parser::ERROR_INVALID_COMMAND;
+	static const string Parser::ERROR_MISSING_TITLE;
+	static const string Parser::ERROR_MISSING_CATEGORY;
+	static const string Parser::ERROR_INVALID_BRACKETS;
+	static const string Parser::ERROR_INVALID_PRIORITY;
+	static const string Parser::ERROR_LOGIC_START_END;
 	Command* stringToCommand(string userCommand);
 	Parser(void);
 	~Parser(void);
