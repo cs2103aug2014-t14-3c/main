@@ -28,9 +28,8 @@ private:
 	bool isEventPast(Item* itemPtr);
 	bool isOverdue(Item* itemPtr);
 
-	bool isHighPriority(string priority);
-	bool isMedPriority(string priority);
-	bool isLowPriority(string priority);
+	void strToBank(vector<string> items);
+	void copyItemToInitialBank(Item* itemPtr);
 
 	void setItemType(vector<string> items, Item* item);
 	void setDone(vector<string> items, Item* item);
