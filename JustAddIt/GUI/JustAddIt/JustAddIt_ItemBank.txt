@@ -1,66 +1,3 @@
-Assignment 8
--
-1414252800
-1414943940
--
-Low
-assignment
-0
-deadline
-Quiz 1
-At lecture theatre 50 
-1414684800
-1414771140
--
-High
-quiz
-0
-event
-Quiz 2
-At auditorium
-1414810800
-1414814400
--
-Low
-quiz
-1
-event
-Prepare for lesson
--
-1414771200
-1414857540
--
-High
-lessonprep
-1
-deadline
-Project meeting
--
-1414836000
-1414839600
--
-Low
-project
-0
-event
-Project meeting 2
--
-1414994400
-1414998000
--
-Low
-project
-1
-event
-Mock Presentation
--
-1414990800
-1414994400
--
-Low
-presentation
-0
-event
 Write report abstract
 -
 -1
@@ -79,21 +16,48 @@ Low
 project
 0
 task
-finish project
+do something
 -
-1415462301
-1415462301
+0
+1415581200
 -
 Low
 -
 0
-deadline
-buy stuff
+task
+item
 -
-1415512800
-1415512800
+1415599200
+1415602800
 -
 Low
 -
-1
-deadline
+0
+event
+item
+-
+1415599200
+1415602800
+-
+Low
+-
+0
+event
+item
+-
+1416441621
+1416448821
+-
+Low
+-
+0
+event
+item2
+-
+1416441630
+1416448830
+-
+Low
+-
+0
+event

@@ -13,16 +13,15 @@ vector<string> Executor::execute(string userCommand) {
 	//outputMessageStorage = displayScreenConstructor->clearScreen();
 
 	command = parser.stringToCommand(userCommand);
-	outputMessageStorage = command->execute();
-//	ActionLog::addCommand(command);
+//	outputMessageStorage = ;
 
-	return outputMessageStorage;
+	return command->execute();
 }
 
 vector<string> Executor::initialise() {
 	Command* command = new CmdInitialiseBank();
-	outputMessageStorage.clear();
-	outputMessageStorage = command->execute();
+//	outputMessageStorage.clear();
+//	outputMessageStorage = ;
 	
-	return outputMessageStorage;
+	return command->execute();
 }

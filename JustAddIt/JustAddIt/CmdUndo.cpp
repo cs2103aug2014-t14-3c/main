@@ -1,4 +1,5 @@
 //@author A0116781A
+
 #include "stdafx.h"
 #include "CmdUndo.h"
 
@@ -18,8 +19,9 @@ vector<string> CmdUndo::execute() {
 	ActionLog::undo();
 
 	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
+	outputMessageStorage = cmdBase->execute();
 
-	return cmdBase->execute();
+	return outputMessageStorage;
 }
 
 void CmdUndo::addToActionLog() {

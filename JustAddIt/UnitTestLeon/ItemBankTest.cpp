@@ -27,7 +27,7 @@ namespace UnitTest
 		}
 
 		// adding one item to empty bank has no conflict with other items
-		TEST_METHOD(addToBank_Neg) 
+		TEST_METHOD(addToBank_NoConflict) 
 		{
 			itemBank->clearBank();
 
@@ -47,7 +47,7 @@ namespace UnitTest
 		}
 
 		// adding 2 duplicate items to empty bank shows conflict with other items
-		TEST_METHOD(addToBank_Pos) 
+		TEST_METHOD(addToBank_Conflict) 
 		{
 			itemBank->clearBank();
 
@@ -56,17 +56,19 @@ namespace UnitTest
 			itemPtr1->setDescription(FILL);
 			itemPtr1->setVenue(FILL);
 			itemPtr1->setCategory(FILL);
-			itemPtr1->setStartDate(15, 10);
+			itemPtr1->setStartDate(20, 10);
 			itemPtr1->setStartTime(8, 0);
-			itemPtr1->setEndDate(15, 10);
-			itemPtr1->setEndTime(8, 0);
+			itemPtr1->setEndDate(20, 10);
+			itemPtr1->setEndTime(10, 0);
 
 			Item* itemPtr2 = new Item;
 			*itemPtr2 = *itemPtr1;
 
 			Assert::IsFalse(itemBank->addToBank(itemPtr1));
-			Assert::IsTrue(itemBank->addToBank(itemPtr2));
-			Assert::AreEqual(itemBank->getBankSize(), 2);
+			Assert::IsTrue(itemBank->addToBank(itemPtr2)); // this assert fails
+			Assert::AreEqual(2, itemBank->getBankSize());
+
+			itemBank->clearBank();
 		}
 
 		// initialise bank from text file

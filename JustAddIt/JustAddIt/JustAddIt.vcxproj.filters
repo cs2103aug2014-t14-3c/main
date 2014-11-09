@@ -85,9 +85,6 @@
     <ClCompile Include="Exporter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IReceiver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActionLog.h">
@@ -172,9 +169,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Exporter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IReceiver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

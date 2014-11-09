@@ -134,3 +134,27 @@ INFO: Items deleted from ItemBank::getInstance()->bank
 INFO: outputMessageStorage stores base screen
 INfO: Success message is stored into outputMessageStorage
 INFO: Command is stored into ActionLog
+INFO: Items deleted from ItemBank::getInstance()->bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items deleted from ItemBank::getInstance()->bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items deleted from ItemBank::getInstance()->bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items deleted from ItemBank::getInstance()->bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items deleted from ItemBank::getInstance()->bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog
+INFO: Items deleted from ItemBank::getInstance()->bank
+INFO: outputMessageStorage stores base screen
+INfO: Success message is stored into outputMessageStorage
+INFO: Command is stored into ActionLog

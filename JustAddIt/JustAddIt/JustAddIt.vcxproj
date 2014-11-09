@@ -100,7 +100,6 @@
     <ClInclude Include="Executor.h" />
     <ClInclude Include="CmdInitialiseBank.h" />
     <ClInclude Include="Exporter.h" />
-    <ClInclude Include="IReceiver.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemBank.h" />
     <ClInclude Include="OutputControl.h" />
@@ -131,7 +130,6 @@
     <ClCompile Include="Executor.cpp" />
     <ClCompile Include="CmdInitialiseBank.cpp" />
     <ClCompile Include="Exporter.cpp" />
-    <ClCompile Include="IReceiver.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemBank.cpp" />
     <ClCompile Include="JustAddIt.cpp" />

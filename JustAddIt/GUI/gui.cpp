@@ -37,7 +37,7 @@ void GUI::updateDisplay(vector<string> output) {
 }
 
 void GUI::initProg() {
-	vector<string> output = IReceiver::initialise();
+	vector<string> output = Executor::initialise();
 
 	updateDisplay(output);
 }
@@ -45,15 +45,11 @@ void GUI::initProg() {
 void GUI::on_pushButton_clicked() {
 	QString qs = ui.lineEdit->text();
 	string str = qs.toLocal8Bit().constData();
-
-	if(qs == "exit") {
-		exit(0);
-	}
 	
 	vector<string> output;
 	output.clear();
 
-	output = IReceiver::receive(str);
+	output = Executor::execute(str);
 
 	updateDisplay(output);
 	
