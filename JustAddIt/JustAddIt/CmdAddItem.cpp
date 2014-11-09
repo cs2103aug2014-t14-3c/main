@@ -2,6 +2,9 @@
 #include "stdafx.h"
 #include "CmdAddItem.h"
 
+const string CmdAddItem::SUCCESS_MESSAGE = "Just added it successfully!";
+const string CmdAddItem::TIME_DATE_CONFLICT_MESSAGE = "This conflicts with another event!";
+
 CmdAddItem::CmdAddItem(Item* item) {
 	_itemAddress = item;
 }
@@ -17,10 +20,10 @@ vector<string> CmdAddItem::execute() {
 	outputMessageStorage.clear();
 	outputMessageStorage = displayScreenConstructor -> clearScreen();
 	outputMessageStorage = displayScreenConstructor -> constructEditScreen(_itemAddress);
-	outputMessageStorage.push_back("Just added it successfully!");
+	outputMessageStorage.push_back(SUCCESS_MESSAGE);
 
 	if (isTimeOrDateConflicted == true) {
-		outputMessageStorage.push_back("This conflicts with another event!");
+		outputMessageStorage.push_back(TIME_DATE_CONFLICT_MESSAGE);
 	}
 
 	OutputControl::setCurrentScreen(OutputControl::EDIT_SCREEN);

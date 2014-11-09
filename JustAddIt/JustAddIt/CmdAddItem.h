@@ -13,9 +13,13 @@ private:
 	Item* _itemAddress;
 
 public:
+	static const string SUCCESS_MESSAGE;
+	static const string TIME_DATE_CONFLICT_MESSAGE;
+
 	CmdAddItem(Item* item);
 	~CmdAddItem(void);
 
 	vector<string> execute();
+
 	Item* getItem();
 };

@@ -4,7 +4,7 @@
 #include "ItemBank.h"
 #include "DisplayScreenConstructor.h"
 
-class CmdSearch :
+class CmdSearch:
 	public Command 
 {
 private:

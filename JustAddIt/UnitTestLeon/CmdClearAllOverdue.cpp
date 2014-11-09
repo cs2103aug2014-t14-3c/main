@@ -11,22 +11,29 @@ namespace UnitTest
 		
 		TEST_METHOD(CmdClearAllOverdueTest)
 		{
+			Item* itemTest1 = new Item;
+			Item* itemTest2 = new Item;
+			Item* itemTest3 = new Item;
 			ItemBank* itemPointer = ItemBank::getInstance();
-			Item* task1 = new Item;
-			Item* task2 = new Item;
-			Item* task3 = new Item;
-			task1->setItemType("deadline");
-			task2->setItemType("event");
-			task3->setItemType("task");
-			itemPointer->addToBank(task1);
-			itemPointer->addToBank(task2);
-			itemPointer->addToBank(task3);
+			itemTest1 -> setItemType("deadline");
+			itemTest2 -> setItemType("event");
+			itemTest3 -> setItemType("task");
+			itemPointer -> addToBank(itemTest1);
+			itemPointer -> addToBank(itemTest2);
+			itemPointer -> addToBank(itemTest3);
 			time_t currentTime;
 			time(&currentTime);
 
-			Assert::AreEqual(itemPointer->getBankSize(), 3);
-			itemPointer->deleteOverdueDeadlines();
-			Assert::AreEqual(itemPointer->getBankSize(), 2);
+			Assert::AreEqual(itemPointer -> getBankSize(), 3);
+			itemPointer -> deleteOverdueDeadlines();
+			Assert::AreEqual(itemPointer -> getBankSize(), 2);
+
+			try {
+				itemPointer -> deleteOverdueDeadlines();
+			}
+			catch (exception &e) {
+				Assert::AreEqual("No more overdue deadlines to be cleared!", e.what());
+			}
 
 			itemPointer->clearBank();
 		}

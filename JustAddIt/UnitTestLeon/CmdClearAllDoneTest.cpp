@@ -1,4 +1,4 @@
-//@author: A0128461H
+//@author A0128461H
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
