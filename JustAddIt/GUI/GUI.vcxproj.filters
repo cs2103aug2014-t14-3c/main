@@ -66,5 +66,15 @@
     <ClInclude Include="GeneratedFiles\ui_gui.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GUI.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+    <Image Include="JustAddIt\JustAddIt_icon.ico" />
   </ItemGroup>
 </Project>

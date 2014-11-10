@@ -31,6 +31,7 @@ public:
 private:
 	Ui::GUIClass ui;
 	
+	static const QString WINDOW_ICON;
 	static const QString TITLE;
 	static const QString STYLESHEET_PUSHBUTTON;
 	static const QString STYLESHEET_LINEEDIT;

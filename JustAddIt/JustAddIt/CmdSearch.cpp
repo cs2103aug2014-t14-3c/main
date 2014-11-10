@@ -23,7 +23,7 @@ vector<string> CmdSearch::execute() {
 
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
 	outputMessageStorage.clear();
-	outputMessageStorage = displayScreenConstructor -> constructSearchScreen(tasks, deadlines, events);
+	outputMessageStorage = displayScreenConstructor -> constructSearchScreen(tasks, deadlines, events, _searchKeyword);
 	
 	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::SEARCH_RESULTS_SCREEN);
 	OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::SEARCH_RESULTS_SCREEN);

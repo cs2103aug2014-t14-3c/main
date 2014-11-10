@@ -42,7 +42,7 @@ private:
 
 	DisplayScreenConstructor(void);
 	vector<string> displayItemsOnHomeScreen(vector<Item*> tasks, vector<Item*> deadlines, vector<Item*> events);
-	vector<string> displayItemsOnSearchScreen(vector<Item*> tasks, vector<Item*> deadlines, vector<Item*> events);
+	vector<string> displayItemsOnSearchScreen(vector<Item*> tasks, vector<Item*> deadlines, vector<Item*> events, string keyword);
 	vector<string> displayItemsOnListView(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events);
 	vector<string> displayItemsOnOverdueScreen (vector<Item*>items);
 	void exportToFile(vector<string>displayScreen);
@@ -61,7 +61,7 @@ public:
 
 	vector<string> constructHomeScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events);
 	vector<string> constructEditScreen(Item* item);
-	vector<string> constructSearchScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events);
+	vector<string> constructSearchScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events, string keyword);
 	vector<string> constructListView(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events);
 	vector<string> constructOverdueScreen(vector<Item*>items);
 	vector<string> clearScreen();

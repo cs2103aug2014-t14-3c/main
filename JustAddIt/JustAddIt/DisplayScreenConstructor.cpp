@@ -19,7 +19,7 @@ const string DisplayScreenConstructor::EDIT_START_TIME_FIELD = "3) Start: ";
 const string DisplayScreenConstructor::EDIT_END_TIME_FIELD = "4) End: ";
 const string DisplayScreenConstructor::EDIT_PRIORITY_FIELD = "5) Priority: ";
 const string DisplayScreenConstructor::EDIT_CATEGORY_FIELD = "6) Category: ";
-const string DisplayScreenConstructor::SEARCH_SHOW_RESULTS = "<u>Showing results:";
+const string DisplayScreenConstructor::SEARCH_SHOW_RESULTS = "<u>Showing results:</u> <i>";
 const string DisplayScreenConstructor::SEARCH_NO_RESULTS = "<span style=\"color:#d3d3d3;\">No results found.</span>";
 const string DisplayScreenConstructor::LISTVIEW_ALL_EVENTS = "<u>All Events</u>";
 const string DisplayScreenConstructor::LISTVIEW_NO_EVENTS = "<span style=\"color:#d3d3d3;\">No events found</span>";
@@ -163,16 +163,16 @@ vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
 	return outputMessageStorage;
 }
 
-vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events) {
+vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events, string keyword) {
 	outputMessageStorage.clear();
-	outputMessageStorage = displayItemsOnSearchScreen(tasks, deadlines, events);
+	outputMessageStorage = displayItemsOnSearchScreen(tasks, deadlines, events, keyword);
 	exportToFile(outputMessageStorage);
 
 	return outputMessageStorage;
 }
 
 //This function inputs the searched items onto the Search screen for display
-vector<string> DisplayScreenConstructor::displayItemsOnSearchScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events) {
+vector<string> DisplayScreenConstructor::displayItemsOnSearchScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events, string keyword) {
 	ifstream mytextfile (TEMPLATE_SCREEN_SEARCH);
 	vector<string> searchScreen;
 	string dummyLine;
@@ -182,6 +182,7 @@ vector<string> DisplayScreenConstructor::displayItemsOnSearchScreen(vector<Item*
 		getline(mytextfile, dummyLine);
 
 		if (dummyLine == SEARCH_SHOW_RESULTS) {
+			dummyLine += keyword;
 			searchScreen.push_back(dummyLine);
 
 			getline(mytextfile, dummyLine);

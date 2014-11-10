@@ -1,4 +1,4 @@
-<u>Showing results:
+<u>Showing results:</u> <i>
  
  
 <span style="color:#3366FF;">[e #] Edit {result number}<br>[m #] Mark {result number}<br>[d #] Delete {result number}<br>[c] Clear all completed items</span>
