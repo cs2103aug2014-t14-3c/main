@@ -3,6 +3,7 @@
 #include "Parser.h"
 #define MONTHS_IN_YEAR 12
 #define DEFAULT_MONTH_START "1"
+#define DEFAULT_MINUTES_START "0"
 #define FORMAT_24H_SIZE 4
 #define START_TIME_FIELD_INDEX 3
 #define END_TIME_FIELD_INDEX 4
@@ -18,6 +19,10 @@
 #define TOMORROW_MARKER "tomorrow"
 #define NEXT_MARKER "next "
 #define EMPTY_STRING ""
+#define AM_MARKER "am"
+#define PM_MARKER "pm"
+#define TIME_DIVIDER_MARKER_1 "."
+#define TIME_DIVIDER_MARKER_2 ":"
 
 const string Parser::ERROR_INVALID_ITEM_NO = "Invalid item number! Please enter a valid number from the menu.";
 const string Parser::ERROR_INVALID_FIELD_NO = "Invalid field number! Please enter a field number 1 - 6.";
@@ -717,14 +722,14 @@ int Parser::convertStringToIntHour(string stringTime){
 		return stoi(stringTime);
 	}
 	else{
-		positionFound = stringTime.find("am");
+		positionFound = stringTime.find(AM_MARKER);
 		//if found, cut the am out
 		if (positionFound!=string::npos){
 			stringTime = stringTime.substr(0,positionFound);
 
 		}
 
-		positionFound = stringTime.find("pm");
+		positionFound = stringTime.find(PM_MARKER);
 		//if found, cut the pm out
 		if (positionFound!=string::npos){
 			stringTime = stringTime.substr(0,positionFound);
@@ -748,8 +753,8 @@ int Parser::convertStringToIntMin(string stringTime){
 		stringTime = stringTime.substr(2,4);
 	}
 	else{
-		positionFound1 = stringTime.find(".");
-		positionFound2 = stringTime.find(":");
+		positionFound1 = stringTime.find(TIME_DIVIDER_MARKER_1);
+		positionFound2 = stringTime.find(TIME_DIVIDER_MARKER_2);
 		//if found, crop the 2 digits after that 
 		if (positionFound1!=string::npos){
 			stringTime = stringTime.substr(positionFound1+1,positionFound1+3);
@@ -759,7 +764,7 @@ int Parser::convertStringToIntMin(string stringTime){
 		}
 		//default case: 0 minutes
 		else {
-			stringTime = "0";
+			stringTime = DEFAULT_MINUTES_START;
 		}
 	}
 	return stoi (stringTime);
