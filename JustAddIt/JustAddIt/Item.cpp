@@ -185,6 +185,7 @@ void Item::setDescription(string description) {
 	_description = description;
 }
 
+//@author A0128461H
 void Item::setStartDateTime(string startDateTimeStr) {
 	struct tm startDateTime;
 	time_t startDateTimeT = stoi(startDateTimeStr);
@@ -201,7 +202,6 @@ void Item::setEndDateTime(string endDateTimeStr) {
 	setEndDateTime(endDateTime);
 }
 
-//@author A0128461H
 void Item::addToStartDate(int daysToAdd){
 	setStartDate();
 	_startDateTime.tm_mday += daysToAdd;
