@@ -46,6 +46,6 @@ void CmdGoToListView::updateOutputControl(vector<Item*> events, vector<Item*> de
 //returns the list screen as a vector of strings.
 vector<string> CmdGoToListView::storeListScreenForDisplay(vector<Item*> events, vector<Item*> deadlines, vector<Item*> tasks){
 	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
-	return displayScreenConstructor->constructListScreen(tasks, deadlines, events);
+	return displayScreenConstructor->constructListView(tasks, deadlines, events);
 	 
 }

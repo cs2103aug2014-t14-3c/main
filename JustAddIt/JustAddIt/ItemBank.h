@@ -43,12 +43,16 @@ private:
 	vector<Item*> getDoneItems();
 
 	bool isTimePast(tm time);
+	bool isTimePast(time_t comp, time_t ref);
 	bool isDateThisWeek(tm time);
 	bool isDateAfterThisWeek(tm timeInTm);
 	bool isThisWeekInPeriod(tm timeStart, tm timeEnd);
 	bool isEventPast(Item* itemPtr);
 	bool isOverdue(Item* itemPtr);
 
+	//vector<Item*>::iterator findLocationToInsert(Item* itemPtr);
+	//vector<Item*>::iterator findLocationInEvents(Item* itemPtr);
+	//vector<Item*>::iterator findLocationInDeadlines(Item* itemPtr);
 
 	void strToBank(vector<string> items);
 	void copyItemToInitialBank(Item* itemPtr);

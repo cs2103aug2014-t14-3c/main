@@ -31,7 +31,11 @@ public:
 private:
 	Ui::GUIClass ui;
 	
-	static const QString title;
+	static const QString TITLE;
+	static const QString STYLESHEET_PUSHBUTTON;
+	static const QString STYLESHEET_LINEEDIT;
+	static const QString STYLESHEET_TEXTEDIT;
+	static const QString PLACEHOLDER_LINEEDIT;
 
 	void initProg(); 
 	void updateDisplay(vector<string> output);

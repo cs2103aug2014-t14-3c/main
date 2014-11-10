@@ -68,7 +68,13 @@ void ItemBank::clearBank() {
 }
 
 bool ItemBank::addToBank(Item* itemPtr) {
-	bank.push_back(itemPtr);
+	//if(bank.empty()) {
+		bank.push_back(itemPtr);
+	//} else {
+	//	vector<Item*>::iterator iter = findLocationToInsert(itemPtr);
+	//	bank.insert(iter, itemPtr);
+	//}
+
 	update();
 
 	return checkForConflict(itemPtr);
@@ -410,6 +416,73 @@ bool ItemBank::isConflicted(Item* itemPtr1, Item* itemPtr2) {
 	return true;
 }
 
+//unused as could not debug in time.
+//vector<Item*>::iterator ItemBank::findLocationToInsert(Item* itemPtr) {
+//
+//	if(itemPtr->getItemType() == Item::ItemType::TASK) {
+//		return bank.end();
+//	} else if(itemPtr->getItemType() == Item::ItemType::DEADLINE) {
+//		return findLocationInDeadlines(itemPtr);
+//	} else if(itemPtr->getItemType() == Item::ItemType::EVENT) {
+//		return findLocationInEvents(itemPtr);
+//	}
+//		//} else if((*iter)->getItemType() == Item::ItemType::DEADLINE) {
+//		//	if(isTimePast(itemPtr->getStartDateTime_T(), (*iter)->getEndDateTime_T())) {
+//		//		if(iter == bank.begin()) {
+//		//			return iter;
+//		//		} else if(++iter == bank.end()) {
+//		//			return iter;
+//		//		}
+//		//	}
+//		//}
+//}
+//
+//vector<Item*>::iterator ItemBank::findLocationInDeadlines(Item* itemPtr) {
+//	vector<Item*>::iterator iter = getAllDeadlines().begin();
+//
+//	while((*iter)->getItemType() != Item::ItemType::TASK &&
+//		isTimePast(itemPtr->getEndDateTime_T(), (*iter)->getEndDateTime_T())) {
+//			if(iter == getAllDeadlines().begin()) {
+//				return findIter(*iter);
+//			} else if(++iter == getAllDeadlines().end()) {
+//				return bank.end();
+//			} else {
+//				iter++;
+//			}
+//	}
+//	return bank.end();
+//}
+//
+//vector<Item*>::iterator ItemBank::findLocationInEvents(Item* itemPtr) {
+//	vector<Item*> allEvents = getAllEvents();
+//	vector<Item*>::iterator iter = allEvents.begin();
+//
+//	assert(allEvents.begin() != allEvents.end());
+//
+//	while(iter != allEvents.end()) {
+//		if(isTimePast(itemPtr->getStartDateTime_T(), (*iter)->getStartDateTime_T()) ||
+//			isTimePast(itemPtr->getEndDateTime_T(), (*iter)->getEndDateTime_T())) {
+//				if(iter == allEvents.begin()) {
+//					return findIter(*iter);
+//				} else if(++iter == allEvents.end()) {
+//					return bank.end();
+//				}
+//				iter--;
+//		} else if(isTimePast((*iter)->getStartDateTime_T(), itemPtr->getStartDateTime_T()) ||
+//			isTimePast((*iter)->getEndDateTime_T(), itemPtr->getEndDateTime_T())) {
+//				if(iter == allEvents.begin()) {
+//					return findIter(*iter);
+//				} else if(++iter == allEvents.end()) {
+//					return bank.end();
+//				}
+//				iter--;
+//		} 
+//		iter++;
+//	}
+//
+//	return bank.end();
+//}
+
 bool ItemBank::isEventPast(Item* itemPtr) {
 	return itemPtr->isEvent() && isTimePast(itemPtr->getEndDateTime());
 }
@@ -499,6 +572,11 @@ bool ItemBank::isDateAfterThisWeek(tm timeInTm) {
 
 
 	return givenTime >= oneWeekLaterTime;
+}
+
+//checks if comp (comparator) occurs before ref (reference)
+bool ItemBank::isTimePast(time_t comp, time_t ref) {
+	return comp < ref;
 }
 
 bool ItemBank::isTimePast(tm time) {

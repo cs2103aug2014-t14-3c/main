@@ -1,10 +1,7 @@
 <u>Overdue Deadlines
 
 
-
-<hr>[m #] Mark {Item number}
-[d #] Delete {Item number}
-[a] Clear all overdue deadlines
+<span style="color:#3366FF;">[m #] Mark {Item number}<br>[d #] Delete {Item number}<br>[c] Clear all overdue deadlines</span>
 
 Tip: To perform multiple deletes/marks, leave a space between each Item number.
-For example: d1 2 5<hr>
+For example: d 1 2 5

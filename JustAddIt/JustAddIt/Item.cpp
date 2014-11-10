@@ -147,6 +147,10 @@ bool Item::isDone() {
 	return _isDone;
 }
 
+Item::ItemType Item::getItemType() {
+	return _itemType;
+}
+
 string Item::getItemTypeInString(){
 
 	switch (_itemType) {

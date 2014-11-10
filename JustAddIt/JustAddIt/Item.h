@@ -101,6 +101,7 @@ public:
 	string getCategory();
 	PriorityLevel getPriority();
 	string getPriorityInString();
+	ItemType getItemType();
 	string getItemTypeInString();
 
 	bool isDone();

@@ -78,10 +78,6 @@ namespace UnitTest
 			itemPtr2->setEndTime(10, 0);
 
 			Assert::IsTrue(itemBank->isConflicted(itemPtr1, itemPtr2));
-			//Assert::IsFalse(itemBank->addToBank(itemPtr1));
-			//Assert::IsTrue(itemBank->checkForConflict(itemPtr2)); // this assert fails
-
-			itemBank->clearBank();
 		}
 
 		// 2 different items do not conflict with each other
@@ -110,10 +106,6 @@ namespace UnitTest
 			itemPtr2->setEndTime(10, 0);
 
 			Assert::IsFalse(itemBank->isConflicted(itemPtr1, itemPtr2));
-			//Assert::IsTrue(itemBank->checkForConflict(itemPtr2)); // this assert fails
-			//Assert::AreEqual(1, itemBank->getBankSize());
-
-			itemBank->clearBank();
 		}
 
 		// initialise bank from text file
