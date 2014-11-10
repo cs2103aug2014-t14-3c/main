@@ -5,3 +5,4 @@
   
 <span style="color:#3366FF;">Universal commands:<br>add {task details}, search {keyword}, export, undo, redo, home, exit<br><br>[t] View To-do list<br>[o] Check for overdue task</span>
  
+Tip: To add an item, something like that can be typed: <br>add picnic at 2pm-6pm next friday (with friends) #fun !!!
