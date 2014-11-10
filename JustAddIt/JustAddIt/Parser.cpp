@@ -27,6 +27,8 @@ const string Parser::ERROR_MISSING_CATEGORY = "No category detected! Please try 
 const string Parser::ERROR_INVALID_BRACKETS = "Invalid brackets! Try something like \"add event at 7pm (description)\"";
 const string Parser::ERROR_INVALID_PRIORITY = "Wrong priority format entered. Please type \"high\", \"med\" or \"low\"";
 const string Parser::ERROR_LOGIC_START_END = "You can't go back in time! End time should be later than start time.";
+const string Parser::ERROR_EMPTY_DELETE = "There are no items to delete!";
+const string Parser::ERROR_EMPTY_MARK = "There are no items to mark!";
 
 Parser::Parser(void)
 {
@@ -112,6 +114,9 @@ Command* Parser::stringToCommand(string userCommand) {
 			vector<Item*> collatedList;
 			string itemNumsStr;
 			getline(commandStream, itemNumsStr);
+			if (OutputControl::getNumberOfDisplayedItems() == 0) {
+				throw invalid_argument(ERROR_EMPTY_DELETE);
+			}
 			CmdDeleteItem* myDelete = new CmdDeleteItem(convertItemNumsToItemPtrs(itemNumsStr));
 			return myDelete;
 			break;
@@ -121,6 +126,9 @@ Command* Parser::stringToCommand(string userCommand) {
 			vector<Item*> collatedList;
 			string itemNumsStr;
 			getline(commandStream, itemNumsStr);
+			if (OutputControl::getNumberOfDisplayedItems() == 0) {
+				throw invalid_argument(ERROR_EMPTY_MARK);
+			}
 			CmdMarkItemDone* myMark = new CmdMarkItemDone(convertItemNumsToItemPtrs(itemNumsStr));
 			return myMark;
 			break;

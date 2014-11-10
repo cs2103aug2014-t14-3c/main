@@ -91,6 +91,8 @@ public:
 	static const string Parser::ERROR_INVALID_BRACKETS;
 	static const string Parser::ERROR_INVALID_PRIORITY;
 	static const string Parser::ERROR_LOGIC_START_END;
+	static const string Parser::ERROR_EMPTY_DELETE;
+	static const string Parser::ERROR_EMPTY_MARK;
 	Command* stringToCommand(string userCommand);
 	Parser(void);
 	~Parser(void);
