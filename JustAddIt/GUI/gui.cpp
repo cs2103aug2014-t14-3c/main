@@ -1,13 +1,15 @@
 //@author A0116781A
 #include "gui.h"
 
+#define QSTRING_EMPTY ""
+
 using namespace std;
 
-const QString GUI::WINDOW_ICON = "JustAddIt/JustAddIt_small.ico";
+const QString GUI::WINDOW_ICON = "JustAddIt/JustAddIt_icon.ico";
 const QString GUI::TITLE = "JustAddIt";
 const QString GUI::STYLESHEET_PUSHBUTTON = "QPushButton { border: 1px solid grey; border-radius: 5px; padding: 3px; background-color: #EFF8FF; color: black; }";
 const QString GUI::STYLESHEET_LINEEDIT = "QLineEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: black; }";
-const QString GUI::STYLESHEET_LINEEDIT_PLACEHOLDER = "QLineEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: blue; }";
+const QString GUI::STYLESHEET_LINEEDIT_PLACEHOLDER = "QLineEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: #a9a9a9; }";
 const QString GUI::STYLESHEET_TEXTEDIT = "QTextEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: black; }";
 const QString GUI::PLACEHOLDER_LINEEDIT = "add {task details}, search {keyword}, export, undo, redo, home, exit";
 
@@ -23,12 +25,12 @@ GUI::GUI(QWidget *parent)
 	this->setWindowTitle(TITLE);
 
 	ui.pushButton->setStyleSheet(STYLESHEET_PUSHBUTTON);
-	ui.lineEdit->setStyleSheet(STYLESHEET_LINEEDIT_PLACEHOLDER);
+	ui.lineEdit->setStyleSheet(STYLESHEET_LINEEDIT);
 	ui.textEdit->setStyleSheet(STYLESHEET_TEXTEDIT);
 
 	ui.textEdit->setReadOnly(true);
 
-	connect(ui.lineEdit, SIGNAL(textChanged()), ui.lineEdit, SLOT(setLineEditStyleSheet()));
+	//connect(ui.lineEdit, SIGNAL(on_lineEdit_textChanged()), ui.lineEdit, SLOT(setStyleSheet()));
 
 	ui.lineEdit->setPlaceholderText(PLACEHOLDER_LINEEDIT);
 	ui.lineEdit->setFocus();
@@ -61,6 +63,21 @@ void GUI::on_pushButton_clicked() {
 	ui.lineEdit->clear();
 
 }
+//
+//void GUI::on_lineEdit_textChanged() {
+//	if(isTextPlaceholder(ui.lineEdit->text())) {
+//		emit STYLESHEET_LINEEDIT_PLACEHOLDER;
+//	} else {
+//		emit STYLESHEET_LINEEDIT;
+//	}
+//}
+//
+//bool GUI::isTextPlaceholder(QString string) {
+//	if(string == QSTRING_EMPTY) {
+//		return true;
+//	}
+//	return false;
+//}
 
 void GUI::updateDisplay(vector<string> output) {
 	ui.textEdit->clear();
@@ -69,21 +86,4 @@ void GUI::updateDisplay(vector<string> output) {
 		ui.textEdit->append(string);
 	}
 	return;
-}
-
-void GUI::setLineEditStyleSheet() {
-	QString lineEditText = ui.lineEdit->text();
-
-	if(isTextPlaceholder(lineEditText)) {
-		ui.lineEdit->setStyleSheet(STYLESHEET_LINEEDIT_PLACEHOLDER);
-	} else {
-		ui.lineEdit->setStyleSheet(STYLESHEET_LINEEDIT);
-	}
-}
-
-bool GUI::isTextPlaceholder(QString string) {
-	if(string == PLACEHOLDER_LINEEDIT) {
-		return true;
-	}
-	return false;
 }

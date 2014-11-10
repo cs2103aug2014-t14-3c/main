@@ -166,6 +166,7 @@ public:
         lineEdit = new QLineEdit(GUIClass);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
         lineEdit->setFont(font2);
+        lineEdit->setStyleSheet(QStringLiteral(""));
 
         horizontalLayout->addWidget(lineEdit);
 

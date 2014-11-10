@@ -345,7 +345,7 @@ string DisplayScreenConstructor::constructOverdueItemDisplay(vector<Item*>::iter
 		overdueItem += MARK_DONE;
 	}
 
-	overdueItem += (*iter)->getTitle() + OVERDUE_DUE + (*iter)->getEndDateInString();
+	overdueItem += FORMAT_BOLD_OPEN + (*iter)->getTitle() + FORMAT_BOLD_CLOSE + OVERDUE_DUE + (*iter)->getEndDateInString();
 
 	return overdueItem;
 }
@@ -373,7 +373,7 @@ string DisplayScreenConstructor::constructEventDisplay(vector<Item*>::iterator i
 		event += MARK_DONE;
 	}
 
-	event += (*iter)->getTitle() + NEW_LINE; 
+	event += FORMAT_BOLD_OPEN + (*iter)->getTitle() + FORMAT_BOLD_CLOSE + NEW_LINE; 
 	event += FROM + (*iter)->getStartDateInString() + NEW_LINE;
 	event += TO + (*iter)->getEndDateInString();
 
@@ -403,7 +403,7 @@ string DisplayScreenConstructor::constructDeadlineDisplay(vector<Item*>::iterato
 		deadline += MARK_DONE;
 	}
 
-	deadline += (*iter)->getTitle() + NEW_LINE;
+	deadline += FORMAT_BOLD_OPEN + (*iter)->getTitle() + FORMAT_BOLD_CLOSE + NEW_LINE;
 	deadline += BY + (*iter)->getEndDateInString();
 
 	return deadline;
@@ -432,7 +432,7 @@ string DisplayScreenConstructor::constructTaskDisplay(vector<Item*>::iterator it
 		task += MARK_DONE;
 	}
 
-	task += (*iter)->getTitle();
+	task += FORMAT_BOLD_OPEN + (*iter)->getTitle() + FORMAT_BOLD_CLOSE;
 
 	return task;
 }

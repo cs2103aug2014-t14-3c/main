@@ -44,7 +44,9 @@ private:
 
 	static vector<Command*> copyLog();
 	
+	static void executeCmds(int numCommands, vector<Command*> tempLog);
 	static void resetUndoStack();
+
 
 	//ActionLog();
 

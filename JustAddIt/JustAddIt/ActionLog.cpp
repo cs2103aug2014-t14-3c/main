@@ -18,8 +18,10 @@ void ActionLog::addCommand(Command* cmd) {
 	//reset the undo stack to zero if the current command is not redo
 	if(state == READY) {
 		resetUndoStack();
-	} else if(state == UNDO || state == REDO) { 
+	} else if(state == UNDO) { 
 		state = READY;
+	} else if(state == REDO) {
+		// do nothing
 	} else {
 		throw logic_error(ERROR_LOGIC);
 	}
@@ -33,19 +35,14 @@ void ActionLog::undo() {
 
 		vector<Command*> tempLog = copyLog();
 
-		int numCommands = tempLog.size();
-
 		resetLog();
 
 		//executes the commands from when the software is started
-		for(int i = 0; i < numCommands - 1; i++) {
-			tempLog[i]->execute();
-		}
-		//adds the last command in tempLog (not executed) to a stack
-		undoStack.push(tempLog[--numCommands]);		
-	} 
+		executeCmds(tempLog.size(), tempLog);
 
-	state = UNDO;
+		//adds the last command in tempLog (not executed) to a stack
+		undoStack.push(tempLog.back());		
+	} 
 }
 
 void ActionLog::redo() {
@@ -55,10 +52,9 @@ void ActionLog::redo() {
 		//executes the last command undone (top command in the stack)
 		Command* lastUndo = undoStack.top();
 		undoStack.pop();
+		state = REDO;
 		lastUndo->execute();
 	}
-	
-	state = REDO;
 }
 
 vector<Command*> ActionLog::copyLog() {
@@ -69,6 +65,14 @@ vector<Command*> ActionLog::copyLog() {
 	}
 
 	return tempLog;
+}
+
+void ActionLog::executeCmds(int numCommands, vector<Command*> tempLog) {
+	//executes the commands from when the software is started
+	for(int i = 0; i < numCommands - 1; i++) {
+		state = UNDO;
+		tempLog[i]->execute();
+	}
 }
 
 void ActionLog::resetUndoStack() {

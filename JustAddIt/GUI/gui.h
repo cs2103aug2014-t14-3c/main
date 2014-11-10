@@ -45,10 +45,10 @@ private:
 
 private slots:
 	void on_pushButton_clicked();
-	void setLineEditStyleSheet();
+	//void setLineEditStyleSheet(QString lineEditText);
 
-signals:
-	void on_lineEdit_textChanged();
+//signals:
+	//void on_lineEdit_textChanged();
 };
 
 #endif // GUI_H

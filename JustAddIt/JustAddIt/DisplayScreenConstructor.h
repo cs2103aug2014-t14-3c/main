@@ -3,6 +3,9 @@
 #include "Item.h"
 #include "Exporter.h"
 
+#define FORMAT_BOLD_OPEN "<b>"
+#define FORMAT_BOLD_CLOSE "</b>"
+
 class DisplayScreenConstructor
 {
 private:
