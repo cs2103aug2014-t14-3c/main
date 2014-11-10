@@ -19,8 +19,8 @@ CommandType ParserForCmds::determineCommandType(string userCommand, OutputContro
 		return ADD;
 	}
 	if (userCommand == "search" || userCommand == "s" || userCommand == "se"
-		 || userCommand == "sea" || userCommand == "sear" || userCommand == "searc") {
-		return SEARCH;
+		|| userCommand == "sea" || userCommand == "sear" || userCommand == "searc") {
+			return SEARCH;
 	}
 	if (userCommand == "undo" || userCommand == "u" || userCommand == "un" || userCommand == "und") {
 		return UNDO;
@@ -32,8 +32,8 @@ CommandType ParserForCmds::determineCommandType(string userCommand, OutputContro
 		return HOME;
 	}
 	if (userCommand == "export" || userCommand == "ex" || userCommand == "exp"
-		 || userCommand == "expo" || userCommand == "expor") {
-		return EXPORT;
+		|| userCommand == "expo" || userCommand == "expor") {
+			return EXPORT;
 	}
 	if (userCommand == "exit") {
 		//UnregisterHotKey(NULL, 1);
@@ -45,27 +45,27 @@ CommandType ParserForCmds::determineCommandType(string userCommand, OutputContro
 	case OutputControl::HOME_SCREEN: {
 		return determineCommandType_HomeScreen(userCommand);
 		break;
-			}
+									 }
 
 	case OutputControl::EDIT_SCREEN: {
 		return determineCommandType_EditScreen(userCommand);
 		break;
-			}
+									 }
 
 	case OutputControl::SEARCH_RESULTS_SCREEN: {
 		return determineCommandType_SearchResultsScreen(userCommand);
 		break;
-			}
+											   }
 
 	case OutputControl::TO_DO_LIST_VIEW: {
 		return determineCommandType_ToDoListView(userCommand);
 		break;
-			}
+										 }
 
 	case OutputControl::OVERDUE_TASKS_SCREEN: {
 		return determineCommandType_OverdueTasksScreen(userCommand);
 		break;
-			 }
+											  }
 
 	default: {
 		throw invalid_argument(ERROR_INVALID_COMMAND);
@@ -89,7 +89,7 @@ CommandType ParserForCmds::determineCommandType_HomeScreen(string userCommand){
 
 }
 CommandType ParserForCmds::determineCommandType_EditScreen(string userCommand){
-	
+
 	if (userCommand == "e") {
 		return EDIT_FIELD;
 	}else if (userCommand == "o" || userCommand == "") {
@@ -133,7 +133,7 @@ CommandType ParserForCmds::determineCommandType_ToDoListView(string userCommand)
 }
 
 CommandType ParserForCmds::determineCommandType_OverdueTasksScreen(string userCommand){
-	
+
 	if (userCommand == "m") {
 		return MARK;
 	}else if (userCommand == "d") {
@@ -143,31 +143,31 @@ CommandType ParserForCmds::determineCommandType_OverdueTasksScreen(string userCo
 	}else{
 		throw invalid_argument(ERROR_INVALID_COMMAND);
 	}
-	
+
 }
 
 CommandType ParserForCmds::determineCommandType_GoToBaseScreen(){
 
 	switch(OutputControl::getCurrentBaseScreen()) {
-		case OutputControl::CurrentScreenType::HOME_SCREEN:{
-			return HOME;
-			break;
+	case OutputControl::CurrentScreenType::HOME_SCREEN:{
+		return HOME;
+		break;
+													   }
+	case OutputControl::CurrentScreenType::TO_DO_LIST_VIEW:{
+		return VIEW_TODOLIST;
+		break;									
 														   }
-		case OutputControl::CurrentScreenType::TO_DO_LIST_VIEW:{
-			return VIEW_TODOLIST;
-			break;									
-															   }
-		case OutputControl::CurrentScreenType::SEARCH_RESULTS_SCREEN:{
-			return VIEW_LAST_SEARCH;
-			break;									
-															   }
-		case OutputControl::CurrentScreenType::OVERDUE_TASKS_SCREEN:{
-			return VIEW_OVERDUE;
-			break;									
-															   }
-		default:{
-			return HOME;
-			break;
-				}
+	case OutputControl::CurrentScreenType::SEARCH_RESULTS_SCREEN:{
+		return VIEW_LAST_SEARCH;
+		break;									
+																 }
+	case OutputControl::CurrentScreenType::OVERDUE_TASKS_SCREEN:{
+		return VIEW_OVERDUE;
+		break;									
+																}
+	default:{
+		return HOME;
+		break;
+			}
 	}
 }

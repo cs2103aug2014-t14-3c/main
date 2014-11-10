@@ -67,7 +67,7 @@ namespace UnitTest
 			myExec->execute("add dinner on 30 Nov at 8 #personal (bring cash)");
 			myExec->execute("add expensive dinner on 25 Dec 2300");
 				
-			myExec->execute("search wake");
+			myExec->execute("search wake up");
 			Assert::AreEqual(1, OutputControl::getNumberOfDisplayedItems());
 			Assert::AreEqual("wake up", OutputControl::getItemAddr(1)->getTitle().c_str());
 			Assert::AreEqual("Tuesday 30 Dec 2014 07:00AM", OutputControl::getItemAddr(1)->getStartDateInString().c_str());

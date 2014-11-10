@@ -42,143 +42,143 @@ Parser::~Parser(void)
 //returns the corresponding Command subclass object with
 //required information embedded inside.
 Command* Parser::stringToCommand(string userCommand) {
-	
 
-	
+
+
 	//convert into a stream and get the first word
 	istringstream commandStream(userCommand);
 	string userAction;
 	commandStream >> userAction;
-	
+
 	//translate the first word into a CommandType
 	convertStringToLowercase(userAction);
 	ParserForCmds* myParserCmd = new ParserForCmds();
 	CommandType commandAction = myParserCmd->determineCommandType(userAction, OutputControl::getCurrentScreen());
-	
+
 	switch (commandAction) {
-		case ADD: {
-					
-			Item* myItem = new Item;
-			//Pass remaining stream as details
-			string stringDetails;
-			getline(commandStream, stringDetails);
-			embedDetailsInItem(myItem, stringDetails);
+	case ADD: {
 
-			CmdAddItem* myAdd = new CmdAddItem(myItem);
-			return myAdd;
+		Item* myItem = new Item;
+		//Pass remaining stream as details
+		string stringDetails;
+		getline(commandStream, stringDetails);
+		embedDetailsInItem(myItem, stringDetails);
 
-			break;
-				  }
+		CmdAddItem* myAdd = new CmdAddItem(myItem);
+		return myAdd;
 
-		case SEARCH: {
-			string keyword;
-			getline(commandStream, keyword);
-			//inform outputcontrol of keyword
-			OutputControl::setCurrentKeywordSearched(keyword);
-			CmdSearch* mySearch = new CmdSearch(keyword);
-			return mySearch;
-			break;
+		break;
+			  }
+
+	case SEARCH: {
+		string keyword;
+		getline(commandStream, keyword);
+		//inform outputcontrol of keyword
+		OutputControl::setCurrentKeywordSearched(keyword);
+		CmdSearch* mySearch = new CmdSearch(keyword);
+		return mySearch;
+		break;
+				 }
+	case VIEW_LAST_SEARCH: {
+		CmdSearch* mySearch = new CmdSearch(OutputControl::getCurrentKeywordSearched());
+		return mySearch;
+		break;
+						   }
+	case EDIT_ITEM: {
+		int itemNum;
+		commandStream >> itemNum;
+		if(itemNum <= 0 || itemNum > OutputControl::getNumberOfDisplayedItems()){
+			throw invalid_argument(ERROR_INVALID_ITEM_NO);
 		}
-		case VIEW_LAST_SEARCH: {
-			CmdSearch* mySearch = new CmdSearch(OutputControl::getCurrentKeywordSearched());
-			return mySearch;
-			break;
-		}
-		case EDIT_ITEM: {
-			int itemNum;
-			commandStream >> itemNum;
-			if(itemNum <= 0 || itemNum > OutputControl::getNumberOfDisplayedItems()){
-				throw invalid_argument(ERROR_INVALID_ITEM_NO);
-			}
-			CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList()+itemNum-1);
-			return myEdit;
-			break;
-		}
+		CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList()+itemNum-1);
+		return myEdit;
+		break;
+					}
 
-		case EDIT_FIELD: {
-			string newFieldInfo=EMPTY_STRING;
-			string buffer;
-			int fieldNum;
-			commandStream >> fieldNum;
-			if(fieldNum==0 || fieldNum > NUM_OF_FIELDS){
-				throw invalid_argument(ERROR_INVALID_FIELD_NO);
-			}	
-			commandStream >> newFieldInfo;
-			getline(commandStream, buffer);
-			newFieldInfo += buffer;
-			return constructRespectiveCmdEdit(fieldNum, newFieldInfo);
-			break;
-						 }
-
-		case DELETE: {
-			vector<Item*> collatedList;
-			string itemNumsStr;
-			getline(commandStream, itemNumsStr);
-			if (OutputControl::getNumberOfDisplayedItems() == 0) {
-				throw invalid_argument(ERROR_EMPTY_DELETE);
-			}
-			CmdDeleteItem* myDelete = new CmdDeleteItem(convertItemNumsToItemPtrs(itemNumsStr));
-			return myDelete;
-			break;
+	case EDIT_FIELD: {
+		string newFieldInfo=EMPTY_STRING;
+		string buffer;
+		int fieldNum;
+		commandStream >> fieldNum;
+		if(fieldNum==0 || fieldNum > NUM_OF_FIELDS){
+			throw invalid_argument(ERROR_INVALID_FIELD_NO);
+		}	
+		commandStream >> newFieldInfo;
+		getline(commandStream, buffer);
+		newFieldInfo += buffer;
+		return constructRespectiveCmdEdit(fieldNum, newFieldInfo);
+		break;
 					 }
 
-		case MARK: {
-			vector<Item*> collatedList;
-			string itemNumsStr;
-			getline(commandStream, itemNumsStr);
-			if (OutputControl::getNumberOfDisplayedItems() == 0) {
-				throw invalid_argument(ERROR_EMPTY_MARK);
-			}
-			CmdMarkItemDone* myMark = new CmdMarkItemDone(convertItemNumsToItemPtrs(itemNumsStr));
-			return myMark;
-			break;
-				   }
-
-		case UNDO : {
-			CmdUndo* myUndo = new CmdUndo();
-			return myUndo;
-			break;
-					}
-		case REDO : {
-			CmdRedo* myRedo = new CmdRedo();
-			return myRedo;
-			break;
-					}
-		case VIEW_TODOLIST : {
-			CmdGoToListView* myList = new CmdGoToListView();
-			return myList;
-			break;
-					}
-		case VIEW_OVERDUE : {
-			CmdShowOverdueDeadlines* myOverdue = new CmdShowOverdueDeadlines();
-			return myOverdue;
-			break;
-					}
-		case HOME : {
-			CmdHome* myHome = new CmdHome();
-			return myHome;
-			break;
-					}
-		case CLEAR_ALL_DONE : {
-			CmdClearAllDone* myDone = new CmdClearAllDone();
-			return myDone;
-			break;
-							  }
-							  
-		case CLEAR_ALL_OVERDUE : {
-			CmdClearAllOverdue* myOverdue = new CmdClearAllOverdue();
-			return myOverdue;
-			break;
-								 }
-		case EXPORT : {
-			CmdExport* myExport = new CmdExport();
-			return myExport;
-			break;
-					  }
-		default: {
-			throw invalid_argument(ERROR_INVALID_COMMAND);
-			break;
+	case DELETE: {
+		vector<Item*> collatedList;
+		string itemNumsStr;
+		getline(commandStream, itemNumsStr);
+		if (OutputControl::getNumberOfDisplayedItems() == 0) {
+			throw invalid_argument(ERROR_EMPTY_DELETE);
+		}
+		CmdDeleteItem* myDelete = new CmdDeleteItem(convertItemNumsToItemPtrs(itemNumsStr));
+		return myDelete;
+		break;
 				 }
+
+	case MARK: {
+		vector<Item*> collatedList;
+		string itemNumsStr;
+		getline(commandStream, itemNumsStr);
+		if (OutputControl::getNumberOfDisplayedItems() == 0) {
+			throw invalid_argument(ERROR_EMPTY_MARK);
+		}
+		CmdMarkItemDone* myMark = new CmdMarkItemDone(convertItemNumsToItemPtrs(itemNumsStr));
+		return myMark;
+		break;
+			   }
+
+	case UNDO : {
+		CmdUndo* myUndo = new CmdUndo();
+		return myUndo;
+		break;
+				}
+	case REDO : {
+		CmdRedo* myRedo = new CmdRedo();
+		return myRedo;
+		break;
+				}
+	case VIEW_TODOLIST : {
+		CmdGoToListView* myList = new CmdGoToListView();
+		return myList;
+		break;
+						 }
+	case VIEW_OVERDUE : {
+		CmdShowOverdueDeadlines* myOverdue = new CmdShowOverdueDeadlines();
+		return myOverdue;
+		break;
+						}
+	case HOME : {
+		CmdHome* myHome = new CmdHome();
+		return myHome;
+		break;
+				}
+	case CLEAR_ALL_DONE : {
+		CmdClearAllDone* myDone = new CmdClearAllDone();
+		return myDone;
+		break;
+						  }
+
+	case CLEAR_ALL_OVERDUE : {
+		CmdClearAllOverdue* myOverdue = new CmdClearAllOverdue();
+		return myOverdue;
+		break;
+							 }
+	case EXPORT : {
+		CmdExport* myExport = new CmdExport();
+		return myExport;
+		break;
+				  }
+	default: {
+		throw invalid_argument(ERROR_INVALID_COMMAND);
+		break;
+			 }
 
 	}
 
@@ -199,7 +199,7 @@ void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
 	bool foundMonthDate = detectMonthDateAndEmbedIsOk(myItem, stringDetails, isDeadline);
 	bool foundDayOfWeek = detectDayOfWeekDateAndEmbedIsOk(myItem, stringDetails, isDeadline);
 	bool foundTime = detectTimeAndEmbedIsOk(myItem, stringDetails, isDeadline);	
-	
+
 	bool foundDate = foundMonthDate || foundDayOfWeek;
 
 	if(foundDate && !foundTime){
@@ -228,7 +228,7 @@ void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
 	}
 
 
-			
+
 }
 
 
@@ -284,16 +284,16 @@ void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 			titleEndIter = endWordIter;
 		}
 	}
-	
+
 	//update the remaining string
 	stringDetails = convertVectorToString(titleEndIter, vectorOfStrings.end());
-	
+
 	titleToSet = convertVectorToString(titleStartIter, titleEndIter);
 	if(titleToSet==EMPTY_STRING){
 		throw invalid_argument(ERROR_MISSING_TITLE);
 	}
 	myItem->setTitle(titleToSet);
-	
+
 	return;
 }
 
@@ -304,10 +304,10 @@ bool Parser::detectDeadlineKeywordAndTrim(string &stringDetails){
 	vector<string> vectorOfStrings;
 	vector<string>::iterator deadlineWordIter;
 	bool isFound = false;
-	
+
 	vectorOfStrings = convertStringToVector(stringDetails);
 	deadlineWordIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isKeywordDeadline);
-	
+
 	//if deadline keyword found
 	if (deadlineWordIter!=vectorOfStrings.end()){
 		vectorOfStrings.erase(deadlineWordIter);
@@ -391,7 +391,7 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 	int endDayInt;
 	int endMonthInt;
 	bool endExists = false;
-	
+
 	streamDetails >> previousWord;
 	while(streamDetails >> currentWord && !isMonth(currentWord)){
 		previousWord = currentWord;
@@ -423,7 +423,7 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 		trimWordFromString(stringDetails, startDateFound);
 		startDayInt = stoi(startDayFound);
 		startMonthInt = convertStrToIntMonth(startMonthFound);
-		
+
 		//reset currentWord and search for second date
 		currentWord=EMPTY_STRING;
 		while(streamDetails >> currentWord && !isMonth(currentWord)){
@@ -462,8 +462,8 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 		}
 		else{
 			if(endExists){
-			myItem->setStartDate(startDayInt, startMonthInt);
-			myItem->setEndDate(endDayInt, endMonthInt);
+				myItem->setStartDate(startDayInt, startMonthInt);
+				myItem->setEndDate(endDayInt, endMonthInt);
 			}
 			else{
 				myItem->setStartDate(startDayInt, startMonthInt);
@@ -475,8 +475,8 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 	else{
 		return false;
 	}
-	
-	
+
+
 
 }
 
@@ -498,7 +498,7 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 	bool isWordNextEnd = false;
 
 	istringstream streamDetails(stringDetails);
-	
+
 	while(streamDetails >> startDate && !isDayOfWeek(startDate)){
 	}
 	while(streamDetails >> endDate && !isDayOfWeek(endDate)){
@@ -516,7 +516,7 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 		else{
 			trimWordFromString(stringDetails, startDate);
 		}
-		
+
 		startDaysToAdd = convertDayOfWeekToIntDaysToAdd(startDate, isWordNextStart);
 		myItem->addToStartDate(startDaysToAdd);
 		if(isDeadline){
@@ -525,7 +525,7 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 		else{
 			//start exists and end exists
 			if(isDayOfWeek(endDate)){
-				
+
 				endFound = true;
 				//remove the end day from input string
 				if(stringDetails.find(NEXT_MARKER + endDate)!=string::npos){
@@ -535,14 +535,14 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 				else{
 					trimWordFromString(stringDetails, endDate);
 				}
-				
-			
+
+
 				endDaysToAdd = convertDayOfWeekToIntDaysToAdd(endDate, isWordNextEnd);
 				myItem->addToEndDate(endDaysToAdd);
 			}
 			else{
-			//start exists but end does not exist
-			//default end date is same as start date
+				//start exists but end does not exist
+				//default end date is same as start date
 				myItem->addToEndDate(startDaysToAdd);
 			}
 		}
@@ -564,7 +564,7 @@ void Parser::detectCategoryAndEmbed(Item* myItem, string &stringDetails){
 	string categoryToSet=EMPTY_STRING;
 	size_t position;
 	position = stringDetails.find(CATEGORY_MARKER);
-	 
+
 	//if found, get the text after the marker
 	if(position!=string::npos){
 		myIter = stringDetails.begin() + position;
@@ -592,7 +592,7 @@ void Parser::detectPriorityAndEmbed(Item* myItem, string &stringDetails){
 
 	size_t position;
 	int count = 0;
-	
+
 	while(true){
 		position = stringDetails.find(PRIORITY_MARKER);
 		//if found, count and trim "!"
@@ -626,20 +626,20 @@ void Parser::detectDescriptionAndEmbed(Item* myItem, string &stringDetails){
 	size_t positionBack;
 	string descripToSet;
 	positionFront = stringDetails.find(DESCRIP_MARKER_FRONT);
-		//if found the front
-		if(positionFront!=string::npos){
-			positionBack = stringDetails.find(DESCRIP_MARKER_BACK);
-			//if found the back
-			if(positionBack<positionFront){
-				throw invalid_argument(ERROR_INVALID_BRACKETS);
-			}
-			if(positionBack!=string::npos && positionBack!=0){
-				descripToSet = stringDetails.substr(positionFront, positionBack-positionFront+1);
-				trimWordFromString(stringDetails, descripToSet);
-				descripToSet = descripToSet.substr(1, descripToSet.length()-2);
-				myItem->setDescription(descripToSet);
-			}
+	//if found the front
+	if(positionFront!=string::npos){
+		positionBack = stringDetails.find(DESCRIP_MARKER_BACK);
+		//if found the back
+		if(positionBack<positionFront){
+			throw invalid_argument(ERROR_INVALID_BRACKETS);
 		}
+		if(positionBack!=string::npos && positionBack!=0){
+			descripToSet = stringDetails.substr(positionFront, positionBack-positionFront+1);
+			trimWordFromString(stringDetails, descripToSet);
+			descripToSet = descripToSet.substr(1, descripToSet.length()-2);
+			myItem->setDescription(descripToSet);
+		}
+	}
 
 	return;
 }
@@ -657,9 +657,9 @@ void Parser::detectTypesOfDatesAndEmbed(Item &myNewItem, string newFieldInfo, bo
 //returns true if the string consists of digits only.
 //Otherwise, it returns false.
 bool Parser::isInteger(string query){
-    unsigned int i;
+	unsigned int i;
 
-    for(i = 0; i < query.length(); i++){
+	for(i = 0; i < query.length(); i++){
 		if(isdigit(query[i]) == 0 || ispunct(query[i]) != 0) {
 			break;
 		}
@@ -704,7 +704,7 @@ bool Parser::isDayOfWeek(string query){
 //This function accepts an input string that represents time
 //and returns the number of hours it indicates. 
 int Parser::convertStringToIntHour(string stringTime){
-	
+
 	assert(isTime(stringTime)==true);
 	convertStringToLowercase(stringTime);
 	size_t positionFound;
@@ -733,7 +733,7 @@ int Parser::convertStringToIntHour(string stringTime){
 	}
 	//what remains is the digits (minutes are trimmed)
 	int actualTime = (stoi (stringTime)%12) + accountForPM;
-	
+
 	return actualTime;
 }
 
@@ -772,9 +772,9 @@ int Parser::convertStrToIntMonth(string month){
 
 	convertStringToLowercase(month);
 	const string month3[] = {"jan", "feb", "mar", "apr", "may", "jun",
-								"jul", "aug", "sep", "oct", "nov", "dec"};
+		"jul", "aug", "sep", "oct", "nov", "dec"};
 	const string monthfull[] = {"january", "february", "march", "april", "may", "june",
-								"july", "august", "september", "october", "november", "december"};
+		"july", "august", "september", "october", "november", "december"};
 	int i;
 	if(month.size()==3){
 		for(i=0; i<MONTHS_IN_YEAR; i++){
@@ -789,9 +789,9 @@ int Parser::convertStrToIntMonth(string month){
 				return i;
 			}
 		}
-	
+
 	}
-	
+
 	return -1; 
 
 }
@@ -808,11 +808,11 @@ void Parser::convertStringToLowercase(string &myString){
 //This function converts the input 'day of week' to the
 //number of days between today and that input day.
 int Parser::convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek){
-	
+
 	const string dayOfWeek[] = {"sunday", "monday", "tuesday", "wednesday","thursday",
-								"friday", "saturday"};
+		"friday", "saturday"};
 	const string dayOfWeek3[] = {"sun", "mon", "tue", "wed","thu",
-								"fri", "sat"};
+		"fri", "sat"};
 	convertStringToLowercase(query);
 	int i;
 	int daysAfterSunday=-1;
@@ -830,10 +830,10 @@ int Parser::convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek){
 	else{
 
 		for(i=0; i<7 && !dayOfWeekFound; i++){
-				if(query==dayOfWeek[i] || query==dayOfWeek3[i]){
-					daysAfterSunday=i;
-					dayOfWeekFound = true;
-				}
+			if(query==dayOfWeek[i] || query==dayOfWeek3[i]){
+				daysAfterSunday=i;
+				dayOfWeekFound = true;
+			}
 		}
 	}
 	if(dayOfWeekFound){
@@ -841,7 +841,7 @@ int Parser::convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek){
 		tm nowTimeTM;
 		time(&nowTime);
 		localtime_s (&nowTimeTM, &nowTime);
-	
+
 		int daysToAdd;
 		daysToAdd = daysAfterSunday - nowTimeTM.tm_wday ;
 		if(daysToAdd<0){
@@ -858,7 +858,7 @@ int Parser::convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek){
 	else{
 		return -1;
 	}
-	
+
 
 }
 
@@ -950,7 +950,7 @@ string Parser::convertVectorToString(vector<string>::iterator start, vector<stri
 		}
 	}
 	return finalString;
-	
+
 }
 //This function converts a priority string to 
 //an enum Item::PriorityLevel type.
@@ -988,33 +988,33 @@ void Parser::trimWordFromString(string &originalString, string toTrim){
 //subclass depending on the input field number.
 CmdEditItem* Parser::constructRespectiveCmdEdit(int fieldNum, string newFieldInfo){
 	switch (fieldNum) {
-		case START_TIME_FIELD_INDEX: {
-			//check for all the possible types of time input
-			Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());
-			detectTypesOfDatesAndEmbed(myNewItem, newFieldInfo, false);		
-			if(OutputControl::getItemAddr(1)->getEndDateTime_T() < myNewItem.getStartDateTime_T()){
-				throw logic_error(ERROR_LOGIC_START_END);
-			}
-			CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, myNewItem.getStartDateTime());
-			return myEdit;
-									 }
-		case END_TIME_FIELD_INDEX: {
-			//check for all the possible types of time input
-			Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());;
-			detectTypesOfDatesAndEmbed(myNewItem, newFieldInfo, true);
-			if(myNewItem.getEndDateTime_T() < OutputControl::getItemAddr(1)->getStartDateTime_T()){
-				throw logic_error(ERROR_LOGIC_START_END);
-			}
-			CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, myNewItem.getEndDateTime());
-			return myEdit;
-								   }
-		case PRIORITY_FIELD_INDEX: {
-			CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, convertStrToPriorityLevel(newFieldInfo));
-			return myEdit;
-								   }
-		default :{
-			CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, newFieldInfo);
-			return myEdit;
-				 }
+	case START_TIME_FIELD_INDEX: {
+		//check for all the possible types of time input
+		Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());
+		detectTypesOfDatesAndEmbed(myNewItem, newFieldInfo, false);		
+		if(OutputControl::getItemAddr(1)->getEndDateTime_T() < myNewItem.getStartDateTime_T()){
+			throw logic_error(ERROR_LOGIC_START_END);
+		}
+		CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, myNewItem.getStartDateTime());
+		return myEdit;
+								 }
+	case END_TIME_FIELD_INDEX: {
+		//check for all the possible types of time input
+		Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());;
+		detectTypesOfDatesAndEmbed(myNewItem, newFieldInfo, true);
+		if(myNewItem.getEndDateTime_T() < OutputControl::getItemAddr(1)->getStartDateTime_T()){
+			throw logic_error(ERROR_LOGIC_START_END);
+		}
+		CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, myNewItem.getEndDateTime());
+		return myEdit;
+							   }
+	case PRIORITY_FIELD_INDEX: {
+		CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, convertStrToPriorityLevel(newFieldInfo));
+		return myEdit;
+							   }
+	default :{
+		CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, newFieldInfo);
+		return myEdit;
+			 }
 	}
 }
