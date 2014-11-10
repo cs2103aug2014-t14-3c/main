@@ -35,14 +35,20 @@ private:
 	static const QString TITLE;
 	static const QString STYLESHEET_PUSHBUTTON;
 	static const QString STYLESHEET_LINEEDIT;
+	static const QString STYLESHEET_LINEEDIT_PLACEHOLDER;
 	static const QString STYLESHEET_TEXTEDIT;
 	static const QString PLACEHOLDER_LINEEDIT;
 
 	void initProg(); 
 	void updateDisplay(vector<string> output);
+	bool isTextPlaceholder(QString string);
 
 private slots:
 	void on_pushButton_clicked();
+	void setLineEditStyleSheet();
+
+signals:
+	void on_lineEdit_textChanged();
 };
 
 #endif // GUI_H
