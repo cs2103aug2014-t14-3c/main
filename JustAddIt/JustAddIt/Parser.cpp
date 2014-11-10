@@ -16,6 +16,7 @@
 #define DESCRIP_MARKER_BACK ")"
 #define TODAY_MARKER "today"
 #define TOMORROW_MARKER "tomorrow"
+#define NEXT_MARKER "next "
 
 const string Parser::ERROR_INVALID_ITEM_NO = "Invalid item number! Please enter a valid number from the menu.";
 const string Parser::ERROR_INVALID_FIELD_NO = "Invalid field number! Please enter a field number 1 - 6.";
@@ -24,7 +25,7 @@ const string Parser::ERROR_MISSING_TITLE =	"No title detected! Try something lik
 const string Parser::ERROR_MISSING_CATEGORY = "No category detected! Please try e.g. \"add homework #school\"";
 const string Parser::ERROR_INVALID_BRACKETS = "Invalid brackets! Try something like \"add event at 7pm (description)\"";
 const string Parser::ERROR_INVALID_PRIORITY = "Wrong priority format entered. Please type \"high\", \"med\" or \"low\"";
-const string Parser::ERROR_LOGIC_START_END = "You can't go back in time! Please try e.g. add event from 2 May 2pm to 3 May 3pm";
+const string Parser::ERROR_LOGIC_START_END = "You can't go back in time! End time should be later than start time.";
 
 Parser::Parser(void)
 {
@@ -409,7 +410,6 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 		}
 
 		//remove date from input string
-		//XXXstringDetails.replace(stringDetails.find(startDateFound),startDateFound.length(),"");
 		trimWordFromString(stringDetails, startDateFound);
 		startDayInt = stoi(startDayFound);
 		startMonthInt = convertStrToIntMonth(startMonthFound);
@@ -440,7 +440,6 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 				endDateFound = endMonthFound;
 			}
 			//remove date from input string
-			//XXXstringDetails.replace(stringDetails.find(endDateFound),endDateFound.length(),"");
 			trimWordFromString(stringDetails, endDateFound);
 			endDayInt = stoi(endDayFound);
 			endMonthInt = convertStrToIntMonth(endMonthFound);
@@ -500,13 +499,11 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 
 		startFound = true;
 		//remove day from input string
-		if(stringDetails.find("next " + startDate)!=string::npos){
+		if(stringDetails.find(NEXT_MARKER + startDate)!=string::npos){
 			isWordNextStart=true;
-			//xxxstringDetails.replace(stringDetails.find("next " + startDate),startDate.length(),"");
-			trimWordFromString(stringDetails, "next " + startDate);
+			trimWordFromString(stringDetails, NEXT_MARKER + startDate);
 		}
 		else{
-			//xxxstringDetails.replace(stringDetails.find(startDate),startDate.length(),"");
 			trimWordFromString(stringDetails, startDate);
 		}
 		
@@ -521,13 +518,11 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 				
 				endFound = true;
 				//remove the end day from input string
-				if(stringDetails.find("next " + endDate)!=string::npos){
+				if(stringDetails.find(NEXT_MARKER + endDate)!=string::npos){
 					isWordNextEnd=true;
-					//xxxstringDetails.replace(stringDetails.find("next " + endDate),endDate.length(),"");
-					trimWordFromString(stringDetails, "next " + endDate);
+					trimWordFromString(stringDetails, NEXT_MARKER + endDate);
 				}
 				else{
-					//xxxstringDetails.replace(stringDetails.find(endDate),endDate.length(),"");
 					trimWordFromString(stringDetails, endDate);
 				}
 				
@@ -535,9 +530,9 @@ bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails
 				endDaysToAdd = convertDayOfWeekToIntDaysToAdd(endDate, isWordNextEnd);
 				myItem->addToEndDate(endDaysToAdd);
 			}
+			else{
 			//start exists but end does not exist
 			//default end date is same as start date
-			else{
 				myItem->addToEndDate(startDaysToAdd);
 			}
 		}
@@ -573,7 +568,6 @@ void Parser::detectCategoryAndEmbed(Item* myItem, string &stringDetails){
 		}
 		myItem->setCategory(categoryToSet);
 		string categoryFound = CATEGORY_MARKER + categoryToSet;
-		//XXXstringDetails.replace(stringDetails.find(categoryFound),categoryFound.length(),"");	
 		trimWordFromString(stringDetails, categoryFound);
 	}
 
@@ -594,7 +588,6 @@ void Parser::detectPriorityAndEmbed(Item* myItem, string &stringDetails){
 		//if found, count and trim "!"
 		if(position!=string::npos){
 			count++;
-			//xxxstringDetails.replace(stringDetails.find(PRIORITY_MARKER),PRIORITY_MARKER_SIZE,"");
 			trimWordFromString(stringDetails, PRIORITY_MARKER);
 		}
 		else{
@@ -632,7 +625,6 @@ void Parser::detectDescriptionAndEmbed(Item* myItem, string &stringDetails){
 			}
 			if(positionBack!=string::npos && positionBack!=0){
 				descripToSet = stringDetails.substr(positionFront, positionBack-positionFront+1);
-				//xxxstringDetails.replace(stringDetails.find(descripToSet),descripToSet.length(),"");
 				trimWordFromString(stringDetails, descripToSet);
 				descripToSet = descripToSet.substr(1, descripToSet.length()-2);
 				myItem->setDescription(descripToSet);
@@ -976,6 +968,9 @@ void Parser::trimWordFromString(string &originalString, string toTrim){
 	originalString.replace(originalString.find(toTrim),toTrim.length(),"");	
 }
 
+
+//This function constructs and reutrns the respecitive CmdEditItem*
+//subclass depending on the input field number.
 CmdEditItem* Parser::constructRespectiveCmdEdit(int fieldNum, string newFieldInfo){
 	switch (fieldNum) {
 		case START_TIME_FIELD_INDEX: {

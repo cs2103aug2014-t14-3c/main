@@ -1,5 +1,16 @@
 #pragma once
 //@author A0110770U
+//------------------------------------------
+//CmdHome acts as a function to return the
+//user to the home screen.
+//
+//On the home screen, it shows the 
+//items that are occuring in the next 
+//week from the current time.
+//
+//
+//CmdHome will not throw exceptions.
+//------------------------------------------
 #include "Command.h"
 #include "DisplayScreenConstructor.h"
 

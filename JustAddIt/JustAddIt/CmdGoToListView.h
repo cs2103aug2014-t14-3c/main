@@ -1,5 +1,14 @@
 #pragma once
 //@author A0110770U
+//------------------------------------------
+//CmdGoToListView acts as a function to allow the
+//user to go to the list view.
+//
+//On the list view, it shows a sorted view
+//of all items.
+//
+//CmdGoToListView will not throw exceptions.
+//------------------------------------------
 #include "command.h"
 #include "ItemBank.h"
 #include "DisplayScreenConstructor.h"

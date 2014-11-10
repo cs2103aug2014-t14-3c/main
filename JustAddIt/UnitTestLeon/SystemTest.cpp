@@ -8,7 +8,7 @@ namespace UnitTest
 	TEST_CLASS(SystemTest)
 	{
 	public:
-			TEST_METHOD(SystemTest_ListAndEditItems)
+			TEST_METHOD(SystemTest_ListAndEditScenarios)
 		{
 			Executor* myExec = new Executor();
 			ItemBank* myIB = ItemBank::getInstance();
@@ -33,7 +33,8 @@ namespace UnitTest
 
 			myExec->execute("e 3");
 			Assert::AreEqual("floating task", OutputControl::getItemAddr(1)->getTitle().c_str());
-			
+			myExec->execute("o");
+
 			
 		}
 		TEST_METHOD(SystemTest_SearchAndEditScenarios)
@@ -284,6 +285,22 @@ namespace UnitTest
 				Assert::AreEqual(Parser::ERROR_LOGIC_START_END.c_str(), e.what());
 			};
 		}	
-	
+		TEST_METHOD(SystemTest_EmptyItemBank)
+		{
+			Executor* myExec = new Executor();
+			ItemBank* myIB = ItemBank::getInstance();
+			ActionLog::resetLog();
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
+			myExec->execute("home");
+			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
+			myExec->execute("t");
+			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
+			myExec->execute("home");
+			myExec->execute("o");
+			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
+			myExec->execute("search sth");
+			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
+		}
 	};
 }
