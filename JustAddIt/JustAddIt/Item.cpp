@@ -7,6 +7,8 @@
 int Item::_idCounter = 1;
 
 const string Item::MESSAGE_INVALID_ARGUMENT = "invalid argument entered";
+const string Item::STRING_NULL = "";
+const string Item::STRING_NEGATIVE_ONE = "-1";
 
 //@author A0128461H
 Item::Item(void){
@@ -74,9 +76,9 @@ time_t Item::getStartDateTime_T() {
 string Item::getStartDateInString() {
 	char tempArray[MAX_SIZE];
 	if(&_startDateTime==NULL){
-		return "";
+		return STRING_NULL;
 	} else if (_startDateTime.tm_hour == -1) {
-		return "-1";
+		return STRING_NEGATIVE_ONE;
 	} else {
 	strftime(tempArray, MAX_SIZE, "%A %d %b %Y %I:%M%p", &_startDateTime);
 
@@ -97,9 +99,9 @@ time_t Item::getEndDateTime_T() {
 string Item::getEndDateInString() {
 	char tempArray[MAX_SIZE];
 	if(&_endDateTime==NULL){
-		return "";
+		return STRING_NULL;
 	} else if (_endDateTime.tm_hour == -1) {
-		return "-1";
+		return STRING_NEGATIVE_ONE;
 	} else {
 		strftime(tempArray, MAX_SIZE, "%A %d %b %Y %I:%M%p", &_endDateTime);
 

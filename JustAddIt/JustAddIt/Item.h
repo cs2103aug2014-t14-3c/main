@@ -28,6 +28,8 @@ public:
 	enum ItemType { EVENT, DEADLINE, TASK };
 
 	static const string MESSAGE_INVALID_ARGUMENT;
+	static const string STRING_NULL;
+	static const string STRING_NEGATIVE_ONE;
 
 private:
 	static int _idCounter;
