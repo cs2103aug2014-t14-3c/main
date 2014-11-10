@@ -3,6 +3,7 @@
 #include "CmdEditItem.h"
 
 const string CmdEditItem::MESSAGE_EDIT_SUCCESSFUL = "Item is successfully edited!";
+const string CmdEditItem::ERROR_INVALID_FIELD = "This field cannot be edited.";
 const string CmdEditItem::ERROR_PROGRAM_MALFUNCTION = "An error has occurred!";
 const string CmdEditItem::ERROR_INVALID_FIELD_NUMBER = "Invalid field number! Please enter a valid field number 1 - 6.";
 const string CmdEditItem::ERROR_EMPTY_FIELD = "Empty input! Please enter a valid input.";
@@ -13,6 +14,8 @@ const string CmdEditItem::LOG_EDIT_SCREEN_STORED = "INFO: Edit screen is stored 
 const string CmdEditItem::LOG_EDIT_FIELD_DETERMINED = "INFO: Field to be edited is determined";
 const string CmdEditItem::LOG_ITEM_EDITED = "INFO: Item field is edited";
 const string CmdEditItem::TEXT_FILE_NAME = "JustAddIt/Logs/CmdEditItem_Log.txt";
+const string CmdEditItem::TASK = "task";
+const string CmdEditItem::DEADLINE = "deadline";
 enum FIELD_TO_BE_EDITED {EDIT_TITLE, EDIT_DESCRIPTION, EDIT_START_TIME, EDIT_END_TIME, EDIT_PRIORITY, EDIT_CATEGORY, INVALID};
 
 //This constructor is used when editing items fields that contain strings variables (i.e. title, description,
@@ -40,6 +43,10 @@ CmdEditItem::CmdEditItem(vector<Item*>::iterator itemPtr, int fieldNum, tm newTi
 
 	if (fieldNum != 1 && fieldNum != 2 && fieldNum != 3 && fieldNum != 4 && fieldNum != 5 && fieldNum != 6) {
 		throw invalid_argument(ERROR_INVALID_FIELD_NUMBER);
+	}
+
+	if ((*itemPtr)->getItemTypeInString() == TASK || ((*itemPtr)->getItemTypeInString() == DEADLINE && fieldNum == 3)) {
+		throw invalid_argument(ERROR_INVALID_FIELD);
 	}
 
 	_itemAddr = *itemPtr;

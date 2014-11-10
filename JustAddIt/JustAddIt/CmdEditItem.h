@@ -17,6 +17,7 @@ private:
 	bool _isEditField;
 
 	static const string MESSAGE_EDIT_SUCCESSFUL;
+	static const string ERROR_INVALID_FIELD;
 	static const string ERROR_PROGRAM_MALFUNCTION;
 	static const string ERROR_INVALID_FIELD_NUMBER;
 	static const string ERROR_EMPTY_FIELD;
@@ -27,6 +28,8 @@ private:
 	static const string LOG_EDIT_FIELD_DETERMINED;
 	static const string LOG_ITEM_EDITED;
 	static const string TEXT_FILE_NAME;
+	static const string TASK;
+	static const string DEADLINE;
 
 	void editItem();
 	enum FIELD_TO_BE_EDITED determineEditField();
