@@ -1,0 +1,2203 @@
+//@author: a0110770u
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\CmdGoToBaseScreen.cpp
+	 */
+
+#include "stdafx.h"
+#include "CmdGoToBaseScreen.h"
+
+//Depending on the input base screen, a different screen
+//will be constructed and stored.
+CmdGoToBaseScreen::CmdGoToBaseScreen(OutputControl::CurrentScreenType currentBaseScreen){
+	switch (currentBaseScreen) {
+	case OutputControl::CurrentScreenType::HOME_SCREEN: {
+		_baseScreenCmd = new CmdHome();
+		break;
+														}
+	case OutputControl::CurrentScreenType::TO_DO_LIST_VIEW: {
+		_baseScreenCmd = new CmdGoToListView();
+		break;
+															}
+	case OutputControl::CurrentScreenType::SEARCH_RESULTS_SCREEN: {
+		_baseScreenCmd = new CmdSearch(OutputControl::getCurrentKeywordSearched());
+		break;
+																  }
+	case OutputControl::CurrentScreenType::OVERDUE_TASKS_SCREEN: {
+		_baseScreenCmd = new CmdShowOverdueDeadlines;
+		break;
+																 }
+	default:{
+		_baseScreenCmd = new CmdHome();
+		break;
+			}
+	}
+}
+
+CmdGoToBaseScreen::~CmdGoToBaseScreen(void){
+	delete _baseScreenCmd;
+}
+
+vector<string> CmdGoToBaseScreen::execute(){
+	return _baseScreenCmd->execute();
+
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\CmdGoToBaseScreen.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\CmdGoToListView.cpp
+	 */
+
+#include "stdafx.h"
+#include "CmdGoToListView.h"
+
+CmdGoToListView::CmdGoToListView()
+{
+}
+
+CmdGoToListView::~CmdGoToListView(void)
+{
+}
+
+vector<string> CmdGoToListView::execute() {
+	
+	vector<Item*> tasks;
+	vector<Item*> deadlines;
+	vector<Item*> events;
+	ItemBank* itemBank = ItemBank::getInstance();
+
+	events = itemBank->getAllEvents();
+	deadlines = itemBank->getAllDeadlines();
+	tasks = itemBank->getAllTasks();
+	
+	outputMessageStorage.clear();
+	outputMessageStorage = storeListScreenForDisplay(events, deadlines, tasks);
+	updateOutputControl(events, deadlines, tasks);
+
+	return outputMessageStorage;
+}
+
+//This function updates the information that OutputControl
+//keeps track of; items displayed, base screen and current screen.
+void CmdGoToListView::updateOutputControl(vector<Item*> events, vector<Item*> deadlines, vector<Item*> tasks){
+	
+	vector<Item*> collatedList;
+	collatedList.insert(collatedList.end(), events.begin(), events.end());
+	collatedList.insert(collatedList.end(), deadlines.begin(), deadlines.end());
+	collatedList.insert(collatedList.end(), tasks.begin(), tasks.end());
+	OutputControl::setCurrentDisplayedItemList(collatedList);
+
+	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::TO_DO_LIST_VIEW);
+	OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::TO_DO_LIST_VIEW);
+}
+
+//This function uses the input Item* vectors and 
+//returns the list screen as a vector of strings.
+vector<string> CmdGoToListView::storeListScreenForDisplay(vector<Item*> events, vector<Item*> deadlines, vector<Item*> tasks){
+	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
+	return displayScreenConstructor->constructListView(tasks, deadlines, events);
+	 
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\CmdGoToListView.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\CmdHome.cpp
+	 */
+
+#include "stdafx.h"
+#include "CmdHome.h"
+
+CmdHome::CmdHome(void) {
+	time_t currentTime;
+	time(&currentTime);
+	localtime_s (&_currentTime, &currentTime);
+}
+
+CmdHome::~CmdHome(void)
+{
+}
+
+vector<string> CmdHome::execute() {
+	updateOutputControl();
+
+	outputMessageStorage.clear();
+	outputMessageStorage = storeHomeScreenForDisplay();
+	
+	return outputMessageStorage;
+}
+//This function updates the information that OutputControl
+//keeps track of;base screen and current screen.
+void CmdHome::updateOutputControl(){
+	
+	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
+	OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
+}
+//This function returns the current home
+//screen as a vector of strings.
+vector<string> CmdHome::storeHomeScreenForDisplay(){
+	vector<Item*> tasks;
+	vector<Item*> deadlines;
+	vector<Item*> events;
+	
+	ItemBank* itemBank = ItemBank::getInstance();
+
+	events = itemBank->getEventsThisWeek();
+	deadlines = itemBank->getDeadlinesThisWeek();
+	tasks = itemBank->getAllTasks();
+
+	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();	 
+	return displayScreenConstructor->constructHomeScreen(tasks, deadlines, events);
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\CmdHome.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\Command.cpp
+	 */
+
+#include "stdafx.h"
+#include "Command.h"
+
+using namespace std;
+
+Command::Command(void)
+{
+}
+
+Command::~Command(void)
+{
+}
+
+vector<string> Command::execute() {
+	return outputMessageStorage;
+}
+
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\Command.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\OutputControl.cpp
+	 */
+
+#include "stdafx.h"
+#include "Command.h"
+#include "OutputControl.h"
+
+vector<Item*> OutputControl::currentDisplayedItemList;
+OutputControl::CurrentScreenType OutputControl::currentScreen = OutputControl::CurrentScreenType::HOME_SCREEN;
+OutputControl::CurrentScreenType OutputControl::currentBaseScreen = OutputControl::CurrentScreenType::HOME_SCREEN;
+string OutputControl::currentKeywordSearched;
+
+//This function clears the vector that stores the displayed items.
+void OutputControl::resetCurrentItemList() {
+	currentDisplayedItemList.clear();
+}
+
+//This function adds an input Item* to the vector of displayed items.
+void OutputControl::addItemToDisplayList(Item* itemPtr) {
+	currentDisplayedItemList.push_back(itemPtr);
+}
+
+//setters
+void OutputControl::setCurrentScreen(CurrentScreenType newScreen) {
+	currentScreen = newScreen;
+}
+void OutputControl::setCurrentBaseScreen(CurrentScreenType newScreen){
+	currentBaseScreen = newScreen;
+}
+
+void OutputControl::setCurrentDisplayedItemList(vector<Item*> newList){
+	resetCurrentItemList();
+	currentDisplayedItemList=newList;
+}
+
+void OutputControl::setCurrentKeywordSearched(string keyword){
+	currentKeywordSearched=keyword;
+}
+
+//getters
+int OutputControl::getNumberOfDisplayedItems(){
+	return currentDisplayedItemList.size();
+}
+Item* OutputControl::getItemAddr(int itemLocationInList) {
+	return currentDisplayedItemList[itemLocationInList-1];
+}
+
+vector<Item*>::iterator OutputControl::getCurrentDisplayedItemList(){
+	return currentDisplayedItemList.begin();
+}
+OutputControl::CurrentScreenType OutputControl::getCurrentScreen(){
+	return currentScreen;
+}
+
+OutputControl::CurrentScreenType OutputControl::getCurrentBaseScreen(){
+	return currentBaseScreen;
+}
+
+string OutputControl::getCurrentKeywordSearched(){
+	return currentKeywordSearched;
+}
+
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\OutputControl.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\Parser.cpp
+	 */
+
+#include "stdafx.h"
+#include "Parser.h"
+#define MONTHS_IN_YEAR 12
+#define DEFAULT_MONTH_START "1"
+#define DEFAULT_MINUTES_START "0"
+#define FORMAT_24H_SIZE 4
+#define START_TIME_FIELD_INDEX 3
+#define END_TIME_FIELD_INDEX 4
+#define PRIORITY_FIELD_INDEX 5
+#define DEFAULT_FIRST_INDEX "1"
+#define CATEGORY_MARKER "#"
+#define PRIORITY_MARKER "!"
+#define PRIORITY_MARKER_SIZE 1
+#define NUM_OF_FIELDS 6
+#define DESCRIP_MARKER_FRONT "("
+#define DESCRIP_MARKER_BACK ")"
+#define TODAY_MARKER "today"
+#define TOMORROW_MARKER "tomorrow"
+#define NEXT_MARKER "next "
+#define EMPTY_STRING ""
+#define AM_MARKER "am"
+#define PM_MARKER "pm"
+#define TIME_DIVIDER_MARKER_1 "."
+#define TIME_DIVIDER_MARKER_2 ":"
+
+const string Parser::ERROR_INVALID_ITEM_NO = "Invalid item number! Please enter a valid number from the menu.";
+const string Parser::ERROR_INVALID_FIELD_NO = "Invalid field number! Please enter a field number 1 - 6.";
+const string Parser::ERROR_INVALID_COMMAND = "Invalid command! Please enter a valid command from the menu.";
+const string Parser::ERROR_MISSING_TITLE =	"No title detected! Try something like \"add event title at 2pm\"";
+const string Parser::ERROR_MISSING_CATEGORY = "No category detected! Please try e.g. \"add homework #school\"";
+const string Parser::ERROR_INVALID_BRACKETS = "Invalid brackets! Try something like \"add event at 7pm (description)\"";
+const string Parser::ERROR_INVALID_PRIORITY = "Wrong priority format entered. Please type \"high\", \"med\" or \"low\"";
+const string Parser::ERROR_LOGIC_START_END = "You can't go back in time! End time should be later than start time.";
+const string Parser::ERROR_EMPTY_DELETE = "There are no items to delete!";
+const string Parser::ERROR_EMPTY_MARK = "There are no items to mark!";
+
+Parser::Parser(void)
+{
+}
+
+
+Parser::~Parser(void)
+{
+}
+//This function inteprets a string user command input and
+//returns the corresponding Command subclass object with
+//required information embedded inside.
+Command* Parser::stringToCommand(string userCommand) {
+
+
+
+	//convert into a stream and get the first word
+	istringstream commandStream(userCommand);
+	string userAction;
+	commandStream >> userAction;
+
+	//translate the first word into a CommandType
+	convertStringToLowercase(userAction);
+	ParserForCmds* myParserCmd = new ParserForCmds();
+	CommandType commandAction = myParserCmd->determineCommandType(userAction, OutputControl::getCurrentScreen());
+
+	switch (commandAction) {
+	case ADD: {
+
+		Item* myItem = new Item;
+		//Pass remaining stream as details
+		string stringDetails;
+		getline(commandStream, stringDetails);
+		embedDetailsInItem(myItem, stringDetails);
+
+		CmdAddItem* myAdd = new CmdAddItem(myItem);
+		return myAdd;
+
+		break;
+			  }
+
+	case SEARCH: {
+		string keyword;
+		getline(commandStream, keyword);
+		//inform outputcontrol of keyword
+		OutputControl::setCurrentKeywordSearched(keyword);
+		CmdSearch* mySearch = new CmdSearch(keyword);
+		return mySearch;
+		break;
+				 }
+	case VIEW_LAST_SEARCH: {
+		CmdSearch* mySearch = new CmdSearch(OutputControl::getCurrentKeywordSearched());
+		return mySearch;
+		break;
+						   }
+	case EDIT_ITEM: {
+		int itemNum;
+		commandStream >> itemNum;
+		if(itemNum <= 0 || itemNum > OutputControl::getNumberOfDisplayedItems()){
+			throw invalid_argument(ERROR_INVALID_ITEM_NO);
+		}
+		CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList()+itemNum-1);
+		return myEdit;
+		break;
+					}
+
+	case EDIT_FIELD: {
+		string newFieldInfo=EMPTY_STRING;
+		string buffer;
+		int fieldNum;
+		commandStream >> fieldNum;
+		if(fieldNum==0 || fieldNum > NUM_OF_FIELDS){
+			throw invalid_argument(ERROR_INVALID_FIELD_NO);
+		}	
+		commandStream >> newFieldInfo;
+		getline(commandStream, buffer);
+		newFieldInfo += buffer;
+		return constructRespectiveCmdEdit(fieldNum, newFieldInfo);
+		break;
+					 }
+
+	case DELETE: {
+		vector<Item*> collatedList;
+		string itemNumsStr;
+		getline(commandStream, itemNumsStr);
+		if (OutputControl::getNumberOfDisplayedItems() == 0) {
+			throw invalid_argument(ERROR_EMPTY_DELETE);
+		}
+		CmdDeleteItem* myDelete = new CmdDeleteItem(convertItemNumsToItemPtrs(itemNumsStr));
+		return myDelete;
+		break;
+				 }
+
+	case MARK: {
+		vector<Item*> collatedList;
+		string itemNumsStr;
+		getline(commandStream, itemNumsStr);
+		if (OutputControl::getNumberOfDisplayedItems() == 0) {
+			throw invalid_argument(ERROR_EMPTY_MARK);
+		}
+		CmdMarkItemDone* myMark = new CmdMarkItemDone(convertItemNumsToItemPtrs(itemNumsStr));
+		return myMark;
+		break;
+			   }
+
+	case UNDO : {
+		CmdUndo* myUndo = new CmdUndo();
+		return myUndo;
+		break;
+				}
+	case REDO : {
+		CmdRedo* myRedo = new CmdRedo();
+		return myRedo;
+		break;
+				}
+	case VIEW_TODOLIST : {
+		CmdGoToListView* myList = new CmdGoToListView();
+		return myList;
+		break;
+						 }
+	case VIEW_OVERDUE : {
+		CmdShowOverdueDeadlines* myOverdue = new CmdShowOverdueDeadlines();
+		return myOverdue;
+		break;
+						}
+	case HOME : {
+		CmdHome* myHome = new CmdHome();
+		return myHome;
+		break;
+				}
+	case CLEAR_ALL_DONE : {
+		CmdClearAllDone* myDone = new CmdClearAllDone();
+		return myDone;
+		break;
+						  }
+
+	case CLEAR_ALL_OVERDUE : {
+		CmdClearAllOverdue* myOverdue = new CmdClearAllOverdue();
+		return myOverdue;
+		break;
+							 }
+	case EXPORT : {
+		CmdExport* myExport = new CmdExport();
+		return myExport;
+		break;
+				  }
+	default: {
+		throw invalid_argument(ERROR_INVALID_COMMAND);
+		break;
+			 }
+
+	}
+
+}
+
+//This function detects all possible details in the input string
+//such as title, date, time, category, priority, description.
+//It sets these values into the input Item*.
+void Parser::embedDetailsInItem(Item* myItem, string stringDetails){
+
+	vector<string> vectorOfStrings;
+	vectorOfStrings = convertStringToVector(stringDetails);
+	detectCategoryAndEmbed(myItem, stringDetails);
+	detectPriorityAndEmbed(myItem, stringDetails);
+	detectDescriptionAndEmbed(myItem, stringDetails);
+	detectTitleAndEmbed(myItem, stringDetails);
+	bool isDeadline = detectDeadlineKeywordAndTrim(stringDetails);
+	bool foundMonthDate = detectMonthDateAndEmbedIsOk(myItem, stringDetails, isDeadline);
+	bool foundDayOfWeek = detectDayOfWeekDateAndEmbedIsOk(myItem, stringDetails, isDeadline);
+	bool foundTime = detectTimeAndEmbedIsOk(myItem, stringDetails, isDeadline);	
+
+	bool foundDate = foundMonthDate || foundDayOfWeek;
+
+	if(foundDate && !foundTime){
+		//set as all day if no time
+		myItem->setStartTime(0,0);
+		myItem->setEndTime(23,59);
+	}
+	if(!foundDate && foundTime){
+		//set as today if no day
+		myItem->setStartDate();
+		myItem->setEndDate();
+	}
+	if(myItem->getEndDateTime_T()<myItem->getStartDateTime_T()){
+		throw logic_error(ERROR_LOGIC_START_END);
+	}
+	if(isDeadline){
+		myItem->setItemTypeDeadline();
+	}
+	//if no date or no time, it is a task
+	else if(!foundDate && !foundTime){
+		myItem->setStartEndDateTimeAsNull();
+		myItem->setItemTypeTask();
+	}
+	else{
+		myItem->setItemTypeEvent();
+	}
+
+
+
+}
+
+
+//This function detects the title in the input string
+//and sets its value into the input Item*.
+//The title found is then removed from the input string.
+void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
+	assert(myItem != nullptr);
+
+	vector<string> vectorOfStrings;
+	vector<string>::iterator titleStartIter;
+	vector<string>::iterator titleEndIter;
+	vector<string>::iterator startWordIter;
+	vector<string>::iterator endWordIter;
+	vector<string>::iterator prevWordIter;
+	string titleToSet;
+	string leftoverString;
+
+	vectorOfStrings = convertStringToVector(stringDetails);
+
+	startWordIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isKeywordEndOfTitle);
+	endWordIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isKeywordEndTime);
+	//if didn't find any keywords
+	if(startWordIter==vectorOfStrings.end() && endWordIter==vectorOfStrings.end()){
+		titleStartIter = vectorOfStrings.begin();
+		titleEndIter = vectorOfStrings.end();
+	}
+	//if found start keyword before end keyword, cut title till start keyword
+	else if(startWordIter<endWordIter){
+		titleStartIter= vectorOfStrings.begin();
+		titleEndIter = startWordIter;
+	}
+	//if found end keyword before start keyword
+	else if(endWordIter<startWordIter){
+		vector<string>::iterator timeIter;
+		vector<string>::iterator monthIter;
+		timeIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isTime);
+		monthIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isMonth);
+		//if month before endkeyword and before time, cut title till month
+		if(monthIter<endWordIter && monthIter < timeIter){
+			titleStartIter= vectorOfStrings.begin();
+			titleEndIter = monthIter;
+		}
+
+		//if time before endkeyword and before month, cut title till time
+		else if(timeIter<endWordIter && timeIter < monthIter){
+			titleStartIter= vectorOfStrings.begin();
+			titleEndIter = timeIter;
+		}
+		//else, cut title till endkeyword
+		else{
+			titleStartIter= vectorOfStrings.begin();
+			titleEndIter = endWordIter;
+		}
+	}
+
+	//update the remaining string
+	stringDetails = convertVectorToString(titleEndIter, vectorOfStrings.end());
+
+	titleToSet = convertVectorToString(titleStartIter, titleEndIter);
+	if(titleToSet==EMPTY_STRING){
+		throw invalid_argument(ERROR_MISSING_TITLE);
+	}
+	myItem->setTitle(titleToSet);
+
+	return;
+}
+
+//This function detects the presence of the deadline keyword 
+//in the input string. It returns 'true' if found and 'false' otherwise.
+//If the keyword is found, it is removed from the input string.
+bool Parser::detectDeadlineKeywordAndTrim(string &stringDetails){
+	vector<string> vectorOfStrings;
+	vector<string>::iterator deadlineWordIter;
+	bool isFound = false;
+
+	vectorOfStrings = convertStringToVector(stringDetails);
+	deadlineWordIter = find_if(vectorOfStrings.begin(), vectorOfStrings.end(), isKeywordDeadline);
+
+	//if deadline keyword found
+	if (deadlineWordIter!=vectorOfStrings.end()){
+		vectorOfStrings.erase(deadlineWordIter);
+		isFound = true;
+	}
+	stringDetails = convertVectorToString(vectorOfStrings.begin(), vectorOfStrings.end());
+	return isFound;
+}
+
+//This function detects the time in the input string
+//and sets its value into the input Item*.
+//If time is detected, this function returns 'true'.
+//Otherwise, it returns false.
+bool Parser::detectTimeAndEmbedIsOk(Item* myItem, string stringDetails, bool isDeadline){
+	assert(myItem != nullptr);
+
+	istringstream streamDetails(stringDetails);
+	string startTime=EMPTY_STRING;
+	string endTime=EMPTY_STRING;
+	int startHourToBeSet;
+	int startMinToBeSet;
+	int endHourToBeSet;
+	int endMinToBeSet;
+	bool startFound = false;
+	bool endFound = false;
+	while(streamDetails >> startTime && !isTime(startTime)){
+	}
+	while(streamDetails >> endTime && !isTime(endTime)){
+	}
+	//if start time exists
+	if(isTime(startTime)){
+		startHourToBeSet = convertStringToIntHour(startTime);
+		startMinToBeSet = convertStringToIntMin(startTime);
+		myItem->setStartTime(startHourToBeSet, startMinToBeSet);
+		startFound = true;
+		if(isDeadline){
+			myItem->setEndTime(startHourToBeSet, startMinToBeSet);
+		}
+		else{
+			//start exists and end exists
+			if(isTime(endTime)){
+				endHourToBeSet = convertStringToIntHour(endTime);
+				endMinToBeSet = convertStringToIntMin(endTime);
+				myItem->setEndTime(endHourToBeSet, endMinToBeSet);
+				endFound = true;
+			}
+			//start exists but end does not exist
+			//default is an hour aft start
+			else{
+				endHourToBeSet = convertStringToIntHour(startTime);
+				endHourToBeSet++;
+				endMinToBeSet = convertStringToIntMin(startTime);
+				myItem->setEndTime(endHourToBeSet, endMinToBeSet);
+			}
+		}
+	}
+
+
+	return startFound || endFound;
+}
+//This function detects the month date in the input string
+//and sets its value into the input Item*.
+//The month date found is then removed from the input string.
+//If a month date is detected, this function returns 'true'.
+//Otherwise, it returns false.
+bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool isDeadline){
+	assert(myItem != nullptr);
+
+	istringstream streamDetails(stringDetails);
+	string currentWord=EMPTY_STRING;
+	string previousWord;
+	string nextWord;
+	string startMonthFound=EMPTY_STRING;
+	string startDateFound=EMPTY_STRING;
+	string startDayFound = EMPTY_STRING;
+	string endMonthFound=EMPTY_STRING;
+	string endDateFound=EMPTY_STRING;
+	string endDayFound = EMPTY_STRING;
+	int startDayInt;
+	int startMonthInt;
+	int endDayInt;
+	int endMonthInt;
+	bool endExists = false;
+
+	streamDetails >> previousWord;
+	while(streamDetails >> currentWord && !isMonth(currentWord)){
+		previousWord = currentWord;
+	}
+	if(isMonth(previousWord)){
+		startMonthFound = previousWord; 
+	}
+	if(isMonth(currentWord)){
+		startMonthFound = currentWord; 
+	}
+	if(isMonth(previousWord) || isMonth(currentWord)){	
+		//if the previous word is a integer, it's the date
+		if(isInteger(previousWord)){
+			startDayFound = previousWord;
+			startDateFound = startDayFound + ' ' + startMonthFound;
+		}
+		//if the next word is a integer, it's the date
+		else if(streamDetails >> nextWord && isInteger(nextWord)){
+			startDayFound = nextWord;
+			startDateFound = startMonthFound + ' ' + startDayFound;
+		}
+		//if only month is found, set a default day
+		else{
+			startDayFound = DEFAULT_MONTH_START;
+			startDateFound = startMonthFound;
+		}
+
+		//remove date from input string
+		trimWordFromString(stringDetails, startDateFound);
+		startDayInt = stoi(startDayFound);
+		startMonthInt = convertStrToIntMonth(startMonthFound);
+
+		//reset currentWord and search for second date
+		currentWord=EMPTY_STRING;
+		while(streamDetails >> currentWord && !isMonth(currentWord)){
+			previousWord = currentWord;
+		}
+
+		if(isMonth(currentWord)){
+			endMonthFound = currentWord; 
+			//if the previous word is a integer, it's the date
+			if(isInteger(previousWord)){
+				endDayFound = previousWord;
+				endDateFound = endDayFound + ' ' + endMonthFound;
+				endExists = true;
+			}
+			//if the next word is a integer, it's the date
+			else if(streamDetails >> nextWord && isInteger(nextWord)){
+				endDayFound = nextWord;
+				endDateFound = endMonthFound + ' ' + endDayFound;
+				endExists = true;
+			}
+			//if only month is found, set a default day
+			else{
+				endDayFound = DEFAULT_MONTH_START;
+				endDateFound = endMonthFound;
+			}
+			//remove date from input string
+			trimWordFromString(stringDetails, endDateFound);
+			endDayInt = stoi(endDayFound);
+			endMonthInt = convertStrToIntMonth(endMonthFound);
+
+		}
+
+		if(isDeadline){
+			myItem->setStartDate(startDayInt, startMonthInt);
+			myItem->setEndDate(startDayInt, startMonthInt);
+		}
+		else{
+			if(endExists){
+				myItem->setStartDate(startDayInt, startMonthInt);
+				myItem->setEndDate(endDayInt, endMonthInt);
+			}
+			else{
+				myItem->setStartDate(startDayInt, startMonthInt);
+				myItem->setEndDate(startDayInt, startMonthInt);
+			}
+		}
+		return true;
+	}
+	else{
+		return false;
+	}
+
+
+
+}
+
+//This function detects the day of the week in the input string
+//and sets its value into the input Item*.
+//The day of the week found is then removed from the input string.
+//If a day of the week is detected, this function returns 'true'.
+//Otherwise, it returns false.
+bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool isDeadline){
+	assert(myItem != nullptr);
+
+	string startDate=EMPTY_STRING;
+	string endDate=EMPTY_STRING;
+	int startDaysToAdd;
+	int endDaysToAdd;
+	bool startFound = false;
+	bool endFound = false;
+	bool isWordNextStart = false;
+	bool isWordNextEnd = false;
+
+	istringstream streamDetails(stringDetails);
+
+	while(streamDetails >> startDate && !isDayOfWeek(startDate)){
+	}
+	while(streamDetails >> endDate && !isDayOfWeek(endDate)){
+	}
+
+	//if start time exists
+	if(isDayOfWeek(startDate)){
+
+		startFound = true;
+		//remove day from input string
+		if(stringDetails.find(NEXT_MARKER + startDate)!=string::npos){
+			isWordNextStart=true;
+			trimWordFromString(stringDetails, NEXT_MARKER + startDate);
+		}
+		else{
+			trimWordFromString(stringDetails, startDate);
+		}
+
+		startDaysToAdd = convertDayOfWeekToIntDaysToAdd(startDate, isWordNextStart);
+		myItem->addToStartDate(startDaysToAdd);
+		if(isDeadline){
+			myItem->addToEndDate(startDaysToAdd);
+		}
+		else{
+			//start exists and end exists
+			if(isDayOfWeek(endDate)){
+
+				endFound = true;
+				//remove the end day from input string
+				if(stringDetails.find(NEXT_MARKER + endDate)!=string::npos){
+					isWordNextEnd=true;
+					trimWordFromString(stringDetails, NEXT_MARKER + endDate);
+				}
+				else{
+					trimWordFromString(stringDetails, endDate);
+				}
+
+
+				endDaysToAdd = convertDayOfWeekToIntDaysToAdd(endDate, isWordNextEnd);
+				myItem->addToEndDate(endDaysToAdd);
+			}
+			else{
+				//start exists but end does not exist
+				//default end date is same as start date
+				myItem->addToEndDate(startDaysToAdd);
+			}
+		}
+	}
+
+
+	return startFound || endFound;
+
+
+}
+
+//This function detects the category in the input string
+//and sets its value into the input Item*.
+//The cateogry found is then removed from the input string.
+void Parser::detectCategoryAndEmbed(Item* myItem, string &stringDetails){
+	assert(myItem != nullptr);
+
+	string::iterator myIter;
+	string categoryToSet=EMPTY_STRING;
+	size_t position;
+	position = stringDetails.find(CATEGORY_MARKER);
+
+	//if found, get the text after the marker
+	if(position!=string::npos){
+		myIter = stringDetails.begin() + position;
+		myIter++;
+		if(*myIter==' '){
+			throw invalid_argument(ERROR_MISSING_CATEGORY);
+		}
+		while(myIter!=stringDetails.end() && *myIter!=' '){
+			categoryToSet += *myIter;
+			myIter++;
+		}
+		myItem->setCategory(categoryToSet);
+		string categoryFound = CATEGORY_MARKER + categoryToSet;
+		trimWordFromString(stringDetails, categoryFound);
+	}
+
+	return;
+}
+
+//This function detects the priority in the input string
+//and sets its value into the input Item*.
+//The priority found is then removed from the input string.
+void Parser::detectPriorityAndEmbed(Item* myItem, string &stringDetails){
+	assert(myItem != nullptr);
+
+	size_t position;
+	int count = 0;
+
+	while(true){
+		position = stringDetails.find(PRIORITY_MARKER);
+		//if found, count and trim "!"
+		if(position!=string::npos){
+			count++;
+			trimWordFromString(stringDetails, PRIORITY_MARKER);
+		}
+		else{
+			break;
+		}
+	}
+	if(count == 1){
+		myItem->setPriority(static_cast<Item::PriorityLevel>(1));
+	}
+	else if(count >= 2){
+		myItem->setPriority(static_cast<Item::PriorityLevel>(2));
+	}
+	else{
+		myItem->setPriority(static_cast<Item::PriorityLevel>(0));
+	}
+	return ;
+}
+
+//This function detects the description in the input string
+//and sets its value into the input Item*.
+//The description found is then removed from the input string.
+void Parser::detectDescriptionAndEmbed(Item* myItem, string &stringDetails){
+	assert(myItem != nullptr);
+
+	size_t positionFront;
+	size_t positionBack;
+	string descripToSet;
+	positionFront = stringDetails.find(DESCRIP_MARKER_FRONT);
+	//if found the front
+	if(positionFront!=string::npos){
+		positionBack = stringDetails.find(DESCRIP_MARKER_BACK);
+		//if found the back
+		if(positionBack<positionFront){
+			throw invalid_argument(ERROR_INVALID_BRACKETS);
+		}
+		if(positionBack!=string::npos && positionBack!=0){
+			descripToSet = stringDetails.substr(positionFront, positionBack-positionFront+1);
+			trimWordFromString(stringDetails, descripToSet);
+			descripToSet = descripToSet.substr(1, descripToSet.length()-2);
+			myItem->setDescription(descripToSet);
+		}
+	}
+
+	return;
+}
+
+//This function detects the different possible formats of date and time
+//in the input string. It then sets its value into the input Item.
+void Parser::detectTypesOfDatesAndEmbed(Item &myNewItem, string newFieldInfo, bool isDeadline){
+	detectMonthDateAndEmbedIsOk(&myNewItem, newFieldInfo, isDeadline);
+	detectDayOfWeekDateAndEmbedIsOk(&myNewItem, newFieldInfo, isDeadline);
+	detectTimeAndEmbedIsOk(&myNewItem, newFieldInfo, isDeadline);
+
+}
+
+//This function accepts an input string and 
+//returns true if the string consists of digits only.
+//Otherwise, it returns false.
+bool Parser::isInteger(string query){
+	unsigned int i;
+
+	for(i = 0; i < query.length(); i++){
+		if(isdigit(query[i]) == 0 || ispunct(query[i]) != 0) {
+			break;
+		}
+	}
+
+	if(i != query.length())
+		return 0;
+	else
+		return 1;
+}
+
+//This function accepts an input string and 
+//returns true if the string is a month.
+//Otherwise, it returns false.
+bool Parser::isMonth(string query){
+	if(convertStrToIntMonth(query)>=0)
+		return true;
+	else
+		return false;
+}
+
+//This function accepts an input string and 
+//returns true if the string is in a time format.
+//Otherwise, it returns false.
+bool Parser::isTime(string query){
+	if(isdigit(query[0])>0)
+		return true;
+	else
+		return false;
+}
+
+//This function accepts an input string and 
+//returns true if the string is a day of the week. e.g. "Monday"
+//Otherwise, it returns false.
+bool Parser::isDayOfWeek(string query){
+	if(convertDayOfWeekToIntDaysToAdd(query, false)>=0)
+		return true;
+	else
+		return false;
+}
+
+//This function accepts an input string that represents time
+//and returns the number of hours it indicates. 
+int Parser::convertStringToIntHour(string stringTime){
+
+	assert(isTime(stringTime)==true);
+	convertStringToLowercase(stringTime);
+	size_t positionFound;
+	//set accountForPM to 12 if afternoon
+	int accountForPM=0;
+
+	//if 2359 format
+	if(isInteger(stringTime) && stringTime.length() == FORMAT_24H_SIZE){
+		stringTime = stringTime.substr(0,2);
+		return stoi(stringTime);
+	}
+	else{
+		positionFound = stringTime.find(AM_MARKER);
+		//if found, cut the am out
+		if (positionFound!=string::npos){
+			stringTime = stringTime.substr(0,positionFound);
+
+		}
+
+		positionFound = stringTime.find(PM_MARKER);
+		//if found, cut the pm out
+		if (positionFound!=string::npos){
+			stringTime = stringTime.substr(0,positionFound);
+			accountForPM=12;
+		}
+	}
+	//what remains is the digits (minutes are trimmed)
+	int actualTime = (stoi (stringTime)%12) + accountForPM;
+
+	return actualTime;
+}
+
+//This function accepts an input string that represents time
+//and returns the number of minutes it indicates. 
+int Parser::convertStringToIntMin(string stringTime){
+	assert(isTime(stringTime)==true);
+	size_t positionFound1;
+	size_t positionFound2;
+
+	if(isInteger(stringTime) && stringTime.length() == FORMAT_24H_SIZE){
+		stringTime = stringTime.substr(2,4);
+	}
+	else{
+		positionFound1 = stringTime.find(TIME_DIVIDER_MARKER_1);
+		positionFound2 = stringTime.find(TIME_DIVIDER_MARKER_2);
+		//if found, crop the 2 digits after that 
+		if (positionFound1!=string::npos){
+			stringTime = stringTime.substr(positionFound1+1,positionFound1+3);
+		}
+		else if (positionFound2!=string::npos){
+			stringTime = stringTime.substr(positionFound2+1,positionFound2+3);
+		}
+		//default case: 0 minutes
+		else {
+			stringTime = DEFAULT_MINUTES_START;
+		}
+	}
+	return stoi (stringTime);
+}
+
+//This function accepts an input string that represents month
+//and returns the number of months since January. 
+//It returns -1 if input string is not a month.
+int Parser::convertStrToIntMonth(string month){
+
+	convertStringToLowercase(month);
+	const string month3[] = {"jan", "feb", "mar", "apr", "may", "jun",
+		"jul", "aug", "sep", "oct", "nov", "dec"};
+	const string monthfull[] = {"january", "february", "march", "april", "may", "june",
+		"july", "august", "september", "october", "november", "december"};
+	int i;
+	if(month.size()==3){
+		for(i=0; i<MONTHS_IN_YEAR; i++){
+			if(month==month3[i]){
+				return i;
+			}
+		}
+	}
+	else{
+		for(i=0; i<MONTHS_IN_YEAR; i++){
+			if(month==monthfull[i]){
+				return i;
+			}
+		}
+
+	}
+
+	return -1; 
+
+}
+
+//This function converts the input string to lowercase.
+void Parser::convertStringToLowercase(string &myString){
+	unsigned int i;
+	for(i=0; i<myString.size(); i++){
+		myString[i] = tolower(myString[i]);
+	}
+	return;
+}
+
+//This function converts the input 'day of week' to the
+//number of days between today and that input day.
+int Parser::convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek){
+
+	const string dayOfWeek[] = {"sunday", "monday", "tuesday", "wednesday","thursday",
+		"friday", "saturday"};
+	const string dayOfWeek3[] = {"sun", "mon", "tue", "wed","thu",
+		"fri", "sat"};
+	convertStringToLowercase(query);
+	int i;
+	int daysAfterSunday=-1;
+	bool dayOfWeekFound=false;
+
+	//account for "today"
+	if(query==TODAY_MARKER){
+		return 0;
+	}
+	//account for "tomorrow"
+	else if(query==TOMORROW_MARKER){
+		return 1;
+	}
+	//else, search for other days of the week
+	else{
+
+		for(i=0; i<7 && !dayOfWeekFound; i++){
+			if(query==dayOfWeek[i] || query==dayOfWeek3[i]){
+				daysAfterSunday=i;
+				dayOfWeekFound = true;
+			}
+		}
+	}
+	if(dayOfWeekFound){
+		time_t nowTime;
+		tm nowTimeTM;
+		time(&nowTime);
+		localtime_s (&nowTimeTM, &nowTime);
+
+		int daysToAdd;
+		daysToAdd = daysAfterSunday - nowTimeTM.tm_wday ;
+		if(daysToAdd<0){
+			daysToAdd += 7;
+		}
+		//checking for "next"
+		int eventDay = nowTimeTM.tm_wday + daysToAdd;
+		if(isNextWeek && eventDay<=6){
+			daysToAdd += 7;
+		}
+
+		return daysToAdd;
+	}
+	else{
+		return -1;
+	}
+
+
+}
+
+//These functions determine if the input string
+//match any of the supported keywords.
+bool Parser::isKeyword(string myWord){
+	convertStringToLowercase(myWord);
+	return isKeywordTime(myWord) || isKeywordDate(myWord);
+}
+bool Parser::isKeywordTime(string myWord){
+	convertStringToLowercase(myWord);
+	return isKeywordStartTime(myWord) || isKeywordEndTime(myWord);
+}
+
+bool Parser::isKeywordStartTime(string myWord){
+	convertStringToLowercase(myWord);
+	return myWord=="at" || myWord == "from" || myWord == "between" || myWord == "next";
+}
+bool Parser::isKeywordEndTime(string myWord){
+	convertStringToLowercase(myWord);
+	return myWord=="to" || myWord == "-"  || myWord == "and";
+}
+bool Parser::isKeywordDeadline(string myWord){
+	convertStringToLowercase(myWord);
+	return myWord == "by" || myWord == "due";
+}
+bool Parser::isKeywordDate(string myWord){
+	convertStringToLowercase(myWord);
+	return myWord=="on";
+}
+bool Parser::isKeywordEndOfTitle(string myWord){
+	convertStringToLowercase(myWord);
+	return isKeywordDate(myWord) || isKeywordStartTime(myWord) || isKeywordDeadline(myWord) || isDayOfWeek(myWord);
+}
+
+//This function converts a string of item numbers
+//into a vector of Item*, based on what is currently displayed.
+//If the string is empty, a vector with the first Item* that is displayed is returned.
+vector <Item*> Parser::convertItemNumsToItemPtrs(string itemNumsStr){
+	vector<Item*> itemPtrs;
+	int itemNum;
+	istringstream itemStream(itemNumsStr);
+	//if empty, return the first item*
+	if(itemNumsStr==EMPTY_STRING){
+		itemPtrs.push_back(OutputControl::getItemAddr(1));
+	}
+	else{
+		while(itemStream >> itemNum){
+			if(itemNum <= 0 || itemNum > OutputControl::getNumberOfDisplayedItems()){
+				throw invalid_argument(ERROR_INVALID_ITEM_NO);
+			}
+			itemPtrs.push_back(OutputControl::getItemAddr(itemNum));
+		}
+	}
+	return itemPtrs;
+}
+//This function converts an input string to a
+//vector of strings, separating the input string by whitespaces.
+vector<string> Parser::convertStringToVector(string inputString){
+
+	istringstream inputStream(inputString);
+	string currentWord;
+	vector<string> vectorOfStrings;
+
+	while(inputStream >> currentWord){
+		vectorOfStrings.push_back(currentWord);
+	}
+
+	return vectorOfStrings;
+}
+//This function accepts two vector iterators and concatenates
+//the vector items in between them to a string.
+//The final concatenated string is returned.
+string Parser::convertVectorToString(vector<string>::iterator start, vector<string>::iterator end){
+	string finalString=EMPTY_STRING;
+	//if start and end are same point, return nothing
+	if(start==end){
+		return finalString;
+	}
+	else{
+		//if first word exists
+		if(*start!=EMPTY_STRING){
+			finalString=*start;
+			start++;
+		}
+		while(start!=end){
+			finalString += ' ' + *start;
+			start++;
+		}
+	}
+	return finalString;
+
+}
+//This function converts a priority string to 
+//an enum Item::PriorityLevel type.
+Item::PriorityLevel Parser::convertStrToPriorityLevel(string priority){
+	if(isHighPriority(priority)){
+		return Item::PriorityLevel::HIGH;
+	}else if(isMedPriority(priority)){
+		return Item::PriorityLevel::MED;
+	}else if(isLowPriority(priority)){
+		return Item::PriorityLevel::LOW;
+	}else{
+		throw invalid_argument(ERROR_INVALID_PRIORITY);
+	}
+}
+bool Parser::isHighPriority(string priority){
+	convertStringToLowercase(priority);
+	return priority == "high" || priority == "h" || priority == "hi";
+}
+
+bool Parser::isMedPriority(string priority){
+	convertStringToLowercase(priority);
+	return priority == "medium" || priority == "med" || priority == "m";
+}
+bool Parser::isLowPriority(string priority){
+	convertStringToLowercase(priority);
+	return priority == "low" || priority == "l";
+}
+
+void Parser::trimWordFromString(string &originalString, string toTrim){
+	originalString.replace(originalString.find(toTrim),toTrim.length(),EMPTY_STRING);	
+}
+
+
+//This function constructs and reutrns the respecitive CmdEditItem*
+//subclass depending on the input field number.
+CmdEditItem* Parser::constructRespectiveCmdEdit(int fieldNum, string newFieldInfo){
+	switch (fieldNum) {
+	case START_TIME_FIELD_INDEX: {
+		//check for all the possible types of time input
+		Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());
+		detectTypesOfDatesAndEmbed(myNewItem, newFieldInfo, false);		
+		if(OutputControl::getItemAddr(1)->getEndDateTime_T() < myNewItem.getStartDateTime_T()){
+			throw logic_error(ERROR_LOGIC_START_END);
+		}
+		CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, myNewItem.getStartDateTime());
+		return myEdit;
+								 }
+	case END_TIME_FIELD_INDEX: {
+		//check for all the possible types of time input
+		Item myNewItem = **(OutputControl::getCurrentDisplayedItemList());;
+		detectTypesOfDatesAndEmbed(myNewItem, newFieldInfo, true);
+		if(myNewItem.getEndDateTime_T() < OutputControl::getItemAddr(1)->getStartDateTime_T()){
+			throw logic_error(ERROR_LOGIC_START_END);
+		}
+		CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, myNewItem.getEndDateTime());
+		return myEdit;
+							   }
+	case PRIORITY_FIELD_INDEX: {
+		CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, convertStrToPriorityLevel(newFieldInfo));
+		return myEdit;
+							   }
+	default :{
+		CmdEditItem* myEdit = new CmdEditItem(OutputControl::getCurrentDisplayedItemList(), fieldNum, newFieldInfo);
+		return myEdit;
+			 }
+	}
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\Parser.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\ParserForCmds.cpp
+	 */
+
+#include "stdafx.h"
+#include "ParserForCmds.h"
+
+const string ParserForCmds::ERROR_INVALID_COMMAND = "Invalid command! Please enter a valid command from the menu.";
+
+ParserForCmds::ParserForCmds(void)
+{
+}
+
+
+ParserForCmds::~ParserForCmds(void)
+{
+}
+
+CommandType ParserForCmds::determineCommandType(string userCommand, OutputControl::CurrentScreenType currentScreen) {
+	//universal commands
+	if (userCommand == "add" || userCommand == "a" || userCommand == "ad") {
+		return ADD;
+	}
+	if (userCommand == "search" || userCommand == "s" || userCommand == "se"
+		|| userCommand == "sea" || userCommand == "sear" || userCommand == "searc") {
+			return SEARCH;
+	}
+	if (userCommand == "undo" || userCommand == "u" || userCommand == "un" || userCommand == "und") {
+		return UNDO;
+	}
+	if (userCommand == "redo" || userCommand == "r" || userCommand == "re" || userCommand == "red") {
+		return REDO;
+	}
+	if (userCommand == "home" || userCommand == "h" || userCommand == "ho" || userCommand == "hom") {
+		return HOME;
+	}
+	if (userCommand == "export" || userCommand == "ex" || userCommand == "exp"
+		|| userCommand == "expo" || userCommand == "expor") {
+			return EXPORT;
+	}
+	if (userCommand == "exit") {
+		//UnregisterHotKey(NULL, 1);
+		exit(0);
+	}
+
+
+	switch (currentScreen) {
+	case OutputControl::HOME_SCREEN: {
+		return determineCommandType_HomeScreen(userCommand);
+		break;
+									 }
+
+	case OutputControl::EDIT_SCREEN: {
+		return determineCommandType_EditScreen(userCommand);
+		break;
+									 }
+
+	case OutputControl::SEARCH_RESULTS_SCREEN: {
+		return determineCommandType_SearchResultsScreen(userCommand);
+		break;
+											   }
+
+	case OutputControl::TO_DO_LIST_VIEW: {
+		return determineCommandType_ToDoListView(userCommand);
+		break;
+										 }
+
+	case OutputControl::OVERDUE_TASKS_SCREEN: {
+		return determineCommandType_OverdueTasksScreen(userCommand);
+		break;
+											  }
+
+	default: {
+		throw invalid_argument(ERROR_INVALID_COMMAND);
+		break;
+			 }
+	}
+
+}
+
+CommandType ParserForCmds::determineCommandType_HomeScreen(string userCommand){
+
+	if (userCommand == "t") {
+		return VIEW_TODOLIST;
+	}else if (userCommand == "c") {
+		return VIEW_CALENDAR;
+	}else if (userCommand == "o") {
+		return VIEW_OVERDUE;
+	}else{
+		throw invalid_argument(ERROR_INVALID_COMMAND);
+	}
+
+}
+CommandType ParserForCmds::determineCommandType_EditScreen(string userCommand){
+
+	if (userCommand == "e") {
+		return EDIT_FIELD;
+	}else if (userCommand == "o" || userCommand == "") {
+		return determineCommandType_GoToBaseScreen();
+	}else if (userCommand == "d") {
+		return DELETE;
+	}else{
+		throw invalid_argument(ERROR_INVALID_COMMAND);
+	}
+
+}
+
+CommandType ParserForCmds::determineCommandType_SearchResultsScreen(string userCommand){
+	if (userCommand == "e") {
+		return EDIT_ITEM;
+	}else if (userCommand == "m") {
+		return MARK;
+	}else if (userCommand == "d") {
+		return DELETE;
+	}else if (userCommand == "c") {
+		return CLEAR_ALL_DONE;
+	}else{
+		throw invalid_argument(ERROR_INVALID_COMMAND);
+	}
+
+
+}
+CommandType ParserForCmds::determineCommandType_ToDoListView(string userCommand){
+	if (userCommand == "e") {
+		return EDIT_ITEM;
+	}else if (userCommand == "m") {
+		return MARK;
+	}else if (userCommand == "d") {
+		return DELETE;
+	}else if (userCommand == "c") {
+		return CLEAR_ALL_DONE;
+	}else{
+		throw invalid_argument(ERROR_INVALID_COMMAND);
+	}
+
+}
+
+CommandType ParserForCmds::determineCommandType_OverdueTasksScreen(string userCommand){
+
+	if (userCommand == "m") {
+		return MARK;
+	}else if (userCommand == "d") {
+		return DELETE;
+	}else if (userCommand == "c") {
+		return CLEAR_ALL_OVERDUE;
+	}else{
+		throw invalid_argument(ERROR_INVALID_COMMAND);
+	}
+
+}
+
+CommandType ParserForCmds::determineCommandType_GoToBaseScreen(){
+
+	switch(OutputControl::getCurrentBaseScreen()) {
+	case OutputControl::CurrentScreenType::HOME_SCREEN:{
+		return HOME;
+		break;
+													   }
+	case OutputControl::CurrentScreenType::TO_DO_LIST_VIEW:{
+		return VIEW_TODOLIST;
+		break;									
+														   }
+	case OutputControl::CurrentScreenType::SEARCH_RESULTS_SCREEN:{
+		return VIEW_LAST_SEARCH;
+		break;									
+																 }
+	case OutputControl::CurrentScreenType::OVERDUE_TASKS_SCREEN:{
+		return VIEW_OVERDUE;
+		break;									
+																}
+	default:{
+		return HOME;
+		break;
+			}
+	}
+}
+
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\ParserForCmds.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\UnitTestLeon\ParserTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+namespace UnitTest
+{		
+	TEST_CLASS(ParserTest)
+	{
+	public:
+		
+		TEST_METHOD(Parser_StringToHourInt)
+		{
+			Parser myParser;
+			Assert::AreEqual(17, myParser.convertStringToIntHour("5pm"));
+			Assert::AreEqual(21, myParser.convertStringToIntHour("9PM"));
+			Assert::AreEqual(0, myParser.convertStringToIntHour("12"));
+			Assert::AreEqual(11, myParser.convertStringToIntHour("11am"));
+			Assert::AreEqual(1, myParser.convertStringToIntHour("1AM"));
+			Assert::AreEqual(22, myParser.convertStringToIntHour("2204"));
+			Assert::AreEqual(0, myParser.convertStringToIntHour("12am"));
+			Assert::AreEqual(12, myParser.convertStringToIntHour("12pm"));
+		}
+
+		TEST_METHOD(Parser_StringToMinInt)
+		{
+			Parser myParser;
+			Assert::AreEqual(30, myParser.convertStringToIntMin("5.30pm"));
+			Assert::AreEqual(50, myParser.convertStringToIntMin("7:50am"));
+			Assert::AreEqual(59, myParser.convertStringToIntMin("2.59"));
+			Assert::AreEqual(0, myParser.convertStringToIntMin("5:00"));
+			Assert::AreEqual(0, myParser.convertStringToIntMin("5:00"));
+		}
+
+		TEST_METHOD(Parser_EmbedTitle)
+		{
+			Parser myParser;
+			Item* myItem = new Item;
+			string expectedString = "dinner reserve";
+			string testString = "dinner reserve at 8pm on 3 Sep";
+			myParser.detectTitleAndEmbed(myItem, testString);
+			Assert::AreEqual(expectedString, myItem->getTitle());
+
+			testString = "dinner reserve on 3 Sep at 8pm";
+			myParser.detectTitleAndEmbed(myItem, testString);
+			Assert::AreEqual(expectedString, myItem->getTitle());
+
+			expectedString = "lunch";
+			testString = "lunch on 3 Sep at 8pm";
+			myParser.detectTitleAndEmbed(myItem, testString);
+			Assert::AreEqual(expectedString, myItem->getTitle());
+
+			expectedString = "deadline two three";
+			testString = "deadline two three by 8pm";
+			myParser.detectTitleAndEmbed(myItem, testString);
+			Assert::AreEqual(expectedString, myItem->getTitle());
+
+			expectedString = "event one";
+			testString = "event one 2pm to 3pm";
+			myParser.detectTitleAndEmbed(myItem, testString);
+			Assert::AreEqual(expectedString, myItem->getTitle());
+			
+			expectedString = "event two";
+			testString = "event two 3 oct to 5 oct";
+			myParser.detectTitleAndEmbed(myItem, testString);
+			Assert::AreEqual(expectedString, myItem->getTitle());
+
+		}
+
+			TEST_METHOD(Parser_EmbedDate)
+		{
+			const int buffer_size = 256;
+			char buffer[256];
+			Parser myParser;
+			Item* myItem = new Item;
+			bool isDeadline = false;
+			string testString = "dinner reserve at 8pm on 3 Sep";
+			
+
+			myParser.detectMonthDateAndEmbedIsOk(myItem, testString, isDeadline);
+			strftime (buffer, buffer_size ,"%d %b",&myItem->getStartDateTime());
+			Assert::AreEqual("03 Sep", buffer);
+
+			testString = "dinner reserve on 17 Sep at 8pm";
+			myParser.detectMonthDateAndEmbedIsOk(myItem, testString, isDeadline);
+			strftime (buffer, buffer_size ,"%d %b",&myItem->getStartDateTime());
+			Assert::AreEqual("17 Sep", buffer);
+
+			testString = "dinner reserve on Sep 23 at 8pm";
+			myParser.detectMonthDateAndEmbedIsOk(myItem, testString, isDeadline);
+			strftime (buffer, buffer_size ,"%d %b",&myItem->getStartDateTime());
+			Assert::AreEqual("23 Sep", buffer);
+
+			testString = "dinner reserve on August 30";
+			myParser.detectMonthDateAndEmbedIsOk(myItem, testString, isDeadline);
+			strftime (buffer, buffer_size ,"%d %b",&myItem->getStartDateTime());
+			Assert::AreEqual("30 Aug", buffer);
+
+
+		}
+
+
+		TEST_METHOD(Parser_EmbedTime)
+		{
+			const int buffer_size = 256;
+			char buffer[256];
+
+
+			Parser myParser;
+			Item* myItem = new Item;
+			bool isDeadline = false;
+			myParser.detectTimeAndEmbedIsOk(myItem, "dinner reserve from 7.30pm to 9pm", isDeadline);
+	
+
+			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getStartDateTime());
+			Assert::AreEqual("07:30PM.", buffer);
+			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getEndDateTime());
+			Assert::AreEqual("09:00PM.", buffer);
+			
+			myParser.detectTimeAndEmbedIsOk(myItem, "dinner reserve 2:20pm to 3pm", isDeadline);
+			
+			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getStartDateTime());
+			Assert::AreEqual("02:20PM.", buffer);
+			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getEndDateTime());
+			Assert::AreEqual("03:00PM.", buffer);
+
+			myParser.detectTimeAndEmbedIsOk(myItem, "dinner reserve from 1pm - 3pm", isDeadline);
+			
+			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getStartDateTime());
+			Assert::AreEqual("01:00PM.", buffer);
+			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getEndDateTime());
+			Assert::AreEqual("03:00PM.", buffer);
+
+			myParser.detectTimeAndEmbedIsOk(myItem, "dinner between 1pm and 3pm", isDeadline);
+			
+			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getStartDateTime());
+			Assert::AreEqual("01:00PM.", buffer);
+			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getEndDateTime());
+			Assert::AreEqual("03:00PM.", buffer);
+
+			myParser.detectTimeAndEmbedIsOk(myItem, "dinner reserve at 2pm", isDeadline);
+			
+			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getStartDateTime());
+			Assert::AreEqual("02:00PM.", buffer);
+			strftime (buffer, buffer_size ,"%I:%M%p.",&myItem->getEndDateTime());
+			Assert::AreEqual("03:00PM.", buffer);
+			
+		}
+			TEST_METHOD(Parser_SetDefaultStartTime)
+		{
+			const int buffer_size = 256;
+			char buffer1[256];
+			char buffer2[256];
+			time_t rawtime=0;
+			struct tm  timeinfo;
+			localtime_s (&timeinfo, &rawtime); 
+
+			Item* myItem = new Item;
+
+			
+			strftime (buffer1, buffer_size,"Now it's %c.",&timeinfo);
+			strftime (buffer2, buffer_size ,"Now it's %c.",&myItem->getStartDateTime());
+			Assert::AreEqual(buffer1, buffer2);
+			
+		}
+
+			TEST_METHOD(Parser_EmbedTitleAndDateTime)
+		{
+			const int buffer_size = 256;
+			char buffer[256];
+			
+
+			Parser myParser;
+			Item* myItem = new Item;
+
+			myParser.embedDetailsInItem(myItem, "busy period on 20 Sep from 1.30am to 9pm");
+			Assert::AreEqual("busy period", myItem->getTitle().c_str());
+			strftime (buffer, buffer_size ,"%d %b %I:%M%p.",&myItem->getStartDateTime());
+			Assert::AreEqual("20 Sep 01:30AM.", buffer);
+			strftime (buffer, buffer_size ,"%d %b %I:%M%p.",&myItem->getEndDateTime());
+			Assert::AreEqual("20 Sep 09:00PM.", buffer);
+			
+		}
+			TEST_METHOD(Parser_NegativeTestExceptions)
+		{
+			Parser myParser;
+			Item* myItem = new Item;
+
+			try{
+				myParser.embedDetailsInItem(myItem, "20 Sep from 1.30am to 9pm");
+			}
+			catch (exception& e){
+				Assert::AreEqual(Parser::ERROR_MISSING_TITLE.c_str(), e.what() );
+			}
+			try{
+				myParser.embedDetailsInItem(myItem, "assignment 2 (physics");
+			}
+			catch (exception& e){
+				Assert::AreEqual(Parser::ERROR_INVALID_BRACKETS.c_str(), e.what() );
+			}
+			try{
+				myParser.embedDetailsInItem(myItem, "assignment 2 physics)");
+			}
+			catch (exception& e){
+				Assert::AreEqual(Parser::ERROR_INVALID_BRACKETS.c_str(), e.what() );
+			}
+			
+			
+		}
+			TEST_METHOD(Parser_UserGuideExamples)
+		{
+			const int buffer_size = 256;
+			char expectedBuffer[256];
+			char actualBuffer[256];
+			Parser myParser;
+			Item* myItem = new Item;
+
+			time_t nowTime;
+			tm nowTimeTM;
+			time(&nowTime);
+			localtime_s (&nowTimeTM, &nowTime);
+
+
+			myParser.embedDetailsInItem(myItem, "band practice at 5pm next Tuesday !!");
+
+			Assert::AreEqual("band practice", myItem->getTitle().c_str());
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getStartDateTime());
+			Assert::AreEqual("18 Nov 2014 05:00PM.", actualBuffer);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			Assert::AreEqual("18 Nov 2014 06:00PM.", actualBuffer);
+			Assert::AreEqual("High", myItem->getPriorityInString().c_str());
+
+			myParser.embedDetailsInItem(myItem, "Dinner date (buy flowers) on 14 February at 9PM");
+
+			Assert::AreEqual("Dinner date", myItem->getTitle().c_str());
+			Assert::AreEqual("buy flowers", myItem->getDescription().c_str());
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getStartDateTime());
+			Assert::AreEqual("14 Feb 2015 09:00PM.", actualBuffer);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			Assert::AreEqual("14 Feb 2015 10:00PM.", actualBuffer);
+
+			myParser.embedDetailsInItem(myItem, "project meeting from 5:30pm - 9pm #school");
+
+			Assert::AreEqual("project meeting", myItem->getTitle().c_str());
+			Assert::AreEqual("school", myItem->getCategory().c_str());
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getStartDateTime());
+			strcat_s(expectedBuffer, buffer_size, " 05:30PM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
+
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			strcat_s(expectedBuffer, buffer_size, " 09:00PM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
+
+			myParser.embedDetailsInItem(myItem, "Holiday period from 10 May - 10 Jul");
+
+			Assert::AreEqual("Holiday period", myItem->getTitle().c_str());
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getStartDateTime());
+			Assert::AreEqual("10 May 2015 12:00AM.", actualBuffer);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			Assert::AreEqual("10 Jul 2015 11:59PM.", actualBuffer);
+
+			myParser.embedDetailsInItem(myItem, "Presentation slot 1.40pm - 1400");
+
+			Assert::AreEqual("Presentation slot", myItem->getTitle().c_str());
+			
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getStartDateTime());
+			strcat_s(expectedBuffer, buffer_size, " 01:40PM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
+
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			strcat_s(expectedBuffer, buffer_size, " 02:00PM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
+
+			myParser.embedDetailsInItem(myItem, "night cycling event today 2.20 - 4am");
+			
+			Assert::AreEqual("night cycling event", myItem->getTitle().c_str());
+			
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getStartDateTime());
+			strcat_s(expectedBuffer, buffer_size, " 02:20AM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
+
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			strcat_s(expectedBuffer, buffer_size, " 04:00AM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
+
+			myParser.embedDetailsInItem(myItem, "submit assignment due 8pm !");
+			
+			Assert::AreEqual("submit assignment", myItem->getTitle().c_str());
+			
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			strcat_s(expectedBuffer, buffer_size, " 08:00PM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
+			Assert::AreEqual("deadline", myItem->getItemTypeInString().c_str());
+			Assert::AreEqual("Medium", myItem->getPriorityInString().c_str());
+
+			myParser.embedDetailsInItem(myItem, "Book flight by tomorrow (change currency)");
+			
+			Assert::AreEqual("Book flight", myItem->getTitle().c_str());
+			nowTimeTM.tm_mday++;
+			mktime(&nowTimeTM);
+			strftime (expectedBuffer, buffer_size ,"%d %b %Y", &nowTimeTM);
+			
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			strcat_s(expectedBuffer, buffer_size, " 11:59PM.");
+			Assert::AreEqual(expectedBuffer, actualBuffer);
+			Assert::AreEqual("deadline", myItem->getItemTypeInString().c_str());
+			Assert::AreEqual("change currency", myItem->getDescription().c_str());
+			time(&nowTime);
+			localtime_s (&nowTimeTM, &nowTime);
+
+			myParser.embedDetailsInItem(myItem, "complete job by 28 March 9pm");
+		
+			Assert::AreEqual("complete job", myItem->getTitle().c_str());
+			
+			strftime (actualBuffer, buffer_size ,"%d %b %Y %I:%M%p.",&myItem->getEndDateTime());
+			Assert::AreEqual("28 Mar 2015 09:00PM.", actualBuffer);
+
+			Assert::AreEqual("deadline", myItem->getItemTypeInString().c_str());
+
+			myParser.embedDetailsInItem(myItem, "call Sarah");
+		
+			Assert::AreEqual("call Sarah", myItem->getTitle().c_str());
+			Assert::AreEqual("task", myItem->getItemTypeInString().c_str());
+
+			myParser.embedDetailsInItem(myItem, "Clean dormitory room #personal");
+		
+			Assert::AreEqual("Clean dormitory room", myItem->getTitle().c_str());
+			Assert::AreEqual("task", myItem->getItemTypeInString().c_str());
+			Assert::AreEqual("personal", myItem->getCategory().c_str());
+}
+	};
+}
+	// End of segment: D:\GitHub\main\JustAddIt\UnitTestLeon\ParserTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\UnitTestLeon\SystemTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+namespace UnitTest
+{		
+	TEST_CLASS(SystemTest)
+	{
+	public:
+
+		TEST_METHOD(SystemTest_EmptyItemBank)
+		{
+			Executor* myExec = new Executor();
+			ItemBank* myIB = ItemBank::getInstance();
+			ActionLog::resetLog();
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
+			myExec->execute("home");
+			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
+			myExec->execute("t");
+			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
+			myExec->execute("home");
+			myExec->execute("o");
+			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
+			myExec->execute("search sth");
+			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
+		}
+			TEST_METHOD(SystemTest_ListAndEditScenarios)
+		{
+			Executor* myExec = new Executor();
+			ItemBank* myIB = ItemBank::getInstance();
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
+			myExec->execute("add event on 30 Dec at 7 #category (more info)");		
+			myExec->execute("add deadline by 28 December !!");
+			myExec->execute("add floating task");
+			myExec->execute("home");
+			myExec->execute("t");
+			Assert::AreEqual(3, OutputControl::getNumberOfDisplayedItems());	
+
+			myExec->execute("e 1");
+			Assert::AreEqual("event", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("Tuesday 30 Dec 2014 07:00AM", OutputControl::getItemAddr(1)->getStartDateInString().c_str());
+			myExec->execute("o");
+
+			myExec->execute("e 2");
+			Assert::AreEqual("deadline", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("Sunday 28 Dec 2014 11:59PM", OutputControl::getItemAddr(1)->getEndDateInString().c_str());
+			myExec->execute("o");
+
+			myExec->execute("e 3");
+			Assert::AreEqual("floating task", OutputControl::getItemAddr(1)->getTitle().c_str());
+			myExec->execute("o");
+
+			
+		}
+		TEST_METHOD(SystemTest_SearchAndEditScenarios)
+		{
+			Executor* myExec = new Executor();
+			ItemBank* myIB = ItemBank::getInstance();
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
+
+			myExec->execute("add wake up on 30 Dec at 7 #category (more info)");
+			myExec->execute("add dinner on 30 Nov at 8 #personal (bring cash)");
+			myExec->execute("add expensive dinner on 25 Dec 2300");
+				
+			myExec->execute("search wake up");
+			Assert::AreEqual(1, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("wake up", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("Tuesday 30 Dec 2014 07:00AM", OutputControl::getItemAddr(1)->getStartDateInString().c_str());
+			Assert::AreEqual("Tuesday 30 Dec 2014 08:00AM", OutputControl::getItemAddr(1)->getEndDateInString().c_str());
+			Assert::AreEqual("category", OutputControl::getItemAddr(1)->getCategory().c_str());
+			Assert::AreEqual("more info", OutputControl::getItemAddr(1)->getDescription().c_str());
+			Assert::AreEqual("Low", OutputControl::getItemAddr(1)->getPriorityInString().c_str());
+			
+			myExec->execute("search dinner");
+			Assert::AreEqual(2, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("dinner", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("Sunday 30 Nov 2014 08:00AM", OutputControl::getItemAddr(1)->getStartDateInString().c_str());
+			Assert::AreEqual("Sunday 30 Nov 2014 09:00AM", OutputControl::getItemAddr(1)->getEndDateInString().c_str());
+			Assert::AreEqual("personal", OutputControl::getItemAddr(1)->getCategory().c_str());
+			Assert::AreEqual("bring cash", OutputControl::getItemAddr(1)->getDescription().c_str());
+			Assert::AreEqual("Low", OutputControl::getItemAddr(1)->getPriorityInString().c_str());
+			
+			myExec->execute("e 1");
+			myExec->execute("e 1 new title");
+			myExec->execute("o");
+
+			Assert::AreEqual(1, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("expensive dinner", OutputControl::getItemAddr(1)->getTitle().c_str());
+
+			myExec->execute("search cash");
+			Assert::AreEqual(OutputControl::getNumberOfDisplayedItems(), 1);
+			Assert::AreEqual("new title", OutputControl::getItemAddr(1)->getTitle().c_str());
+			
+			myExec->execute("e 1");
+			myExec->execute("e 2 bring money");
+			myExec->execute("o");
+			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
+			
+		}
+		TEST_METHOD(SystemTest_AddEditFields)
+		{
+			Executor* myExec = new Executor();
+			ItemBank* myIB = ItemBank::getInstance();
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
+
+			myExec->execute("add concert on 30 Dec at 7 #category (more info)");		
+			myExec->execute("e 1 new title");
+			Assert::AreEqual(1, OutputControl::getNumberOfDisplayedItems());;
+			Assert::AreEqual("new title", OutputControl::getItemAddr(1)->getTitle().c_str());
+
+			myExec->execute("e 2 new description");
+			Assert::AreEqual("new description", OutputControl::getItemAddr(1)->getDescription().c_str());
+
+			myExec->execute("e 3 25 dec 2pm");
+			Assert::AreEqual("Thursday 25 Dec 2014 02:00PM", OutputControl::getItemAddr(1)->getStartDateInString().c_str());
+			
+			myExec->execute("e 4 26 dec 4pm");
+			Assert::AreEqual("Friday 26 Dec 2014 04:00PM", OutputControl::getItemAddr(1)->getEndDateInString().c_str());
+			
+			myExec->execute("e 5 high");
+			Assert::AreEqual("High", OutputControl::getItemAddr(1)->getPriorityInString().c_str());
+
+			myExec->execute("e 6 new cat");
+			Assert::AreEqual("new cat", OutputControl::getItemAddr(1)->getCategory().c_str());
+		
+				
+		}
+	
+		TEST_METHOD(SystemTest_MarkAndClearDoneScenarios)
+		{
+			Executor* myExec = new Executor();
+			ItemBank* myIB = ItemBank::getInstance();
+			ActionLog::resetLog();
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
+			myExec->execute("add event on 30 Dec at 7 #category (more info)");		
+			myExec->execute("add deadline by 28 December !!");
+			myExec->execute("add floating task");
+			myExec->execute("home");
+			myExec->execute("t");
+			Assert::AreEqual(3, OutputControl::getNumberOfDisplayedItems());
+		
+			myExec->execute("e 1");
+			Assert::AreEqual("event", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("Tuesday 30 Dec 2014 07:00AM", OutputControl::getItemAddr(1)->getStartDateInString().c_str());
+			myExec->execute("o");
+
+			myExec->execute("e 2");
+			Assert::AreEqual("deadline", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("Sunday 28 Dec 2014 11:59PM", OutputControl::getItemAddr(1)->getEndDateInString().c_str());
+			myExec->execute("o");
+
+			myExec->execute("e 3");
+			Assert::AreEqual("floating task", OutputControl::getItemAddr(1)->getTitle().c_str());
+			myExec->execute("o");
+
+			myExec->execute("m 1 3");
+			Assert::IsTrue(OutputControl::getItemAddr(1)->isDone());
+			Assert::IsFalse(OutputControl::getItemAddr(2)->isDone());
+			Assert::IsTrue(OutputControl::getItemAddr(3)->isDone());
+
+			myExec->execute("m 3");
+			Assert::IsTrue(OutputControl::getItemAddr(1)->isDone());
+			Assert::IsFalse(OutputControl::getItemAddr(2)->isDone());
+			Assert::IsFalse(OutputControl::getItemAddr(3)->isDone());
+			
+			myExec->execute("c");
+			Assert::AreEqual("deadline", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("floating task", OutputControl::getItemAddr(2)->getTitle().c_str());
+			
+			
+			myExec->execute("undo");
+			Assert::AreEqual("event", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("deadline", OutputControl::getItemAddr(2)->getTitle().c_str());
+			Assert::AreEqual("floating task", OutputControl::getItemAddr(3)->getTitle().c_str());
+		}
+		TEST_METHOD(SystemTest_DeleteScenarios)
+		{
+			Executor* myExec = new Executor();
+			ItemBank* myIB = ItemBank::getInstance();
+			ActionLog::resetLog();
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
+			myExec->execute("add eoy party on 30 Dec at 7 #category (more info)");
+			myExec->execute("add eoy dinner on 29 Dec at 8");
+			myExec->execute("add tutorial by 28 December !");
+			myExec->execute("add floaters");
+			myExec->execute("home");
+			myExec->execute("t");
+			Assert::AreEqual(4, OutputControl::getNumberOfDisplayedItems());
+			//deleting in list view
+			myExec->execute("d 1 3");
+			Assert::AreEqual(2, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("eoy dinner", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("floaters", OutputControl::getItemAddr(2)->getTitle().c_str());
+			//undoing delete
+			myExec->execute("undo");
+			Assert::AreEqual(4, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("eoy party", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("eoy dinner", OutputControl::getItemAddr(2)->getTitle().c_str());
+			Assert::AreEqual("tutorial", OutputControl::getItemAddr(3)->getTitle().c_str());
+			Assert::AreEqual("floaters", OutputControl::getItemAddr(4)->getTitle().c_str());
+			//deleting in edit screen
+			myExec->execute("e 4");
+			myExec->execute("d");
+			Assert::AreEqual(3, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("eoy party", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("eoy dinner", OutputControl::getItemAddr(2)->getTitle().c_str());
+			Assert::AreEqual("tutorial", OutputControl::getItemAddr(3)->getTitle().c_str());
+			//deleting in search screen
+			myExec->execute("search eoy");
+			Assert::AreEqual(2, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("eoy party", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("eoy dinner", OutputControl::getItemAddr(2)->getTitle().c_str());
+			myExec->execute("d 1");
+			Assert::AreEqual(1, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("eoy dinner", OutputControl::getItemAddr(1)->getTitle().c_str());
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
+		}
+		TEST_METHOD(SystemTest_NegExceptions)
+		{
+			Executor* myExec = new Executor();
+			ItemBank* myIB = ItemBank::getInstance();
+			ActionLog::resetLog();
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
+			myExec->execute("home");
+			try{
+				myExec->execute("rubbish");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_INVALID_COMMAND.c_str(), e.what());
+			};
+			try{
+				myExec->execute("add on Saturday");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_MISSING_TITLE.c_str(), e.what());
+			};
+			try{
+				myExec->execute("add event at 2pm )description");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_INVALID_BRACKETS.c_str(), e.what());
+			};
+			try{
+				myExec->execute("add event # category");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_MISSING_CATEGORY.c_str(), e.what());
+			};
+			myExec->execute("add birthday at 2pm");
+			myExec->execute("add assignemnt due 6pm !!");
+			myExec->execute("add cloud");
+			myExec->execute("o");
+			myExec->execute("t");
+			
+			try{
+				myExec->execute("e 4");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_INVALID_ITEM_NO.c_str(), e.what());
+			};
+			myExec->execute("e 1");
+			try{
+				myExec->execute("e 7");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_INVALID_FIELD_NO.c_str(), e.what());
+			};
+			try{
+				myExec->execute("e 5 whatever");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_INVALID_PRIORITY.c_str(), e.what());
+			};
+			try{
+				myExec->execute("e 3 10pm");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_LOGIC_START_END.c_str(), e.what());
+			};
+			try{
+				myExec->execute("e 4 1pm");
+			}
+			catch(exception& e){
+				Assert::AreEqual(Parser::ERROR_LOGIC_START_END.c_str(), e.what());
+			};
+		}	
+		TEST_METHOD(SystemTest_OverdueScenarios)
+		{
+			Executor* myExec = new Executor();
+			ItemBank* myIB = ItemBank::getInstance();
+			myIB->clearBank();
+			ActionLog::resetLog();
+			OutputControl::resetCurrentItemList();
+			//add two overdue items for testing
+			Item* overdueItemA = new Item;
+			tm yesterdayTM;
+			time_t currentTime;
+			time(&currentTime);
+			localtime_s(&yesterdayTM, &currentTime);
+			yesterdayTM.tm_mday--;
+			mktime(&yesterdayTM);
+
+			overdueItemA -> setItemType("deadline");
+			overdueItemA -> setTitle("urgent job");
+			overdueItemA -> setEndDateTime(yesterdayTM);
+			myIB->addToBank(overdueItemA);
+
+			Item* overdueItemB = new Item;
+			yesterdayTM.tm_mday--;
+			mktime(&yesterdayTM);
+			overdueItemB -> setItemType("deadline");
+			overdueItemB -> setTitle("urgent task");
+			overdueItemB -> setEndDateTime(yesterdayTM);
+			myIB->addToBank(overdueItemB);
+			//add new items
+			myExec->execute("add some event on 20 nov");
+			myExec->execute("add random task");
+			myExec->execute("add new deadline due 25 dec");
+			
+			myExec->execute("home");
+			myExec->execute("t");
+			Assert::AreEqual(5, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("some event", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("urgent job", OutputControl::getItemAddr(2)->getTitle().c_str());
+			Assert::AreEqual("urgent task", OutputControl::getItemAddr(3)->getTitle().c_str());
+			Assert::AreEqual("new deadline", OutputControl::getItemAddr(4)->getTitle().c_str());
+			Assert::AreEqual("random task", OutputControl::getItemAddr(5)->getTitle().c_str());
+
+			//deleting and marking in overdue screen
+			myExec->execute("home");
+			myExec->execute("o");
+			myExec->execute("m 2");
+			Assert::AreEqual("urgent job", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("urgent task", OutputControl::getItemAddr(2)->getTitle().c_str());
+			Assert::AreEqual(false, OutputControl::getItemAddr(1)->isDone());
+			Assert::AreEqual(true, OutputControl::getItemAddr(2)->isDone());
+			myExec->execute("d 1");
+			Assert::AreEqual(1, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("urgent task", OutputControl::getItemAddr(1)->getTitle().c_str());
+
+			myExec->execute("home");
+			myExec->execute("o");
+			myExec->execute("c");
+			myExec->execute("home");
+			myExec->execute("t");
+			Assert::AreEqual(3, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("some event", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("new deadline", OutputControl::getItemAddr(2)->getTitle().c_str());
+			Assert::AreEqual("random task", OutputControl::getItemAddr(3)->getTitle().c_str());
+			
+			
+
+		}
+
+	};
+}
+	// End of segment: D:\GitHub\main\JustAddIt\UnitTestLeon\SystemTest.cpp
+
+
+
+
+

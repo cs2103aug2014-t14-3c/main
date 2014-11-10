@@ -1,0 +1,660 @@
+//@author: a0128461h
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\CmdAddItem.cpp
+	 */
+
+#include "stdafx.h"
+#include "CmdAddItem.h"
+
+const string CmdAddItem::SUCCESS_MESSAGE = "Just added it successfully!";
+const string CmdAddItem::TIME_DATE_CONFLICT_MESSAGE = "This conflicts with another event!";
+
+CmdAddItem::CmdAddItem(Item* item) {
+	_itemAddress = item;
+}
+
+CmdAddItem::~CmdAddItem(void) {
+}
+
+vector<string> CmdAddItem::execute() {
+	bool isTimeOrDateConflicted = ItemBank::getInstance() -> addToBank(_itemAddress);
+	assert(_itemAddress != NULL);
+
+	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
+	outputMessageStorage.clear();
+	outputMessageStorage = displayScreenConstructor -> clearScreen();
+	outputMessageStorage = displayScreenConstructor -> constructEditScreen(_itemAddress);
+	outputMessageStorage.push_back(SUCCESS_MESSAGE);
+
+	if (isTimeOrDateConflicted == true) {
+		outputMessageStorage.push_back(TIME_DATE_CONFLICT_MESSAGE);
+	}
+
+	OutputControl::setCurrentScreen(OutputControl::EDIT_SCREEN);
+	OutputControl::resetCurrentItemList();
+	OutputControl::addItemToDisplayList(_itemAddress); 
+
+	ActionLog::addCommand(this);
+
+	return outputMessageStorage;
+}
+
+Item* CmdAddItem::getItem() {
+	return _itemAddress;
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\CmdAddItem.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\CmdClearAllDone.cpp
+	 */
+
+#include "stdafx.h"
+#include "CmdClearAllDone.h"
+
+const string CmdClearAllDone::TEXT_FILE_NAME = "../JustAddIt/JustAddIt/JustAddIt/Logs/CmdClearItem_Log.txt";
+const string CmdClearAllDone::CLEARED_ALL_DONE_ITEMS_LOG = "All the done items are cleared.";
+const string CmdClearAllDone::ERROR_MESSAGE = "No more done items to be cleared!";
+const string CmdClearAllDone::SUCCESS_MESSAGE = "All completed Item(s) successfully deleted!";
+
+CmdClearAllDone::CmdClearAllDone(void) {
+}
+
+CmdClearAllDone::~CmdClearAllDone(void) {
+}
+
+void CmdClearAllDone::writeToLog(string logEntry) {
+	ofstream mytextfile;
+	mytextfile.open(TEXT_FILE_NAME, ios::app);
+	mytextfile << logEntry << endl;
+	mytextfile.close();
+}
+
+vector<string> CmdClearAllDone::execute() {
+	ItemBank* itemPointer = ItemBank::getInstance();
+	if (itemPointer -> getNumberOfMarkedItems() == 0) {
+		throw invalid_argument(ERROR_MESSAGE);
+		writeToLog(ERROR_MESSAGE);
+	}
+	else {
+		ItemBank::getInstance() -> deleteDoneItems();
+		writeToLog(CLEARED_ALL_DONE_ITEMS_LOG);
+	}
+
+	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
+	
+	outputMessageStorage.clear();
+	outputMessageStorage = cmdBase -> execute();
+	outputMessageStorage.push_back(SUCCESS_MESSAGE);
+
+	ActionLog::addCommand(this);
+
+	return outputMessageStorage;
+}
+
+
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\CmdClearAllDone.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\CmdClearAllOverdue.cpp
+	 */
+
+#include "stdafx.h"
+#include "CmdClearAllOverdue.h"
+
+const string CmdClearAllOverdue::TEXT_FILE_NAME = "JustAddIt/Logs/CmdEditItem_Log.txt";
+const string CmdClearAllOverdue::CLEARED_ALL_OVERDUE_DEADLINES_LOG = "All the overdue deadlines are cleared.";
+const string CmdClearAllOverdue::ERROR_MESSAGE = "No more overdue deadlines to be cleared!";
+const string CmdClearAllOverdue::SUCCESS_MESSAGE = "All overdue Deadline(s) successfully deleted!";
+
+CmdClearAllOverdue::CmdClearAllOverdue(void) {
+}
+
+CmdClearAllOverdue::~CmdClearAllOverdue(void) {
+}
+
+void CmdClearAllOverdue::writeToLog(string logEntry) {
+	ofstream mytextfile;
+	mytextfile.open(TEXT_FILE_NAME, ios::app);
+	mytextfile << logEntry << endl;
+	mytextfile.close();
+}
+
+vector<string> CmdClearAllOverdue::execute() {
+	ItemBank* itemPointer = ItemBank::getInstance();
+	if (itemPointer -> getOverdueDeadlines().size() == 0) {
+		throw invalid_argument(ERROR_MESSAGE);
+		writeToLog(ERROR_MESSAGE);
+	}
+	else {
+		ItemBank::getInstance() -> deleteOverdueDeadlines();
+		writeToLog(CLEARED_ALL_OVERDUE_DEADLINES_LOG);
+	}
+
+	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
+	outputMessageStorage.clear();
+	outputMessageStorage = cmdBase -> execute();
+	outputMessageStorage.push_back(SUCCESS_MESSAGE);
+
+	ActionLog::addCommand(this);
+
+	return outputMessageStorage;
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\CmdClearAllOverdue.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\CmdSearch.cpp
+	 */
+
+#include "stdafx.h"
+#include "CmdSearch.h"
+
+//Used substr(1) because the first space character is unnecessary
+CmdSearch::CmdSearch(string keyword) {
+	_searchKeyword = keyword.substr(1);
+}
+
+CmdSearch::~CmdSearch(void) {
+}
+
+vector<string> CmdSearch::execute() {
+	vector<Item*> tasks;
+	vector<Item*> deadlines;
+	vector<Item*> events;
+
+	ItemBank* itemBank = ItemBank::getInstance();
+
+	events = itemBank -> searchEvents(_searchKeyword);
+	deadlines = itemBank -> searchDeadlines(_searchKeyword);
+	tasks = itemBank -> searchTasks(_searchKeyword);
+
+	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
+	outputMessageStorage.clear();
+	outputMessageStorage = displayScreenConstructor -> constructSearchScreen(tasks, deadlines, events, _searchKeyword);
+	
+	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::SEARCH_RESULTS_SCREEN);
+	OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::SEARCH_RESULTS_SCREEN);
+
+	//append all the items to a collated list vector
+	vector<Item*> collatedList;
+	collatedList.insert(collatedList.end(), events.begin(), events.end());
+	collatedList.insert(collatedList.end(), deadlines.begin(), deadlines.end());
+	collatedList.insert(collatedList.end(), tasks.begin(), tasks.end());
+	OutputControl::setCurrentDisplayedItemList(collatedList);
+
+	return outputMessageStorage;
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\CmdSearch.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\Executor.cpp
+	 */
+
+#include "stdafx.h"
+#include "Executor.h"
+
+vector<string> Executor::outputMessageStorage;
+
+const string Executor::LOG_FILE_NAME = "JustAddIt/Logs/error.log";
+const string Executor::LOG_EXECUTOR_EXECUTING_EXCEPTIONS_PART_1 = "exception occurred: \"";
+const string Executor::LOG_EXECUTOR_EXECUTING_EXCEPTIONS_PART_2 = "\" \n command entered: \"";
+const string Executor::LOG_EXECUTOR_INITIALISING_EXCEPTIONS = "exception occurred when initialising bank: \"";
+const string Executor::NEWLINE_CHARACTERS = "\"\n";
+const string Executor::ERROR_MESSAGE = "<span style=\"color:#CC0000;\">Woops! ";
+
+vector<string> Executor::execute(string userCommand) {
+	Parser parser;
+	Command* command;
+
+	try {
+		command = parser.stringToCommand(userCommand);
+		outputMessageStorage = command -> execute();
+	} catch (exception& e) {
+		ofstream file;
+		file.open(LOG_FILE_NAME, ios::app);
+		file << LOG_EXECUTOR_EXECUTING_EXCEPTIONS_PART_1 <<  e.what() << LOG_EXECUTOR_EXECUTING_EXCEPTIONS_PART_2 << userCommand << NEWLINE_CHARACTERS << endl;
+		file.close();
+
+		string errorMessage = ERROR_MESSAGE;
+		errorMessage += e.what();
+		outputMessageStorage.push_back(errorMessage);
+	}
+
+	return outputMessageStorage;
+}
+
+vector<string> Executor::initialise() {
+	try {
+		Command* command = new CmdInitialiseBank();
+		outputMessageStorage = command -> execute();
+	} catch (exception& e) {
+		ofstream file;
+		file.open(LOG_FILE_NAME, ios::app);
+		file << LOG_EXECUTOR_INITIALISING_EXCEPTIONS <<  e.what() << NEWLINE_CHARACTERS << endl;
+		file.close();
+
+		string errorMessage = ERROR_MESSAGE;
+		errorMessage += e.what();
+		outputMessageStorage.push_back(errorMessage);
+	}
+	
+	return outputMessageStorage;
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\Executor.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+	 */
+
+#include "stdafx.h"
+#include "Item.h"
+#include <time.h>
+
+int Item::_idCounter = 1;
+
+const string Item::MESSAGE_INVALID_ARGUMENT = "invalid argument entered";
+const string Item::STRING_NULL = "";
+const string Item::STRING_NEGATIVE_ONE = "-1";
+
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+	 */
+
+Item::Item(void){
+	_title = "-";
+	_description = "-";
+	//default start/end time/date is null
+	time_t myTempTime = 0;
+	//time(&myTempTime);	//set current time to myTempTime
+	localtime_s (&_startDateTime, &myTempTime); //assign time_t var (myTempTime) to tm variable (_startDateTime)
+	localtime_s (&_endDateTime, &myTempTime);
+	_venue = "-";
+	_category = "-";
+	_priority = MED;
+	_isDone = false;
+	_id = _idCounter++;
+}
+
+Item::~Item(void)
+{
+}
+
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+	 */
+
+void Item::setStartDateTime(string startDateTimeStr) {
+	struct tm startDateTime;
+	time_t startDateTimeT = stoi(startDateTimeStr);
+
+	localtime_s(&startDateTime, &startDateTimeT);
+	setStartDateTime(startDateTime);
+}
+
+void Item::setEndDateTime(string endDateTimeStr) {
+	struct tm endDateTime;
+	time_t endDateTimeT = stoi(endDateTimeStr);
+
+	localtime_s(&endDateTime, &endDateTimeT);
+	setEndDateTime(endDateTime);
+}
+
+void Item::addToStartDate(int daysToAdd){
+	setStartDate();
+	_startDateTime.tm_mday += daysToAdd;
+	mktime(&_startDateTime);
+}
+
+void Item::addToEndDate(int daysToAdd){
+	setEndDate();
+	_endDateTime.tm_mday += daysToAdd;
+	mktime(&_endDateTime);
+}
+
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+	 */
+
+void Item::setStartDateTime(struct tm startDateTime) {
+	_startDateTime = startDateTime;
+	mktime(&_startDateTime);
+}
+
+void Item::setEndDateTime(struct tm endDateTime) {
+	_endDateTime = endDateTime;
+	mktime(&_endDateTime);
+}
+
+void Item::setStartDate(int day, int month) {
+	setDate(day, month, _startDateTime);
+}
+
+void Item::setEndDate(int day, int month) {
+	setDate(day, month, _endDateTime);
+}
+
+void Item::setStartEndDateTimeAsNull(){
+	time_t currTime=0;
+	localtime_s (&_startDateTime, &currTime);
+	localtime_s (&_endDateTime, &currTime);
+}
+
+void Item::setStartTime(int hour, int min){
+	setTime(hour, min, _startDateTime);
+}
+
+void Item::setEndTime(int hour, int min){
+	setTime(hour, min, _endDateTime);
+}
+
+void Item::setTime(int hour, int min, tm &date) {
+	date.tm_hour = hour;
+	date.tm_min = min;
+	mktime(&date);
+}
+
+void Item::setDate(int day, int month, tm &date) {
+	time_t currTime;
+
+	time(&currTime);
+	localtime_s (&date, &currTime);
+
+	//if input month is earlier in the year, assume it is for next year
+	if(month < date.tm_mon){
+		date.tm_year++;
+	}
+	//if day has passed, assume it is for next year.
+	else if(month == date.tm_mon && day < date.tm_mday){
+			date.tm_year++;
+	}
+
+	date.tm_mday = day;
+	date.tm_mon = month;
+
+	mktime(&date);
+}
+
+void Item::setDate(tm input, tm &output) {
+	output.tm_mday = input.tm_mday;
+	output.tm_wday = input.tm_wday;
+	output.tm_mon = input.tm_mon;
+	output.tm_yday = input.tm_yday;
+	output.tm_year = input.tm_year;
+}
+
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdAddTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+namespace UnitTest
+{		
+	TEST_CLASS(CmdAdd)
+	{
+	public:
+
+		TEST_METHOD(CmdAddTest)
+		{
+			Item* addTest1 = new Item;
+			Item* addTest2 = new Item;
+			ItemBank* itemPointer = ItemBank::getInstance();
+
+			addTest1 -> setTitle("finish JustAddIt");
+			addTest1 -> setDescription("cs2103 project");
+			addTest1 -> setStartDate(4, 8);
+			addTest1 -> setStartTime(8, 0);
+			addTest1 -> setEndDate(10, 11);
+			addTest1 -> setEndTime(12, 0);
+			addTest1 -> setPriority("High");
+			addTest1 -> setCategory("Project");
+			addTest1 -> setVenue("PGP");
+
+			Assert::AreEqual(itemPointer -> addToBank(addTest1), false);
+			Assert::AreEqual(itemPointer -> getBankSize(), 1);
+
+			addTest2 -> setTitle("finish network assignment");
+			addTest2 -> setDescription("cs2105 assignment");
+			addTest2 -> setStartDate(15, 11);
+			addTest2 -> setStartTime(8, 0);
+			addTest2 -> setEndDate(17, 11);
+			addTest2 -> setEndTime(12, 0);
+			addTest2 -> setPriority("High");
+			addTest2 -> setCategory("Assignment");
+			addTest2 -> setVenue("PGP");
+
+			Assert::AreEqual(itemPointer -> addToBank(addTest2), false);
+			Assert::AreEqual(itemPointer -> getBankSize(), 2);
+
+			itemPointer -> clearBank();
+		}
+	};
+}
+	// End of segment: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdAddTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdClearAllDoneTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+namespace UnitTest
+{
+	TEST_CLASS(CmdClearAllDone)
+	{
+	public:
+		
+		TEST_METHOD(CmdClearAllDoneTest)
+		{
+			Item* itemTest1 = new Item;
+			Item* itemTest2 = new Item;
+			ItemBank* itemPointer = ItemBank::getInstance();
+
+			itemTest1 -> setTitle("study cs2103");
+			itemTest1 -> setItemType("task");
+			itemPointer -> addToBank(itemTest1);
+			Assert::AreEqual(itemPointer -> getBankSize(), 1);
+
+			itemTest1 -> toggleDone();
+			itemPointer -> deleteDoneItems();
+			Assert::AreEqual(itemPointer -> getBankSize(), 0);
+
+			itemTest2 -> setTitle("study cs2105");
+			itemTest2 -> setItemType("task");
+			itemPointer -> addToBank(itemTest1);
+			Assert::AreEqual(itemPointer -> getBankSize(), 1);
+
+			try {
+				itemPointer -> deleteDoneItems();
+			}
+			catch (exception &e) {
+				Assert::AreEqual("No more done items to be cleared!", e.what());
+			}
+
+			itemPointer->clearBank();
+		}
+	};
+}
+	// End of segment: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdClearAllDoneTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdClearAllOverdue.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+namespace UnitTest
+{
+	TEST_CLASS(CmdClearAllOverdue)
+	{
+	public:
+		
+		TEST_METHOD(CmdClearAllOverdueTest)
+		{
+			Item* itemTest1 = new Item;
+			Item* itemTest2 = new Item;
+			Item* itemTest3 = new Item;
+			ItemBank* itemPointer = ItemBank::getInstance();
+			itemTest1 -> setItemType("deadline");
+			itemTest2 -> setItemType("event");
+			itemTest3 -> setItemType("task");
+			itemPointer -> addToBank(itemTest1);
+			itemPointer -> addToBank(itemTest2);
+			itemPointer -> addToBank(itemTest3);
+			time_t currentTime;
+			time(&currentTime);
+
+			Assert::AreEqual(itemPointer -> getBankSize(), 3);
+			itemPointer -> deleteOverdueDeadlines();
+			Assert::AreEqual(itemPointer -> getBankSize(), 2);
+
+			try {
+				itemPointer -> deleteOverdueDeadlines();
+			}
+			catch (exception &e) {
+				Assert::AreEqual("No more overdue deadlines to be cleared!", e.what());
+			}
+
+			itemPointer->clearBank();
+		}
+	};
+}
+	// End of segment: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdClearAllOverdue.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdSearchTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+namespace UnitTest
+{
+	TEST_CLASS(CmdSearch)
+	{
+	public:
+		
+		TEST_METHOD(CmdSearchTest)
+		{
+			Item* itemSearchTest1 = new Item;
+			Item* itemSearchTest2 = new Item;
+			ItemBank* itemPointer = ItemBank::getInstance();
+			itemPointer -> clearBank();
+
+			itemSearchTest1 -> setItemType("deadline");
+			itemSearchTest1 -> setTitle("search testing");
+			itemSearchTest1 -> setDescription("For JustAddIt");
+			itemSearchTest1 -> setStartDate(4, 8);
+			itemSearchTest1 -> setStartTime(8, 0);
+			itemSearchTest1 -> setEndDate(10, 11);
+			itemSearchTest1 -> setEndTime(12, 0);
+			itemSearchTest1 -> setPriority("Medium");
+			itemSearchTest1 -> setCategory("Individual Component");
+			itemSearchTest1 -> setVenue("PGP");
+			itemPointer -> addToBank(itemSearchTest1);
+
+			itemSearchTest2 -> setItemType("task");
+			itemSearchTest2 -> setTitle("overall testing");
+			itemSearchTest2 -> setDescription("For JustAddIt");
+			itemSearchTest2 -> setPriority("High");
+			itemSearchTest2 -> setCategory("Group Project");
+			itemSearchTest2 -> setVenue("UTown");
+			itemPointer -> addToBank(itemSearchTest2);
+
+			Assert::AreEqual(itemPointer -> getBankSize(), 2);
+
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest1 -> getItemTypeInString(), "dead"), true);
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest1 -> getTitle(), "test"), true);
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest1 -> getDescription(), "AddIt"), true);
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest1 -> getStartDateInString(), "4"), true);
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest1 -> getEndDateInString(), "10"), true);
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest1 -> getPriorityInString(), "Med"), true);
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest1 -> getCategory(), "Individual Component"), true);
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest1 -> getVenue(), "PGP"), true);
+
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest2 -> getItemTypeInString(), "dead"), false);
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest2 -> getTitle(), "test"), true);
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest2 -> getDescription(), "AddIt"), true);
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest2 -> getStartDateInString(), "4"), false);
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest2 -> getEndDateInString(), "10"), false);
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest2 -> getPriorityInString(), "Med"), false);
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest2 -> getCategory(), "Individual Component"), false);
+			Assert::AreEqual(itemPointer -> searchKeyword(itemSearchTest2 -> getVenue(), "PGP"), false);
+		}
+	};
+}
+	// End of segment: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdSearchTest.cpp
+
+
+
+
+

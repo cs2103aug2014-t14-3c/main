@@ -1,0 +1,1578 @@
+//@author: a0108397w
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\CmdDeleteItem.cpp
+	 */
+
+#include "stdafx.h"
+#include "CmdDeleteItem.h"
+
+const string CmdDeleteItem::MESSAGE_DELETION_SUCCESSFUL = "Item(s) successfully deleted!";
+const string CmdDeleteItem::LOG_ITEMS_DELETED = "INFO: Items deleted from ItemBank::getInstance()->bank";
+const string CmdDeleteItem::LOG_BASE_SCREEN_STORED = "INFO: outputMessageStorage stores base screen";
+const string CmdDeleteItem::LOG_SUCCESS_MESSAGE_STORED = "INfO: Success message is stored into outputMessageStorage";
+const string CmdDeleteItem::LOG_ACTION_LOG_UPDATED = "INFO: Command is stored into ActionLog";
+const string CmdDeleteItem::ERROR_EMPTY_VECTOR = "Please choose one or more Items to delete!";
+const string CmdDeleteItem::TEXT_FILE_NAME = "JustAddIt/Logs/CmdDeleteItem_Log.txt";
+
+CmdDeleteItem::CmdDeleteItem(vector<Item*> itemsToDelete) {
+	_itemsToDelete = itemsToDelete;
+
+	if (_itemsToDelete.size() == 0) {
+		throw invalid_argument(ERROR_EMPTY_VECTOR);
+	}
+}
+
+CmdDeleteItem::~CmdDeleteItem(void) {
+}
+
+//This function first deletes items based on their addresses in ItemBank::getInstance()->bank and then stores the base screen
+//together with a success message into outputMessageStorage. The outputMessageStorage is then returned for 
+//display.
+vector<string> CmdDeleteItem::execute() {
+
+	deleteItemsFromBank();
+
+	outputMessageStorage.clear();
+	outputMessageStorage = returnToBaseScreen();
+
+	storeSuccessMessage();
+
+	storeCommandIntoActionLog();
+
+	return outputMessageStorage;
+}
+
+//This function calls for Itembank to delete the items in the _itemsToDelete vector
+void CmdDeleteItem::deleteItemsFromBank(void) {
+	ItemBank::getInstance()->deleteItems(_itemsToDelete);
+
+	writeToLog(LOG_ITEMS_DELETED);
+}
+
+//This function first retrieve the base screen information from OutputControl, constructs it and stores it
+//inside baseScreenToBeDisplayed. baseScreenToBeDiplayed is then returned.
+vector<string> CmdDeleteItem::returnToBaseScreen(void) {
+	vector<string>baseScreenToBeDisplayed;
+
+	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
+	baseScreenToBeDisplayed = cmdBase->execute();
+
+	writeToLog(LOG_BASE_SCREEN_STORED);
+
+	return baseScreenToBeDisplayed;
+}
+
+void CmdDeleteItem::storeSuccessMessage() {
+	outputMessageStorage.push_back(MESSAGE_DELETION_SUCCESSFUL);
+
+	writeToLog(LOG_SUCCESS_MESSAGE_STORED);
+}
+
+//This function updates the ActionLog which will be used during undo/redo functions
+void CmdDeleteItem::storeCommandIntoActionLog(void) {
+	ActionLog::addCommand(this);
+
+	writeToLog(LOG_ACTION_LOG_UPDATED);
+}
+
+void CmdDeleteItem::writeToLog (string logEntry) {
+	ofstream mytextfile;
+	mytextfile.open(TEXT_FILE_NAME, ios::app);
+
+	mytextfile << logEntry << endl;
+
+	mytextfile.close();
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\CmdDeleteItem.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\CmdEditItem.cpp
+	 */
+
+#include "stdafx.h"
+#include "CmdEditItem.h"
+
+const string CmdEditItem::MESSAGE_EDIT_SUCCESSFUL = "Item is successfully edited!";
+const string CmdEditItem::ERROR_INVALID_FIELD = "This field cannot be edited.";
+const string CmdEditItem::ERROR_PROGRAM_MALFUNCTION = "An error has occurred!";
+const string CmdEditItem::ERROR_INVALID_FIELD_NUMBER = "Invalid field number! Please enter a valid field number 1 - 6.";
+const string CmdEditItem::ERROR_EMPTY_FIELD = "Empty input! Please enter a valid input.";
+const string CmdEditItem::LOG_OUTPUTCONTROL_UPDATED = "INFO: Output control is updated";
+const string CmdEditItem::LOG_ACTION_LOG_UPDATED = "INFO: Command is stored into ActionLog";
+const string CmdEditItem::LOG_SUCCESS_MESSAGE_STORED = "INFO: Success message is stored into outputMessageStorage";
+const string CmdEditItem::LOG_EDIT_SCREEN_STORED = "INFO: Edit screen is stored and returned to be displayed";
+const string CmdEditItem::LOG_EDIT_FIELD_DETERMINED = "INFO: Field to be edited is determined";
+const string CmdEditItem::LOG_ITEM_EDITED = "INFO: Item field is edited";
+const string CmdEditItem::TEXT_FILE_NAME = "JustAddIt/Logs/CmdEditItem_Log.txt";
+const string CmdEditItem::TASK = "task";
+const string CmdEditItem::DEADLINE = "deadline";
+enum FIELD_TO_BE_EDITED {EDIT_TITLE, EDIT_DESCRIPTION, EDIT_START_TIME, EDIT_END_TIME, EDIT_PRIORITY, EDIT_CATEGORY, INVALID};
+
+//This constructor is used when editing items fields that contain strings variables (i.e. title, description,
+//category)
+CmdEditItem::CmdEditItem(vector<Item*>::iterator itemPtr, int fieldNum, string newFieldInfo) {
+	assert(*itemPtr != nullptr);
+
+	if (fieldNum != 1 && fieldNum != 2 && fieldNum != 3 && fieldNum != 4 && fieldNum != 5 && fieldNum != 6) {
+		throw invalid_argument(ERROR_INVALID_FIELD_NUMBER);
+	}
+
+	if (newFieldInfo == "") {
+		newFieldInfo = "-"; //storing "" into DataStorage will cause the program to crash during reinitialisation
+	}
+
+	_itemAddr = *itemPtr;
+	_editFieldNumber = fieldNum;
+	_newFieldInfo = newFieldInfo;
+	_isEditField = true;
+}
+
+//This constructor is used when editing start and end date time
+CmdEditItem::CmdEditItem(vector<Item*>::iterator itemPtr, int fieldNum, tm newTimeInfo) {
+	assert(*itemPtr != nullptr);
+
+	if (fieldNum != 1 && fieldNum != 2 && fieldNum != 3 && fieldNum != 4 && fieldNum != 5 && fieldNum != 6) {
+		throw invalid_argument(ERROR_INVALID_FIELD_NUMBER);
+	}
+
+	if ((*itemPtr)->getItemTypeInString() == TASK || ((*itemPtr)->getItemTypeInString() == DEADLINE && fieldNum == 3)) {
+		throw invalid_argument(ERROR_INVALID_FIELD);
+	}
+
+	_itemAddr = *itemPtr;
+	_editFieldNumber = fieldNum;
+	_newTimeInfo = newTimeInfo;
+	_isEditField = true;
+}
+//This constructor is used when editing priority
+CmdEditItem::CmdEditItem(vector<Item*>::iterator itemPtr, int fieldNum, Item::PriorityLevel newPriorityInfo) {
+	assert(*itemPtr != nullptr);
+
+	if (fieldNum != 1 && fieldNum != 2 && fieldNum != 3 && fieldNum != 4 && fieldNum != 5 && fieldNum != 6) {
+		throw invalid_argument(ERROR_INVALID_FIELD_NUMBER);
+	}
+
+	_itemAddr = *itemPtr;
+	_editFieldNumber = fieldNum;
+	_newPriorityInfo = newPriorityInfo;
+	_isEditField = true;
+}
+
+//This constructor is used when selecting an item to be edited from a list
+CmdEditItem::CmdEditItem(vector<Item*>::iterator itemPtr) {
+	assert(*itemPtr != nullptr);
+
+	_itemAddr = *itemPtr;
+	_isEditField = false;
+}
+
+
+
+CmdEditItem::~CmdEditItem(void) {
+}
+
+//This function is used to edit an item using its address and return a edit screen which will be displayed to the user
+vector<string> CmdEditItem::execute() {
+	editItem();
+
+	outputMessageStorage.clear();
+	outputMessageStorage = storeEditScreenForDisplay();
+
+	storeSuccessMessage();
+
+	updateActionLog();
+
+	updateOutputControl();
+
+	return outputMessageStorage;
+}
+
+//This function invokes the corresponding edit functions in the ItemBank class based on the user's input
+void CmdEditItem::editItem() {
+	ItemBank* itemBank = ItemBank::getInstance();
+
+	if(_isEditField){
+		FIELD_TO_BE_EDITED editField = determineEditField();
+
+		switch (editField) {
+		case EDIT_TITLE: {
+			itemBank->editItemTitle(_itemAddr, _newFieldInfo);
+			break;
+						 }
+		case EDIT_DESCRIPTION: {
+			itemBank->editItemDescription(_itemAddr, _newFieldInfo);
+			break;
+							   }
+		case EDIT_START_TIME: {
+			itemBank->editItemStartDateTime(_itemAddr, _newTimeInfo);
+			break;
+							  }
+		case EDIT_END_TIME: {
+			itemBank->editItemEndDateTime(_itemAddr, _newTimeInfo);
+			break;
+							}
+		case EDIT_PRIORITY: {
+			itemBank->editItemPriority(_itemAddr, _newPriorityInfo);
+			break;
+							}
+		case EDIT_CATEGORY: {
+			itemBank->editItemCategory(_itemAddr, _newFieldInfo);
+			break;
+							}
+		case INVALID: {
+			throw invalid_argument(ERROR_INVALID_FIELD_NUMBER);
+			break;
+					  }
+		default: {
+			throw invalid_argument(ERROR_PROGRAM_MALFUNCTION);
+			break;
+				 }
+		}
+	}
+
+	writeToLog(LOG_ITEM_EDITED);
+}
+
+FIELD_TO_BE_EDITED CmdEditItem::determineEditField() {
+	if (_editFieldNumber == 1) {
+		return EDIT_TITLE;
+	}
+	else if (_editFieldNumber == 2) {
+		return EDIT_DESCRIPTION;
+	}
+	else if (_editFieldNumber == 3) {
+		return EDIT_START_TIME;
+	}
+	else if (_editFieldNumber == 4) {
+		return EDIT_END_TIME;
+	}
+	else if (_editFieldNumber == 5) {
+		return EDIT_PRIORITY;
+	}
+	else if (_editFieldNumber == 6) {
+		return EDIT_CATEGORY;
+	}
+	else {
+		return INVALID;
+	}
+
+	writeToLog(LOG_EDIT_FIELD_DETERMINED);
+}
+
+//This function calls DisplayScreenConstructor class to construct the edit screen and return it as a vector<string>
+vector<string> CmdEditItem::storeEditScreenForDisplay() {
+	vector<string> editScreenToBeDisplayed;
+
+	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
+	editScreenToBeDisplayed = displayScreenConstructor->clearScreen();
+	editScreenToBeDisplayed = displayScreenConstructor->constructEditScreen(_itemAddr);
+
+	writeToLog(LOG_EDIT_SCREEN_STORED);
+
+	return editScreenToBeDisplayed;
+}
+
+void CmdEditItem::storeSuccessMessage() {
+	if(_isEditField){
+		outputMessageStorage.push_back(MESSAGE_EDIT_SUCCESSFUL);
+
+		writeToLog(LOG_SUCCESS_MESSAGE_STORED);
+	}
+}
+
+void CmdEditItem::updateOutputControl() {
+	OutputControl::setCurrentScreen(OutputControl::EDIT_SCREEN);
+	OutputControl::resetCurrentItemList();
+	OutputControl::addItemToDisplayList(_itemAddr);
+
+	writeToLog(LOG_OUTPUTCONTROL_UPDATED);
+}
+
+void CmdEditItem::updateActionLog() {
+	ActionLog::addCommand(this);
+
+	writeToLog(LOG_ACTION_LOG_UPDATED);
+}
+
+void CmdEditItem::writeToLog(string logEntry) {
+	ofstream mytextfile;
+	mytextfile.open(TEXT_FILE_NAME, ios::app);
+
+	mytextfile << logEntry << endl;
+
+	mytextfile.close();
+}
+
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\CmdEditItem.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\CmdExport.cpp
+	 */
+
+#include "stdafx.h"
+#include "CmdExport.h"
+
+const string CmdExport::MESSAGE_EXPORT_SUCCESSFUL = "The current screen has been exported into the file \"JustAddIt_Exports.html\"!";
+
+CmdExport::CmdExport(void) {
+}
+
+
+CmdExport::~CmdExport(void) {
+}
+
+//This function simply reflects a success message when it is called to provide the user with the name of the exported text file
+vector<string> CmdExport::execute() {
+	outputMessageStorage.push_back(MESSAGE_EXPORT_SUCCESSFUL);
+
+	return outputMessageStorage;
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\CmdExport.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\CmdMarkItemDone.cpp
+	 */
+
+#include "stdafx.h"
+#include "CmdMarkItemDone.h"
+
+const string CmdMarkItemDone::MESSAGE_MARK_SUCCESSFUL = "Item(s) successfully marked!";
+const string CmdMarkItemDone::LOG_ITEMS_MARKED = "INFO: Items marked in ItemBank::bank";
+const string CmdMarkItemDone::LOG_BASE_SCREEN_STORED = "INFO: outputMessageStorage stores base screen";
+const string CmdMarkItemDone::LOG_SUCCESS_MESSAGE_STORED = "INfO: Success message is stored into outputMessageStorage";
+const string CmdMarkItemDone::LOG_ACTION_LOG_UPDATED = "INFO: Command is stored into ActionLog";
+const string CmdMarkItemDone::ERROR_EMPTY_VECTOR = "Please choose one or more Items to mark!";
+const string CmdMarkItemDone::TEXT_FILE_NAME = "JustAddIt/Logs/CmdMarkItemDone_Log.txt";
+
+CmdMarkItemDone::CmdMarkItemDone(vector<Item*> itemsToBeMarked) {
+	_itemsToBeMarked = itemsToBeMarked;
+
+	if (_itemsToBeMarked.size() == 0) {
+		throw invalid_argument(ERROR_EMPTY_VECTOR);
+	}
+}
+
+CmdMarkItemDone::~CmdMarkItemDone(void) {
+}
+
+//This function first marks items based on their addresses in ItemBank::bank and then stores the base screen
+//together with a success message into outputMessageStorage. The outputMessageStorage is then returned for 
+//display.
+vector<string> CmdMarkItemDone::execute() {
+
+	toggleItemsDone();
+
+	outputMessageStorage.clear();
+	outputMessageStorage = returnToBaseScreen();
+
+	storeSuccessMessage();
+
+	storeCommandIntoActionLog();
+
+	return outputMessageStorage;
+}
+
+//This function calls for Itembank to mark the items in the _itemsToBeMarked vector
+void CmdMarkItemDone::toggleItemsDone(void) {
+	ItemBank::getInstance()->toggleItemsDone(_itemsToBeMarked);
+
+	writeToLog(LOG_ITEMS_MARKED);
+}
+
+//This function first retrieve the base screen information from OutputControl, contructs it and stores it
+//inside screen. screenToBeDiplayed is then returned.
+vector<string> CmdMarkItemDone::returnToBaseScreen(void) {
+	vector<string>screen;
+
+	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
+	screen = cmdBase->execute();
+
+	writeToLog(LOG_BASE_SCREEN_STORED);
+
+	return screen;
+}
+
+void CmdMarkItemDone::storeSuccessMessage(void) {
+	outputMessageStorage.push_back(MESSAGE_MARK_SUCCESSFUL);
+
+	writeToLog(LOG_SUCCESS_MESSAGE_STORED);
+}
+
+//This function updates the ActionLog which will be used during undo/redo functions
+void CmdMarkItemDone::storeCommandIntoActionLog(void) {
+	ActionLog::addCommand(this);
+
+	writeToLog(LOG_ACTION_LOG_UPDATED);
+}
+
+void CmdMarkItemDone::writeToLog (string logEntry) {
+	ofstream mytextfile;
+	mytextfile.open(TEXT_FILE_NAME, ios::app);
+
+	mytextfile << logEntry << endl;
+
+	mytextfile.close();
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\CmdMarkItemDone.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\CmdShowOverdueDeadlines.cpp
+	 */
+
+#include "stdafx.h"
+#include "CmdShowOverdueDeadlines.h"
+
+const string CmdShowOverdueDeadlines::LOG_OVERDUE_SCREEN_STORED = "INFO: Overdue screen has been constructed and stored in a string vector";
+const string CmdShowOverdueDeadlines::LOG_OUTPUTCONTROL_UPDATED = "INFO: OutputControl is updated with the current command";
+const string CmdShowOverdueDeadlines::LOG_OVERDUE_DEADLINES_RETRIEVED = "INFO: All overdue deadlines have been retrieved from Bank";
+const string CmdShowOverdueDeadlines::TEXT_FILE_NAME = "JustAddIt/Logs/CmdShowOverdueDeadlines_Log.txt";
+
+CmdShowOverdueDeadlines::CmdShowOverdueDeadlines(void) {
+}
+
+CmdShowOverdueDeadlines::~CmdShowOverdueDeadlines(void) {
+}
+
+//This function retrieves all overdue deadlines from ItemBank, constructs the overdue screen with the deadlines and returns it
+vector<string> CmdShowOverdueDeadlines::execute() {
+	vector<Item*> overdueDeadlines;
+
+	overdueDeadlines = getOverdueDeadlinesFromBank();
+
+	outputMessageStorage.clear();
+	outputMessageStorage = storeOverdueScreenForDisplay(overdueDeadlines);
+
+	updateOutputControl(overdueDeadlines);
+
+	return outputMessageStorage;
+}
+
+vector<Item*> CmdShowOverdueDeadlines::getOverdueDeadlinesFromBank() {
+	vector<Item*> overdueDeadlines;
+	ItemBank* itemBank = ItemBank::getInstance();
+
+	overdueDeadlines = itemBank->getOverdueDeadlines();
+
+	writeToLog(LOG_OVERDUE_DEADLINES_RETRIEVED);
+
+	return overdueDeadlines;
+}
+
+vector<string> CmdShowOverdueDeadlines::storeOverdueScreenForDisplay(vector<Item*> overdueDeadlines) {
+	vector<string> overdueScreen;
+
+	DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
+	overdueScreen = displayScreenConstructor->clearScreen();
+	overdueScreen = displayScreenConstructor->constructOverdueScreen(overdueDeadlines);
+
+	writeToLog(LOG_OVERDUE_SCREEN_STORED);
+
+	return overdueScreen;
+}
+
+void CmdShowOverdueDeadlines::updateOutputControl(vector<Item*> overdueDeadlines) {
+	OutputControl::setCurrentScreen(OutputControl::CurrentScreenType::OVERDUE_TASKS_SCREEN);
+	OutputControl::setCurrentBaseScreen(OutputControl::CurrentScreenType::OVERDUE_TASKS_SCREEN);
+	OutputControl::setCurrentDisplayedItemList(overdueDeadlines);
+
+	writeToLog(LOG_OUTPUTCONTROL_UPDATED);
+}
+
+void CmdShowOverdueDeadlines::writeToLog (string logEntry) {
+	ofstream mytextfile;
+	mytextfile.open(TEXT_FILE_NAME, ios::app);
+
+	mytextfile << logEntry << endl;
+
+	mytextfile.close();
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\CmdShowOverdueDeadlines.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\DataStorage.cpp
+	 */
+
+#include "stdafx.h"
+#include "DataStorage.h"
+
+const string DataStorage::SPACE = " ";
+const string DataStorage::EMPTY_STRING = "";
+const string DataStorage::FILE_NAME = "JustAddIt/JustAddIt_ItemBank.txt";
+const int DataStorage::NUM_OF_ATTRIBUTES_PER_ITEM = 9;
+DataStorage* DataStorage::dataStorage = NULL;
+
+DataStorage::DataStorage(void) {
+}
+
+DataStorage::~DataStorage(void) {
+}
+
+DataStorage* DataStorage::getInstance(void) {
+	if (dataStorage == NULL) {
+		dataStorage = new DataStorage();
+	}
+	return dataStorage;
+}
+
+//This function writes the details of the Items stored in the program into the computer's local memory - in the format of a
+//text file
+void DataStorage::writeToFile(vector<string>itemDetails) {
+	ofstream mytextfile;
+	mytextfile.open(FILE_NAME);
+
+	for (vector<string>::iterator iter = itemDetails.begin(); iter != itemDetails.end(); iter++) {
+		mytextfile << *iter << endl;
+	}
+
+	mytextfile.close();
+}
+
+//This function extracts the Item details stored inside the computer's local memory (in the form of a text file)
+//and returns it to ItemBank as a vector<string>
+vector<string> DataStorage::readFromLocalMemory() {
+	vector<string> itemDetails;
+	string dummyLine;
+	ifstream mytextfile;
+	mytextfile.open(FILE_NAME);
+
+	while (!mytextfile.eof()) {
+
+		getline(mytextfile, dummyLine);
+
+		if (dummyLine != EMPTY_STRING) {
+			dummyLine = trimWhiteSpaceOnLeft(dummyLine);
+			itemDetails.push_back(dummyLine);
+		}
+	}
+	mytextfile.close();
+
+	if (isCorrupted(itemDetails) == true) {
+		itemDetails.clear();
+	}
+	return itemDetails;
+}
+
+inline string DataStorage::trimWhiteSpaceOnLeft(const string& inputString) {
+	return inputString.substr( inputString.find_first_not_of(SPACE));
+}
+
+//This function checks to see if the local memory (text file) has been altered by removing any content or adding addItional content
+bool DataStorage::isCorrupted(vector<string> itemDetails) {
+	bool isCorrupted = false;
+
+	if (itemDetails.size()%NUM_OF_ATTRIBUTES_PER_ITEM != 0) {
+		isCorrupted = true;
+	}
+
+	return isCorrupted;
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\DataStorage.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\DisplayScreenConstructor.cpp
+	 */
+
+#include "stdafx.h"
+#include "DisplayScreenConstructor.h"
+
+using namespace std;
+
+const string DisplayScreenConstructor::TEMPLATE_SCREEN_HOME = "JustAddIt/Templates/HomeScreen.txt";
+const string DisplayScreenConstructor::TEMPLATE_SCREEN_EDIT = "JustAddIt/Templates/EditScreen.txt";
+const string DisplayScreenConstructor::TEMPLATE_SCREEN_SEARCH = "JustAddIt/Templates/SearchScreen.txt";
+const string DisplayScreenConstructor::TEMPLATE_SCREEN_LISTVIEW = "JustAddIt/Templates/ListViewScreen.txt";
+const string DisplayScreenConstructor::TEMPLATE_SCREEN_OVERDUE = "JustAddIt/Templates/OverdueScreen.txt";
+const string DisplayScreenConstructor::MARK_DONE = "<span style=\"color:#CC0000;\">[DONE]</span> ";
+const string DisplayScreenConstructor::HOME_WEEK_CLEAR = "<span style=\"color:#d3d3d3;\">You're clear for the week!</span>";
+const string DisplayScreenConstructor::HOME_HAPPENINGS = "<u>What's going on this week?</u>";
+const string DisplayScreenConstructor::EDIT_HEADER = "<u>Edit ";
+const string DisplayScreenConstructor::EDIT_TITLE_FIELD = "1) Title: ";
+const string DisplayScreenConstructor::EDIT_DESCRIPTION_FIELD = "2) Description: ";
+const string DisplayScreenConstructor::EDIT_START_TIME_FIELD = "3) Start: ";
+const string DisplayScreenConstructor::EDIT_END_TIME_FIELD = "4) End: ";
+const string DisplayScreenConstructor::EDIT_PRIORITY_FIELD = "5) Priority: ";
+const string DisplayScreenConstructor::EDIT_CATEGORY_FIELD = "6) Category: ";
+const string DisplayScreenConstructor::SEARCH_SHOW_RESULTS = "<u>Showing results:</u> <i>";
+const string DisplayScreenConstructor::SEARCH_NO_RESULTS = "<span style=\"color:#d3d3d3;\">No results found.</span>";
+const string DisplayScreenConstructor::LISTVIEW_ALL_EVENTS = "<u>All Events</u>";
+const string DisplayScreenConstructor::LISTVIEW_NO_EVENTS = "<span style=\"color:#d3d3d3;\">No events found</span>";
+const string DisplayScreenConstructor::LISTVIEW_NO_DEADLINES = "<span style=\"color:#d3d3d3;\">No deadlines found</span>";
+const string DisplayScreenConstructor::LISTVIEW_NO_TASKS = "<span style=\"color:#d3d3d3;\">No tasks found</span>";
+const string DisplayScreenConstructor::OVERDUE_HEADER = "<u>Overdue Deadlines";
+const string DisplayScreenConstructor::OVERDUE_NO_OVERDUE = "<span style=\"color:#d3d3d3;\">All caught up! Nothing is overdue.</span>";
+const string DisplayScreenConstructor::OVERDUE_DUE = " was due ";
+const string DisplayScreenConstructor::PERIOD = ". ";
+const string DisplayScreenConstructor::FROM = "&nbsp;&nbsp;&nbsp;from:&nbsp;";
+const string DisplayScreenConstructor::TO = "&nbsp;&nbsp;&nbsp;to:&nbsp;&nbsp;&nbsp;&nbsp;";
+const string DisplayScreenConstructor::BY = "&nbsp;&nbsp;&nbsp;by:&nbsp;&nbsp;&nbsp;&nbsp;";
+const string DisplayScreenConstructor::DEFAULT_INPUT = "-";
+const string DisplayScreenConstructor::BLANK =  "";
+const string DisplayScreenConstructor::NEW_LINE = "<br>";
+
+DisplayScreenConstructor* DisplayScreenConstructor::displayScreenConstructor = NULL;
+
+DisplayScreenConstructor::DisplayScreenConstructor(void) {
+}
+
+DisplayScreenConstructor::~DisplayScreenConstructor(void) {
+}
+
+DisplayScreenConstructor* DisplayScreenConstructor::getInstance(void) {
+	if (displayScreenConstructor == NULL) {
+		displayScreenConstructor = new DisplayScreenConstructor();
+	}
+	return displayScreenConstructor;
+}
+
+vector<string> DisplayScreenConstructor::constructHomeScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events) {
+	outputMessageStorage.clear();
+	outputMessageStorage = displayItemsOnHomeScreen(tasks, deadlines, events);
+
+	exportToFile(outputMessageStorage);
+
+	return outputMessageStorage;
+}
+
+//This function inserts Item details onto the Home screen for display
+vector<string> DisplayScreenConstructor::displayItemsOnHomeScreen(vector<Item*> tasks, vector<Item*> deadlines, vector<Item*> events) {
+	ifstream mytextfile (TEMPLATE_SCREEN_HOME);
+	vector<string> homeScreen;
+	string dummyLine;
+	int displayCounter = 1;
+
+	while (!mytextfile.eof()) {
+		getline(mytextfile, dummyLine);
+
+		if (dummyLine == HOME_HAPPENINGS) {
+			homeScreen.push_back(dummyLine);
+
+			getline(mytextfile, dummyLine);
+			homeScreen.push_back(dummyLine);
+
+			if(events.empty() && deadlines.empty() && tasks.empty()) {
+				dummyLine += HOME_WEEK_CLEAR;
+				homeScreen.push_back(dummyLine);
+			}
+			else {
+				vector<string> eventList = constructEventList(events,displayCounter);
+				vector<string> deadlineList = constructDeadlineList(deadlines, displayCounter);
+				vector<string> taskList = constructTaskList(tasks, displayCounter);
+
+				homeScreen.insert(homeScreen.end(), eventList.begin(), eventList.end());
+				homeScreen.insert(homeScreen.end(), deadlineList.begin(), deadlineList.end());
+				homeScreen.insert(homeScreen.end(), taskList.begin(), taskList.end());
+			}
+		}
+		else {
+			homeScreen.push_back(dummyLine);
+		}
+	}
+	return homeScreen;
+}
+
+//This function detects the various fields in the template Edit screen and inputs the corresponding Item details.
+vector<string> DisplayScreenConstructor::constructEditScreen(Item* item) {
+	ifstream mytextfile (TEMPLATE_SCREEN_EDIT);
+	string dummyLine;
+
+	outputMessageStorage.clear();
+
+	while (!mytextfile.eof()) {
+		getline(mytextfile, dummyLine);
+
+		if (dummyLine == EDIT_HEADER) {
+			dummyLine += item->getItemTypeInString();
+		}
+		else if (dummyLine == EDIT_TITLE_FIELD) {
+
+			if (item->isDone()) {
+				dummyLine += MARK_DONE;
+			}
+
+			dummyLine += item->getTitle();
+
+		}
+		else if (dummyLine == EDIT_DESCRIPTION_FIELD) {
+			if (item->getDescription() == DEFAULT_INPUT) {
+				dummyLine += BLANK;
+			}
+			else {
+				dummyLine += item->getDescription();
+			}
+		}
+		else if (dummyLine == EDIT_START_TIME_FIELD) {
+			if (item->isTask() || item->isDeadline()) {
+				dummyLine += BLANK;
+			}
+			else {
+				dummyLine += item->getStartDateInString();
+			}
+		}
+		else if (dummyLine == EDIT_END_TIME_FIELD) {
+			if (item->isTask()) {
+				dummyLine += BLANK;
+			}
+			else {
+				dummyLine += item->getEndDateInString();
+			}
+		}
+		else if (dummyLine == EDIT_PRIORITY_FIELD) {
+			dummyLine += item->getPriorityInString();
+		}
+		else if (dummyLine == EDIT_CATEGORY_FIELD) {
+			if (item->getCategory() == DEFAULT_INPUT) {
+				dummyLine += BLANK;
+			}
+			else {
+				dummyLine += item->getCategory();
+			}
+		}
+
+		outputMessageStorage.push_back(dummyLine);
+	}
+
+	exportToFile(outputMessageStorage);
+
+	return outputMessageStorage;
+}
+
+vector<string> DisplayScreenConstructor::constructSearchScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events, string keyword) {
+	outputMessageStorage.clear();
+	outputMessageStorage = displayItemsOnSearchScreen(tasks, deadlines, events, keyword);
+	exportToFile(outputMessageStorage);
+
+	return outputMessageStorage;
+}
+
+//This function inputs the searched items onto the Search screen for display
+vector<string> DisplayScreenConstructor::displayItemsOnSearchScreen(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events, string keyword) {
+	ifstream mytextfile (TEMPLATE_SCREEN_SEARCH);
+	vector<string> searchScreen;
+	string dummyLine;
+	int displayCounter = 1;
+
+	while (!mytextfile.eof()) {
+		getline(mytextfile, dummyLine);
+
+		if (dummyLine == SEARCH_SHOW_RESULTS) {
+			dummyLine += keyword;
+			searchScreen.push_back(dummyLine);
+
+			getline(mytextfile, dummyLine);
+			searchScreen.push_back(dummyLine);
+
+			if(events.empty() && deadlines.empty() && tasks.empty()){
+				dummyLine += SEARCH_NO_RESULTS;
+				searchScreen.push_back(dummyLine);
+			}
+			else{
+				vector<string> eventList = constructEventList(events,displayCounter);
+				vector<string> deadlineList = constructDeadlineList(deadlines, displayCounter);
+				vector<string> taskList = constructTaskList(tasks, displayCounter);
+
+				searchScreen.insert(searchScreen.end(), eventList.begin(), eventList.end());
+				searchScreen.insert(searchScreen.end(), deadlineList.begin(), deadlineList.end());
+				searchScreen.insert(searchScreen.end(), taskList.begin(), taskList.end());
+			}
+		}
+		else {
+			searchScreen.push_back(dummyLine);
+		}
+	}
+
+	return searchScreen;
+}
+
+vector<string> DisplayScreenConstructor::constructListView(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events) {
+	outputMessageStorage.clear();
+	outputMessageStorage = displayItemsOnListView(tasks, deadlines, events);
+	exportToFile(outputMessageStorage);
+
+	return outputMessageStorage;
+}
+
+vector<string> DisplayScreenConstructor::displayItemsOnListView(vector<Item*>tasks, vector<Item*>deadlines, vector<Item*>events) {
+	ifstream mytextfile (TEMPLATE_SCREEN_LISTVIEW);
+	vector<string> listViewScreen, eventList, deadlineList, taskList;
+	string dummyLine;
+	int displayCounter = 1;
+	vector<Item*>::iterator iter;
+
+	while (!mytextfile.eof()) {
+		getline(mytextfile, dummyLine);
+
+		if (dummyLine == LISTVIEW_ALL_EVENTS) {
+
+			listViewScreen.push_back(dummyLine);
+			getline(mytextfile, dummyLine);
+			listViewScreen.push_back(dummyLine);
+
+			if(events.empty()){
+				dummyLine += LISTVIEW_NO_EVENTS;
+				listViewScreen.push_back(dummyLine);
+			}
+			else{
+				eventList = constructEventList(events,displayCounter);
+				listViewScreen.insert(listViewScreen.end(), eventList.begin(), eventList.end());
+			}
+
+			getline(mytextfile, dummyLine);
+			listViewScreen.push_back(dummyLine);
+			getline(mytextfile, dummyLine);
+			listViewScreen.push_back(dummyLine);
+			getline(mytextfile, dummyLine);
+			listViewScreen.push_back(dummyLine);
+
+			if(deadlines.empty()){
+				dummyLine += LISTVIEW_NO_DEADLINES;
+				listViewScreen.push_back(dummyLine);
+			}
+			else{
+				deadlineList = constructDeadlineList(deadlines, displayCounter);
+				listViewScreen.insert(listViewScreen.end(), deadlineList.begin(), deadlineList.end());
+			}
+
+			getline(mytextfile, dummyLine);
+			listViewScreen.push_back(dummyLine);
+			getline(mytextfile, dummyLine);
+			listViewScreen.push_back(dummyLine);
+			getline(mytextfile, dummyLine);
+			listViewScreen.push_back(dummyLine);
+
+			if(tasks.empty()){
+				dummyLine += LISTVIEW_NO_TASKS;
+				listViewScreen.push_back(dummyLine);
+			}
+			else{
+				taskList = constructTaskList(tasks, displayCounter);
+				listViewScreen.insert(listViewScreen.end(), taskList.begin(), taskList.end());
+			}
+		}
+		else {
+			listViewScreen.push_back(dummyLine);
+		}
+	}
+
+	return listViewScreen;
+}
+
+vector<string> DisplayScreenConstructor::constructOverdueScreen(vector<Item*>items) {
+
+	outputMessageStorage.clear();
+	outputMessageStorage = displayItemsOnOverdueScreen(items);
+	exportToFile(outputMessageStorage);
+
+	return outputMessageStorage;
+}
+
+vector<string> DisplayScreenConstructor::displayItemsOnOverdueScreen (vector<Item*> overdueItems) {
+	ifstream mytextfile (TEMPLATE_SCREEN_OVERDUE);
+	vector<string> overdueScreen;
+	string dummyLine;
+	int displayCounter = 1;
+	vector<Item*>::iterator iter;
+
+	while (!mytextfile.eof()) {
+		getline(mytextfile, dummyLine);
+		if (dummyLine == OVERDUE_HEADER) {
+			overdueScreen.push_back(dummyLine);
+
+			getline(mytextfile, dummyLine);
+			overdueScreen.push_back(dummyLine);
+
+			if(overdueItems.empty()){
+				dummyLine += OVERDUE_NO_OVERDUE;
+				overdueScreen.push_back(dummyLine);
+			}
+			else{
+				vector<string> overdueList = constructOverdueList(overdueItems, displayCounter);
+				overdueScreen.insert(overdueScreen.end(), overdueList.begin(), overdueList.end());
+			}
+		}
+		else {
+			overdueScreen.push_back(dummyLine);
+		}
+	}
+
+	return overdueScreen;
+}
+
+vector<string> DisplayScreenConstructor::constructOverdueList(vector<Item*>overdueItems, int &displayCounter) {
+	vector<string> overdueList;
+	string overdueItem;
+
+	for (vector<Item*>::iterator iter = overdueItems.begin(); iter != overdueItems.end(); iter++) {
+		overdueItem = constructOverdueItemDisplay(iter, displayCounter);
+		overdueList.push_back(overdueItem);
+		displayCounter++;
+	}
+
+	return overdueList;
+}
+
+string DisplayScreenConstructor::constructOverdueItemDisplay(vector<Item*>::iterator iter, int displayCounter) {
+	string overdueItem;
+	overdueItem = to_string(displayCounter) + PERIOD;
+
+	if ((*iter)->isDone()) {
+		overdueItem += MARK_DONE;
+	}
+
+	overdueItem += FORMAT_BOLD_OPEN + (*iter)->getTitle() + FORMAT_BOLD_CLOSE + OVERDUE_DUE + (*iter)->getEndDateInString();
+
+	return overdueItem;
+}
+
+vector<string> DisplayScreenConstructor::constructEventList(vector<Item*> events, int &displayCounter) {
+	vector<string> eventList;
+	string event;
+
+	for (vector<Item*>::iterator iter = events.begin(); iter != events.end(); iter++) {
+		event = constructEventDisplay(iter, displayCounter);
+		eventList.push_back(event);
+		displayCounter++;
+	}
+
+	return eventList;
+}
+
+//This function constructs the details of a event into a string
+string DisplayScreenConstructor::constructEventDisplay(vector<Item*>::iterator iter, int displayCounter) {
+	string event;
+
+	event = to_string(displayCounter) + PERIOD;
+
+	if ((*iter)->isDone()) {
+		event += MARK_DONE;
+	}
+
+	event += FORMAT_BOLD_OPEN + (*iter)->getTitle() + FORMAT_BOLD_CLOSE + NEW_LINE; 
+	event += FROM + (*iter)->getStartDateInString() + NEW_LINE;
+	event += TO + (*iter)->getEndDateInString();
+
+	return event;
+}
+
+vector<string> DisplayScreenConstructor::constructDeadlineList(vector<Item*> deadlines, int &displayCounter) {
+	vector<string> deadlineList;
+	string deadline;
+
+	for (vector<Item*>::iterator iter = deadlines.begin(); iter != deadlines.end(); iter++) {
+		deadline = constructDeadlineDisplay(iter, displayCounter);
+		deadlineList.push_back(deadline);
+		displayCounter++;
+	}
+
+	return deadlineList;
+}
+
+//This function constructs the details of a deadline into a string
+string DisplayScreenConstructor::constructDeadlineDisplay(vector<Item*>::iterator iter, int displayCounter) {
+	string deadline;
+
+	deadline = to_string(displayCounter) + PERIOD;
+
+	if ((*iter)->isDone()) {
+		deadline += MARK_DONE;
+	}
+
+	deadline += FORMAT_BOLD_OPEN + (*iter)->getTitle() + FORMAT_BOLD_CLOSE + NEW_LINE;
+	deadline += BY + (*iter)->getEndDateInString();
+
+	return deadline;
+}
+
+vector<string> DisplayScreenConstructor::constructTaskList(vector<Item*> tasks, int &displayCounter) {
+	vector<string> taskList;
+	string task;
+
+	for (vector<Item*>::iterator iter = tasks.begin(); iter != tasks.end(); iter++) {
+		task = constructTaskDisplay(iter, displayCounter);
+		taskList.push_back(task);
+		displayCounter++;
+	}
+
+	return taskList;
+}
+
+//This function constructs the details of a task into a string
+string DisplayScreenConstructor::constructTaskDisplay(vector<Item*>::iterator iter, int displayCounter) {
+	string task;
+
+	task = to_string(displayCounter) + PERIOD;
+
+	if ((*iter)->isDone()) {
+		task += MARK_DONE;
+	}
+
+	task += FORMAT_BOLD_OPEN + (*iter)->getTitle() + FORMAT_BOLD_CLOSE;
+
+	return task;
+}
+
+void DisplayScreenConstructor::exportToFile(vector<string>displayScreen) {
+	Exporter* exporter = Exporter::getInstance();
+	exporter->writeToFile(displayScreen);
+}
+
+//after moving away from CLI, we no longer need to clear screen with this method.
+vector<string> DisplayScreenConstructor::clearScreen() {
+	outputMessageStorage.clear();
+	for (int i = 0; i != 50; i++) {
+		outputMessageStorage.push_back(BLANK);
+	}
+	return outputMessageStorage;
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\DisplayScreenConstructor.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\Exporter.cpp
+	 */
+
+#include "stdafx.h"
+#include "Exporter.h"
+
+const string Exporter::ERROR_EMPTY_VECTOR = "Woops! An empty screen has been exported!";
+const string Exporter::BLANK_SPACE = "";
+const string Exporter::EXPORT_FILE_NAME = "JustAddIt_Exports.html";
+const string Exporter::NEWLINE = "<br>";
+
+Exporter* Exporter::exporter = NULL;
+
+Exporter::Exporter(void) {
+}
+
+Exporter::~Exporter(void) {
+}
+
+Exporter* Exporter::getInstance(void) {
+	if (exporter == NULL) {
+		exporter = new Exporter();
+	}
+	return exporter;
+}
+
+//This function exports the current display screen by writing it into a HTML file
+void Exporter::writeToFile(vector<string>displayScreen) {
+	ofstream myHtmlFile;
+	myHtmlFile.open(EXPORT_FILE_NAME);
+
+	checkEmptyExport(displayScreen);
+
+	for (vector<string>::iterator iter = displayScreen.begin(); iter != displayScreen.end(); iter++) {
+		if (*iter != BLANK_SPACE) {
+			myHtmlFile << *iter << NEWLINE << endl;
+		}
+	}
+
+	myHtmlFile.close();
+}
+
+void Exporter::checkEmptyExport(vector<string>displayScreen) {
+	if (displayScreen.size() == 0) {
+		throw invalid_argument(ERROR_EMPTY_VECTOR);
+	}
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\Exporter.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdDeleteItemTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+#include "OutputControl.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+enum CurrentScreenType { 
+	HOME_SCREEN, 
+	EDIT_SCREEN, 
+	SEARCH_RESULTS_SCREEN, 
+	TO_DO_LIST_VIEW, 
+	CALENDAR_VIEW, 
+	OVERDUE_TASKS_SCREEN 
+};
+
+namespace UnitTest
+{		
+	TEST_CLASS(CmdDeleteItemTest)
+	{
+	public:
+
+		TEST_METHOD(CmdDeleteItem_SingleDeletionTest)
+		{
+			ItemBank* itemBank = ItemBank::getInstance();
+			Item* task = new Item();
+			OutputControl* outputControl = new OutputControl();
+			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
+
+			itemBank->addToBank(task);
+			Assert::AreEqual(itemBank->getBankSize(), 1);
+
+			vector<Item*>itemsToBeDeleted;
+			itemsToBeDeleted.push_back(task);
+
+			CmdDeleteItem* cmdDeleteItem = new CmdDeleteItem(itemsToBeDeleted);
+			cmdDeleteItem->execute();
+			Assert::AreEqual(itemBank->getBankSize(), 0);
+
+			itemBank->clearBank();
+		}
+
+		TEST_METHOD(CmdDeleteItem_MultipleDeletionTest)
+		{
+			ItemBank* itemBank = ItemBank::getInstance();
+			OutputControl* outputControl = new OutputControl();
+			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
+
+			Item* task1 = new Item();
+			itemBank->addToBank(task1);
+			Assert::AreEqual(itemBank->getBankSize(), 1);
+
+			Item* task2 = new Item();
+			itemBank->addToBank(task2);
+			Assert::AreEqual(itemBank->getBankSize(), 2);
+
+			Item* task3 = new Item();
+			itemBank->addToBank(task3);
+			Assert::AreEqual(itemBank->getBankSize(), 3);
+
+			vector<Item*>itemsToBeDeleted;
+			itemsToBeDeleted.push_back(task1);
+			itemsToBeDeleted.push_back(task2);
+
+			CmdDeleteItem* cmdDeleteItem = new CmdDeleteItem(itemsToBeDeleted);
+			cmdDeleteItem->execute();
+			Assert::AreEqual(itemBank->getBankSize(), 1);
+
+			itemBank->clearBank();
+		}
+
+		TEST_METHOD(CmdDeleteItem_DeleteAllTest)
+		{
+			ItemBank* itemBank = ItemBank::getInstance();
+			OutputControl* outputControl = new OutputControl();
+			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
+
+			Item* task1 = new Item();
+			itemBank->addToBank(task1);
+			Assert::AreEqual(itemBank->getBankSize(), 1);
+
+			Item* task2 = new Item();
+			itemBank->addToBank(task2);
+			Assert::AreEqual(itemBank->getBankSize(), 2);
+
+			Item* task3 = new Item();
+			itemBank->addToBank(task3);
+			Assert::AreEqual(itemBank->getBankSize(), 3);
+
+			vector<Item*>itemsToBeDeleted;
+			itemsToBeDeleted.push_back(task1);
+			itemsToBeDeleted.push_back(task2);
+			itemsToBeDeleted.push_back(task3);
+
+			CmdDeleteItem* cmdDeleteItem = new CmdDeleteItem(itemsToBeDeleted);
+			cmdDeleteItem->execute();
+			Assert::AreEqual(itemBank->getBankSize(), 0);
+
+			itemBank->clearBank();
+		}
+	};
+}
+	// End of segment: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdDeleteItemTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdEditItemTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+#include "OutputControl.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+enum CurrentScreenType { 
+	HOME_SCREEN, 
+	EDIT_SCREEN, 
+	SEARCH_RESULTS_SCREEN, 
+	TO_DO_LIST_VIEW, 
+	CALENDAR_VIEW, 
+	OVERDUE_TASKS_SCREEN 
+};
+
+namespace UnitTest
+{		
+	TEST_CLASS(CmdEditItemTest)
+	{
+	public:
+
+		TEST_METHOD(CmdEditItem_EditTitleTest)
+		{
+			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
+
+			Item* itemPtr = new Item;
+			itemPtr->setTitle("Title");
+			itemPtr->setDescription("Description");
+			itemPtr->setVenue("-");
+			itemPtr->setCategory("Category");
+			itemPtr->setPriority(static_cast<Item::PriorityLevel>(1));
+			itemPtr->setStartDate(23, 9);
+			itemPtr->setStartTime(8, 0);
+			itemPtr->setEndDate(23, 9);
+			itemPtr->setEndTime(8, 0);
+			itemPtr->setItemTypeTask();
+
+			OutputControl* outputControl = new OutputControl();
+			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
+
+			itemBank->addToBank(itemPtr);
+			Assert::AreEqual(itemBank->getBankSize(), 1);
+			CmdEditItem* cmdEditItem = new CmdEditItem(itemBank->findIter(itemPtr), 1, "New Title");
+			cmdEditItem->execute();
+			Assert::AreEqual((*itemBank->findIter(itemPtr))->getTitle().c_str(), "New Title");
+			itemBank->clearBank();
+		}
+
+		TEST_METHOD(CmdEditItem_EditDescriptionTest)
+		{
+			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
+
+			Item* itemPtr = new Item;
+			itemPtr->setTitle("Title");
+			itemPtr->setDescription("Description");
+			itemPtr->setVenue("-");
+			itemPtr->setCategory("Category");
+			itemPtr->setPriority(static_cast<Item::PriorityLevel>(1));
+			itemPtr->setStartDate(23, 9);
+			itemPtr->setStartTime(8, 0);
+			itemPtr->setEndDate(23, 9);
+			itemPtr->setEndTime(8, 0);
+			itemPtr->setItemTypeTask();
+
+			OutputControl* outputControl = new OutputControl();
+			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
+
+			itemBank->addToBank(itemPtr);
+			Assert::AreEqual(itemBank->getBankSize(), 1);
+			CmdEditItem* cmdEditItem = new CmdEditItem(itemBank->findIter(itemPtr), 2, "New Description");
+			cmdEditItem->execute();
+			Assert::AreEqual((*itemBank->findIter(itemPtr))->getDescription().c_str(), "New Description");
+			itemBank->clearBank();
+		}
+
+		TEST_METHOD(CmdEditItem_EditStartTimeTest)
+		{
+			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
+
+			Item* itemPtr = new Item;
+
+			time_t currentTime_timet;
+			tm currentTime_struct;
+			time(&currentTime_timet);
+			localtime_s(&currentTime_struct, &currentTime_timet);
+
+			Item* newItemPtr = new Item();
+			newItemPtr->setStartDateTime(currentTime_struct);
+
+			OutputControl* outputControl = new OutputControl();
+			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
+
+			itemBank->addToBank(itemPtr);
+			Assert::AreEqual(itemBank->getBankSize(), 1);
+			CmdEditItem* cmdEditItem = new CmdEditItem(itemBank->findIter(itemPtr), 3, currentTime_struct);
+			cmdEditItem->execute();
+			itemBank->editItemStartDateTime(itemPtr, currentTime_struct);
+			Assert::AreEqual((*itemBank->findIter(itemPtr))->getStartDateInString().c_str(), newItemPtr->getStartDateInString().c_str());
+			itemBank->clearBank();
+		}
+		TEST_METHOD(CmdEditItem_EditEndTimeTest)
+		{
+			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
+
+			Item* itemPtr = new Item;
+
+			time_t currentTime_timet;
+			tm currentTime_struct;
+			time(&currentTime_timet);
+			localtime_s(&currentTime_struct, &currentTime_timet);
+
+			Item* newItemPtr = new Item();
+			newItemPtr->setEndDateTime(currentTime_struct);
+
+			OutputControl* outputControl = new OutputControl();
+			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
+
+			itemBank->addToBank(itemPtr);
+			Assert::AreEqual(itemBank->getBankSize(), 1);
+			CmdEditItem* cmdEditItem = new CmdEditItem(itemBank->findIter(itemPtr), 3, currentTime_struct);
+			cmdEditItem->execute();
+			itemBank->editItemEndDateTime(itemPtr, currentTime_struct);
+			Assert::AreEqual((*itemBank->findIter(itemPtr))->getEndDateInString().c_str(), newItemPtr->getEndDateInString().c_str());
+			itemBank->clearBank();
+		}
+		TEST_METHOD(CmdEditItem_EditPriorityTest)
+		{
+			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
+
+			Item* itemPtr = new Item;
+			itemPtr->setTitle("Title");
+			itemPtr->setDescription("Description");
+			itemPtr->setVenue("-");
+			itemPtr->setCategory("Category");
+			itemPtr->setPriority(static_cast<Item::PriorityLevel>(1));
+			itemPtr->setStartDate(23, 9);
+			itemPtr->setStartTime(8, 0);
+			itemPtr->setEndDate(23, 9);
+			itemPtr->setEndTime(8, 0);
+			itemPtr->setItemTypeTask();
+
+			OutputControl* outputControl = new OutputControl();
+			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
+
+			itemBank->addToBank(itemPtr);
+			Assert::AreEqual(itemBank->getBankSize(), 1);
+			CmdEditItem* cmdEditItem = new CmdEditItem(itemBank->findIter(itemPtr), 5, static_cast<Item::PriorityLevel>(2));
+			cmdEditItem->execute();
+			Assert::AreEqual((*itemBank->findIter(itemPtr))->getPriorityInString().c_str(), "High");
+			itemBank->clearBank();
+		}
+		TEST_METHOD(CmdEditItem_EditCategoryTest)
+		{
+			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
+
+			Item* itemPtr = new Item;
+			itemPtr->setTitle("Title");
+			itemPtr->setDescription("Description");
+			itemPtr->setVenue("-");
+			itemPtr->setCategory("Category");
+			itemPtr->setPriority(Item::PriorityLevel::MED);
+			itemPtr->setStartDate(23, 9);
+			itemPtr->setStartTime(8, 0);
+			itemPtr->setEndDate(23, 9);
+			itemPtr->setEndTime(8, 0);
+			itemPtr->setItemTypeTask();
+
+			OutputControl* outputControl = new OutputControl();
+			outputControl->setCurrentScreen(OutputControl::CurrentScreenType::HOME_SCREEN);
+
+			itemBank->addToBank(itemPtr);
+			Assert::AreEqual(itemBank->getBankSize(), 1);
+			CmdEditItem* cmdEditItem = new CmdEditItem(itemBank->findIter(itemPtr), 6, "New Category");
+			cmdEditItem->execute();
+			Assert::AreEqual((*itemBank->findIter(itemPtr))->getCategory().c_str(), "New Category");
+			itemBank->clearBank();
+		}
+	};
+}
+	// End of segment: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdEditItemTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdExportTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+const string MESSAGE_EXPORT_SUCCESSFUL = "The current screen has been exported into the file \"JustAddIt_Exports.html\"!";
+
+namespace UnitTest
+{		
+	TEST_CLASS(CmdExportTest)
+	{
+	public:
+
+		TEST_METHOD(CmdExport_SuccessMessageTest)
+		{
+			CmdExport* cmdExport = new CmdExport();
+			vector<string> outputMessageStorage = cmdExport->execute();
+			Assert::AreEqual(outputMessageStorage.back(), MESSAGE_EXPORT_SUCCESSFUL);
+		}
+
+		TEST_METHOD(CmdExport_FinalStorageSizeTest)
+		{
+			CmdExport* cmdExport = new CmdExport();
+			vector<string> outputMessageStorage = cmdExport->execute();
+			Assert::AreEqual((int)outputMessageStorage.size(), 1);
+		}
+	};
+}
+	// End of segment: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdExportTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdMarkItemDoneTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+#include "OutputControl.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+enum CurrentScreenType { 
+	HOME_SCREEN, 
+	EDIT_SCREEN, 
+	SEARCH_RESULTS_SCREEN, 
+	TO_DO_LIST_VIEW, 
+	CALENDAR_VIEW, 
+	OVERDUE_TASKS_SCREEN 
+};
+
+namespace UnitTest
+{		
+	TEST_CLASS(CmdMarkItemDoneTest)
+	{
+	public:
+
+		TEST_METHOD(CmdMarkItemDone_SingleMarkTest)
+		{
+			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
+			OutputControl* outputControl = new OutputControl();
+			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
+
+			Item* task1 = new Item();
+			itemBank->addToBank(task1);
+			Assert::AreEqual(itemBank->getBankSize(), 1);
+
+			Item* task2 = new Item();
+			itemBank->addToBank(task2);
+			Assert::AreEqual(itemBank->getBankSize(), 2);
+
+			Item* task3 = new Item();
+			itemBank->addToBank(task3);
+			Assert::AreEqual(itemBank->getBankSize(), 3);
+
+			vector<Item*>itemsToBeMarked;
+			itemsToBeMarked.push_back(task1);
+
+			CmdMarkItemDone* cmdMarkItemDone = new CmdMarkItemDone(itemsToBeMarked);
+			cmdMarkItemDone->execute();
+			Assert::AreEqual(itemBank->getNumberOfMarkedItems(), 1);
+
+			itemBank->clearBank();
+		}
+
+		TEST_METHOD(CmdMarkItemDone_MultipleMarkTest)
+		{
+			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
+			OutputControl* outputControl = new OutputControl();
+			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
+
+			Item* task1 = new Item();
+			itemBank->addToBank(task1);
+			Assert::AreEqual(itemBank->getBankSize(), 1);
+
+			Item* task2 = new Item();
+			itemBank->addToBank(task2);
+			Assert::AreEqual(itemBank->getBankSize(), 2);
+
+			Item* task3 = new Item();
+			itemBank->addToBank(task3);
+			Assert::AreEqual(itemBank->getBankSize(), 3);
+
+			vector<Item*>itemsToBeMarked;
+			itemsToBeMarked.push_back(task1);
+			itemsToBeMarked.push_back(task2);
+
+			CmdMarkItemDone* cmdMarkItemDone = new CmdMarkItemDone(itemsToBeMarked);
+			cmdMarkItemDone->execute();
+			Assert::AreEqual(itemBank->getNumberOfMarkedItems(), 2);
+
+			itemBank->clearBank();
+		}
+
+		TEST_METHOD(CmdMarkItemDone_MarkAllTest)
+		{
+			ItemBank* itemBank = ItemBank::getInstance();
+			itemBank->clearBank();
+			OutputControl* outputControl = new OutputControl();
+			outputControl->setCurrentScreen(static_cast<OutputControl::CurrentScreenType>(0));
+
+			Item* task1 = new Item();
+			itemBank->addToBank(task1);
+			Assert::AreEqual(itemBank->getBankSize(), 1);
+
+			Item* task2 = new Item();
+			itemBank->addToBank(task2);
+			Assert::AreEqual(itemBank->getBankSize(), 2);
+
+			Item* task3 = new Item();
+			itemBank->addToBank(task3);
+			Assert::AreEqual(itemBank->getBankSize(), 3);
+
+			vector<Item*>itemsToBeMarked;
+			itemsToBeMarked.push_back(task1);
+			itemsToBeMarked.push_back(task2);
+			itemsToBeMarked.push_back(task3);
+
+			CmdMarkItemDone* cmdMarkItemDone = new CmdMarkItemDone(itemsToBeMarked);
+			cmdMarkItemDone->execute();
+			Assert::AreEqual(itemBank->getNumberOfMarkedItems(), 3);
+
+			itemBank->clearBank();
+		}
+	};
+}
+	// End of segment: D:\GitHub\main\JustAddIt\UnitTestLeon\CmdMarkItemDoneTest.cpp
+
+
+
+
+

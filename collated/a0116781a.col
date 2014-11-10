@@ -1,0 +1,1481 @@
+//@author: a0116781a
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\GUI\gui.cpp
+	 */
+
+#include "gui.h"
+
+#define QSTRING_EMPTY ""
+
+using namespace std;
+
+const QString GUI::WINDOW_ICON = "JustAddIt/JustAddIt_icon.ico";
+const QString GUI::TITLE = "JustAddIt";
+const QString GUI::STYLESHEET_PUSHBUTTON = "QPushButton { border: 1px solid grey; border-radius: 5px; padding: 3px; background-color: #EFF8FF; color: black; }";
+const QString GUI::STYLESHEET_LINEEDIT = "QLineEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: black; }";
+const QString GUI::STYLESHEET_LINEEDIT_PLACEHOLDER = "QLineEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: #a9a9a9; }";
+const QString GUI::STYLESHEET_TEXTEDIT = "QTextEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: black; }";
+const QString GUI::PLACEHOLDER_LINEEDIT = "add {task details}, search {keyword}, export, undo, redo, home, exit";
+
+GUI::GUI(QWidget *parent)
+	: QWidget(parent)
+{
+	ui.setupUi(this);
+
+	//this->setWindowFlags(Qt::FramelessWindowHint);
+	QIcon* icon = new QIcon(WINDOW_ICON);
+	this->setWindowIcon(*icon);
+
+	this->setWindowTitle(TITLE);
+
+	ui.pushButton->setStyleSheet(STYLESHEET_PUSHBUTTON);
+	ui.lineEdit->setStyleSheet(STYLESHEET_LINEEDIT);
+	ui.textEdit->setStyleSheet(STYLESHEET_TEXTEDIT);
+
+	ui.textEdit->setReadOnly(true);
+
+	//connect(ui.lineEdit, SIGNAL(on_lineEdit_textChanged()), ui.lineEdit, SLOT(setStyleSheet()));
+
+	ui.lineEdit->setPlaceholderText(PLACEHOLDER_LINEEDIT);
+	ui.lineEdit->setFocus();
+
+	initProg();
+}
+
+GUI::~GUI()
+{
+
+}
+
+void GUI::initProg() {
+	vector<string> output = Executor::initialise();
+	//RegisterHotKey(NULL, 1, MOD_CONTROL | MOD_ALT, 'J');
+	updateDisplay(output);
+}
+
+void GUI::on_pushButton_clicked() {
+	QString qs = ui.lineEdit->text();
+	string str = qs.toLocal8Bit().constData();
+	
+	vector<string> output;
+	output.clear();
+
+	output = Executor::execute(str);
+
+	updateDisplay(output);
+	
+	ui.lineEdit->clear();
+
+}
+//
+//void GUI::on_lineEdit_textChanged() {
+//	if(isTextPlaceholder(ui.lineEdit->text())) {
+//		emit STYLESHEET_LINEEDIT_PLACEHOLDER;
+//	} else {
+//		emit STYLESHEET_LINEEDIT;
+//	}
+//}
+//
+//bool GUI::isTextPlaceholder(QString string) {
+//	if(string == QSTRING_EMPTY) {
+//		return true;
+//	}
+//	return false;
+//}
+
+void GUI::updateDisplay(vector<string> output) {
+	ui.textEdit->clear();
+	for(vector<string>::iterator iter = output.begin(); iter != output.end(); iter++) {
+		QString string = QString::fromStdString(*iter);
+		ui.textEdit->append(string);
+	}
+	return;
+}
+
+	// End of segment: D:\GitHub\main\JustAddIt\GUI\gui.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\ActionLog.cpp
+	 */
+
+#include "stdafx.h"
+#include "ActionLog.h"
+
+vector<Command*> ActionLog::log;
+stack<Command*> ActionLog::undoStack;
+ActionLog::State ActionLog::state = READY;
+
+const string ActionLog::MESSAGE_INVALID_UNDO = "nothing to undo!";
+const string ActionLog::MESSAGE_INVALID_REDO = "nothing to redo!";
+const string ActionLog::ERROR_LOGIC = "logic error in setting state when adding command";
+
+void ActionLog::addCommand(Command* cmd) {
+	log.push_back(cmd);
+
+	assert(log.size() != 0);
+	
+	//reset the undo stack to zero if the current command is not redo
+	if(state == READY) {
+		resetUndoStack();
+	} else if(state == UNDO) { 
+		state = READY;
+	} else if(state == REDO) {
+		// do nothing
+	} else {
+		throw logic_error(ERROR_LOGIC);
+	}
+}
+
+void ActionLog::undo() {
+	if(log.size() == 0) {
+		throw invalid_argument(MESSAGE_INVALID_UNDO);
+	} else {
+		ItemBank::getInstance()->resetBank();
+
+		vector<Command*> tempLog = copyLog();
+
+		resetLog();
+
+		//executes the commands from when the software is started
+		executeCmds(tempLog.size(), tempLog);
+
+		//adds the last command in tempLog (not executed) to a stack
+		undoStack.push(tempLog.back());		
+	} 
+}
+
+void ActionLog::redo() {
+	if(undoStack.empty()) {
+		throw invalid_argument(MESSAGE_INVALID_REDO);
+	} else {
+		//executes the last command undone (top command in the stack)
+		Command* lastUndo = undoStack.top();
+		undoStack.pop();
+		state = REDO;
+		lastUndo->execute();
+	}
+}
+
+vector<Command*> ActionLog::copyLog() {
+	vector<Command*> tempLog;
+		
+	for(vector<Command*>::iterator iter = log.begin(); iter != log.end(); iter++) {
+		tempLog.push_back(*iter);
+	}
+
+	return tempLog;
+}
+
+void ActionLog::executeCmds(int numCommands, vector<Command*> tempLog) {
+	//executes the commands from when the software is started
+	for(int i = 0; i < numCommands - 1; i++) {
+		state = UNDO;
+		tempLog[i]->execute();
+	}
+}
+
+void ActionLog::resetUndoStack() {
+	while(undoStack.size() != 0) {
+		undoStack.pop();
+	}
+}
+
+void ActionLog::resetLog() {
+	log.clear();
+}
+
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\ActionLog.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\CmdInitialiseBank.cpp
+	 */
+
+#include "stdafx.h"
+#include "CmdInitialiseBank.h"
+
+CmdInitialiseBank::CmdInitialiseBank(void)
+{
+}
+
+CmdInitialiseBank::~CmdInitialiseBank(void)
+{
+}
+
+vector<string> CmdInitialiseBank::execute() {
+	ItemBank::getInstance()->initialiseBank();
+	
+	Command* cmdHome = new CmdHome;
+
+	return cmdHome->execute();
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\CmdInitialiseBank.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\CmdRedo.cpp
+	 */
+
+#include "stdafx.h"
+#include "CmdRedo.h"
+
+
+CmdRedo::CmdRedo(void)
+{
+}
+
+
+CmdRedo::~CmdRedo(void)
+{
+}
+
+vector<string> CmdRedo::execute() {
+	ActionLog::redo();
+
+	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
+
+	return cmdBase->execute();
+}
+
+void CmdRedo::addToActionLog() {
+	//do nothing
+}
+
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\CmdRedo.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\CmdUndo.cpp
+	 */
+
+
+#include "stdafx.h"
+#include "CmdUndo.h"
+
+
+CmdUndo::CmdUndo(void)
+{
+}
+
+
+CmdUndo::~CmdUndo(void)
+{
+}
+
+
+vector<string> CmdUndo::execute() {
+
+	ActionLog::undo();
+
+	Command* cmdBase = new CmdGoToBaseScreen(OutputControl::getCurrentBaseScreen());
+	outputMessageStorage = cmdBase->execute();
+
+	return outputMessageStorage;
+}
+
+void CmdUndo::addToActionLog() {
+	//do nothing
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\CmdUndo.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+	 */
+
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+	 */
+
+vector<string>::iterator Item::strToItem(vector<string>::iterator iter) {
+	setTitle(*iter++);
+	setDescription(*iter++);
+	setStartDateTime(*iter++);
+	setEndDateTime(*iter++);
+	setVenue(*iter++);
+	setPriority(*iter++);
+	setCategory(*iter++);
+	toggleDone(*iter++);
+	setItemType(*iter++);
+
+	return iter;
+}
+
+bool Item::isEvent() {
+	return _itemType == EVENT;
+}
+
+bool Item::isDeadline() {
+	return _itemType == DEADLINE;
+}
+
+bool Item::isTask() {
+	return _itemType == TASK;
+}
+
+string Item::getTitle() {
+	return _title;
+}
+
+string Item::getDescription() {
+	return _description;
+}
+
+struct tm Item::getStartDateTime() {
+	return _startDateTime;
+}
+
+time_t Item::getStartDateTime_T() {
+	return mktime(&_startDateTime);
+}
+
+string Item::getStartDateInString() {
+	char tempArray[MAX_SIZE];
+	if(&_startDateTime==NULL){
+		return STRING_NULL;
+	} else if (_startDateTime.tm_hour == -1) {
+		return STRING_NEGATIVE_ONE;
+	} else {
+	strftime(tempArray, MAX_SIZE, "%A %d %b %Y %I:%M%p", &_startDateTime);
+
+	string str(tempArray);
+
+	return str;
+	}
+}
+
+struct tm Item::getEndDateTime() {
+	return _endDateTime;
+}
+
+time_t Item::getEndDateTime_T() {
+	return mktime(&_endDateTime);
+}
+
+string Item::getEndDateInString() {
+	char tempArray[MAX_SIZE];
+	if(&_endDateTime==NULL){
+		return STRING_NULL;
+	} else if (_endDateTime.tm_hour == -1) {
+		return STRING_NEGATIVE_ONE;
+	} else {
+		strftime(tempArray, MAX_SIZE, "%A %d %b %Y %I:%M%p", &_endDateTime);
+
+		string str(tempArray);
+
+		return str;
+	}
+}
+
+string Item::getVenue() {
+	return _venue;
+}
+
+string Item::getCategory() {
+	return _category;
+}
+
+Item::PriorityLevel Item::getPriority() {
+	return _priority;
+}
+
+string Item::getPriorityInString() {
+	switch(_priority) {
+		case LOW: {
+			return PRIORITY_LOW;
+		}
+		case MED: {
+			return PRIORITY_MED;
+		}
+		case HIGH: {
+			return PRIORITY_HIGH;
+		}
+		case INVALID: {
+			return STRING_INVALID;
+		}
+		default: {
+			return STRING_EMPTY;
+		}
+	}
+}
+
+bool Item::isDone() { 
+	return _isDone;
+}
+
+Item::ItemType Item::getItemType() {
+	return _itemType;
+}
+
+string Item::getItemTypeInString(){
+
+	switch (_itemType) {
+		case EVENT: {
+			return ITEM_TYPE_EVENT;
+		}
+		case DEADLINE: {
+			return ITEM_TYPE_DEADLINE;
+		}
+		case TASK: {
+			return ITEM_TYPE_TASK;
+		}
+		default: {
+			return STRING_EMPTY;
+		}
+	}
+}
+
+int Item::getId() {
+	return _id;
+}
+
+void Item::updateIdCounter(int lastIdUsed) {
+	_idCounter = lastIdUsed + 1;
+}
+
+void Item::setTitle(string title) {
+	_title = title;
+}
+
+void Item::setDescription(string description) {
+	_description = description;
+}
+
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+	 */
+
+//default function with no parameter input sets date to current date
+void Item::setStartDate(){
+	time_t currTime;
+	tm currTimeTM;
+
+	time(&currTime);
+	localtime_s (&currTimeTM, &currTime);
+	setDate(currTimeTM, _startDateTime);
+	mktime(&_startDateTime);
+}
+
+//default function with no parameter input sets date to current date
+void Item::setEndDate(){
+	time_t currTime;
+	tm currTimeTM;
+
+	time(&currTime);
+	localtime_s (&currTimeTM, &currTime);
+	setDate(currTimeTM, _endDateTime);
+	mktime(&_endDateTime);
+}
+
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+	 */
+
+void Item::setVenue(string venue) {
+	_venue = venue;
+}
+
+void Item::setCategory(string category) {
+	_category = category;
+}
+
+void Item::setPriority(string priority) {
+	if(priority == PRIORITY_HIGH) {
+		setPriority(HIGH);
+	} else if (priority == PRIORITY_MED) {
+		setPriority(MED);
+	} else if (priority == PRIORITY_LOW) {
+		setPriority(LOW);
+	} else {
+		throw invalid_argument(MESSAGE_INVALID_ARGUMENT);
+	}
+}
+
+void Item::setPriority(PriorityLevel priority) {
+	_priority = priority;
+}
+
+void Item::toggleDone(string done) {
+	if(stoi(done)) {
+		toggleDone();
+	}
+}
+
+void Item::toggleDone() {
+	if(_isDone) {
+		_isDone = false;
+	} else {
+		_isDone = true;
+	}
+}
+
+void Item::setItemType(string itemType){
+
+	assert(itemType == ITEM_TYPE_EVENT || itemType == ITEM_TYPE_DEADLINE || itemType == ITEM_TYPE_TASK);
+
+	if(itemType == ITEM_TYPE_EVENT) {
+		setItemTypeEvent();
+	} else if(itemType == ITEM_TYPE_DEADLINE) {
+		setItemTypeDeadline();
+	} else if(itemType == ITEM_TYPE_TASK) {
+		setItemTypeTask();
+	}
+}
+
+void Item::setItemTypeDeadline() {
+	_itemType = DEADLINE;
+}
+
+void Item::setItemTypeEvent() {
+	_itemType = EVENT;
+}
+
+void Item::setItemTypeTask() {
+	_itemType = TASK;
+}
+
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\Item.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\JustAddIt\ItemBank.cpp
+	 */
+
+#include "stdafx.h"
+#include "ItemBank.h"
+
+#define SEVEN_DAYS_IN_SECONDS 604800
+
+ItemBank* ItemBank::itemBank = NULL;
+bool ItemBank::instanceFlag = false;
+
+vector<Item*> ItemBank::initialBank;
+vector<Item*> ItemBank::bank;
+
+const string ItemBank::MESSAGE_INVALID_ITEM = "item does not exist!";
+
+ItemBank::ItemBank() {
+
+}
+
+ItemBank::~ItemBank() {
+	instanceFlag = false;
+}
+
+ItemBank* ItemBank::getInstance() {
+	if(!instanceFlag) {
+		ItemBank();
+		instanceFlag = true;
+	}
+	
+	return itemBank;
+}
+
+void ItemBank::initialiseBank() {
+	DataStorage* dataStorage = dataStorage->getInstance();
+
+	strToBank(dataStorage->readFromLocalMemory());
+
+	return;
+}
+
+void ItemBank::strToBank(vector<string> items) {
+	vector<string>::iterator iter = items.begin();
+
+	bank.clear();
+	initialBank.clear();
+
+	while (iter != items.end()) {
+		Item* newItem = new Item;
+
+		iter = newItem->strToItem(iter);
+
+		bank.push_back(newItem);
+		copyItemToInitialBank(newItem);
+	}
+}
+
+void ItemBank::resetBank() {
+	bank.clear();
+	for(vector<Item*>::iterator iter = initialBank.begin(); iter != initialBank.end(); iter++) {
+		Item* itemPtr = new Item;
+		*itemPtr = **iter;
+		addToBank(itemPtr);
+	}
+}
+
+void ItemBank::clearBank() {
+	bank.clear();
+	update();
+}
+
+bool ItemBank::addToBank(Item* itemPtr) {
+	//if(bank.empty()) {
+		bank.push_back(itemPtr);
+	//} else {
+	//	vector<Item*>::iterator iter = findLocationToInsert(itemPtr);
+	//	bank.insert(iter, itemPtr);
+	//}
+
+	update();
+
+	return checkForConflict(itemPtr);
+}
+
+void ItemBank::deleteDoneItems() {
+	deleteItems(getDoneItems());
+
+	update();
+}
+
+void ItemBank::deleteOverdueDeadlines() {
+	deleteItems(getOverdueDeadlines());
+
+	update();
+}
+
+void ItemBank::deletePastEvents() {
+	deleteItems(getPastEvents());
+
+	update();
+}
+
+void ItemBank::deleteItems(vector<Item*> itemsToDelete) {
+	for(vector<Item*>::iterator iter = itemsToDelete.begin(); iter != itemsToDelete.end(); iter++) {
+		deleteItem(*iter);
+	}
+	update();
+}
+
+void ItemBank::toggleItemsDone(vector<Item*> itemPtrs) {
+	for(vector<Item*>::iterator iter = itemPtrs.begin(); iter != itemPtrs.end(); iter++) {
+		toggleItemDone(*iter);
+	}
+
+	update();
+}
+
+void ItemBank::editItemTitle(Item* item, string newTitle) {
+	vector<Item*>::iterator itemIter = findIter(item);
+	(*itemIter)->setTitle(newTitle);
+	update();
+}
+
+void ItemBank::editItemDescription(Item* item, string newDescription) {
+	vector<Item*>::iterator itemIter = findIter(item);
+	(*itemIter)->setDescription(newDescription);
+	update();
+}
+
+void ItemBank::editItemStartDateTime(Item* item, tm newStartDateTime) {
+	vector<Item*>::iterator itemIter = findIter(item);
+	(*itemIter)->setStartDateTime(newStartDateTime);
+	update();
+}
+
+void ItemBank::editItemEndDateTime(Item* item, tm newEndDateTime) {
+	vector<Item*>::iterator itemIter = findIter(item);
+	(*itemIter)->setEndDateTime(newEndDateTime);
+	update();
+}
+
+void ItemBank::editItemVenue(Item* item, string newVenue) {
+	vector<Item*>::iterator itemIter = findIter(item);
+	(*itemIter)->setVenue(newVenue);
+	update();
+}
+
+void ItemBank::editItemCategory(Item* item, string newCategory) {
+	vector<Item*>::iterator itemIter = findIter(item);
+	(*itemIter)->setCategory(newCategory);
+	update();
+}
+
+void ItemBank::editItemPriority(Item* item, Item::PriorityLevel newPriority) {
+	vector<Item*>::iterator itemIter = findIter(item);
+	(*itemIter)->setPriority(newPriority);
+	update();
+}
+
+vector<Item*> ItemBank::getPastEvents() {
+	vector<Item*> allEvents;
+	vector<Item*> pastEvents; 
+
+	allEvents = getAllEvents();
+
+	for(vector<Item*>::iterator iter = allEvents.begin(); iter != allEvents.end(); iter++) {
+		if(isEventPast(*iter)) {
+			pastEvents.push_back(*iter);
+		}
+	}
+
+	return pastEvents;
+}
+
+vector<Item*> ItemBank::getOverdueDeadlines() {
+	vector<Item*> allDeadlines;
+	vector<Item*> overdueDeadlines;
+
+	allDeadlines = getAllDeadlines();
+	
+	for (vector<Item*>::iterator iter = allDeadlines.begin(); iter != allDeadlines.end(); iter++) {
+		if (isOverdue(*iter)) {
+			overdueDeadlines.push_back(*iter);
+		}
+	}
+
+	return overdueDeadlines;
+}
+
+vector<Item*> ItemBank::getDeadlinesThisWeek() {
+	vector<Item*> allDeadlines;
+	vector<Item*> deadlinesThisWeek;
+	
+	allDeadlines = getAllDeadlines();
+
+	for (vector<Item*>::iterator iter = allDeadlines.begin(); iter != allDeadlines.end(); iter++) {
+		if (isThisWeekInPeriod((*iter)->getStartDateTime(), (*iter)->getEndDateTime())) {
+				deadlinesThisWeek.push_back(*iter);
+		}
+	}
+
+	return deadlinesThisWeek;
+}
+
+vector<Item*> ItemBank::getEventsThisWeek() {
+	vector<Item*> eventsThisWeek;
+	vector<Item*> allEvents;
+
+	allEvents = getAllEvents();
+
+	for (vector<Item*>::iterator iter = allEvents.begin(); iter != allEvents.end(); iter++) {
+		if (isThisWeekInPeriod((*iter)->getStartDateTime(), (*iter)->getEndDateTime())) {
+				eventsThisWeek.push_back(*iter);
+		}
+	}
+
+	return eventsThisWeek;
+}
+
+int ItemBank::getNumberOfMarkedItems() {
+	vector<Item*> markedDone = getDoneItems();
+
+	return (int)markedDone.size();
+}
+
+vector<Item*> ItemBank::getDoneItems() {
+	vector<Item*> doneItems;
+
+	for(vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if((*iter)->isDone()) {
+			doneItems.push_back(*iter);
+		}
+	}
+
+	return doneItems;
+}
+
+bool ItemBank::isFoundForSearchingEvents(string keyword) {
+	vector<Item*> events = searchEvents(keyword);
+	
+	if(events.size() > 0) {
+		return true;
+	}
+
+	return false;
+}
+
+bool ItemBank::isFoundForSearchingDeadlines(string keyword) {
+	vector<Item*> events = searchEvents(keyword);
+	
+	if(events.size() > 0) {
+		return true;
+	}
+
+	return false;
+}
+
+bool ItemBank::isFoundForSearchingTasks(string keyword) {
+	vector<Item*> events = searchEvents(keyword);
+	
+	if(events.size() > 0) {
+		return true;
+	}
+
+	return false;
+}
+
+vector<Item*> ItemBank::searchEvents(string keyword) {
+	vector<Item*> allEvents;
+	vector<Item*> eventsFound;
+
+	allEvents = getAllEvents();
+
+	for (vector<Item*>::iterator iter = allEvents.begin(); iter != allEvents.end(); iter++) {
+		if (searchKeyword((*iter)->getTitle(), keyword)) {
+			eventsFound.push_back(*iter);
+		} else if (searchKeyword((*iter)->getDescription(), keyword)) {
+			eventsFound.push_back(*iter);
+		} else if (searchKeyword((*iter)->getStartDateInString(), keyword)) {
+			eventsFound.push_back(*iter);
+		} else if (searchKeyword((*iter)->getEndDateInString(), keyword)) {
+			eventsFound.push_back(*iter);
+		} else if (searchKeyword((*iter)->getVenue(), keyword)) {
+			eventsFound.push_back(*iter);
+		} else if (searchKeyword((*iter)->getCategory(), keyword)) {
+			eventsFound.push_back(*iter);
+		} else if (searchKeyword((*iter)->getPriorityInString(), keyword)) {
+			eventsFound.push_back(*iter);
+		}
+	}
+
+	return eventsFound;
+}
+
+vector<Item*> ItemBank::searchDeadlines(string keyword) {
+	vector<Item*> allDeadlines;
+	vector<Item*> deadlinesFound;
+
+	allDeadlines = getAllDeadlines();
+
+	for (vector<Item*>::iterator iter = allDeadlines.begin(); iter != allDeadlines.end(); iter++) {
+		if (searchKeyword((*iter)->getTitle(), keyword)) {
+			deadlinesFound.push_back(*iter);
+		} else if (searchKeyword((*iter)->getDescription(), keyword)) {
+			deadlinesFound.push_back(*iter);
+		} else if (searchKeyword((*iter)->getEndDateInString(), keyword)) {
+			deadlinesFound.push_back(*iter);
+		} else if (searchKeyword((*iter)->getVenue(), keyword)) {
+			deadlinesFound.push_back(*iter);
+		} else if (searchKeyword((*iter)->getCategory(), keyword)) {
+			deadlinesFound.push_back(*iter);
+		} else if (searchKeyword((*iter)->getPriorityInString(), keyword)) {
+			deadlinesFound.push_back(*iter);
+		}
+	}
+
+	return deadlinesFound;
+}
+
+vector<Item*> ItemBank::searchTasks(string keyword) {
+	vector<Item*> allTasks;
+	vector<Item*> tasksFound;
+
+	allTasks = getAllTasks();
+
+	for (vector<Item*>::iterator iter = allTasks.begin(); iter != allTasks.end(); iter++) {
+		if (searchKeyword((*iter)->getTitle(), keyword)) {
+			tasksFound.push_back(*iter);
+		} else if (searchKeyword((*iter)->getDescription(), keyword)) {
+			tasksFound.push_back(*iter);
+		} else if (searchKeyword((*iter)->getVenue(), keyword)) {
+			tasksFound.push_back(*iter);
+		} else if (searchKeyword((*iter)->getCategory(), keyword)) {
+			tasksFound.push_back(*iter);
+		} else if (searchKeyword((*iter)->getPriorityInString(), keyword)) {
+			tasksFound.push_back(*iter);
+		}
+	}
+
+	return tasksFound;
+}
+
+vector<Item*> ItemBank::getAllTasks() {
+	vector<Item*> tasks;
+
+	for(vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if((*iter)->isTask()) {
+			tasks.push_back(*iter);
+		}
+	}
+
+	return tasks;
+}
+
+vector<Item*> ItemBank::getAllEvents() {
+	vector<Item*>events;
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->isEvent()) {
+			events.push_back(*iter);
+		}
+	}
+
+	return events;
+}
+
+vector<Item*> ItemBank::getAllDeadlines() {
+	vector<Item*> deadlines;
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		if ((*iter)->isDeadline()) {
+			deadlines.push_back(*iter);
+		}
+	}
+
+	return deadlines;
+}
+
+void ItemBank::update() {
+	vector<string>items;
+
+	for (vector<Item*>::iterator iter = bank.begin(); iter != bank.end(); iter++) {
+		items = updateItem(items, *iter);
+	}
+	
+	DataStorage* dataStorage = dataStorage->getInstance();
+	dataStorage->writeToFile(items);
+
+	return;
+}
+
+bool ItemBank::checkForConflict(Item* itemPtr) {
+	vector<Item*> allEvents;
+	vector<Item*> conflictedEvents;
+
+	allEvents = getAllEvents();
+
+	for (vector<Item*>::iterator iter = allEvents.begin(); iter != allEvents.end(); iter++) {
+		if (*iter != itemPtr && isConflicted(itemPtr, *iter)) {
+			conflictedEvents.push_back(*iter);
+		}
+	}
+
+	return !conflictedEvents.empty();
+}
+
+bool ItemBank::isConflicted(Item* itemPtr1, Item* itemPtr2) {
+	time_t item1Start = itemPtr1->getStartDateTime_T();
+	time_t item1End = itemPtr1->getEndDateTime_T();
+	time_t item2Start = itemPtr2->getStartDateTime_T();
+	time_t item2End = itemPtr2->getEndDateTime_T();
+
+	if(item1Start >= item2End || 
+		item1End <= item2Start) {
+		return false;
+	}
+
+	return true;
+}
+
+//unused as could not debug in time.
+//vector<Item*>::iterator ItemBank::findLocationToInsert(Item* itemPtr) {
+//
+//	if(itemPtr->getItemType() == Item::ItemType::TASK) {
+//		return bank.end();
+//	} else if(itemPtr->getItemType() == Item::ItemType::DEADLINE) {
+//		return findLocationInDeadlines(itemPtr);
+//	} else if(itemPtr->getItemType() == Item::ItemType::EVENT) {
+//		return findLocationInEvents(itemPtr);
+//	}
+//		//} else if((*iter)->getItemType() == Item::ItemType::DEADLINE) {
+//		//	if(isTimePast(itemPtr->getStartDateTime_T(), (*iter)->getEndDateTime_T())) {
+//		//		if(iter == bank.begin()) {
+//		//			return iter;
+//		//		} else if(++iter == bank.end()) {
+//		//			return iter;
+//		//		}
+//		//	}
+//		//}
+//}
+//
+//vector<Item*>::iterator ItemBank::findLocationInDeadlines(Item* itemPtr) {
+//	vector<Item*>::iterator iter = getAllDeadlines().begin();
+//
+//	while((*iter)->getItemType() != Item::ItemType::TASK &&
+//		isTimePast(itemPtr->getEndDateTime_T(), (*iter)->getEndDateTime_T())) {
+//			if(iter == getAllDeadlines().begin()) {
+//				return findIter(*iter);
+//			} else if(++iter == getAllDeadlines().end()) {
+//				return bank.end();
+//			} else {
+//				iter++;
+//			}
+//	}
+//	return bank.end();
+//}
+//
+//vector<Item*>::iterator ItemBank::findLocationInEvents(Item* itemPtr) {
+//	vector<Item*> allEvents = getAllEvents();
+//	vector<Item*>::iterator iter = allEvents.begin();
+//
+//	assert(allEvents.begin() != allEvents.end());
+//
+//	while(iter != allEvents.end()) {
+//		if(isTimePast(itemPtr->getStartDateTime_T(), (*iter)->getStartDateTime_T()) ||
+//			isTimePast(itemPtr->getEndDateTime_T(), (*iter)->getEndDateTime_T())) {
+//				if(iter == allEvents.begin()) {
+//					return findIter(*iter);
+//				} else if(++iter == allEvents.end()) {
+//					return bank.end();
+//				}
+//				iter--;
+//		} else if(isTimePast((*iter)->getStartDateTime_T(), itemPtr->getStartDateTime_T()) ||
+//			isTimePast((*iter)->getEndDateTime_T(), itemPtr->getEndDateTime_T())) {
+//				if(iter == allEvents.begin()) {
+//					return findIter(*iter);
+//				} else if(++iter == allEvents.end()) {
+//					return bank.end();
+//				}
+//				iter--;
+//		} 
+//		iter++;
+//	}
+//
+//	return bank.end();
+//}
+
+bool ItemBank::isEventPast(Item* itemPtr) {
+	return itemPtr->isEvent() && isTimePast(itemPtr->getEndDateTime());
+}
+
+bool ItemBank::isOverdue(Item* itemPtr) {
+	return itemPtr->isDeadline() && isTimePast(itemPtr->getEndDateTime());
+}
+
+void ItemBank::toggleItemDone(Item* itemPtr) {
+	vector<Item*>::iterator itemIter = findIter(itemPtr);
+	(*itemIter)->toggleDone();
+}
+
+void ItemBank::deleteItem(Item* itemPtr) {
+	bank.erase(findIter(itemPtr));
+}
+
+void ItemBank::copyItemToInitialBank(Item* itemPtr) {
+	Item* newItem = new Item;
+	*newItem = *itemPtr;
+	initialBank.push_back(newItem);
+}
+
+vector<Item*>::iterator ItemBank::findIter(Item* itemPtr) {
+	vector<Item*>::iterator iter = bank.begin();
+
+	while(iter != bank.end()) {
+		if((*iter)->getId() == itemPtr->getId()) {
+			return iter;
+		}
+		iter++;
+	}
+
+	throw logic_error(MESSAGE_INVALID_ITEM);
+}
+
+vector<string> ItemBank::updateItem(vector<string> items, Item* item) {
+	items.push_back(item->getTitle());
+	items.push_back(item->getDescription());
+	items.push_back(to_string(item->getStartDateTime_T()));
+	items.push_back(to_string(item->getEndDateTime_T()));
+	items.push_back(item->getVenue());
+	items.push_back(item->getPriorityInString());
+	items.push_back(item->getCategory());
+	items.push_back(to_string(item->isDone()));
+	items.push_back(item->getItemTypeInString());
+
+	return items;
+}
+
+bool ItemBank::searchKeyword(string itemAttribute, string keyword) {
+	size_t wordPosition = itemAttribute.find(keyword);
+
+	if (wordPosition != string::npos) {
+		return true;
+	}
+
+	return false;
+}
+
+bool ItemBank::isThisWeekInPeriod(tm timeStart, tm timeEnd) {
+	if(isDateThisWeek(timeStart) || isDateThisWeek(timeEnd)) {
+		return true;
+	}
+	if(isTimePast(timeStart) && isDateAfterThisWeek(timeEnd)) {
+		return true;
+	}
+
+	return false;
+}
+
+bool ItemBank::isDateThisWeek(tm timeInTm) {
+	time_t currentTime;
+	std::time(&currentTime);
+	time_t oneWeekLaterTime = currentTime + SEVEN_DAYS_IN_SECONDS;
+	time_t givenTime = mktime(&timeInTm);
+
+
+	return givenTime <= oneWeekLaterTime && givenTime >= currentTime;
+}
+
+bool ItemBank::isDateAfterThisWeek(tm timeInTm) {
+	time_t oneWeekLaterTime;
+	std::time(&oneWeekLaterTime);
+	oneWeekLaterTime += SEVEN_DAYS_IN_SECONDS;
+	time_t givenTime = mktime(&timeInTm);
+
+
+	return givenTime >= oneWeekLaterTime;
+}
+
+//checks if comp (comparator) occurs before ref (reference)
+bool ItemBank::isTimePast(time_t comp, time_t ref) {
+	return comp < ref;
+}
+
+bool ItemBank::isTimePast(tm time) {
+	time_t currentTime;
+	std::time(&currentTime);
+
+	return mktime(&time) <= currentTime;
+}
+
+int ItemBank::getBankSize() {
+	return (int)bank.size();
+}
+	// End of segment: D:\GitHub\main\JustAddIt\JustAddIt\ItemBank.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\UnitTestLeon\ItemBankTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+const string source = "../UnitTestLeon/TestItems.txt";
+const string destination = "JustAddIt/JustAddIt_ItemBank.txt";
+const string FILL = "Filler text to test code";
+const string DATE = "Saturday 15 Nov 2014 08:00AM";
+const string SEARCH_TERM_EVENTS = "quiz";
+const string SEARCH_TERM_DEADLINES = "assignment";
+const string SEARCH_TERM_TASKS = "project";
+
+
+ItemBank* itemBank = ItemBank::getInstance();
+
+namespace UnitTest
+{		
+	TEST_CLASS(ItemBankTest)
+	{
+	public:
+
+		// clearBank() clears the bank
+		TEST_METHOD(clearBank) 
+		{
+			itemBank->clearBank();
+
+			Assert::AreEqual(itemBank->getBankSize(), 0);
+		}
+
+		// adding one item to empty bank has no conflict with other items
+		TEST_METHOD(addToBank_NoConflict) 
+		{
+			itemBank->clearBank();
+
+			Item* itemPtr = new Item;
+			itemPtr->setTitle(FILL);
+			itemPtr->setDescription(FILL);
+			itemPtr->setVenue(FILL);
+			itemPtr->setCategory(FILL);
+			itemPtr->setStartDate(15, 10);
+			itemPtr->setStartTime(8, 0);
+			itemPtr->setEndDate(15, 10);
+			itemPtr->setEndTime(8, 0);
+			itemPtr->setPriority(PRIORITY_HIGH);
+
+			Assert::IsFalse(itemBank->addToBank(itemPtr));
+			Assert::AreEqual(itemBank->getBankSize(), 1);
+		}
+
+		// 2 duplicate items conflict with each other
+		TEST_METHOD(isConflicted_Pos) 
+		{
+			itemBank->clearBank();
+
+			OutputControl::resetCurrentItemList();
+
+			Item* itemPtr = new Item;
+			Item* itemPtr1 = new Item;
+			itemPtr1->setTitle(FILL);
+			itemPtr1->setDescription(FILL);
+			itemPtr1->setVenue(FILL);
+			itemPtr1->setCategory(FILL);
+			itemPtr1->setStartDate(20, 10);
+			itemPtr1->setStartTime(8, 0);
+			itemPtr1->setEndDate(20, 10);
+			itemPtr1->setEndTime(10, 0);
+
+			Item* itemPtr2 = new Item;
+			itemPtr2->setTitle(FILL);
+			itemPtr2->setDescription(FILL);
+			itemPtr2->setVenue(FILL);
+			itemPtr2->setCategory(FILL);
+			itemPtr2->setStartDate(20, 10);
+			itemPtr2->setStartTime(8, 0);
+			itemPtr2->setEndDate(20, 10);
+			itemPtr2->setEndTime(10, 0);
+
+			Assert::IsTrue(itemBank->isConflicted(itemPtr1, itemPtr2));
+		}
+
+		// 2 different items do not conflict with each other
+		TEST_METHOD(isConflicted_Neg) 
+		{
+			itemBank->clearBank();
+
+			Item* itemPtr1 = new Item;
+			itemPtr1->setTitle(FILL);
+			itemPtr1->setDescription(FILL);
+			itemPtr1->setVenue(FILL);
+			itemPtr1->setCategory(FILL);
+			itemPtr1->setStartDate(20, 10);
+			itemPtr1->setStartTime(8, 0);
+			itemPtr1->setEndDate(20, 10);
+			itemPtr1->setEndTime(10, 0);
+
+			Item* itemPtr2 = new Item;
+			itemPtr2->setTitle(FILL);
+			itemPtr2->setDescription(FILL);
+			itemPtr2->setVenue(FILL);
+			itemPtr2->setCategory(FILL);
+			itemPtr2->setStartDate(21, 10);
+			itemPtr2->setStartTime(8, 0);
+			itemPtr2->setEndDate(21, 10);
+			itemPtr2->setEndTime(10, 0);
+
+			Assert::IsFalse(itemBank->isConflicted(itemPtr1, itemPtr2));
+		}
+
+		// initialise bank from text file
+		TEST_METHOD(initialise) 
+		{
+			itemBank->clearBank();
+
+			ifstream src(source, ios::binary);
+			ofstream dest(destination, ios::binary);
+
+			dest << src.rdbuf();
+
+			src.close();
+			dest.close();
+
+			itemBank->initialiseBank();
+
+			Assert::AreEqual(15, itemBank->getBankSize());
+			Assert::AreEqual(2, (int)itemBank->getAllDeadlines().size());
+			Assert::AreEqual(5, (int)itemBank->getAllEvents().size());
+			Assert::AreEqual(8, (int)itemBank->getAllTasks().size());
+		}
+		
+		// reset bank to initial loaded bank
+		TEST_METHOD(resetBank) 
+		{
+			itemBank->clearBank();
+
+			ifstream src(source, ios::binary);
+			ofstream dest(destination, ios::binary);
+
+			dest << src.rdbuf();
+
+			src.close();
+			dest.close();
+
+			itemBank->initialiseBank();
+
+			Item* itemPtr = new Item;
+
+			itemBank->addToBank(itemPtr);
+
+			Assert::AreEqual(16, itemBank->getBankSize());
+
+			itemBank->resetBank();
+
+			Assert::AreEqual(15, itemBank->getBankSize());
+			Assert::AreEqual(2, (int)itemBank->getAllDeadlines().size());
+			Assert::AreEqual(5, (int)itemBank->getAllEvents().size());
+			Assert::AreEqual(8, (int)itemBank->getAllTasks().size());
+		}
+				
+		// delete items in bank that have been marked done
+		TEST_METHOD(deleteDoneItems) 
+		{
+			itemBank->clearBank();
+
+			ifstream src(source, ios::binary);
+			ofstream dest(destination, ios::binary);
+
+			dest << src.rdbuf();
+
+			src.close();
+			dest.close();
+
+			itemBank->initialiseBank();
+
+			Assert::AreEqual(15, itemBank->getBankSize());
+			
+			itemBank->deleteDoneItems();
+
+			Assert::AreEqual(10, itemBank->getBankSize());
+		}
+
+		// delete items in bank that are overdue
+		TEST_METHOD(deleteOverdueDeadlines) 
+		{
+			itemBank->clearBank();
+
+			ifstream src(source, ios::binary);
+			ofstream dest(destination, ios::binary);
+
+			dest << src.rdbuf();
+
+			src.close();
+			dest.close();
+
+			itemBank->initialiseBank();
+
+			Assert::AreEqual(15, itemBank->getBankSize());
+			
+			itemBank->deleteOverdueDeadlines();
+
+			Assert::AreEqual(13, itemBank->getBankSize());
+		}
+
+		// delete events in bank that have passed
+		TEST_METHOD(deletePastEvents) 
+		{
+			itemBank->clearBank();
+
+			ifstream src(source, ios::binary);
+			ofstream dest(destination, ios::binary);
+
+			dest << src.rdbuf();
+
+			src.close();
+			dest.close();
+
+			itemBank->initialiseBank();
+
+			Assert::AreEqual(15, itemBank->getBankSize());
+			
+			itemBank->deleteOverdueDeadlines();
+
+			Assert::AreEqual(13, itemBank->getBankSize());
+		}
+
+		// performs a search on the items in the bank
+		TEST_METHOD(searchItems) 
+		{
+			itemBank->clearBank();
+
+			ifstream src(source, ios::binary);
+			ofstream dest(destination, ios::binary);
+
+			dest << src.rdbuf();
+
+			src.close();
+			dest.close();
+
+			itemBank->initialiseBank();
+
+			Assert::AreEqual(15, itemBank->getBankSize());
+			Assert::AreEqual(2, (int)itemBank->searchEvents(SEARCH_TERM_EVENTS).size());
+			Assert::AreEqual(7, (int)itemBank->searchTasks(SEARCH_TERM_TASKS).size());
+			Assert::AreEqual(1, (int)itemBank->searchDeadlines(SEARCH_TERM_DEADLINES).size());
+		}
+	};
+}
+	// End of segment: D:\GitHub\main\JustAddIt\UnitTestLeon\ItemBankTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\GitHub\main\JustAddIt\UnitTestLeon\ItemTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+const string FILL = "This is a random filler text to test code";
+const string DATE = "Thursday 20 Nov 2014 08:00AM";
+
+namespace UnitTest
+{		
+	TEST_CLASS(ItemTest)
+	{
+	public:
+		
+		TEST_METHOD(Item_Pos) // all positive test case *using multiple input
+		{
+			Item* itemPtr = new Item;
+			itemPtr->setTitle(FILL);
+			itemPtr->setDescription(FILL);
+			itemPtr->setVenue(FILL);
+			itemPtr->setCategory(FILL);
+			itemPtr->setStartDate(20, 10);
+			itemPtr->setStartTime(8, 0);
+			itemPtr->setEndDate(20, 10);
+			itemPtr->setEndTime(8, 0);
+
+			Assert::AreEqual(FILL, itemPtr->getTitle());
+			Assert::AreEqual(FILL, itemPtr->getDescription());
+			Assert::AreEqual(FILL, itemPtr->getVenue());
+			Assert::AreEqual(FILL, itemPtr->getCategory());
+			Assert::AreEqual(DATE, itemPtr->getStartDateInString());
+			Assert::AreEqual(DATE, itemPtr->getEndDateInString());
+		}
+	};
+}
+	// End of segment: D:\GitHub\main\JustAddIt\UnitTestLeon\ItemTest.cpp
+
+
+
+
+
