@@ -442,7 +442,6 @@ void DisplayScreenConstructor::exportToFile(vector<string>displayScreen) {
 	exporter->writeToFile(displayScreen);
 }
 
-//@author A0116781A-unused
 //after moving away from CLI, we no longer need to clear screen with this method.
 vector<string> DisplayScreenConstructor::clearScreen() {
 	outputMessageStorage.clear();
