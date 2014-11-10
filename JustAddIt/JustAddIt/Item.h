@@ -5,27 +5,29 @@
 
 #define MAX_SIZE 100
 
+#define STRING_EMPTY ""
+#define STRING_INVALID "Invalid"
+
+#define ITEM_TYPE_EVENT "event"
+#define ITEM_TYPE_DEADLINE "deadline"
+#define ITEM_TYPE_TASK "task"
+
+#define PRIORITY_LOW "Low"
+#define PRIORITY_MED "Medium"
+#define PRIORITY_HIGH "High"
+
+#define IS_DONE "0"
+
 using namespace std;
 
+//@author A0116781A
 class Item { 
 public:
+	
 	enum PriorityLevel { LOW, MED, HIGH, INVALID };	
 	enum ItemType { EVENT, DEADLINE, TASK };
 
 	static const string MESSAGE_INVALID_ARGUMENT;
-
-	static const string STRING_EMPTY;
-	static const string STRING_INVALID;
-
-	static const string ITEM_TYPE_EVENT;
-	static const string ITEM_TYPE_DEADLINE;
-	static const string ITEM_TYPE_TASK;
-
-	static const string PRIORITY_LOW;
-	static const string PRIORITY_MED;
-	static const string PRIORITY_HIGH;
-
-	static const string IS_DONE;
 
 private:
 	static int _idCounter;
@@ -57,6 +59,7 @@ public:
 	void addToStartDate(int daysToAdd);
 	void addToEndDate(int daysToAdd);
 
+	//@author A0128461H
 	void setStartDateTime(struct tm startDateTime);
 	void setEndDateTime(struct tm endDateTime);
 	void setStartDate(int day, int month);

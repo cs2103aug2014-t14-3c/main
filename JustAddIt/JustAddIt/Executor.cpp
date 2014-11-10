@@ -8,10 +8,6 @@ vector<string> Executor::execute(string userCommand) {
 	Parser parser;
 	Command* command;
 
-	//DisplayScreenConstructor* displayScreenConstructor = DisplayScreenConstructor::getInstance();
-	//outputMessageStorage.clear();
-	//outputMessageStorage = displayScreenConstructor->clearScreen();
-
 	try {
 		command = parser.stringToCommand(userCommand);
 		outputMessageStorage = command->execute();

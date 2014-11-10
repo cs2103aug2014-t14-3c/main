@@ -83,6 +83,8 @@ vector<string> CmdEditItem::execute() {
 
 	storeSuccessMessage();
 
+	updateActionLog();
+
 	updateOutputControl();
 
 	return outputMessageStorage;
@@ -129,8 +131,6 @@ void CmdEditItem::editItem() {
 			break;
 				 }
 		}
-
-		storeCommandIntoActionLog();
 	}
 
 	writeToLog(LOG_ITEM_EDITED);
@@ -191,7 +191,7 @@ void CmdEditItem::updateOutputControl() {
 	writeToLog(LOG_OUTPUTCONTROL_UPDATED);
 }
 
-void CmdEditItem::storeCommandIntoActionLog() {
+void CmdEditItem::updateActionLog() {
 	ActionLog::addCommand(this);
 
 	writeToLog(LOG_ACTION_LOG_UPDATED);

@@ -21,7 +21,7 @@ private:
 	vector<string> storeEditScreenForDisplay();
 	void storeSuccessMessage();
 	void updateOutputControl();
-	void storeCommandIntoActionLog();
+	void updateActionLog();
 	void writeToLog (string logEntry);
 
 public:

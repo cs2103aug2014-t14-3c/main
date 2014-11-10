@@ -5,6 +5,7 @@
 3. Write report abstract
 4. Refactor class C in coding project
 5. do something
+6. hi
 <u>What do you want to do?</u>
   
 <span style="color:#3366FF;">Universal commands:<br>add {task details}, search {keyword}, export, undo, redo, home, exit<br><br>[t] View To-do list<br>[o] Check for overdue task</span>

@@ -1,3 +1,4 @@
+//@author A0108397W
 #include "stdafx.h"
 #include "DisplayScreenConstructor.h"
 
@@ -365,6 +366,7 @@ vector<string> DisplayScreenConstructor::constructOverdueScreen(vector<Item*>ite
 }
 
 //@author A0116781A-unused
+//after moving away from CLI, we no longer need to clear screen with this method.
 vector<string> DisplayScreenConstructor::clearScreen() {
 	outputMessageStorage.clear();
 	for (int i = 0; i != 50; i++) {

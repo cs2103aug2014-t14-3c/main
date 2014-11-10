@@ -1,7 +1,12 @@
+//@author A0108397W
 #include "stdafx.h"
 #include "Exporter.h"
 
-string exportFileName = "JustAddIt_Exports.txt";
+const string Exporter::ERROR_EMPTY_VECTOR = "Woops! An empty screen has been exported!";
+const string Exporter::BLANK_SPACE = "";
+const string Exporter::EXPORT_FILE_NAME = "JustAddIt_Exports.html";
+const string Exporter::NEWLINE = "<br>";
+
 Exporter* Exporter::exporter = NULL;
 
 Exporter::Exporter(void) {
@@ -17,17 +22,20 @@ Exporter* Exporter::getInstance(void) {
 	return exporter;
 }
 
-void Exporter::writeToFile(vector<string>displayScreenToBeExported) {
-	ofstream mytextfile;
-	mytextfile.open(exportFileName);
-	vector<string>::iterator iter;
+//This function exports the current display screen by writing it into a HTML file
+void Exporter::writeToFile(vector<string>displayScreen) {
+	ofstream myHtmlFile;
+	myHtmlFile.open(EXPORT_FILE_NAME);
 
-	for (iter = displayScreenToBeExported.begin(); iter != displayScreenToBeExported.end(); iter++) {
-		if (*iter != "") {
-			mytextfile << *iter << endl;
+	if (displayScreen.size() == 0) {
+		throw invalid_argument(ERROR_EMPTY_VECTOR);
+	}
+
+	for (vector<string>::iterator iter = displayScreen.begin(); iter != displayScreen.end(); iter++) {
+		if (*iter != BLANK_SPACE) {
+			myHtmlFile << *iter << NEWLINE << endl;
 		}
 	}
 
-	mytextfile.close();
-	return;
+	myHtmlFile.close();
 }

@@ -1,6 +1,7 @@
 //@author A0116781A
 #include "stdafx.h"
 #include "ItemBank.h"
+
 #define SEVEN_DAYS_IN_SECONDS 604800
 
 ItemBank* ItemBank::itemBank = NULL;
@@ -8,6 +9,8 @@ bool ItemBank::instanceFlag = false;
 
 vector<Item*> ItemBank::initialBank;
 vector<Item*> ItemBank::bank;
+
+const string ItemBank::MESSAGE_INVALID_ITEM = "item does not exist!";
 
 ItemBank::ItemBank() {
 
@@ -29,7 +32,7 @@ ItemBank* ItemBank::getInstance() {
 void ItemBank::initialiseBank() {
 	DataStorage* dataStorage = dataStorage->getInstance();
 
-	strToBank(dataStorage->readToBank());
+	strToBank(dataStorage->readFromLocalMemory());
 
 	return;
 }
@@ -440,7 +443,7 @@ vector<Item*>::iterator ItemBank::findIter(Item* itemPtr) {
 		iter++;
 	}
 
-	throw exception("item does not exist!");
+	throw logic_error(MESSAGE_INVALID_ITEM);
 }
 
 vector<string> ItemBank::updateItem(vector<string> items, Item* item) {

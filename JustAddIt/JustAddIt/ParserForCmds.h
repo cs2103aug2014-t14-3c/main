@@ -37,4 +37,11 @@ private:
 	CommandType determineCommandType_ToDoListView(string userCommand);
 	CommandType determineCommandType_OverdueTasksScreen(string userCommand);
 	CommandType determineCommandType_GoToBaseScreen();
+<<<<<<< HEAD
+=======
+
+private:
+	static const string ERROR_INVALID_COMMAND;
+
+>>>>>>> aa78c47ea4de706124cca010337ca5158c248961
 };
