@@ -8,6 +8,24 @@ namespace UnitTest
 	TEST_CLASS(SystemTest)
 	{
 	public:
+
+		TEST_METHOD(SystemTest_EmptyItemBank)
+		{
+			Executor* myExec = new Executor();
+			ItemBank* myIB = ItemBank::getInstance();
+			ActionLog::resetLog();
+			OutputControl::resetCurrentItemList();
+			myIB->clearBank();
+			myExec->execute("home");
+			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
+			myExec->execute("t");
+			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
+			myExec->execute("home");
+			myExec->execute("o");
+			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
+			myExec->execute("search sth");
+			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
+		}
 			TEST_METHOD(SystemTest_ListAndEditScenarios)
 		{
 			Executor* myExec = new Executor();
@@ -113,7 +131,7 @@ namespace UnitTest
 				
 		}
 	
-		TEST_METHOD(SystemTest_MarkAndClearScenarios)
+		TEST_METHOD(SystemTest_MarkAndClearDoneScenarios)
 		{
 			Executor* myExec = new Executor();
 			ItemBank* myIB = ItemBank::getInstance();
@@ -285,22 +303,73 @@ namespace UnitTest
 				Assert::AreEqual(Parser::ERROR_LOGIC_START_END.c_str(), e.what());
 			};
 		}	
-		TEST_METHOD(SystemTest_EmptyItemBank)
+		TEST_METHOD(SystemTest_OverdueScenarios)
 		{
 			Executor* myExec = new Executor();
 			ItemBank* myIB = ItemBank::getInstance();
+			myIB->clearBank();
 			ActionLog::resetLog();
 			OutputControl::resetCurrentItemList();
-			myIB->clearBank();
+			//add two overdue items for testing
+			Item* overdueItemA = new Item;
+			tm yesterdayTM;
+			time_t currentTime;
+			time(&currentTime);
+			localtime_s(&yesterdayTM, &currentTime);
+			yesterdayTM.tm_mday--;
+			mktime(&yesterdayTM);
+
+			overdueItemA -> setItemType("deadline");
+			overdueItemA -> setTitle("urgent job");
+			overdueItemA -> setEndDateTime(yesterdayTM);
+			myIB->addToBank(overdueItemA);
+
+			Item* overdueItemB = new Item;
+			yesterdayTM.tm_mday--;
+			mktime(&yesterdayTM);
+			overdueItemB -> setItemType("deadline");
+			overdueItemB -> setTitle("urgent task");
+			overdueItemB -> setEndDateTime(yesterdayTM);
+			myIB->addToBank(overdueItemB);
+			//add new items
+			myExec->execute("add some event on 20 nov");
+			myExec->execute("add random task");
+			myExec->execute("add new deadline due 25 dec");
+			
 			myExec->execute("home");
-			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
 			myExec->execute("t");
-			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual(5, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("some event", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("urgent job", OutputControl::getItemAddr(2)->getTitle().c_str());
+			Assert::AreEqual("urgent task", OutputControl::getItemAddr(3)->getTitle().c_str());
+			Assert::AreEqual("new deadline", OutputControl::getItemAddr(4)->getTitle().c_str());
+			Assert::AreEqual("random task", OutputControl::getItemAddr(5)->getTitle().c_str());
+
+			//deleting and marking in overdue screen
 			myExec->execute("home");
 			myExec->execute("o");
-			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
-			myExec->execute("search sth");
-			Assert::AreEqual(0, OutputControl::getNumberOfDisplayedItems());
+			myExec->execute("m 2");
+			Assert::AreEqual("urgent job", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("urgent task", OutputControl::getItemAddr(2)->getTitle().c_str());
+			Assert::AreEqual(false, OutputControl::getItemAddr(1)->isDone());
+			Assert::AreEqual(true, OutputControl::getItemAddr(2)->isDone());
+			myExec->execute("d 1");
+			Assert::AreEqual(1, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("urgent task", OutputControl::getItemAddr(1)->getTitle().c_str());
+
+			myExec->execute("home");
+			myExec->execute("o");
+			myExec->execute("c");
+			myExec->execute("home");
+			myExec->execute("t");
+			Assert::AreEqual(3, OutputControl::getNumberOfDisplayedItems());
+			Assert::AreEqual("some event", OutputControl::getItemAddr(1)->getTitle().c_str());
+			Assert::AreEqual("new deadline", OutputControl::getItemAddr(2)->getTitle().c_str());
+			Assert::AreEqual("random task", OutputControl::getItemAddr(3)->getTitle().c_str());
+			
+			
+
 		}
+
 	};
 }

@@ -7,6 +7,9 @@
 //On the list view, it shows a sorted view
 //of all items.
 //
+//To edit the list view template, modify
+//the text file under Templates folder.
+//
 //CmdGoToListView will not throw exceptions.
 //------------------------------------------
 #include "command.h"

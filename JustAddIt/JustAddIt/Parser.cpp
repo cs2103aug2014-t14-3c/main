@@ -17,6 +17,7 @@
 #define TODAY_MARKER "today"
 #define TOMORROW_MARKER "tomorrow"
 #define NEXT_MARKER "next "
+#define EMPTY_STRING ""
 
 const string Parser::ERROR_INVALID_ITEM_NO = "Invalid item number! Please enter a valid number from the menu.";
 const string Parser::ERROR_INVALID_FIELD_NO = "Invalid field number! Please enter a field number 1 - 6.";
@@ -92,7 +93,7 @@ Command* Parser::stringToCommand(string userCommand) {
 		}
 
 		case EDIT_FIELD: {
-			string newFieldInfo="";
+			string newFieldInfo=EMPTY_STRING;
 			string buffer;
 			int fieldNum;
 			commandStream >> fieldNum;
@@ -279,7 +280,7 @@ void Parser::detectTitleAndEmbed(Item* myItem, string &stringDetails){
 	stringDetails = convertVectorToString(titleEndIter, vectorOfStrings.end());
 	
 	titleToSet = convertVectorToString(titleStartIter, titleEndIter);
-	if(titleToSet==""){
+	if(titleToSet==EMPTY_STRING){
 		throw invalid_argument(ERROR_MISSING_TITLE);
 	}
 	myItem->setTitle(titleToSet);
@@ -315,8 +316,8 @@ bool Parser::detectTimeAndEmbedIsOk(Item* myItem, string stringDetails, bool isD
 	assert(myItem != nullptr);
 
 	istringstream streamDetails(stringDetails);
-	string startTime="";
-	string endTime="";
+	string startTime=EMPTY_STRING;
+	string endTime=EMPTY_STRING;
 	int startHourToBeSet;
 	int startMinToBeSet;
 	int endHourToBeSet;
@@ -367,15 +368,15 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 	assert(myItem != nullptr);
 
 	istringstream streamDetails(stringDetails);
-	string currentWord="";
+	string currentWord=EMPTY_STRING;
 	string previousWord;
 	string nextWord;
-	string startMonthFound="";
-	string startDateFound="";
-	string startDayFound = "";
-	string endMonthFound="";
-	string endDateFound="";
-	string endDayFound = "";
+	string startMonthFound=EMPTY_STRING;
+	string startDateFound=EMPTY_STRING;
+	string startDayFound = EMPTY_STRING;
+	string endMonthFound=EMPTY_STRING;
+	string endDateFound=EMPTY_STRING;
+	string endDayFound = EMPTY_STRING;
 	int startDayInt;
 	int startMonthInt;
 	int endDayInt;
@@ -415,7 +416,7 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 		startMonthInt = convertStrToIntMonth(startMonthFound);
 		
 		//reset currentWord and search for second date
-		currentWord="";
+		currentWord=EMPTY_STRING;
 		while(streamDetails >> currentWord && !isMonth(currentWord)){
 			previousWord = currentWord;
 		}
@@ -478,8 +479,8 @@ bool Parser::detectMonthDateAndEmbedIsOk(Item* myItem, string &stringDetails,  b
 bool Parser::detectDayOfWeekDateAndEmbedIsOk(Item* myItem, string &stringDetails,  bool isDeadline){
 	assert(myItem != nullptr);
 
-	string startDate="";
-	string endDate="";
+	string startDate=EMPTY_STRING;
+	string endDate=EMPTY_STRING;
 	int startDaysToAdd;
 	int endDaysToAdd;
 	bool startFound = false;
@@ -551,7 +552,7 @@ void Parser::detectCategoryAndEmbed(Item* myItem, string &stringDetails){
 	assert(myItem != nullptr);
 
 	string::iterator myIter;
-	string categoryToSet="";
+	string categoryToSet=EMPTY_STRING;
 	size_t position;
 	position = stringDetails.find(CATEGORY_MARKER);
 	 
@@ -887,7 +888,7 @@ vector <Item*> Parser::convertItemNumsToItemPtrs(string itemNumsStr){
 	int itemNum;
 	istringstream itemStream(itemNumsStr);
 	//if empty, return the first item*
-	if(itemNumsStr==""){
+	if(itemNumsStr==EMPTY_STRING){
 		itemPtrs.push_back(OutputControl::getItemAddr(1));
 	}
 	else{
@@ -918,14 +919,14 @@ vector<string> Parser::convertStringToVector(string inputString){
 //the vector items in between them to a string.
 //The final concatenated string is returned.
 string Parser::convertVectorToString(vector<string>::iterator start, vector<string>::iterator end){
-	string finalString="";
+	string finalString=EMPTY_STRING;
 	//if start and end are same point, return nothing
 	if(start==end){
 		return finalString;
 	}
 	else{
 		//if first word exists
-		if(*start!=""){
+		if(*start!=EMPTY_STRING){
 			finalString=*start;
 			start++;
 		}
@@ -965,7 +966,7 @@ bool Parser::isLowPriority(string priority){
 }
 
 void Parser::trimWordFromString(string &originalString, string toTrim){
-	originalString.replace(originalString.find(toTrim),toTrim.length(),"");	
+	originalString.replace(originalString.find(toTrim),toTrim.length(),EMPTY_STRING);	
 }
 
 

@@ -6,8 +6,10 @@
 //
 //On the home screen, it shows the 
 //items that are occuring in the next 
-//week from the current time.
+//week from the current time. 
 //
+//To edit the home screen template, modify
+//the text file under Templates folder.
 //
 //CmdHome will not throw exceptions.
 //------------------------------------------
