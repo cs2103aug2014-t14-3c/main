@@ -66,10 +66,6 @@ namespace UnitTest
 			myParser.detectTitleAndEmbed(myItem, testString);
 			Assert::AreEqual(expectedString, myItem->getTitle());
 
-			//expectedString = "assignment 5";
-			//testString = "assignment 5 3 oct to 5 oct";
-			//myParser.detectTitleAndEmbed(myItem, testString);
-			//Assert::AreEqual(expectedString, myItem->getTitle());
 		}
 
 			TEST_METHOD(Parser_EmbedDate)

@@ -1,3 +1,4 @@
+//@author A0110770U
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
@@ -178,16 +179,6 @@ namespace UnitTest
 			Assert::AreEqual("event", OutputControl::getItemAddr(1)->getTitle().c_str());
 			Assert::AreEqual("deadline", OutputControl::getItemAddr(2)->getTitle().c_str());
 			Assert::AreEqual("floating task", OutputControl::getItemAddr(3)->getTitle().c_str());
-			//Assert::AreEqual(true, OutputControl::getItemAddr(1)->isDone());
-			//Assert::AreEqual(false, OutputControl::getItemAddr(2)->isDone());
-			//Assert::AreEqual(false, OutputControl::getItemAddr(3)->isDone());
-
-			//myExec->execute("undo");
-			//Assert::IsTrue(OutputControl::getItemAddr(1)->isDone());
-			//Assert::IsFalse(OutputControl::getItemAddr(2)->isDone());
-			//Assert::IsTrue(OutputControl::getItemAddr(3)->isDone());
-			OutputControl::resetCurrentItemList();
-			myIB->clearBank();
 		}
 		TEST_METHOD(SystemTest_DeleteScenarios)
 		{
