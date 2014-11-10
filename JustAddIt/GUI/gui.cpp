@@ -3,7 +3,10 @@
 
 using namespace std;
 
-const QString GUI::title = "JustAddIt";
+const QString GUI::TITLE = "JustAddIt";
+const QString GUI::STYLESHEET_PUSHBUTTON = "QPushButton { border: 1px solid grey; border-radius: 5px; padding: 3px; background-color: #EFF8FF; color: black; }";
+const QString GUI::STYLESHEET_LINEEDIT = "QLineEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: black; }";
+const QString GUI::STYLESHEET_TEXTEDIT = "QTextEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: black; }";
 
 GUI::GUI(QWidget *parent)
 	: QWidget(parent)
@@ -11,11 +14,11 @@ GUI::GUI(QWidget *parent)
 	ui.setupUi(this);
 
 	//this->setWindowFlags(Qt::FramelessWindowHint);
-	this->setWindowTitle(title);
+	this->setWindowTitle(TITLE);
 
-	ui.pushButton->setStyleSheet("QPushButton { border: 1px solid grey; border-radius: 5px; padding: 3px; background-color: #EFF8FF; color: black; }");
-	ui.lineEdit->setStyleSheet("QLineEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: black; }");
-	ui.textEdit->setStyleSheet("QTextEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: black; }");
+	ui.pushButton->setStyleSheet(STYLESHEET_PUSHBUTTON);
+	ui.lineEdit->setStyleSheet(STYLESHEET_LINEEDIT);
+	ui.textEdit->setStyleSheet(STYLESHEET_TEXTEDIT);
 
 	ui.textEdit->setReadOnly(true);
 
