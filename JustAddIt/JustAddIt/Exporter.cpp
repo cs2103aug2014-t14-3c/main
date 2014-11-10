@@ -27,9 +27,7 @@ void Exporter::writeToFile(vector<string>displayScreen) {
 	ofstream myHtmlFile;
 	myHtmlFile.open(EXPORT_FILE_NAME);
 
-	if (displayScreen.size() == 0) {
-		throw invalid_argument(ERROR_EMPTY_VECTOR);
-	}
+	checkEmptyExport(displayScreen);
 
 	for (vector<string>::iterator iter = displayScreen.begin(); iter != displayScreen.end(); iter++) {
 		if (*iter != BLANK_SPACE) {
@@ -38,4 +36,10 @@ void Exporter::writeToFile(vector<string>displayScreen) {
 	}
 
 	myHtmlFile.close();
+}
+
+void Exporter::checkEmptyExport(vector<string>displayScreen) {
+	if (displayScreen.size() == 0) {
+		throw invalid_argument(ERROR_EMPTY_VECTOR);
+	}
 }

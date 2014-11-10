@@ -5,12 +5,11 @@
 
 class CmdExport :
 	public Command {
-
-public:
+private:
 	static const string MESSAGE_EXPORT_SUCCESSFUL;
 
+public:
 	CmdExport(void);
 	~CmdExport(void);
-	vector<string> CmdExport::execute();
-
+	vector<string> execute();
 };

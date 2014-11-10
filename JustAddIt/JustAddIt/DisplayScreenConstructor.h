@@ -11,7 +11,6 @@ private:
 	static const string TEMPLATE_SCREEN_SEARCH; 
 	static const string TEMPLATE_SCREEN_LISTVIEW;
 	static const string TEMPLATE_SCREEN_OVERDUE; 
-	static const string MARK_DONE;
 	static const string HOME_WEEK_CLEAR;
 	static const string HOME_HAPPENINGS;
 	static const string EDIT_HEADER;
@@ -37,6 +36,8 @@ private:
 	static const string DEFAULT_INPUT;
 	static const string BLANK;
 	static const string NEW_LINE;
+	static const string MARK_DONE;
+
 	static DisplayScreenConstructor* displayScreenConstructor;
 	vector<string>outputMessageStorage;
 

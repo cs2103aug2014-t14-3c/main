@@ -12,6 +12,7 @@ private:
 	static Exporter* exporter;
 
 	Exporter(void);
+	static void checkEmptyExport(vector<string>displayScreen);
 
 public:
 	static Exporter* getInstance(void);

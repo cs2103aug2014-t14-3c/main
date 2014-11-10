@@ -3,7 +3,7 @@
 #include "DataStorage.h"
 
 const string DataStorage::SPACE = " ";
-const string DataStorage::BLANK_SPACE = "";
+const string DataStorage::EMPTY_STRING = "";
 const string DataStorage::FILE_NAME = "JustAddIt/JustAddIt_ItemBank.txt";
 const int DataStorage::NUM_OF_ATTRIBUTES_PER_ITEM = 9;
 DataStorage* DataStorage::dataStorage = NULL;
@@ -35,7 +35,7 @@ void DataStorage::writeToFile(vector<string>itemDetails) {
 }
 
 //This function extracts the Item details stored inside the computer's local memory (in the form of a text file)
-//and returns it as a vector<string>
+//and returns it to ItemBank as a vector<string>
 vector<string> DataStorage::readFromLocalMemory() {
 	vector<string> itemDetails;
 	string dummyLine;
@@ -46,7 +46,7 @@ vector<string> DataStorage::readFromLocalMemory() {
 
 		getline(mytextfile, dummyLine);
 
-		if (dummyLine != BLANK_SPACE) {
+		if (dummyLine != EMPTY_STRING) {
 			dummyLine = trimWhiteSpaceOnLeft(dummyLine);
 			itemDetails.push_back(dummyLine);
 		}
@@ -63,7 +63,7 @@ inline string DataStorage::trimWhiteSpaceOnLeft(const string& inputString) {
 	return inputString.substr( inputString.find_first_not_of(SPACE));
 }
 
-//This function checks to see if the local memory (text file) has been altered by removing any content or adding addtional content
+//This function checks to see if the local memory (text file) has been altered by removing any content or adding addItional content
 bool DataStorage::isCorrupted(vector<string> itemDetails) {
 	bool isCorrupted = false;
 
