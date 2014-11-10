@@ -9,7 +9,7 @@
  
 
  
-<hr>[o] Ok
+<hr>[ENTER] Ok
 [e #] Edit {Field number}
 [d] Delete<hr>
 

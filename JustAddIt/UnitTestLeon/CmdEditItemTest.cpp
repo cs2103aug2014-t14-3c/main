@@ -96,8 +96,8 @@ namespace UnitTest
 
 			itemBank->addToBank(itemPtr);
 			Assert::AreEqual(itemBank->getBankSize(), 1);
-			//CmdEditItem* cmdEditItem = new CmdEditItem(itemBank->findIter(itemPtr), 3, currentTime_struct);
-			//cmdEditItem->execute();
+			CmdEditItem* cmdEditItem = new CmdEditItem(itemBank->findIter(itemPtr), 3, currentTime_struct);
+			cmdEditItem->execute();
 			itemBank->editItemStartDateTime(itemPtr, currentTime_struct);
 			Assert::AreEqual((*itemBank->findIter(itemPtr))->getStartDateInString().c_str(), newItemPtr->getStartDateInString().c_str());
 			itemBank->clearBank();
@@ -122,8 +122,8 @@ namespace UnitTest
 
 			itemBank->addToBank(itemPtr);
 			Assert::AreEqual(itemBank->getBankSize(), 1);
-			//CmdEditItem* cmdEditItem = new CmdEditItem(itemBank->findIter(itemPtr), 3, currentTime_struct);
-			//cmdEditItem->execute();
+			CmdEditItem* cmdEditItem = new CmdEditItem(itemBank->findIter(itemPtr), 3, currentTime_struct);
+			cmdEditItem->execute();
 			itemBank->editItemEndDateTime(itemPtr, currentTime_struct);
 			Assert::AreEqual((*itemBank->findIter(itemPtr))->getEndDateInString().c_str(), newItemPtr->getEndDateInString().c_str());
 			itemBank->clearBank();

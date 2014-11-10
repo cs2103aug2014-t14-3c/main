@@ -4,7 +4,7 @@
 
 <hr>[m #] Mark {Item number}
 [d #] Delete {Item number}
-[a] Clear all overdue deadlines
+[c] Clear all overdue deadlines
 
 Tip: To perform multiple deletes/marks, leave a space between each Item number.
 For example: d1 2 5<hr>
