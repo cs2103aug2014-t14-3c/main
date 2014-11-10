@@ -49,6 +49,7 @@ Command* Parser::stringToCommand(string userCommand) {
 	commandStream >> userAction;
 	
 	//translate the first word into a CommandType
+	convertStringToLowercase(userAction);
 	ParserForCmds* myParserCmd = new ParserForCmds();
 	CommandType commandAction = myParserCmd->determineCommandType(userAction, OutputControl::getCurrentScreen());
 	
@@ -856,25 +857,32 @@ int Parser::convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek){
 //These functions determine if the input string
 //match any of the supported keywords.
 bool Parser::isKeyword(string myWord){
+	convertStringToLowercase(myWord);
 	return isKeywordTime(myWord) || isKeywordDate(myWord);
 }
 bool Parser::isKeywordTime(string myWord){
+	convertStringToLowercase(myWord);
 	return isKeywordStartTime(myWord) || isKeywordEndTime(myWord);
 }
 
 bool Parser::isKeywordStartTime(string myWord){
+	convertStringToLowercase(myWord);
 	return myWord=="at" || myWord == "from" || myWord == "between" || myWord == "next";
 }
 bool Parser::isKeywordEndTime(string myWord){
+	convertStringToLowercase(myWord);
 	return myWord=="to" || myWord == "-"  || myWord == "and";
 }
 bool Parser::isKeywordDeadline(string myWord){
+	convertStringToLowercase(myWord);
 	return myWord == "by" || myWord == "due";
 }
 bool Parser::isKeywordDate(string myWord){
+	convertStringToLowercase(myWord);
 	return myWord=="on";
 }
 bool Parser::isKeywordEndOfTitle(string myWord){
+	convertStringToLowercase(myWord);
 	return isKeywordDate(myWord) || isKeywordStartTime(myWord) || isKeywordDeadline(myWord) || isDayOfWeek(myWord);
 }
 
