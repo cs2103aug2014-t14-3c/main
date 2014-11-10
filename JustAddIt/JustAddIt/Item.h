@@ -20,7 +20,6 @@
 
 using namespace std;
 
-//@author A0116781A
 class Item { 
 public:
 	
@@ -61,7 +60,6 @@ public:
 	void addToStartDate(int daysToAdd);
 	void addToEndDate(int daysToAdd);
 
-	//@author A0128461H
 	void setStartDateTime(struct tm startDateTime);
 	void setEndDateTime(struct tm endDateTime);
 	void setStartDate(int day, int month);
