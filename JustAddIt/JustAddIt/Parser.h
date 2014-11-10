@@ -37,7 +37,7 @@
 
 
 //TODO: REMOVE THIS WHEN NOT IN UNIT TEST MODE
-#define TESTMODE
+//#define TESTMODE
 class Parser
 {
 #ifndef TESTMODE 

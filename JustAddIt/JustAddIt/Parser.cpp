@@ -676,7 +676,6 @@ bool Parser::isMonth(string query){
 //returns true if the string is in a time format.
 //Otherwise, it returns false.
 bool Parser::isTime(string query){
-	//TODO: For more supported formats
 	if(isdigit(query[0])>0)
 		return true;
 	else
@@ -849,7 +848,6 @@ int Parser::convertDayOfWeekToIntDaysToAdd(string query, bool isNextWeek){
 	}
 	else{
 		return -1;
-		//TODO: Throw exception for bad day
 	}
 	
 

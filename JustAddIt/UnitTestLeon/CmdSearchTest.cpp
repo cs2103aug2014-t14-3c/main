@@ -11,7 +11,6 @@ namespace UnitTest
 		
 		TEST_METHOD(CmdSearchTest)
 		{
-			// TODO: Your test code here
 			Item* itemSearchTest1 = new Item;
 			Item* itemSearchTest2 = new Item;
 			ItemBank* itemPointer = ItemBank::getInstance();
