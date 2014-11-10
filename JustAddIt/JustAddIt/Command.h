@@ -6,7 +6,8 @@
 //should not be created.
 //
 //When adding new Cmds, inherit as a subclass of
-//Command.
+//Command. New Cmds should have should a execute
+//function, similar to existing Cmds.
 //-----------------------------------------------
 
 #include "stdafx.h"
