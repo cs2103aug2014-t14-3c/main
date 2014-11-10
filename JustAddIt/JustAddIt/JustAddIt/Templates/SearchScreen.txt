@@ -1,10 +1,7 @@
 <u>Showing results:
  
  
-<hr>[e #] Edit {result number}
-[m #] Mark {result number}
-[d #] Delete {result number}
-[c] Clear all completed items
+<span style="color:#3366FF;">[e #] Edit {result number}<br>[m #] Mark {result number}<br>[d #] Delete {result number}<br>[c] Clear all completed items</span>
  
 Tip: To perform multiple deletes/marks, leave a space between each Item number.
-For example: d 1 2 5<hr>
+For example: d 1 2 5
