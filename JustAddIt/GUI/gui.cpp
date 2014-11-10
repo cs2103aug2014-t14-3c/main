@@ -7,6 +7,7 @@ const QString GUI::TITLE = "JustAddIt";
 const QString GUI::STYLESHEET_PUSHBUTTON = "QPushButton { border: 1px solid grey; border-radius: 5px; padding: 3px; background-color: #EFF8FF; color: black; }";
 const QString GUI::STYLESHEET_LINEEDIT = "QLineEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: black; }";
 const QString GUI::STYLESHEET_TEXTEDIT = "QTextEdit { border: 1px solid grey; border-radius: 5px; background-color: #EFF8FF; color: black; }";
+const QString GUI::PLACEHOLDER_LINEEDIT = "add go shopping at 2pm next friday (with friends) #fun !!!";
 
 GUI::GUI(QWidget *parent)
 	: QWidget(parent)
@@ -22,6 +23,7 @@ GUI::GUI(QWidget *parent)
 
 	ui.textEdit->setReadOnly(true);
 
+	ui.lineEdit->setPlaceholderText(PLACEHOLDER_LINEEDIT);
 	ui.lineEdit->setFocus();
 
 	initProg();
