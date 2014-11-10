@@ -22,8 +22,5 @@
 #include <cassert>
 #include <algorithm>
 
-enum CommandType {
-	ADD, SEARCH, VIEW_LAST_SEARCH, EDIT_FIELD, EDIT_ITEM, DELETE, MARK, SAVE, UNDO, VIEW_CALENDAR, VIEW_TODOLIST, 
-	VIEW_OVERDUE, HOME, REDO, EXPORT, CLEAR_ALL_OVERDUE, CLEAR_ALL_DONE, CYCLE_LEFT, CYCLE_RIGHT
-};
+
 // TODO: reference additional headers your program requires here

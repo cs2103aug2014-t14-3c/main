@@ -184,10 +184,6 @@ namespace UnitTest
 		}
 			TEST_METHOD(Parser_NegativeTestExceptions)
 		{
-			const int buffer_size = 256;
-			char buffer[256];
-			
-
 			Parser myParser;
 			Item* myItem = new Item;
 
